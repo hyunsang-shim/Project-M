@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="MainGame">
+      <UniqueIdentifier>{643981d6-ea63-42e4-891c-ced1a7d72b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeightMap">
+      <UniqueIdentifier>{08780291-a7cc-45a8-b64e-a81334b79e08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ASE_Load">
+      <UniqueIdentifier>{6cf1ba9e-9937-422b-8d0c-fa0e9c5cdb61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OBJ_Load">
+      <UniqueIdentifier>{ff5b3f52-dcee-4da9-8aa5-873596a1a5d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{239601f7-4086-443d-b577-fcac13a391fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_____MAIN">
+      <UniqueIdentifier>{d0cfa9d5-6b64-47b5-bb00-97faf1313d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_____STDAFX">
+      <UniqueIdentifier>{43e58858-2fc4-4994-a5b2-eae5e90b4c66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="X-File">
+      <UniqueIdentifier>{66b64165-2abf-41ed-97b6-860660a2097c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GRID">
+      <UniqueIdentifier>{6530f5c3-dce4-4df2-85c5-46b52b4dae43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SkinnedMesh">
+      <UniqueIdentifier>{e0e7e76f-039e-4e72-b929-965abd073efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OBB">
+      <UniqueIdentifier>{39791cfb-731f-415b-9b85-7646f1867282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{de65ac51-24b5-4ba5-b810-f014398e44c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cMainGame.h">
+      <Filter>MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="cHeightMap.h">
+      <Filter>HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="iMap.h">
+      <Filter>HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Asciitok.h">
+      <Filter>ASE_Load</Filter>
+    </ClInclude>
+    <ClInclude Include="cNewObject.h">
+      <Filter>OBJ_Load</Filter>
+    </ClInclude>
+    <ClInclude Include="cCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="cAseLoader.h">
+      <Filter>ASE_Load</Filter>
+    </ClInclude>
+    <ClInclude Include="cFrame.h">
+      <Filter>ASE_Load</Filter>
+    </ClInclude>
+    <ClInclude Include="cMtlTex.h">
+      <Filter>ASE_Load</Filter>
+    </ClInclude>
+    <ClInclude Include="cObject.h">
+      <Filter>ASE_Load</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DX_PROJECT.h">
+      <Filter>_____MAIN</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>_____STDAFX</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimeManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cGrid.h">
+      <Filter>GRID</Filter>
+    </ClInclude>
+    <ClInclude Include="cCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMeshManager.h">
+      <Filter>SkinnedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMesh.h">
+      <Filter>SkinnedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="cAllocateHierarchy.h">
+      <Filter>SkinnedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="cOBB.h">
+      <Filter>OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="cXModel.h">
+      <Filter>X-File</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjectManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTextureManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cDeviceManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cObj_Surface.h">
+      <Filter>OBJ_Load</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cMainGame.cpp">
+      <Filter>MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="cHeightMap.cpp">
+      <Filter>HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="iMap.cpp">
+      <Filter>HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="cNewObject.cpp">
+      <Filter>OBJ_Load</Filter>
+    </ClCompile>
+    <ClCompile Include="cCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="cAseLoader.cpp">
+      <Filter>ASE_Load</Filter>
+    </ClCompile>
+    <ClCompile Include="cFrame.cpp">
+      <Filter>ASE_Load</Filter>
+    </ClCompile>
+    <ClCompile Include="cMtlTex.cpp">
+      <Filter>ASE_Load</Filter>
+    </ClCompile>
+    <ClCompile Include="cObject.cpp">
+      <Filter>ASE_Load</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DX_PROJECT.cpp">
+      <Filter>_____MAIN</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>_____STDAFX</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimeManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cGrid.cpp">
+      <Filter>GRID</Filter>
+    </ClCompile>
+    <ClCompile Include="cCharacter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMeshManager.cpp">
+      <Filter>SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMesh.cpp">
+      <Filter>SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cAllocateHierarchy.cpp">
+      <Filter>SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cOBB.cpp">
+      <Filter>OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="cXModel.cpp">
+      <Filter>X-File</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjectManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cTextureManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cDeviceManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cObj_Surface.cpp">
+      <Filter>OBJ_Load</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D3DX_PROJECT.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="D3DX_PROJECT.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
