@@ -53,16 +53,16 @@ void cMainGame::Setup()
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
-	m_pObject->Setup();
-
+	m_pObject->Setup("map.obj");
+	m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
+	//
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
-	 
+	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
 	//테스트 엑스모델 셋팅
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
-	m_pXmodel->SetSRT(D3DXVECTOR3(10, 10, 10), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 15, 0));
-
+	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f,1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 15, -15));
 }
 
 void cMainGame::Update()
@@ -70,7 +70,8 @@ void cMainGame::Update()
 	m_pCamera->Update(D3DXVECTOR3(0,0,0));
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
-
+	
+	
 }
 
 void cMainGame::Render()

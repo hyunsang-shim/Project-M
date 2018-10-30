@@ -12,12 +12,13 @@ public:
 	cNewObject();
 	~cNewObject();
 public:
-	void Setup();
+	void Setup(string filePath);
 	void Updata();
 	void Render();
 	void FileLoad(char* FileName);
 	void ProcessMtl(char* FileName);
 	bool StartWith(char* FindStr, char* SearchStr);
+	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
 	D3DMATERIAL9 m_mtlColor;
 private:
 	vector<MLT_GROUP> m_vecMLT;
@@ -34,6 +35,9 @@ private:
 	vector<DWORD> m_vecAttribute;
 	LPD3DXMESH m_pMesh;
 
+	D3DXVECTOR3 m_vRot;
+	D3DXVECTOR3 m_vPos;
+	D3DXVECTOR3 m_vScale;
 
 	int m_nNumLine;
 };

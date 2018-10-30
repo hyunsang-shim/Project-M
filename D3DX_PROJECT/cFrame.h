@@ -25,6 +25,7 @@ public:
 	void AddChild(cFrame* pChild);
 	void Destroy();
 	void CalcOriginLocalTM(D3DXMATRIXA16* pmatParent);
+	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
 
 	void CalcLocalT(IN int nKeyFrame, OUT D3DXMATRIXA16& matT);
 	void CalcLocalR(IN int nKeyFrame, OUT D3DXMATRIXA16& matR);
@@ -36,8 +37,11 @@ public:
 	DWORD m_dwFrameSpeed;
 	DWORD m_dwTicksPerFrame;
 
+	D3DXVECTOR3 m_vRot;
+	D3DXVECTOR3 m_vPos;
+	D3DXVECTOR3 m_vScale;
 
-
+	D3DXMATRIXA16 m_matWorld;
 
 };
 

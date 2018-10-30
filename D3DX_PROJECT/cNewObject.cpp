@@ -11,14 +11,21 @@ cNewObject::~cNewObject()
 {
 }
 
-void cNewObject::Setup()
+void cNewObject::Setup(string filePath)
 {
 	m_mtlColor.Emissive.r = 0.0f;
 	m_mtlColor.Emissive.g = 0.0f;
 	m_mtlColor.Emissive.b = 0.0f;
 	m_mtlColor.Emissive.a = 1.0f;
 	//FileLoad("box.obj");
-	FileLoad("./Map.obj");
+
+	char * writable = new char[filePath.size() + 1];
+	std::copy(filePath.begin(), filePath.end(), writable);
+	writable[filePath.size()] = '\0'; // 스트링 끝에 0을 추가해주는 거 잊지 마세요
+
+	FileLoad(writable);
+
+	delete[] writable;
 
 	D3DXCreateMeshFVF(
 		m_vecVertex.size() / 3,
@@ -57,16 +64,16 @@ void cNewObject::Updata()
 
 void cNewObject::Render()
 {
-	D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY;
+	D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
 
 	D3DXMatrixScaling(&BoxS, 0.01, 0.01, 0.01);
 	D3DXMatrixRotationYawPitchRoll(&BoxR, D3DX_PI / 2, -D3DX_PI / 2, 0);
 	D3DXVec3TransformNormal(&v_BoxLookAt, &D3DXVECTOR3(0, 0, 1), &BoxR);
 	D3DXMatrixTranslation(&BoxT, v_translation.x, v_translation.y, v_translation.z);
 
-	m_matWorld = BoxS * BoxR * BoxT;
+	tmp = BoxS * BoxR * BoxT* m_matWorld;
 
-	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
+	g_pDevice->SetTransform(D3DTS_WORLD, &tmp);
 
 	for (int i = 0; i < m_vecMLT.size(); i++)
 	{
@@ -229,4 +236,19 @@ bool cNewObject::StartWith(char * FindStr, char * SearchStr)
 	if (temp == FindStr)
 		return true;
 	return false;
+}
+
+void cNewObject::SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos)
+{
+	m_vPos = vPos;
+	m_vScale = vScale;
+	m_vRot = vRot;
+	D3DXMATRIXA16 matT, matS, matR, matX, matY, matZ;
+	D3DXMatrixTranslation(&matT, m_vPos.x, m_vPos.y, m_vPos.z);
+	D3DXMatrixScaling(&matS, m_vScale.x, m_vScale.y, m_vScale.z);
+	D3DXMatrixRotationX(&matX, m_vRot.x);
+	D3DXMatrixRotationY(&matY, m_vRot.y);
+	D3DXMatrixRotationZ(&matZ, m_vRot.z);
+	matR = matZ * matX * matY;
+	m_matWorld = matS * matR * matT;
 }

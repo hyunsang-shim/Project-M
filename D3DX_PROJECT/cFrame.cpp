@@ -7,6 +7,7 @@ cFrame::cFrame()
 {
 	D3DXMatrixIdentity(&m_matLocalTM);
 	D3DXMatrixIdentity(&m_matWorldTM);
+	D3DXMatrixIdentity(&m_matWorld);
 }
 
 cFrame::~cFrame()
@@ -30,6 +31,7 @@ void cFrame::Update(int nKeyFrame, D3DXMATRIXA16 * pmatParent)
 	for each(auto c in m_vecChild)
 	{
 		c->Update(nKeyFrame, &m_matWorldTM);
+		c->m_matWorld = m_matWorld;
 	}
 
 }
@@ -38,7 +40,9 @@ void cFrame::Render()
 {
 	if (m_pMtlTex)
 	{
-		g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorldTM);
+		D3DXMATRIXA16 tmp;
+		tmp = m_matWorldTM * m_matWorld;
+		g_pDevice->SetTransform(D3DTS_WORLD, &tmp);
 		g_pDevice->SetTexture(0, m_pMtlTex->GetTexture());
 		g_pDevice->SetMaterial(&m_pMtlTex->GetMaterial());
 		g_pDevice->SetFVF(ST_PNT_VERTEX::FVF);
@@ -83,6 +87,21 @@ void cFrame::CalcOriginLocalTM(D3DXMATRIXA16 * pmatParent)
 	{
 		c->CalcOriginLocalTM(&m_matWorldTM);
 	}
+}
+
+void cFrame::SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos)
+{
+	m_vPos = vPos;
+	m_vScale = vScale;
+	m_vRot = vRot;
+	D3DXMATRIXA16 matT, matS, matR, matX, matY, matZ;
+	D3DXMatrixTranslation(&matT, m_vPos.x, m_vPos.y, m_vPos.z);
+	D3DXMatrixScaling(&matS, m_vScale.x, m_vScale.y, m_vScale.z);
+	D3DXMatrixRotationX(&matX, m_vRot.x);
+	D3DXMatrixRotationY(&matY, m_vRot.y);
+	D3DXMatrixRotationZ(&matZ, m_vRot.z);
+	matR = matZ * matX * matY;
+	this->m_matWorld = matS * matR * matT;
 }
 
 void cFrame::CalcLocalT(IN int nKeyFrame, OUT D3DXMATRIXA16 & matT)

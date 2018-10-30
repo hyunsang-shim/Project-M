@@ -30,7 +30,7 @@ cXModel::cXModel(string filePath)
 	DWORD numMtrls = 0;
 
 	D3DXLoadMeshFromXA(
-		"./Xfile/bigship1.x",
+		filePath.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,
 		&adjBuffer,
