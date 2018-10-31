@@ -49,8 +49,12 @@ void cMainGame::Setup()
 	DirectLight = InitDirectionalLight(&dir, &c);
 	g_pDevice->SetLight(0, &DirectLight);
 	g_pDevice->SetLight(1, &DirectLight);
+	g_pDevice->SetLight(2, &DirectLight);
+	g_pDevice->SetLight(3, &DirectLight);
 	g_pDevice->LightEnable(0, TRUE);
 	g_pDevice->LightEnable(1, TRUE);
+	g_pDevice->LightEnable(2, TRUE);
+	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// ÇÏÀÌÆ®¸Ê ¼ÂÆÃ
@@ -76,7 +80,7 @@ void cMainGame::Setup()
 
 	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup("Xfile" , "zealot.X");
+	m_pMyCharacter->Setup("Xfile" , "soldier4.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 }
