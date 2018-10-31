@@ -14,6 +14,7 @@ protected:
 public:
 	virtual void SetUP();
 	virtual void Update();
+	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
 	virtual void Render();
 	virtual D3DXVECTOR3& GetPosition();
 	virtual D3DXMATRIXA16* GetTransform()

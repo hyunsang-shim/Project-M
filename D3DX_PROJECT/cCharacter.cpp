@@ -54,6 +54,19 @@ void cCharacter::Update()
 	m_matWorld = matR * matT;
 }
 
+void cCharacter::Update(float ROTY, D3DXVECTOR3 POSITION)
+{
+	D3DXMATRIXA16 matR, matT;
+	m_vPosition = POSITION;
+	D3DXMatrixRotationY(&matR, m_fRotY);
+
+	m_vDirection = D3DXVECTOR3(0, 0, 1);
+
+	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+	m_matWorld = matR * matT;
+}
+
 void cCharacter::Render()
 {
 }

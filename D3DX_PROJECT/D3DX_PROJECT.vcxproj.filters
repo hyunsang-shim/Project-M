@@ -49,6 +49,15 @@
     <Filter Include="Manager">
       <UniqueIdentifier>{de65ac51-24b5-4ba5-b810-f014398e44c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SKY">
+      <UniqueIdentifier>{429bc2e0-bc69-46ec-8e58-8d9182ceb6d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Character_MY">
+      <UniqueIdentifier>{f1ac4d5a-ee0a-4a81-b341-2c90ee4a6d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Character_OTHER">
+      <UniqueIdentifier>{c6332ce6-d046-4026-aa8e-a2e5c86741eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -132,11 +141,14 @@
     <ClInclude Include="cObj_Surface.h">
       <Filter>OBJ_Load</Filter>
     </ClInclude>
-    <ClInclude Include="cSKY.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="cMyCharacter.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Character_MY</Filter>
+    </ClInclude>
+    <ClInclude Include="cSKY.h">
+      <Filter>SKY</Filter>
+    </ClInclude>
+    <ClInclude Include="cOtherCharacter.h">
+      <Filter>Character_OTHER</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -209,11 +221,14 @@
     <ClCompile Include="cObj_Surface.cpp">
       <Filter>OBJ_Load</Filter>
     </ClCompile>
-    <ClCompile Include="cSKY.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="cMyCharacter.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Character_MY</Filter>
+    </ClCompile>
+    <ClCompile Include="cSKY.cpp">
+      <Filter>SKY</Filter>
+    </ClCompile>
+    <ClCompile Include="cOtherCharacter.cpp">
+      <Filter>Character_OTHER</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
