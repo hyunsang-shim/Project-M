@@ -155,7 +155,7 @@ namespace d3d
 #include "cObjectManager.h"
 #include "cTextureManager.h"
 #include "cTimeManager.h"
-#include "cSkinnedMeshManager.h"
+
 
 using namespace std;
 

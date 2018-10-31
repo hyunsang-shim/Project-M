@@ -5,8 +5,8 @@
 #include "cNewObject.h"
 #include "cXModel.h"
 #include "cAseLoader.h"
-#include "cSkinnedMesh.h"
 #include "cSKY.h"
+#include "cSkinnedMesh.h"
 
 cMainGame::cMainGame()		
 	:m_pCamera(NULL),
@@ -14,8 +14,8 @@ cMainGame::cMainGame()
 	m_pMap(NULL),
 	m_pObject(NULL),
 	m_pXmodel(NULL),
-	m_pSkinnedMesh(NULL),
-	m_pSKY(NULL)
+	m_pSKY(NULL),
+	m_pSkinnedMesh(NULL)
 {
 }
 
@@ -65,24 +65,28 @@ void cMainGame::Setup()
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
 	//Å×½ºÆ® ¿¢½º¸ðµ¨ ¼ÂÆÃ
-	//m_pXmodel = new cXModel("Xfile/bigship1.x");
-	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f,1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 15, -15));
+	m_pXmodel = new cXModel("Xfile/bigship1.x");
+	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f,1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 15, -15));
 
-	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("Xfile", "zealot.X");
-
+	//ÇÏ´Ã ¼ÂÆÃ
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
+
+	//Áú·µ ¼ÂÆÃ
+	m_pSkinnedMesh = new cSkinnedMesh;
+	m_pSkinnedMesh->Setup("Xfile", "zealot.X");
 }
 
 void cMainGame::Update()
 {
 	g_pTimeManager->Update();
+
 	m_pCamera->Update(D3DXVECTOR3(0,0,0));
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
-	
-	if(m_pSkinnedMesh)
+
+
+	if (m_pSkinnedMesh)
 		m_pSkinnedMesh->Update();
 }
 
@@ -101,8 +105,9 @@ void cMainGame::Render()
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 
-	if(m_pSkinnedMesh)
+	if (m_pSkinnedMesh)
 		m_pSkinnedMesh->Render(NULL);
+
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
 	g_pDevice->EndScene();
