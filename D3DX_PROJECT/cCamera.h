@@ -22,4 +22,5 @@ public:
 	void Update(D3DXVECTOR3 cube);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+
 };

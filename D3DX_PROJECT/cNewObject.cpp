@@ -21,7 +21,7 @@ void cNewObject::Setup(string filePath)
 
 	char * writable = new char[filePath.size() + 1];
 	std::copy(filePath.begin(), filePath.end(), writable);
-	writable[filePath.size()] = '\0'; // 스트링 끝에 0을 추가해주는 거 잊지 마세요
+	writable[filePath.size()] = '\0'; 
 
 	FileLoad(writable);
 

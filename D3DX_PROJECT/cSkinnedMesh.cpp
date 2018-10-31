@@ -71,8 +71,6 @@ void cSkinnedMesh::Update()
 		}
 
 	}
-
-
 	m_pAnimController->AdvanceTime(g_pTimeManager->GetElapsedTime(), NULL);
 	Update(m_pRoot, NULL);
 	UpdateSKinnedMesh(m_pRoot);
@@ -100,7 +98,7 @@ void cSkinnedMesh::Update(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
 	}
 }
 
-void cSkinnedMesh::Render(LPD3DXFRAME pFrame)
+void cSkinnedMesh::Render(LPD3DXFRAME pFrame)	
 {
 	if (pFrame == NULL)
 		pFrame = m_pRoot;
@@ -241,10 +239,6 @@ void cSkinnedMesh::SetAnimationIndexBlend(int nIndex)
 
 	SAFE_RELEASE(pPrevAnimSet);
 	SAFE_RELEASE(pNextAnimSet);
-
-
-
-
 }
 
 cSkinnedMesh::cSkinnedMesh(char * szFolder, char * szFileName)

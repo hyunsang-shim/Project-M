@@ -8,6 +8,8 @@ class cGrid;
 class cNewObject;
 class cXModel;
 class cAseLoader;
+class cSkinnedMesh;
+class cSKY;
 class cMainGame
 {
 public:
@@ -30,7 +32,8 @@ private:
 	cAseLoader* loader;
 	cXModel* m_pXmodel;
 	cFrame *m_pRootFrame;
-
+	cSkinnedMesh *m_pSkinnedMesh;
+	cSKY *m_pSKY;
 public:	//광원을 초기화 하는 함수
 	D3DLIGHT9 InitDirectionalLight(D3DXVECTOR3* direction, D3DXCOLOR* color);
 	D3DLIGHT9 InitPointLight(D3DXVECTOR3* position, D3DXCOLOR* color);
@@ -38,4 +41,3 @@ public:	//광원을 초기화 하는 함수
 private:
 	D3DLIGHT9 DirectLight;	//메인 광원
 };
-
