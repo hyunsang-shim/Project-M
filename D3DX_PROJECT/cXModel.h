@@ -1,4 +1,5 @@
 #pragma once
+#include "cCharacter.h"
 class cXModel
 {
 public:
@@ -6,6 +7,7 @@ public:
 	cXModel(string filePath);
 	~cXModel();
 private:
+
 	D3DXVECTOR3 m_vRot;
 	D3DXVECTOR3 m_vPos;
 	D3DXVECTOR3 m_vScale;

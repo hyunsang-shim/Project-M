@@ -7,6 +7,8 @@
 #include "cAseLoader.h"
 #include "cSKY.h"
 #include "cSkinnedMesh.h"
+#include "cCharacter.h"
+#include "cMyCharacter.h"
 
 cMainGame::cMainGame()		
 	:m_pCamera(NULL),
@@ -15,7 +17,7 @@ cMainGame::cMainGame()
 	m_pObject(NULL),
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
-	m_pSkinnedMesh(NULL)
+	m_pMyCharacter(NULL)
 {
 }
 
@@ -27,7 +29,7 @@ cMainGame::~cMainGame()
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pGrid);
 	SAFE_DELETE(m_pObject);
-	SAFE_DELETE(m_pSkinnedMesh);
+	SAFE_DELETE(m_pMyCharacter);
 }
 
 void cMainGame::Setup()
@@ -67,27 +69,29 @@ void cMainGame::Setup()
 	//Å×½ºÆ® ¿¢½º¸ðµ¨ ¼ÂÆÃ
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
 	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f,1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 15, -15));
-
+	
 	//ÇÏ´Ã ¼ÂÆÃ
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
 
 	//Áú·µ ¼ÂÆÃ
-	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("Xfile", "zealot.X");
+	m_pMyCharacter = new cMyCharacter;
+	m_pMyCharacter->Setup();
+	cCharacter* pCharacter = new cCharacter;
+	m_pMyCharacter->SetCharacterController(pCharacter);
 }
 
 void cMainGame::Update()
 {
 	g_pTimeManager->Update();
 
-	m_pCamera->Update(D3DXVECTOR3(0,0,0));
+	m_pCamera->Update(m_pMyCharacter->GetPosition());
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
 
-	if (m_pSkinnedMesh)
-		m_pSkinnedMesh->Update();
+	if (m_pMyCharacter)
+		m_pMyCharacter->Update();
 }
 
 void cMainGame::Render()
@@ -105,8 +109,8 @@ void cMainGame::Render()
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 
-	if (m_pSkinnedMesh)
-		m_pSkinnedMesh->Render(NULL);
+	if (m_pMyCharacter)
+		m_pMyCharacter->Render(NULL);
 
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
@@ -120,6 +124,17 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		m_pCamera->WndProc(hWnd, message, wParam, lParam);
 	}
+	switch (message)
+	{
+	case WM_LBUTTONDOWN:
+	{
+		static int n = 0;
+		//m_pSkinnedMesh->SetAnimationIndex(n++);
+		m_pMyCharacter->SetAnimationIndexBlend(n++);
+	}
+	break;
+	}
+
 }
 
 void cMainGame::Setup_HeightMap()

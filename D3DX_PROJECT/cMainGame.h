@@ -9,6 +9,7 @@ class cNewObject;
 class cXModel;
 class cAseLoader;
 class cSKY;
+class cMyCharacter;
 class cMainGame
 {
 public:
@@ -32,7 +33,7 @@ private:
 	cXModel* m_pXmodel;
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
-	cSkinnedMesh *m_pSkinnedMesh;
+	cMyCharacter *m_pMyCharacter;
 public:	//광원을 초기화 하는 함수
 	D3DLIGHT9 InitDirectionalLight(D3DXVECTOR3* direction, D3DXCOLOR* color);
 	D3DLIGHT9 InitPointLight(D3DXVECTOR3* position, D3DXCOLOR* color);

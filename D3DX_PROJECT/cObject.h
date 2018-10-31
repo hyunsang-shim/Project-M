@@ -3,7 +3,7 @@ class cObject
 {
 public:
 	cObject();
-	~cObject();
+	virtual ~cObject();
 
 protected:
 	ULONG m_ulRefCount;

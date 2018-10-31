@@ -67,8 +67,8 @@ public : inline void Set##funName(varType& var) { varName = var; }
 
 #define SAFE_ADD_REF(p){if(p) p->AddRef();}
 
-#define SYNTHESIZE_ADD_REF(varType,varName,funName) \
-protected : varType varName;\
+#define SYNTHESIZE_ADD_REF(varType, varName, funName)\
+protected: varType varName;\
 public: virtual varType Get##funName(void) const {return varName;}\
 public: virtual void Set##funName(varType var){\
 	if(varName != var){\

@@ -152,6 +152,7 @@
     <ClInclude Include="cHeightMap.h" />
     <ClInclude Include="cMainGame.h" />
     <ClInclude Include="cMtlTex.h" />
+    <ClInclude Include="cMyCharacter.h" />
     <ClInclude Include="cNewObject.h" />
     <ClInclude Include="cOBB.h" />
     <ClInclude Include="cObject.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="cHeightMap.cpp" />
     <ClCompile Include="cMainGame.cpp" />
     <ClCompile Include="cMtlTex.cpp" />
+    <ClCompile Include="cMyCharacter.cpp" />
     <ClCompile Include="cNewObject.cpp" />
     <ClCompile Include="cOBB.cpp" />
     <ClCompile Include="cObject.cpp" />

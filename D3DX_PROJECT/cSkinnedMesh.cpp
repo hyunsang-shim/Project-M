@@ -13,7 +13,6 @@ cSkinnedMesh::cSkinnedMesh()
 
 {
 	D3DXMatrixIdentity(&m_matWorldTM);
-
 }
 
 

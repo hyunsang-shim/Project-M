@@ -1,5 +1,5 @@
 #pragma once
-class cCharacter
+class cCharacter:public cObject
 {
 public:
 	cCharacter();
@@ -16,5 +16,9 @@ public:
 	virtual void Update();
 	virtual void Render();
 	virtual D3DXVECTOR3& GetPosition();
+	virtual D3DXMATRIXA16* GetTransform()
+	{
+		return &m_matWorld;
+	}
 };
 
