@@ -240,10 +240,6 @@ void cSkinnedMesh::SetAnimationIndexBlend(int nIndex)
 
 	SAFE_RELEASE(pPrevAnimSet);
 	SAFE_RELEASE(pNextAnimSet);
-
-
-
-
 }
 
 cSkinnedMesh::cSkinnedMesh(char * szFolder, char * szFileName)

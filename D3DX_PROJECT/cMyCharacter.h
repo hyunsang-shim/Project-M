@@ -17,7 +17,7 @@ private:
 	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
 
 public:
-	void Setup();
+	void Setup(char * szFolder, char * szFileName);
 	void Update();
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
 	cOBB* GetOBB();

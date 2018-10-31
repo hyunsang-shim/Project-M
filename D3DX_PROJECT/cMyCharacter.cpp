@@ -18,9 +18,9 @@ cMyCharacter::~cMyCharacter()
 	SAFE_DELETE(m_pOBB);
 }
 
-void cMyCharacter::Setup()
+void cMyCharacter::Setup(char * szFolder, char * szFileName)
 {
-	m_pSkinnedMesh = new cSkinnedMesh("Xfile", "zealot.X");
+	m_pSkinnedMesh = new cSkinnedMesh(szFolder, szFileName);
 	m_pSkinnedMesh->SetRandomTrackPosition();
 
 	m_pOBB = new cOBB;

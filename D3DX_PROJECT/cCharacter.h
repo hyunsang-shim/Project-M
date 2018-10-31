@@ -17,6 +17,7 @@ public:
 	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
 	virtual void Render();
 	virtual D3DXVECTOR3& GetPosition();
+	void SetPositionY(float y);
 	virtual D3DXMATRIXA16* GetTransform()
 	{
 		return &m_matWorld;

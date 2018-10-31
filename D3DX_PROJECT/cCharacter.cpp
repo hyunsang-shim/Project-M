@@ -75,3 +75,8 @@ D3DXVECTOR3 & cCharacter::GetPosition()
 {
 	return this->m_vPosition;
 }
+
+void cCharacter::SetPositionY(float y)
+{
+	this->m_vPosition.y = y;
+}

@@ -76,7 +76,7 @@ void cMainGame::Setup()
 
 	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup();
+	m_pMyCharacter->Setup("Xfile" , "zealot.X");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 }
@@ -92,6 +92,13 @@ void cMainGame::Update()
 
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update();
+
+
+	float y = m_pMyCharacter->GetPosition().y;
+	if(m_pMap)
+		m_pMap->GetHeight(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z);
+
+	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
 }
 
 void cMainGame::Render()
