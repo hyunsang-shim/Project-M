@@ -27,10 +27,13 @@ void cMyCharacter::Setup(char * szFolder, char * szFileName)
 	m_pOBB->Setup(m_pSkinnedMesh);
 }
 
-void cMyCharacter::Update()
+void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 {
 	if (m_pCharacterController)
+	{	
 		m_pCharacterController->Update();
+	
+	}
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
@@ -61,5 +64,10 @@ D3DXVECTOR3 cMyCharacter::GetPosition()
 void cMyCharacter::SetAnimationIndexBlend(int nIndex)
 {
 	m_pSkinnedMesh->SetAnimationIndexBlend(nIndex);
+}
+
+void cMyCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	
 }
 

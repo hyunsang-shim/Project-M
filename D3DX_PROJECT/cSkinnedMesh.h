@@ -42,6 +42,5 @@ public:
 	void Update(ST_BONE* pCurrent, D3DXMATRIXA16* pmatParent);
 	void SetRandomTrackPosition();
 	void setTransform(D3DXMATRIXA16* pmat);
-
 };
 

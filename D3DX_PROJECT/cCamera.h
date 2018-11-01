@@ -13,6 +13,7 @@ private:
 	BOOL m_isLButtonDown;
 
 	D3DXVECTOR3 m_vCamRotAngle;
+	D3DXVECTOR3 m_vCamDirection;
 	float m_fCameraDistance;
 
 
@@ -21,6 +22,6 @@ public:
 	void Setup();
 	void Update(D3DXVECTOR3 cube);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
+	D3DXVECTOR3 getDirection();
 
 };

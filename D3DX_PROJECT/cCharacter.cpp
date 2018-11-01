@@ -21,14 +21,18 @@ void cCharacter::SetUP()
 
 void cCharacter::Update()
 {
+	D3DXVECTOR3 m_vLeftDirection;
+	D3DXVECTOR3 m_vUp(0, 1, 0);
+
+	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
 	if (GetKeyState('A') & 0x8000)
 	{
-		m_fRotY -= 0.1f;
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 	}
 
 	if (GetKeyState('D') & 0x8000)
 	{
-		m_fRotY += 0.1f;
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 	}
 
 	if (GetKeyState('W') & 0x8000)

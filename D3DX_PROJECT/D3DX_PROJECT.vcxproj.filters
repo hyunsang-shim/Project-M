@@ -58,6 +58,9 @@
     <Filter Include="Character_OTHER">
       <UniqueIdentifier>{c6332ce6-d046-4026-aa8e-a2e5c86741eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FONT">
+      <UniqueIdentifier>{2d6a7905-30ec-4313-b3bb-91328efce455}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -150,6 +153,12 @@
     <ClInclude Include="cOtherCharacter.h">
       <Filter>Character_OTHER</Filter>
     </ClInclude>
+    <ClInclude Include="cUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cFontManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -229,6 +238,12 @@
     </ClCompile>
     <ClCompile Include="cOtherCharacter.cpp">
       <Filter>Character_OTHER</Filter>
+    </ClCompile>
+    <ClCompile Include="cUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cFontManager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
