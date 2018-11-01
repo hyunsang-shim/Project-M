@@ -15,8 +15,8 @@ private:
 	D3DXVECTOR3 m_vCamRotAngle;
 	D3DXVECTOR3 m_vCamDirection;
 	float m_fCameraDistance;
-
-
+	float fDeltaX;
+	float fDeltaY;
 
 public:
 	void Setup();

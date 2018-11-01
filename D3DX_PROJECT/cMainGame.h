@@ -24,6 +24,7 @@ public:
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	void Setup_HeightMap();
+	void SetMousePosToCenter(HWND hWnd);
 private:
 	cCamera* m_pCamera;
 	cHeightMap* m_pMap;
@@ -34,6 +35,8 @@ private:
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
 	cMyCharacter *m_pMyCharacter;
+	
+	BOOL mouseMoveCheck;
 
 public:	//광원을 초기화 하는 함수
 	D3DLIGHT9 InitDirectionalLight(D3DXVECTOR3* direction, D3DXCOLOR* color);

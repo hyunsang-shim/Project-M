@@ -1,4 +1,7 @@
 #pragma once
+
+class cOBB;
+
 struct MLT_GROUP
 {
 	char c[1024];
@@ -19,6 +22,7 @@ public:
 	void ProcessMtl(char* FileName);
 	bool StartWith(char* FindStr, char* SearchStr);
 	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
+	cOBB * GetOBB();
 	D3DMATERIAL9 m_mtlColor;
 private:
 	vector<MLT_GROUP> m_vecMLT;
@@ -40,5 +44,9 @@ private:
 	D3DXVECTOR3 m_vScale;
 
 	int m_nNumLine;
+
+	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);
+	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
+	cOBB* m_pOBB;
 };
 

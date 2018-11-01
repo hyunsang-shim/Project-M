@@ -10,6 +10,7 @@
 #include "cCharacter.h"
 #include "cMyCharacter.h"
 #include "cFontManager.h"
+#include "cOBB.h"
 
 cMainGame::cMainGame()		
 	:m_pCamera(NULL),
@@ -56,8 +57,12 @@ void cMainGame::Setup()
 	DirectLight = InitDirectionalLight(&dir, &c);
 	g_pDevice->SetLight(0, &DirectLight);
 	g_pDevice->SetLight(1, &DirectLight);
+	g_pDevice->SetLight(2, &DirectLight);
+	g_pDevice->SetLight(3, &DirectLight);
 	g_pDevice->LightEnable(0, TRUE);
 	g_pDevice->LightEnable(1, TRUE);
+	g_pDevice->LightEnable(2, TRUE);
+	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// 하이트맵 셋팅
@@ -66,8 +71,8 @@ void cMainGame::Setup()
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
-	m_pObject->Setup("map.obj");
-	m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
+	m_pObject->Setup("box.obj");
+	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
@@ -83,7 +88,7 @@ void cMainGame::Setup()
 
 	//질럿 셋팅
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup("Xfile" , "zealot.x");
+	m_pMyCharacter->Setup("Xfile" , "soldier4.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
@@ -99,6 +104,8 @@ void cMainGame::Update()
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
+	if (m_pObject)
+		m_pObject->Updata();
 
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
@@ -126,12 +133,15 @@ void cMainGame::Render()
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 
-	if (m_pMyCharacter)
-		m_pMyCharacter->Render(NULL);
-
-
 	//Render_Text();
 
+	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	{
+		if (m_pMyCharacter)
+			m_pMyCharacter->Render(NULL);
+	}
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
 	g_pDevice->EndScene();
@@ -158,7 +168,7 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	}
-
+	
 }
 
 void cMainGame::Setup_HeightMap()
@@ -166,6 +176,17 @@ void cMainGame::Setup_HeightMap()
 	cHeightMap* pMap = new cHeightMap;
 	pMap->Setup("HeightMapData/", "HeightMap.raw","terrain.jpg");
 	m_pMap = pMap;
+}
+
+void cMainGame::SetMousePosToCenter(HWND hWnd)
+{
+	POINT MOUSE;
+	RECT client;
+	GetClientRect(hWnd, &client);
+	MOUSE.y = (client.bottom - client.top) / 2;
+	MOUSE.x = (client.right - client.left) / 2;
+	ClientToScreen(hWnd, &MOUSE);
+	SetCursorPos(MOUSE.x, MOUSE.y);
 }
 
 

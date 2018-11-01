@@ -224,7 +224,7 @@ void cAseLoader::ProcessMAP_DIFFUSE(OUT cMtlTex * pMtlTex)
 		{
 			szToken = GetToken();
 			pMtlTex->SetTexture(
-				g_pTextureManager->GetTexture(szToken));
+			g_pTextureManager->GetTexture(szToken));
 		}
 	} while (nLevel > 0);
 }
