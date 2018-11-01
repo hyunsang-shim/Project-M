@@ -42,6 +42,7 @@ void cCamera::Update(D3DXVECTOR3 cube)
 	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
 
 	m_vEye = D3DXVECTOR3(0, m_fCameraDistance, -m_fCameraDistance);
+	cube.y += m_fCameraDistance / 3.0f + 0.5f;
 
 	D3DXMatrixRotationX(&matRX, m_vCamRotAngle.x);
 	D3DXMatrixRotationY(&matRY, m_vCamRotAngle.y);
