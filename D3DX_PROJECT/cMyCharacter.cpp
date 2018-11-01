@@ -63,3 +63,8 @@ void cMyCharacter::SetAnimationIndexBlend(int nIndex)
 	m_pSkinnedMesh->SetAnimationIndexBlend(nIndex);
 }
 
+void cMyCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	m_pCharacterController->WndProc(hWnd, message, wParam, lParam);
+}
+

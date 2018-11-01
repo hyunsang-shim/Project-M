@@ -6,8 +6,11 @@ cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
 	, m_vPosition(0, 0, 0)
+
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	m_ptPrevMouse.x = 0;
+	m_ptPrevMouse.y = 0;
 }
 
 
@@ -21,24 +24,27 @@ void cCharacter::SetUP()
 
 void cCharacter::Update()
 {
+	D3DXVECTOR3 m_vDirectionLeft;
+	D3DXVECTOR3 m_vUP(0, 1, 0);
+	D3DXVec3Cross(&m_vDirectionLeft, &m_vDirection, &m_vUP);
 	if (GetKeyState('A') & 0x8000)
 	{
-		m_fRotY -= 0.1f;
+		m_vPosition = m_vPosition + (m_vDirectionLeft*0.1F);
 	}
 
 	if (GetKeyState('D') & 0x8000)
 	{
-		m_fRotY += 0.1f;
+		m_vPosition = m_vPosition - (m_vDirectionLeft*0.1F);
 	}
 
 	if (GetKeyState('W') & 0x8000)
 	{
-		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 	}
 
 	if (GetKeyState('S') & 0x8000)
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 	}
 
 
@@ -79,4 +85,24 @@ D3DXVECTOR3 & cCharacter::GetPosition()
 void cCharacter::SetPositionY(float y)
 {
 	this->m_vPosition.y = y;
+}
+
+void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_MOUSEMOVE:
+		POINT ptCurrMouse;
+		ptCurrMouse.x = LOWORD(lParam);
+		ptCurrMouse.y = HIWORD(lParam);
+
+		float fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
+		float fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
+
+		m_fRotY += (fDeltaX / 100.f);
+		m_vDirection.x += (fDeltaY / 100.f);
+
+		m_ptPrevMouse = ptCurrMouse;
+		break;
+	}
 }

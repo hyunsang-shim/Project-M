@@ -120,6 +120,8 @@ void cMainGame::Render()
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 
+
+	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
 	if (m_pMyCharacter)
 		m_pMyCharacter->Render(NULL);
 
@@ -135,6 +137,10 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		m_pCamera->WndProc(hWnd, message, wParam, lParam);
 	}
+	if (m_pMyCharacter)
+	{
+		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
+	}
 	switch (message)
 	{
 	case WM_LBUTTONDOWN:
@@ -145,7 +151,7 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	}
-
+	
 }
 
 void cMainGame::Setup_HeightMap()
@@ -153,6 +159,17 @@ void cMainGame::Setup_HeightMap()
 	cHeightMap* pMap = new cHeightMap;
 	pMap->Setup("HeightMapData/", "HeightMap.raw","terrain.jpg");
 	m_pMap = pMap;
+}
+
+void cMainGame::SetMousePosToCenter(HWND hWnd)
+{
+	POINT MOUSE;
+	RECT client;
+	GetClientRect(hWnd, &client);
+	MOUSE.y = (client.bottom - client.top) / 2;
+	MOUSE.x = (client.right - client.left) / 2;
+	ClientToScreen(hWnd, &MOUSE);
+	SetCursorPos(MOUSE.x, MOUSE.y);
 }
 
 

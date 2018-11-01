@@ -7,9 +7,15 @@ public:
 
 protected:
 	float m_fRotY;
+	float fDeltaX;
+	float fDeltaY;
 	D3DXVECTOR3 m_vDirection;
 	D3DXVECTOR3 m_vPosition;
 	D3DXMATRIXA16 m_matWorld;
+
+	POINT m_ptPrevMouse;
+
+
 
 public:
 	virtual void SetUP();
@@ -22,5 +28,6 @@ public:
 	{
 		return &m_matWorld;
 	}
+	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
