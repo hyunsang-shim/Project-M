@@ -9,6 +9,7 @@
 #include "cSkinnedMesh.h"
 #include "cCharacter.h"
 #include "cMyCharacter.h"
+#include "cOBB.h"
 
 cMainGame::cMainGame()		
 	:m_pCamera(NULL),
@@ -63,8 +64,8 @@ void cMainGame::Setup()
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
-	m_pObject->Setup("map.obj");
-	m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
+	m_pObject->Setup("box.obj");
+	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
@@ -93,6 +94,8 @@ void cMainGame::Update()
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
+	if (m_pObject)
+		m_pObject->Updata();
 
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update();
@@ -122,9 +125,12 @@ void cMainGame::Render()
 
 
 	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-	if (m_pMyCharacter)
-		m_pMyCharacter->Render(NULL);
 
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	{
+		if (m_pMyCharacter)
+			m_pMyCharacter->Render(NULL);
+	}
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
 	g_pDevice->EndScene();

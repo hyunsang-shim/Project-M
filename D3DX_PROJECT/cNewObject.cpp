@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "cNewObject.h"
+#include "cOBB.h"
 
-cNewObject::cNewObject() : m_pTexture(NULL), v_translation(0, 0, 0)
+cNewObject::cNewObject() : m_pTexture(NULL), v_translation(0, 0, 0), m_pOBB(NULL), m_vMin(0, 0, 0), m_vMax(0, 0, 0)
 {
 	D3DXMatrixIdentity(&m_matWorld);
 }
@@ -9,6 +10,7 @@ cNewObject::cNewObject() : m_pTexture(NULL), v_translation(0, 0, 0)
 
 cNewObject::~cNewObject()
 {
+	SAFE_DELETE(m_pOBB);
 }
 
 void cNewObject::Setup(string filePath)
@@ -21,7 +23,7 @@ void cNewObject::Setup(string filePath)
 
 	char * writable = new char[filePath.size() + 1];
 	std::copy(filePath.begin(), filePath.end(), writable);
-	writable[filePath.size()] = '\0'; 
+	writable[filePath.size()] = '\0';
 
 	FileLoad(writable);
 
@@ -41,6 +43,22 @@ void cNewObject::Setup(string filePath)
 	memcpy(vertex, &m_vecVertex[0], m_vecVertex.size() * sizeof(ST_PNT_VERTEX));
 	m_pMesh->UnlockVertexBuffer();
 
+	D3DXVECTOR3 vMin(0, 0, 0), vMax(0, 0, 0);
+
+	LPVOID pV = NULL;
+	m_pMesh->LockVertexBuffer(0, &pV);
+	D3DXComputeBoundingBox((D3DXVECTOR3*)pV,
+		m_pMesh->GetNumVertices(),
+		D3DXGetFVFVertexSize(m_pMesh->GetFVF()),
+		&vMin,
+		&vMax);
+
+	D3DXVec3Minimize(&m_vMin, &m_vMin, &vMin);
+	D3DXVec3Maximize(&m_vMax, &m_vMax, &vMax);
+
+	m_pMesh->UnlockVertexBuffer();
+
+
 	WORD* Index = 0;
 	m_pMesh->LockIndexBuffer(0, (void**)&Index);
 	for (int i = 0; i < m_vecVertex.size(); i++)
@@ -55,25 +73,28 @@ void cNewObject::Setup(string filePath)
 	memcpy(Attribute, &m_vecAttribute[0], m_vecAttribute.size() * sizeof(DWORD));
 	m_pMesh->UnlockAttributeBuffer();
 
+	m_pOBB = new cOBB();
+	m_pOBB->Setup(this);
 }
 
 void cNewObject::Updata()
 {
-
+	if (m_pOBB)
+		m_pOBB->Update(&m_matWorld);
 }
 
 void cNewObject::Render()
 {
-	D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
+	//D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
 
-	D3DXMatrixScaling(&BoxS, 0.01, 0.01, 0.01);
-	D3DXMatrixRotationYawPitchRoll(&BoxR, D3DX_PI / 2, -D3DX_PI / 2, 0);
-	D3DXVec3TransformNormal(&v_BoxLookAt, &D3DXVECTOR3(0, 0, 1), &BoxR);
-	D3DXMatrixTranslation(&BoxT, v_translation.x, v_translation.y, v_translation.z);
+	//D3DXMatrixScaling(&BoxS, 0.01, 0.01, 0.01);
+	//D3DXMatrixRotationYawPitchRoll(&BoxR, D3DX_PI / 2, -D3DX_PI / 2, 0);
+	//D3DXVec3TransformNormal(&v_BoxLookAt, &D3DXVECTOR3(0, 0, 1), &BoxR);
+	//D3DXMatrixTranslation(&BoxT, v_translation.x, v_translation.y, v_translation.z);
 
-	tmp = BoxS * BoxR * BoxT* m_matWorld;
+	//m_matWorld = BoxS * BoxR * BoxT;
 
-	g_pDevice->SetTransform(D3DTS_WORLD, &tmp);
+	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
 
 	for (int i = 0; i < m_vecMLT.size(); i++)
 	{
@@ -82,6 +103,9 @@ void cNewObject::Render()
 		m_pMesh->DrawSubset(i);
 	}
 	g_pDevice->SetTexture(0, NULL);
+
+	D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255);
+	m_pOBB->OBBBox_Render(c);
 }
 
 void cNewObject::FileLoad(char * FileName)
@@ -251,4 +275,9 @@ void cNewObject::SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos)
 	D3DXMatrixRotationZ(&matZ, m_vRot.z);
 	matR = matZ * matX * matY;
 	m_matWorld = matS * matR * matT;
+}
+
+cOBB * cNewObject::GetOBB()
+{
+	return m_pOBB;
 }
