@@ -284,4 +284,5 @@ void cOBB::OBBBox_Render(D3DXCOLOR c)
 	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorldTM);
 	g_pDevice->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, 8, 0, 24);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 }
