@@ -9,6 +9,7 @@
 #include "cSkinnedMesh.h"
 #include "cCharacter.h"
 #include "cMyCharacter.h"
+#include "cOBB.h"
 
 cMainGame::cMainGame()		
 	:m_pCamera(NULL),
@@ -49,12 +50,8 @@ void cMainGame::Setup()
 	DirectLight = InitDirectionalLight(&dir, &c);
 	g_pDevice->SetLight(0, &DirectLight);
 	g_pDevice->SetLight(1, &DirectLight);
-	g_pDevice->SetLight(2, &DirectLight);
-	g_pDevice->SetLight(3, &DirectLight);
 	g_pDevice->LightEnable(0, TRUE);
 	g_pDevice->LightEnable(1, TRUE);
-	g_pDevice->LightEnable(2, TRUE);
-	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// 하이트맵 셋팅
@@ -63,8 +60,8 @@ void cMainGame::Setup()
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
-	m_pObject->Setup("map.obj");
-	m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
+	m_pObject->Setup("box.obj");
+	//m_pObject->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0));
 	//
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
@@ -93,6 +90,8 @@ void cMainGame::Update()
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
+	if(m_pObject)
+		m_pObject->Updata();
 
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update();
@@ -114,14 +113,21 @@ void cMainGame::Render()
 	m_pSKY->Render();
 	m_pGrid->Render();
 	m_pMap->Render();
-	m_pObject->Render();
 	m_pXmodel->Render();
 
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 
-	if (m_pMyCharacter)
-		m_pMyCharacter->Render(NULL);
+	//D3DCOLOR c = cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()) ? D3DCOLOR_XRGB(255, 0, 0) : D3DCOLOR_XRGB(0, 255, 0);
+	
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	{
+		m_pObject->Render();
+
+		if (m_pMyCharacter)
+			m_pMyCharacter->Render(NULL);
+	}
+
 
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
