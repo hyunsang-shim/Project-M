@@ -88,7 +88,7 @@ void cMainGame::Setup()
 
 	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup("Xfile" , "zealot.x");
+	m_pMyCharacter->Setup("Xfile" , "soldier4.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
