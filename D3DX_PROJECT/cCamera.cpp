@@ -9,17 +9,12 @@ cCamera::cCamera() : m_vEye(0, 0, -5), m_vLookAt(0, 0, 0), m_vUp(0, 1, 0)
 	m_vCamRotAngle.y = 0.0f;
 	m_isLButtonDown = false;
 	m_fCameraDistance = 5.0;
-<<<<<<< HEAD
-	m_ptPrevMouse.x = 9999;
-	m_ptPrevMouse.y = 9999;
-	m_vCamDirection = D3DXVECTOR3(0, 0, 0);
-=======
+
 	fDeltaX = 0.f;
 	fDeltaY = 0.f;
 	m_ptPrevMouse.x = 0.0f;
 	m_ptPrevMouse.y = 0.0f;
 
->>>>>>> 4126a3d624bc20d3ca90c49fd4d7d019b4664780
 }
 
 
@@ -45,13 +40,7 @@ void cCamera::Update(D3DXVECTOR3 cube)
 	D3DXMATRIXA16 matR, matRX, matRY, matTY;
 	D3DXMATRIXA16 m_matTrans;
 	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
-<<<<<<< HEAD
 
-=======
-	D3DXVECTOR3 temp = m_vEye;
-	temp = cube - m_vEye;
-	cube.y += m_fCameraDistance /3.0f + 0.5f;
->>>>>>> 4126a3d624bc20d3ca90c49fd4d7d019b4664780
 	m_vEye = D3DXVECTOR3(0, m_fCameraDistance, -m_fCameraDistance);
 
 	D3DXMatrixRotationX(&matRX, m_vCamRotAngle.x);
@@ -74,17 +63,9 @@ void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_MOUSEMOVE:
-<<<<<<< HEAD
-		if (1)
-		{
-			POINT ptCurrMouse;
-			ptCurrMouse.x = LOWORD(lParam);
-			ptCurrMouse.y = HIWORD(lParam);
-=======
 		POINT ptCurrMouse;
 		ptCurrMouse.x = LOWORD(lParam);
 		ptCurrMouse.y = HIWORD(lParam);
->>>>>>> 4126a3d624bc20d3ca90c49fd4d7d019b4664780
 
 		fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
 		fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
@@ -93,22 +74,14 @@ void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		m_vCamRotAngle.x += (fDeltaY / 100.f);
 
 		m_ptPrevMouse = ptCurrMouse;
-		
+		break;
 
 	case WM_MOUSEWHEEL:
-<<<<<<< HEAD
-		m_fCameraDistance -= (GET_WHEEL_DELTA_WPARAM(wParam) / 3.0f);
-		if (m_fCameraDistance < EPSILON)
-			m_fCameraDistance = EPSILON;
-		if (m_fCameraDistance > 30.0)
-			m_fCameraDistance = 30.0;
-=======
 		m_fCameraDistance -= (GET_WHEEL_DELTA_WPARAM(wParam) / 100.0f);
 		if (m_fCameraDistance < EPSILON)
 			m_fCameraDistance = EPSILON;
 		if (m_fCameraDistance > 10.0)
 			m_fCameraDistance = 10.0;
->>>>>>> 4126a3d624bc20d3ca90c49fd4d7d019b4664780
 		if (m_fCameraDistance < 2.0)
 			m_fCameraDistance = 2.0;
 
