@@ -32,7 +32,7 @@ void cSkinnedMesh::Setup(char * szFolder, char * szFile)
 	cAllocateHierarchy ah;
 	ah.SetFolder(szFolder);
 
-	D3DXLoadMeshHierarchyFromXA(sFullPath.c_str(),
+	HRESULT  hr =D3DXLoadMeshHierarchyFromXA(sFullPath.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,
 		&ah,
@@ -280,7 +280,8 @@ void cSkinnedMesh::Load(char * szFolder, char * szFileName)
 	string sFullPath(szFolder);
 	sFullPath += string("/") + string(szFileName);
 
-	D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
+	
+	HRESULT  hr = D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,
 		&ah,
@@ -348,3 +349,4 @@ void cSkinnedMesh::setTransform(D3DXMATRIXA16 * pmat)
 {
 	m_matWorldTM = *pmat;
 }
+

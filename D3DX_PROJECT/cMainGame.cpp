@@ -9,6 +9,7 @@
 #include "cSkinnedMesh.h"
 #include "cCharacter.h"
 #include "cMyCharacter.h"
+#include "cFontManager.h"
 
 cMainGame::cMainGame()		
 	:m_pCamera(NULL),
@@ -17,7 +18,9 @@ cMainGame::cMainGame()
 	m_pObject(NULL),
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
-	m_pMyCharacter(NULL)
+	m_pMyCharacter(NULL),
+	m_pFont(NULL),
+	m_p3DText(NULL)
 {
 }
 
@@ -25,6 +28,10 @@ cMainGame::cMainGame()
 cMainGame::~cMainGame()
 {
 	m_pMap->Destroy();
+	SAFE_RELEASE(m_pFont);
+	SAFE_RELEASE(m_p3DText);
+
+	g_pFontManager->Destroy();
 	SAFE_DELETE(m_pMap);
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pGrid);
@@ -68,7 +75,7 @@ void cMainGame::Setup()
 
 	//테스트 엑스모델 셋팅
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
-	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f,1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 15, -15));
+	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f,1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 	
 	//하늘 셋팅
 	m_pSKY = new cSKY();
@@ -76,9 +83,12 @@ void cMainGame::Setup()
 
 	//질럿 셋팅
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup("Xfile" , "zealot.X");
+	m_pMyCharacter->Setup("Xfile" , "zealot.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
+
+	//폰트 셋팅
+	//Creat_Font();
 }
 
 void cMainGame::Update()
@@ -91,7 +101,7 @@ void cMainGame::Update()
 
 
 	if (m_pMyCharacter)
-		m_pMyCharacter->Update();
+		m_pMyCharacter->Update(m_pCamera->getDirection());
 
 
 	float y = m_pMyCharacter->GetPosition().y;
@@ -119,6 +129,9 @@ void cMainGame::Render()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Render(NULL);
 
+
+	//Render_Text();
+
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
 	g_pDevice->EndScene();
@@ -130,6 +143,10 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (m_pCamera)
 	{
 		m_pCamera->WndProc(hWnd, message, wParam, lParam);
+	}
+	if (m_pMyCharacter)
+	{
+		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
 	}
 	switch (message)
 	{
@@ -197,4 +214,81 @@ D3DLIGHT9 cMainGame::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * directi
 	light.Theta = D3DX_PI / 4.0;
 	light.Phi = D3DX_PI / 2.0;
 	return light;
+}
+
+void cMainGame::Creat_Font()
+{
+	{
+		D3DXFONT_DESC fd;
+		ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
+		fd.Height = 50;
+		fd.Width = 25;
+		fd.Weight = FW_MEDIUM;
+		fd.Italic = false;
+		fd.CharSet = DEFAULT_CHARSET;
+		fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+		fd.PitchAndFamily = FF_DONTCARE;
+
+		{
+			AddFontResource("font/umberto.ttf");
+			strcpy(fd.FaceName, "umberto");
+		}
+		D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
+	}
+	{
+		HDC hdc = CreateCompatibleDC(0);
+		LOGFONT lf;
+		ZeroMemory(&lf, sizeof(LOGFONT));
+		lf.lfHeight = 25;
+		lf.lfWidth = 12;
+		lf.lfWeight = 500;
+		lf.lfItalic = false;
+		lf.lfUnderline = false;
+		lf.lfStrikeOut = false;
+		strcpy(lf.lfFaceName, "굴림체");
+
+		HFONT hFont;
+		HFONT hFontOld;
+		hFont = CreateFontIndirect(&lf);
+		hFontOld = (HFONT)SelectObject(hdc, hFont);
+		D3DXCreateText(g_pDevice, hdc, "Direct3D한글", 0.001f, 0.01f, &m_p3DText, 0,0);
+		SelectObject(hdc, hFontOld);
+		DeleteObject(hFont);
+		DeleteDC(hdc);
+	}
+
+}
+
+void cMainGame::Render_Text()
+{
+	{
+		string sText("ABC 123 !@#!@#$% 가나다라");
+		RECT rc;
+		SetRect(&rc, 100, 100, 101, 101);
+		m_pFont->DrawTextA(NULL, sText.c_str(), sText.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 0));
+	}
+	{
+		string sText("Quest");
+		LPD3DXFONT pFont = g_pFontManager->GetFont(cFontManager::E_QUEST);
+		RECT rc;
+		SetRect(&rc, 100, 200, 101, 101);
+
+		pFont->DrawTextA(NULL, sText.c_str(), strlen(sText.c_str()), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 0));
+
+	}
+	{
+		D3DXMATRIXA16 matWorld, matS, matR, matT;
+		D3DXMatrixIdentity(&matS);
+		D3DXMatrixIdentity(&matR);
+		D3DXMatrixIdentity(&matT);
+
+		D3DXMatrixScaling(&matS, 1.0f, 1.0f, 100.0f);
+		D3DXMatrixRotationX(&matR, -D3DX_PI / 4.0f);
+		D3DXMatrixTranslation(&matT, -2.0f, 2.0f, 0.0f);
+		matWorld = matS * matR * matT;
+		g_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+		m_p3DText->DrawSubset(0);
+	}
+
+
 }

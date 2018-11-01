@@ -147,6 +147,7 @@
     <ClInclude Include="cCamera.h" />
     <ClInclude Include="cCharacter.h" />
     <ClInclude Include="cDeviceManager.h" />
+    <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cFrame.h" />
     <ClInclude Include="cGrid.h" />
     <ClInclude Include="cHeightMap.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="cSKY.h" />
     <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="cTimeManager.h" />
+    <ClInclude Include="cUI.h" />
     <ClInclude Include="cXModel.h" />
     <ClInclude Include="D3DX_PROJECT.h" />
     <ClInclude Include="iMap.h" />
@@ -177,6 +179,7 @@
     <ClCompile Include="cCamera.cpp" />
     <ClCompile Include="cCharacter.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
+    <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cFrame.cpp" />
     <ClCompile Include="cGrid.cpp" />
     <ClCompile Include="cHeightMap.cpp" />
@@ -194,6 +197,7 @@
     <ClCompile Include="cSKY.cpp" />
     <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="cTimeManager.cpp" />
+    <ClCompile Include="cUI.cpp" />
     <ClCompile Include="cXModel.cpp" />
     <ClCompile Include="D3DX_PROJECT.cpp" />
     <ClCompile Include="iMap.cpp" />

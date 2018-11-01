@@ -9,6 +9,9 @@ cCamera::cCamera() : m_vEye(0, 0, -5), m_vLookAt(0, 0, 0), m_vUp(0, 1, 0)
 	m_vCamRotAngle.y = 0.0f;
 	m_isLButtonDown = false;
 	m_fCameraDistance = 5.0;
+	m_ptPrevMouse.x = 9999;
+	m_ptPrevMouse.y = 9999;
+	m_vCamDirection = D3DXVECTOR3(0, 0, 0);
 }
 
 
@@ -30,11 +33,10 @@ void cCamera::Setup()
 void cCamera::Update(D3DXVECTOR3 cube)
 {
 	/*cube = D3DXVECTOR3(0, 0, 0);*/
-	D3DXMATRIXA16 matR, matRX, matRY;
+	
+	D3DXMATRIXA16 matR, matRX, matRY, matTY;
 	D3DXMATRIXA16 m_matTrans;
 	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
-	D3DXVECTOR3 temp = m_vEye;
-	temp = cube - m_vEye;
 
 	m_vEye = D3DXVECTOR3(0, m_fCameraDistance, -m_fCameraDistance);
 
@@ -45,8 +47,12 @@ void cCamera::Update(D3DXVECTOR3 cube)
 	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &matR);
 	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &m_matTrans);
 	D3DXMATRIXA16 matView;
-	D3DXMatrixLookAtLH(&matView, &m_vEye, &cube, &m_vUp);
+	D3DXVECTOR3 aimSet = cube + (cube - m_vEye)*10;
+	D3DXMatrixLookAtLH(&matView, &m_vEye, &cube , &m_vUp);
 	g_pDevice->SetTransform(D3DTS_VIEW, &matView);
+
+
+	m_vCamDirection = cube - m_vEye;
 }
 
 void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -64,7 +70,7 @@ void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_MOUSEMOVE:
-		if (m_isLButtonDown)
+		if (1)
 		{
 			POINT ptCurrMouse;
 			ptCurrMouse.x = LOWORD(lParam);
@@ -81,15 +87,20 @@ void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_MOUSEWHEEL:
-		m_fCameraDistance -= (GET_WHEEL_DELTA_WPARAM(wParam) / 30.0f);
+		m_fCameraDistance -= (GET_WHEEL_DELTA_WPARAM(wParam) / 3.0f);
 		if (m_fCameraDistance < EPSILON)
 			m_fCameraDistance = EPSILON;
-		if (m_fCameraDistance > 3000.0)
-			m_fCameraDistance = 3000.0;
+		if (m_fCameraDistance > 30.0)
+			m_fCameraDistance = 30.0;
 		if (m_fCameraDistance < 2.0)
 			m_fCameraDistance = 2.0;
 
 		break;
 	}
+}
+
+D3DXVECTOR3 cCamera::getDirection()
+{
+	return m_vCamDirection;
 }
 
