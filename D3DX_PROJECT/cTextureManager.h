@@ -16,10 +16,13 @@ public:
 	LPDIRECT3DTEXTURE9 GetTexture(string& sFullPath);
 	void Destroy();
 
-
-
-
-
+	// >> :
+private:
+	map<string, D3DXIMAGE_INFO>		m_mapImageInfo;
+public:
+	LPDIRECT3DTEXTURE9 GetTexture(char* szFullPath, D3DXIMAGE_INFO* pImageInfo);
+	LPDIRECT3DTEXTURE9 GetTexture(string& szFullPath, D3DXIMAGE_INFO* pImageInfo);
+	// << :
 
 
 };

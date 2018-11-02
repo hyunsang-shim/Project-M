@@ -132,6 +132,15 @@ struct ST_ROT_SAMPLE
 	}
 };
 
+struct ST_SIZEN
+{
+	int		nWidth;
+	int		nHeight;
+	ST_SIZEN(): nWidth(0), nHeight(0) { }
+	ST_SIZEN(int _w, int _h): nWidth(_w), nHeight(_h) {}
+
+};
+
 #include "cMainGame.h"
 #include "cCamera.h"
 
@@ -155,6 +164,7 @@ namespace d3d
 #include "cObjectManager.h"
 #include "cTextureManager.h"
 #include "cTimeManager.h"
+#include "cFontManager.h"
 
 
 using namespace std;

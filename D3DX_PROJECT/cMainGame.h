@@ -1,8 +1,9 @@
 #pragma once
-class cCamera;
 
 #include "cHeightMap.h"
 #include "cFrame.h"
+#include "cUIButton.h"
+class cCamera;
 class cSkinnedMesh;
 class cGrid;
 class cNewObject;
@@ -10,12 +11,12 @@ class cXModel;
 class cAseLoader;
 class cSKY;
 class cMyCharacter;
-class cMainGame
+
+class cMainGame : public iButtonDelegate
 {
 public:
 	cMainGame();
 	~cMainGame();
-
 
 public:
 	void Setup();
@@ -51,5 +52,23 @@ private :
 public:
 	void Creat_Font();
 	void Render_Text();
+
+
+	// >> : UI
+private:
+	LPD3DXSPRITE		m_pSprite;
+	LPDIRECT3DTEXTURE9	m_pTextureUI;
+	D3DXIMAGE_INFO		m_stImageInfo;
+	cUIObject*			m_pUIRoot;
+
+public:
+	void Setup_UI();
+	void Render_UI();
+	virtual void OnClick(cUIButton* pSender) override;
+
+
+	// << :
+
+
 };
 

@@ -12,7 +12,19 @@
 #include "cFontManager.h"
 #include "cOBB.h"
 
-cMainGame::cMainGame()		
+#include "cUIImageView.h"
+#include "cUIButton.h"
+#include "cUITextView.h"
+
+enum
+{
+	E_BUTTON_OK = 11,
+	E_BUTTON_CANCLE,
+	E_BUTTON_EXIT,
+	E_TEXT_VIEW,
+};
+
+cMainGame::cMainGame()
 	:m_pCamera(NULL),
 	m_pGrid(NULL),
 	m_pMap(NULL),
@@ -21,13 +33,20 @@ cMainGame::cMainGame()
 	m_pSKY(NULL),
 	m_pMyCharacter(NULL),
 	m_pFont(NULL),
-	m_p3DText(NULL)
+	m_p3DText(NULL),
+	m_pSprite(NULL),
+	m_pTextureUI(NULL),
+	m_pUIRoot(NULL)
 {
 }
 
 
 cMainGame::~cMainGame()
 {
+	if (m_pUIRoot) m_pUIRoot->Destroy();
+	SAFE_RELEASE(m_pSprite);
+	SAFE_RELEASE(m_pTextureUI);
+
 	m_pMap->Destroy();
 	SAFE_RELEASE(m_pFont);
 	SAFE_RELEASE(m_p3DText);
@@ -88,12 +107,15 @@ void cMainGame::Setup()
 
 	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup("Xfile" , "soldier4.x");
+	m_pMyCharacter->Setup("Xfile" , "Soldier4.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
 	//ÆùÆ® ¼ÂÆÃ
 	//Creat_Font();
+
+	//UI ¼¼ÆÃ
+	Setup_UI();
 }
 
 void cMainGame::Update()
@@ -116,6 +138,8 @@ void cMainGame::Update()
 		m_pMap->GetHeight(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z);
 
 	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
+	if(m_pUIRoot)
+		m_pUIRoot->Update();
 }
 
 void cMainGame::Render()
@@ -132,7 +156,7 @@ void cMainGame::Render()
 
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
-
+	Render_UI();
 	//Render_Text();
 
 	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
@@ -312,4 +336,127 @@ void cMainGame::Render_Text()
 	}
 
 
+}
+
+void cMainGame::Setup_UI()
+{
+	D3DXCreateSprite(g_pDevice, &m_pSprite);
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±èÅÂÈñ.jpg");
+
+	D3DXCreateTextureFromFileEx(
+		g_pDevice,
+		"UI/±èÅÂÈñ.jpg",
+		D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT,
+		0,
+		D3DFMT_UNKNOWN,
+		D3DPOOL_MANAGED,
+		D3DX_FILTER_NONE,
+		D3DX_DEFAULT,
+		0,
+		&m_stImageInfo,
+		NULL,
+		&m_pTextureUI);
+
+	{
+		cUIImageView* pImageView = new cUIImageView;
+		pImageView->SetPosition(0, 0, 0);
+		pImageView->SetTexture("./UI/panel-info.png");
+		m_pUIRoot = pImageView;
+
+		cUITextView* pTextView = new cUITextView;
+		pTextView->Settext("¹ÎÇüÀÇ Äèº¯À» ºô¸ç!!");
+		pTextView->SetSize(ST_SIZEN(300, 200));
+		pTextView->SetPosition(100, 100);
+		pTextView->SetDrawTextFormat(DT_CENTER | DT_VCENTER | DT_WORDBREAK);
+		pTextView->SetTextColor(D3DCOLOR_XRGB(255, 255, 0));
+		pTextView->SetTag(E_TEXT_VIEW);
+		m_pUIRoot->AddChild(pTextView);
+
+		cUIButton* pButtonOK = new cUIButton;
+		pButtonOK->SetTexture("./UI/btn-med-up.png",
+			"./UI/btn-med-over.png",
+			"./UI/btn-med-down.png",
+			"OK");
+		pButtonOK->SetPosition(150, 330);
+		pButtonOK->SetDelegate(this);
+		pButtonOK->SetTag(E_BUTTON_OK);
+		m_pUIRoot->AddChild(pButtonOK);
+
+		cUIButton* pButtonCancle = new cUIButton;
+		pButtonCancle->SetTexture("./UI/btn-med-up.png",
+			"./UI/btn-med-over.png",
+			"./UI/btn-med-down.png",
+			"cancle");
+		pButtonCancle->SetPosition(150, 380);
+		pButtonCancle->SetDelegate(this);
+		pButtonCancle->SetTag(E_BUTTON_CANCLE);
+		m_pUIRoot->AddChild(pButtonCancle);
+
+		cUIButton* pButtonExit = new cUIButton;
+		pButtonExit->SetTexture("./UI/btn-main-menu.png",
+			"./UI/btn-main-menu.png",
+			"./UI/btn-main-menu.png");
+		pButtonExit->SetPosition(400, 75);
+		pButtonExit->SetDelegate(this);
+		pButtonExit->SetTag(E_BUTTON_EXIT);
+		m_pUIRoot->AddChild(pButtonExit);
+	}
+
+
+}
+
+void cMainGame::Render_UI()
+{
+	/*m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
+
+	D3DXMATRIXA16 matT, matR, matS, mat;
+	D3DXMatrixTranslation(&matT, 100, 100, 0);
+	
+	{
+		static float fAngle = 0.0f;
+		fAngle += 0.01f;
+		D3DXMatrixRotationZ(&matR, fAngle);
+		mat = matR*matT;
+	}
+
+
+
+	m_pSprite->SetTransform(&mat);
+
+
+
+	RECT rc;
+	SetRect(&rc, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
+	m_pSprite->Draw(m_pTextureUI,
+		&rc,
+		&D3DXVECTOR3(0, 0, 0),
+		&D3DXVECTOR3(0, 0, 0),
+		D3DCOLOR_ARGB(255, 255, 255, 255));
+	m_pSprite->End();*/
+
+
+	if (m_pUIRoot)
+		m_pUIRoot->Render(m_pSprite);
+
+}
+
+void cMainGame::OnClick(cUIButton * pSender)
+{
+	cUITextView* pTextView =
+		(cUITextView*)m_pUIRoot->FindChildByTag(E_TEXT_VIEW);
+
+	if (pSender->GetTag() == E_BUTTON_OK)
+	{
+		pTextView->Settext("¶Ë Àß ½Ó!");
+	}
+	else if (pSender->GetTag() == E_BUTTON_CANCLE)
+	{
+		pTextView->Settext("´ÙÀ½ ±âÈ¸¿¡!");
+	}
+	else if (pSender->GetTag() == E_BUTTON_EXIT)
+	{
+		m_pUIRoot->m_isHidden = true;
+	}
 }
