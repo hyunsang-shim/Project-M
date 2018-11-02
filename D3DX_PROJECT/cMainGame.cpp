@@ -161,7 +161,7 @@ void cMainGame::Render()
 
 	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
 
-	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	//if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
 	{
 		if (m_pMyCharacter)
 			m_pMyCharacter->Render(NULL);
