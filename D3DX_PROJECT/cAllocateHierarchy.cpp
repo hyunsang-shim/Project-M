@@ -48,12 +48,15 @@ STDMETHODIMP cAllocateHierarchy::CreateMeshContainer(
 
 	for (DWORD i = 0; i < NumMaterials; ++i)
 	{
-		pBoneMesh->vecMtl.push_back(pMaterials[i].MatD3D);
-		string sFullPath = m_sFolder;
-		sFullPath = sFullPath + string("/") +
-			string(pMaterials[i].pTextureFilename);
-		pBoneMesh->vecTexture.push_back(
-			g_pTextureManager->GetTexture(sFullPath));
+		if (pMaterials[i].pTextureFilename != NULL)
+		{
+			pBoneMesh->vecMtl.push_back(pMaterials[i].MatD3D);
+			string sFullPath = m_sFolder;
+			sFullPath = sFullPath + string("/") +
+				string(pMaterials[i].pTextureFilename);
+			pBoneMesh->vecTexture.push_back(
+				g_pTextureManager->GetTexture(sFullPath));
+		}
 	}
 
 	pSkinInfo->AddRef();

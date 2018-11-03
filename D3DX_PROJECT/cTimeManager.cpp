@@ -15,7 +15,7 @@ cTimeManager::~cTimeManager()
 void cTimeManager::Update()
 {
 	DWORD dwCurrentTIme = GetTickCount();
-	m_fElapsedTime = (dwCurrentTIme - m_dwLastUpdateTime) / 1000.0f;
+	m_fElapsedTime = (dwCurrentTIme - m_dwLastUpdateTime) / 2000.0f;
 	m_dwLastUpdateTime = dwCurrentTIme;
 }
 
@@ -26,5 +26,5 @@ float cTimeManager::GetElapsedTime()
 
 float cTimeManager::GetLastUpdateTime()
 {
-	return m_dwLastUpdateTime / 1000.0f;
+	return m_dwLastUpdateTime / 2000.0f;
 }

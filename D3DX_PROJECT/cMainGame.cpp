@@ -107,7 +107,7 @@ void cMainGame::Setup()
 
 	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
-	m_pMyCharacter->Setup("Xfile" , "Soldier4.x");
+	m_pMyCharacter->Setup("Xfile" , "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
@@ -158,8 +158,6 @@ void cMainGame::Render()
 		m_pRootFrame->Render();
 	Render_UI();
 	//Render_Text();
-
-	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
 
 	//if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
 	{
