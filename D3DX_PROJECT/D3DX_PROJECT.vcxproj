@@ -149,6 +149,7 @@
     <ClInclude Include="cDeviceManager.h" />
     <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cFrame.h" />
+    <ClInclude Include="cGameInfoManager.h" />
     <ClInclude Include="cGrid.h" />
     <ClInclude Include="cHeightMap.h" />
     <ClInclude Include="cMainGame.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="cDeviceManager.cpp" />
     <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cFrame.cpp" />
+    <ClCompile Include="cGameInfoManager.cpp" />
     <ClCompile Include="cGrid.cpp" />
     <ClCompile Include="cHeightMap.cpp" />
     <ClCompile Include="cMainGame.cpp" />

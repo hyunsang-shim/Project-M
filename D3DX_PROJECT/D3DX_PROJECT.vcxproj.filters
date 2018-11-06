@@ -186,6 +186,9 @@
     <ClInclude Include="cSCENE_TITLE.h">
       <Filter>SCENE</Filter>
     </ClInclude>
+    <ClInclude Include="cGameInfoManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -289,6 +292,9 @@
     </ClCompile>
     <ClCompile Include="cSCENE_TITLE.cpp">
       <Filter>SCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameInfoManager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
