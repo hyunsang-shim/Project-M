@@ -160,6 +160,9 @@
     <ClInclude Include="cObjectManager.h" />
     <ClInclude Include="cObj_Surface.h" />
     <ClInclude Include="cOtherCharacter.h" />
+    <ClInclude Include="cSCENE_INGAME.h" />
+    <ClInclude Include="cSCENE_RESULT.h" />
+    <ClInclude Include="cSCENE_TITLE.h" />
     <ClInclude Include="cSkinnedMesh.h" />
     <ClInclude Include="cSkinnedMeshManager.h" />
     <ClInclude Include="cSKY.h" />
@@ -195,6 +198,9 @@
     <ClCompile Include="cObjectManager.cpp" />
     <ClCompile Include="cObj_Surface.cpp" />
     <ClCompile Include="cOtherCharacter.cpp" />
+    <ClCompile Include="cSCENE_INGAME.cpp" />
+    <ClCompile Include="cSCENE_RESULT.cpp" />
+    <ClCompile Include="cSCENE_TITLE.cpp" />
     <ClCompile Include="cSkinnedMesh.cpp" />
     <ClCompile Include="cSkinnedMeshManager.cpp" />
     <ClCompile Include="cSKY.cpp" />
