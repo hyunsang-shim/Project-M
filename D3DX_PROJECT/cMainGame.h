@@ -65,10 +65,7 @@ public:
 	void Setup_UI();
 	void Render_UI();
 	virtual void OnClick(cUIButton* pSender) override;
-
-
 	// << :
-
 
 };
 

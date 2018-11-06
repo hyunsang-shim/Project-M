@@ -43,6 +43,7 @@ cMainGame::cMainGame()
 
 cMainGame::~cMainGame()
 {
+
 	if (m_pUIRoot) m_pUIRoot->Destroy();
 	SAFE_RELEASE(m_pSprite);
 	SAFE_RELEASE(m_pTextureUI);
@@ -116,6 +117,7 @@ void cMainGame::Setup()
 
 	//UI ¼¼ÆÃ
 	Setup_UI();
+
 }
 
 void cMainGame::Update()
@@ -156,7 +158,7 @@ void cMainGame::Render()
 
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
-	Render_UI();
+	//Render_UI();
 	//Render_Text();
 
 	//if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
@@ -166,6 +168,7 @@ void cMainGame::Render()
 	}
 	//<-------------------------CODE END-----------------------
 	//---------------------------------------------------------
+
 	g_pDevice->EndScene();
 	g_pDevice->Present(NULL, NULL, NULL, NULL);
 }
@@ -458,3 +461,4 @@ void cMainGame::OnClick(cUIButton * pSender)
 		m_pUIRoot->m_isHidden = true;
 	}
 }
+
