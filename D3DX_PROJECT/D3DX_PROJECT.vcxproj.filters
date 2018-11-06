@@ -67,6 +67,9 @@
     <Filter Include="Character">
       <UniqueIdentifier>{31bb686a-10c8-4617-8060-4e317efdbedc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SCENE">
+      <UniqueIdentifier>{93f4a247-8be4-45d4-8b42-8ba1c2f826e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -174,6 +177,15 @@
     <ClInclude Include="cCharacter.h">
       <Filter>Character</Filter>
     </ClInclude>
+    <ClInclude Include="cSCENE_INGAME.h">
+      <Filter>SCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="cSCENE_RESULT.h">
+      <Filter>SCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="cSCENE_TITLE.h">
+      <Filter>SCENE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -268,6 +280,15 @@
     </ClCompile>
     <ClCompile Include="cCharacter.cpp">
       <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="cSCENE_INGAME.cpp">
+      <Filter>SCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="cSCENE_RESULT.cpp">
+      <Filter>SCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="cSCENE_TITLE.cpp">
+      <Filter>SCENE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

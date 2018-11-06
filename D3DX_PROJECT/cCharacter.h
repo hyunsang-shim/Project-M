@@ -1,4 +1,5 @@
 #pragma once
+#include "cObject.h"
 class cCharacter:public cObject
 {
 public:

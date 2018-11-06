@@ -143,6 +143,7 @@ struct ST_SIZEN
 
 #include "cMainGame.h"
 #include "cCamera.h"
+#include "cHeightMap.h"
 
 namespace d3d
 {
