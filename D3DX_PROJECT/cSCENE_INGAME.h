@@ -45,5 +45,11 @@ public:
 	POINT beforeMousePos;
 	POINT nowMousePos;
 	  
+private:
+	LPD3DXFONT m_pFont;
+
+public:
+	void setupUI();
+	void renderUI();
 };
 

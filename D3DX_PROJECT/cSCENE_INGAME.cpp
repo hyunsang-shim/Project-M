@@ -21,7 +21,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pObject(NULL),
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
-	m_pMyCharacter(NULL)
+	m_pMyCharacter(NULL),
+	m_pFont(NULL)
 {
 }
 
@@ -35,6 +36,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pXmodel);
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
+	SAFE_RELEASE(m_pFont);
 }
 
 void cSCENE_INGAME::Setup()
@@ -95,6 +97,9 @@ void cSCENE_INGAME::Setup()
 	nowMousePos.x = 1920 / 2;
 	nowMousePos.y = 1080 / 2;
 	SetCursorPos(1920 / 2, 1080 / 2);
+
+	//임시 셋팅
+	setupUI();
 
 }
 
@@ -170,6 +175,7 @@ void cSCENE_INGAME::Render()
 		if (m_pMyCharacter)
 			m_pMyCharacter->Render(NULL);
 	}
+	renderUI();
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -257,4 +263,31 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 	light.Theta = D3DX_PI / 4.0;
 	light.Phi = D3DX_PI / 2.0;
 	return light;
+}
+
+void cSCENE_INGAME::setupUI()
+{
+	D3DXFONT_DESC fd;
+	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
+	fd.Height = 20;
+	fd.Width = 12;
+	fd.Weight = FW_MEDIUM;
+	fd.Italic = false;
+	fd.CharSet = DEFAULT_CHARSET;
+	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+	fd.PitchAndFamily = FF_DONTCARE;
+
+	{
+		AddFontResource("font/umberto.ttf");
+		strcpy(fd.FaceName, "굴림체");
+	}
+	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
+}
+
+void cSCENE_INGAME::renderUI()
+{
+	string sText("o");
+	RECT rc;
+	SetRect(&rc, 1920/2, 1080/2, 1920 / 2+1, 1080 / 2+1 );
+	m_pFont->DrawTextA(NULL, sText.c_str(), sText.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(0, 0, 0));
 }

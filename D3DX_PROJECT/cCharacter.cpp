@@ -28,22 +28,22 @@ void cCharacter::Update()
 	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
 	if (GetKeyState('A') & 0x8000)
 	{
-		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.5f);
 	}
 
 	if (GetKeyState('D') & 0x8000)
 	{
-		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.5f);
 	}
 
 	if (GetKeyState('W') & 0x8000)
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.5f);
 	}
 
 	if (GetKeyState('S') & 0x8000)
 	{
-		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vDirection * 0.5f);
 	}
 
 
