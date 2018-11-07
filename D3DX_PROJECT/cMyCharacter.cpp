@@ -31,7 +31,7 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 {
 	if (m_pCharacterController)
 	{	
-		m_pCharacterController->Update();
+		m_pCharacterController->Update(this, m_pSkinnedMesh);
 	
 	}
 

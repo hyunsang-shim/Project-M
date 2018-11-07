@@ -1,5 +1,9 @@
 #pragma once
 #include "cObject.h"
+
+class cMyCharacter;
+class cSkinnedMesh;
+
 class cCharacter:public cObject
 {
 public:
@@ -22,7 +26,7 @@ protected:
 
 public:
 	virtual void SetUP();
-	virtual void Update();
+	virtual void Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh);
 	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
 	virtual void Render();
 	virtual D3DXVECTOR3& GetPosition();

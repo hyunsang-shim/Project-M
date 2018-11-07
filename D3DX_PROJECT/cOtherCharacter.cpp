@@ -30,7 +30,7 @@ void cOtherCharacter::Setup()
 void cOtherCharacter::Update()
 {
 	if (m_pCharacterController)
-		m_pCharacterController->Update();
+//		m_pCharacterController->Update();
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
