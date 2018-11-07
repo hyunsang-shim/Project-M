@@ -9,8 +9,6 @@ cCharacter::cCharacter()
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
-	m_ptPrevMouse.x = 0;
-	m_ptPrevMouse.y = 0;
 }
 
 
@@ -93,17 +91,12 @@ void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_MOUSEMOVE:
-		POINT ptCurrMouse;
-		ptCurrMouse.x = LOWORD(lParam);
-		ptCurrMouse.y = HIWORD(lParam);
+		if (!g_pGameInfoManager->isESCPushed)
+		{
+			m_fRotY += (g_pGameInfoManager->mouseMoveX / 100.f);
+			m_vDirection.x += (g_pGameInfoManager->mouseMoveY / 100.f);
 
-		float fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
-		float fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
-
-		m_fRotY += (fDeltaX / 100.f);
-		m_vDirection.x += (fDeltaY / 100.f);
-
-		m_ptPrevMouse = ptCurrMouse;
+		}
 		break;
 	}
 }

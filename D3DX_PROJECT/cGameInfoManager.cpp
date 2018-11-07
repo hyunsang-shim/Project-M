@@ -2,7 +2,10 @@
 #include "cGameInfoManager.h"
 
 
-cGameInfoManager::cGameInfoManager()
+cGameInfoManager::cGameInfoManager():
+	isESCPushed(0),
+	mouseMoveX(0),
+	mouseMoveY(0)
 {
 }
 

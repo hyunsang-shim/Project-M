@@ -16,7 +16,6 @@ protected:
 	
 	D3DXMATRIXA16 m_matWorld;
 
-	POINT m_ptPrevMouse;
 
 
 

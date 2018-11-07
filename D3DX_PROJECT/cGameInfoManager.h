@@ -6,5 +6,9 @@ class cGameInfoManager
 {
 public:
 	SINGLETON(cGameInfoManager);
+
+	BOOL isESCPushed;
+	int mouseMoveX;
+	int mouseMoveY;
 };
 

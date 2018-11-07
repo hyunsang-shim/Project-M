@@ -89,11 +89,47 @@ void cSCENE_INGAME::Setup()
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
+	//마우스 좌표 셋팅
+	beforeMousePos.x = 1920 / 2;
+	beforeMousePos.y = 1080 / 2;
+	nowMousePos.x = 1920 / 2;
+	nowMousePos.y = 1080 / 2;
+	SetCursorPos(1920 / 2, 1080 / 2);
+
 }
 
 void cSCENE_INGAME::Update()
 {
+	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
+
+
+	//마우스 이동값 계산
+
+
+	if (mouseMove == 0)
+	{
+		GetCursorPos(&nowMousePos);
+
+		g_pGameInfoManager->mouseMoveX = nowMousePos.x - beforeMousePos.x;
+		g_pGameInfoManager->mouseMoveY = nowMousePos.y - beforeMousePos.y;
+	
+		beforeMousePos = nowMousePos;
+		if (nowMousePos.x == 0 || nowMousePos.y == 0 || nowMousePos.x >= 1920 || nowMousePos.y >= 1080)
+		{
+			SetCursorPos(1920 / 2, 1080 / 2);	
+			mouseMove = 1;
+		}
+	
+	}
+	else
+	{
+		g_pGameInfoManager->mouseMoveX = 0;
+		g_pGameInfoManager->mouseMoveY = 0;
+		GetCursorPos(&nowMousePos);
+		GetCursorPos(&beforeMousePos);
+		mouseMove = 0;
+	}
 
 	m_pCamera->Update(m_pMyCharacter->GetPosition());
 	if (m_pRootFrame)
@@ -116,6 +152,12 @@ void cSCENE_INGAME::Update()
 
 void cSCENE_INGAME::Render()
 {
+	SetCursor(NULL);
+	if (g_pGameInfoManager->isESCPushed)
+	{
+		SetCursor(LoadCursor(NULL, IDC_ARROW));
+	}
+
 	m_pSKY->Render();
 	m_pGrid->Render();
 	m_pMap->Render();
@@ -132,6 +174,27 @@ void cSCENE_INGAME::Render()
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	switch (message)
+	{
+	case WM_LBUTTONDOWN:
+		{
+		static int n = 0;
+		//m_pSkinnedMesh->SetAnimationIndex(n++);
+		m_pMyCharacter->SetAnimationIndexBlend(n++);
+		break;
+		}
+	 
+	case WM_KEYUP:
+		switch (wParam) 
+		{
+		case VK_ESCAPE:
+			{
+				g_pGameInfoManager->isESCPushed = ~g_pGameInfoManager->isESCPushed;
+				break;
+			}
+		break;
+		}
+	}
 	if (m_pCamera)
 	{
 		m_pCamera->WndProc(hWnd, message, wParam, lParam);
@@ -139,17 +202,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	if (m_pMyCharacter)
 	{
 		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
-	}
-	switch (message)
-	{
-	case WM_LBUTTONDOWN:
-	{
-		static int n = 0;
-		//m_pSkinnedMesh->SetAnimationIndex(n++);
-		m_pMyCharacter->SetAnimationIndexBlend(n++);
-	}
-	break;
-	}
+	}	
 }
 
 void cSCENE_INGAME::Setup_HeightMap()

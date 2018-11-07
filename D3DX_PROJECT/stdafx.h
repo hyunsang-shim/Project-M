@@ -166,7 +166,7 @@ namespace d3d
 #include "cTextureManager.h"
 #include "cTimeManager.h"
 #include "cFontManager.h"
-
+#include "cGameInfoManager.h"
 
 using namespace std;
 
