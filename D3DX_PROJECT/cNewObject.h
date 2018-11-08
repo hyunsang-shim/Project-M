@@ -24,6 +24,7 @@ public:
 	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
 	cOBB * GetOBB();
 	D3DMATERIAL9 m_mtlColor;
+	bool GetHeight(IN float x, OUT float &y, IN float z);		// testing .obj heightmap
 private:
 	vector<MLT_GROUP> m_vecMLT;
 	vector<ST_PNT_VERTEX> m_vecVertex;
@@ -42,7 +43,7 @@ private:
 	D3DXVECTOR3 m_vRot;
 	D3DXVECTOR3 m_vPos;
 	D3DXVECTOR3 m_vScale;
-
+	int			m_nTileN;			// testing .obj heightmap
 	int m_nNumLine;
 
 	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);

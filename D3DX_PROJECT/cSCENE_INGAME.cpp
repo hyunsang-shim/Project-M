@@ -65,6 +65,8 @@ void cSCENE_INGAME::Setup()
 	// 하이트맵 셋팅
 	m_pMap = new cHeightMap();
 	m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
+	//	m_pMap = new cNewObject;
+	//m_pMap->Setup("test_map_obj.obj");
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
@@ -155,8 +157,11 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 void cSCENE_INGAME::Setup_HeightMap()
 {
 	cHeightMap* pMap = new cHeightMap;
-	pMap->Setup("HeightMapData/", "HeightMap.raw", "terrain.jpg");
+	pMap->Setup("Map/", "HeightMap.raw", "terrain.jpg");
 	m_pMap = pMap;
+	/*cNewObject* pMap = new cNewObject;
+	pMap->Setup("test_map_obj.obj");
+	m_pMap = pMap;*/
 }
 
 D3DLIGHT9 cSCENE_INGAME::InitDirectionalLight(D3DXVECTOR3 * direction, D3DXCOLOR * color)

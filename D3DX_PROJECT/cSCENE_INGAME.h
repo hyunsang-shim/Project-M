@@ -23,7 +23,8 @@ public:
 
 	void Setup_HeightMap();
 private:
-	cCamera* m_pCamera;
+	cCamera* m_pCamera;	
+	//cNewObject* m_pMap;
 	cHeightMap* m_pMap;
 	cGrid* m_pGrid;
 	cNewObject* m_pObject;
