@@ -70,6 +70,9 @@
     <Filter Include="SCENE">
       <UniqueIdentifier>{93f4a247-8be4-45d4-8b42-8ba1c2f826e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{f9ebe957-0c39-4488-844e-47a176e3d41f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -189,6 +192,12 @@
     <ClInclude Include="cGameInfoManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="cNetworkManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="cOtherPlayerManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -295,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="cGameInfoManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cNetworkManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="cOtherPlayerManager.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,12 +15,14 @@ private:
 	cOBB* m_pOBB;
 	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
 
+
 public:
 	void Setup();
-	void Update();
+	void Update(float x, float y, float z, float degree, int action, int actionCount);
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
 	cOBB* GetOBB();
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
+	UserInfo info;
 
 };

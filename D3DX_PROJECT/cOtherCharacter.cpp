@@ -20,17 +20,17 @@ cOtherCharacter::~cOtherCharacter()
 
 void cOtherCharacter::Setup()
 {
-	m_pSkinnedMesh = new cSkinnedMesh("Xfile", "zealot.X");
+	m_pSkinnedMesh = new cSkinnedMesh("Xfile", "Soldier76_with_gun.x");
 	m_pSkinnedMesh->SetRandomTrackPosition();
 
 	m_pOBB = new cOBB;
 	m_pOBB->Setup(m_pSkinnedMesh);
 }
 
-void cOtherCharacter::Update()
+void cOtherCharacter::Update(float x, float y, float z, float degree, int action, int actionCount)
 {
 	if (m_pCharacterController)
-		m_pCharacterController->Update();
+		m_pCharacterController->UpdateOtherPlayer(x, y, z, degree, action, actionCount);
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);

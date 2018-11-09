@@ -1,5 +1,4 @@
 #pragma once
-
 #include "cCharacter.h"
 class cSkinnedMesh;
 class cOBB;
@@ -25,5 +24,6 @@ public:
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	string sendData();
 };
 

@@ -13,6 +13,11 @@
 #include "cOBB.h"
 #include "cFrame.h"
 
+DWORD FtoDW(float f)
+{
+	return *((DWORD*)&f);
+}
+
 
 cSCENE_INGAME::cSCENE_INGAME()
 	: m_pCamera(NULL),
@@ -153,6 +158,9 @@ void cSCENE_INGAME::Update()
 
 	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
 
+
+	g_pNetworkManager->SendData(m_pMyCharacter->sendData());
+
 }
 
 void cSCENE_INGAME::Render()
@@ -162,12 +170,15 @@ void cSCENE_INGAME::Render()
 	{
 		SetCursor(LoadCursor(NULL, IDC_ARROW));
 	}
+	
 
 	m_pSKY->Render();
 	m_pGrid->Render();
 	m_pMap->Render();
 	m_pObject->Render();
 	m_pXmodel->Render();
+
+	g_pOtherPlayerManager->render();
 
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
@@ -176,6 +187,7 @@ void cSCENE_INGAME::Render()
 			m_pMyCharacter->Render(NULL);
 	}
 	renderUI();
+
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -200,6 +212,9 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			}
 		break;
 		}
+	case WM_RBUTTONUP:
+		//g_pNetworkManager->SendData();
+		break;
 	}
 	if (m_pCamera)
 	{
@@ -209,6 +224,12 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	{
 		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
 	}	
+	
+}
+
+void cSCENE_INGAME::RenderOtherPlayer()
+{
+
 }
 
 void cSCENE_INGAME::Setup_HeightMap()
@@ -278,8 +299,14 @@ void cSCENE_INGAME::setupUI()
 	fd.PitchAndFamily = FF_DONTCARE;
 
 	{
-		AddFontResource("font/umberto.ttf");
-		strcpy(fd.FaceName, "±¼¸²Ã¼");
+		AddFontResource(TEXT("font/umberto.ttf"));
+		string narrow_string("±¼¸²Ã¼");
+		wstring wide_string = wstring(narrow_string.begin(), narrow_string.end());
+		const wchar_t* result = wide_string.c_str();
+
+		std::wstring name(L"±¼¸²Ã¼");
+		const wchar_t* szName = name.c_str();
+		wcscpy(fd.FaceName, szName);
 	}
 	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
 }
@@ -291,3 +318,112 @@ void cSCENE_INGAME::renderUI()
 	SetRect(&rc, 1920/2, 1080/2, 1920 / 2+1, 1080 / 2+1 );
 	m_pFont->DrawTextA(NULL, sText.c_str(), sText.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(0, 0, 0));
 }
+/*
+void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
+{
+	D3DXMATRIXA16	matBillBoard;
+	D3DXMatrixIdentity(&matBillBoard);
+	g_pDevice->GetTransform(D3DTS_VIEW, &matBillBoard);
+	D3DXMatrixInverse(&matBillBoard, NULL, &matBillBoard);
+	matBillBoard._41 = 0;
+	matBillBoard._42 = 0;
+	matBillBoard._43 = 0;
+	*pmatWorld = matBillBoard;
+}
+
+void cSCENE_INGAME::Setup_Particle()
+{
+	m_vecVertexParticle.resize(1000);
+	for (int i = 0; i < m_vecVertexParticle.size(); ++i)
+	{
+		float fRadius = rand() % 100 / 10.0f;
+		m_vecVertexParticle[i].p = D3DXVECTOR3(0, 0, fRadius);
+
+		D3DXVECTOR3 vAngle = D3DXVECTOR3(
+			D3DXToRadian(rand() % 3600 / 10.0f),
+			D3DXToRadian(rand() % 3600 / 10.0f),
+			D3DXToRadian(rand() % 3600 / 10.0f)
+		);
+		D3DXMATRIX matRX, matRY, matRZ, matWorld;
+		D3DXMatrixRotationX(&matRX, vAngle.x);
+		D3DXMatrixRotationY(&matRY, vAngle.y);
+		D3DXMatrixRotationZ(&matRZ, vAngle.z);
+		matWorld = matRX* matRY* matRZ;
+
+		D3DXVec3TransformCoord(
+			&m_vecVertexParticle[i].p,
+			&m_vecVertexParticle[i].p,
+			&matWorld);
+		m_vecVertexParticle[i].c = D3DCOLOR_ARGB(255, 180, 70, 20);
+	}
+
+	g_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+	g_pDevice->SetRenderState(D3DRS_POINTSIZE, FtoDW(5.0f));
+
+	g_pDevice->SetRenderState(D3DRS_POINTSCALE_A, FtoDW(0.0f));
+	g_pDevice->SetRenderState(D3DRS_POINTSCALE_B, FtoDW(0.0f));
+	g_pDevice->SetRenderState(D3DRS_POINTSCALE_C, FtoDW(1.0f));
+
+	g_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+	g_pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, FtoDW(0.0f));
+	g_pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, FtoDW(100.0f));
+
+	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+	
+	g_pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	g_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+}
+
+void cSCENE_INGAME::Update_Particle()
+{
+	static int nAlpha = 0;
+	static int nDelta = 4;
+	nAlpha += nDelta;
+
+	if (nAlpha > 255)
+	{
+		nAlpha = 255;
+		nDelta *= -1;
+	}
+	if (nAlpha < 0)
+	{
+		nAlpha = 0;
+		nDelta *= -1;
+	}
+	for (int i = 0; i < m_vecVertexParticle.size(); i++)
+	{
+		if (i % 2) continue;
+
+		m_vecVertexParticle[i].c = D3DCOLOR_ARGB(nAlpha, 180, 70, 20);
+
+	}
+
+}
+
+void cSCENE_INGAME::Render_Particle()
+{
+	D3DXMATRIXA16	matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	g_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+	g_pDevice->SetRenderState(D3DRS_LIGHTING, false);
+	g_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	g_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+
+	g_pDevice->SetFVF(ST_PC_VERTEX::FVF);
+	g_pDevice->SetTexture(0, g_pTextureManager->GetTexture("./images/alpha_tex.tga"));
+	g_pDevice->DrawPrimitiveUP(D3DPT_POINTLIST,
+		m_vecVertexParticle.size(),
+		&m_vecVertexParticle[0],
+		sizeof(ST_PC_VERTEX));
+
+
+	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
+	g_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+	g_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+*/

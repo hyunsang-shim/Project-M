@@ -281,7 +281,17 @@ void cSkinnedMesh::Load(char * szFolder, char * szFileName)
 	sFullPath += string("/") + string(szFileName);
 
 	
-	HRESULT  hr = D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
+	int len;
+	int slength = (int)sFullPath.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, sFullPath.c_str(), slength, 0, 0);
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, sFullPath.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+
+
+
+	HRESULT  hr = D3DXLoadMeshHierarchyFromX(r.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,
 		&ah,
