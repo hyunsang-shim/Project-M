@@ -282,59 +282,22 @@ cOBB * cNewObject::GetOBB()
 	return m_pOBB;
 }
 
-bool cNewObject::GetHeight(IN float x, OUT float & y, IN float z)
+bool cNewObject::GetY(IN float x, OUT float & y, IN float z)
 {
-	if (x < 0.f || z < 0.f || x >= m_nTileN || z >= m_nTileN)
-	{
-		y = 0;
-		return false;
+	BOOL hit = false;
+	float dist = 0.0f;
+	float start = y + 12.0f;
+	float before = y;
+
+	D3DXIntersect(m_pMesh, &D3DXVECTOR3(x, start, z), &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+	if (hit)
+	{		
+		y = start - dist;
+
+		if (y > abs(before - y))
+			y = 0.015f;
 	}
 
-	int nX = x;
-	int nZ = z;
-
-	float fDeltaX = x - nX;
-	float fDeltaZ = z - nZ;
-
-	int _0 = (nZ + 0)*(m_nTileN + 1) + nX + 0;
-	int _1 = (nZ + 1)*(m_nTileN + 1) + nX + 0;
-	int _2 = (nZ + 0)*(m_nTileN + 1) + nX + 1;
-	int _3 = (nZ + 1)*(m_nTileN + 1) + nX + 1;
-
-	if (fDeltaX + fDeltaZ < 1.0f)
-	{
-		/*D3DXVECTOR3 v01 = m_vecVertex[_1] - m_vecVertex[_0];
-		D3DXVECTOR3 v02 = m_vecVertex[_2] - m_vecVertex[_0];
-		y = m_vecVertex[_0].y +
-			(v01*fDeltaZ + v02*fDeltaX).y;
-		return true;*/
-
-		D3DXVECTOR3 v01 = m_vecPoint[_1] - m_vecPoint[_0];
-		D3DXVECTOR3 v02 = m_vecPoint[_2] - m_vecPoint[_0];
-		y = m_vecPoint[_0].y +
-			(v01*fDeltaZ + v02*fDeltaX).y;
-		return true;
-
-	}
-	else
-	{
-		/*fDeltaX = 1.0f - fDeltaX;
-		fDeltaZ = 1.0f - fDeltaZ;
-		D3DXVECTOR3 v31 = m_vecVertex[_1] - m_vecVertex[_3];
-		D3DXVECTOR3 v32 = m_vecVertex[_2] - m_vecVertex[_3];
-		y = m_vecVertex[_3].y +
-			(v31*fDeltaX + v32*fDeltaZ).y;
-		return true;*/
-
-		fDeltaX = 1.0f - fDeltaX;
-		fDeltaZ = 1.0f - fDeltaZ;
-		D3DXVECTOR3 v31 = m_vecPoint[_1] - m_vecPoint[_3];
-		D3DXVECTOR3 v32 = m_vecPoint[_2] - m_vecPoint[_3];
-		y = m_vecPoint[_3].y +
-			(v31*fDeltaX + v32*fDeltaZ).y;
-		return true;
-
-
-	}
 	return true;
 }
