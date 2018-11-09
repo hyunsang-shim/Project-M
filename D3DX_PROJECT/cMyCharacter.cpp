@@ -71,3 +71,8 @@ void cMyCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	m_pCharacterController->WndProc(hWnd, message, wParam, lParam);
 }
 
+string cMyCharacter::sendData()
+{
+	return m_pCharacterController->getUserData();
+}
+

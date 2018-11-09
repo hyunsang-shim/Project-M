@@ -21,6 +21,7 @@ public:
 	void Render();
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+	void RenderOtherPlayer();
 	void Setup_HeightMap();
 private:
 	cCamera* m_pCamera;
@@ -40,5 +41,29 @@ public:
 	D3DLIGHT9 InitDirectionalLight(D3DXVECTOR3* direction, D3DXCOLOR* color);
 	D3DLIGHT9 InitPointLight(D3DXVECTOR3* position, D3DXCOLOR* color);
 	D3DLIGHT9 InitSpotLight(D3DXVECTOR3* position, D3DXVECTOR3* direction, D3DXCOLOR* color);
+	
+public:
+	POINT beforeMousePos;
+	POINT nowMousePos;
+	  
+private:
+	LPD3DXFONT m_pFont;
+	
+public:
+	void setupUI();
+	void renderUI();
+	/*
+	// : billborard
+	void Set_Billboard(D3DXMATRIXA16* pmatWorld);
+
+	// : particle
+private:
+	vector<ST_PC_VERTEX>		m_vecVertexParticle;
+public:
+	void Setup_Particle();
+	void Update_Particle();
+	void Render_Particle();
+
+	*/
 };
 

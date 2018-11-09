@@ -141,6 +141,19 @@ struct ST_SIZEN
 
 };
 
+typedef struct UserInfo
+{//(int x, int y, int direction, int action, int actionCount)
+
+	int userNum;
+	float x;
+	float y;
+	float z;
+	float direction;
+	int action;
+	int actionCount;
+}UserInfo;
+
+
 #include "cMainGame.h"
 #include "cCamera.h"
 #include "cHeightMap.h"
@@ -166,7 +179,9 @@ namespace d3d
 #include "cTextureManager.h"
 #include "cTimeManager.h"
 #include "cFontManager.h"
-
+#include "cGameInfoManager.h"
+#include "cNetworkManager.h"
+#include "cOtherPlayerManager.h"
 
 using namespace std;
 

@@ -31,8 +31,10 @@ LPD3DXFONT cFontManager::GetFont(eFontType e)
 		fd.PitchAndFamily = FF_DONTCARE;
 
 		{
-			AddFontResource("font/umberto.ttf");
-			strcpy(fd.FaceName, "±¼¸²Ã¼");
+			AddFontResource(TEXT("font/umberto.ttf"));
+			std::wstring name(L"±¼¸²Ã¼");
+			const wchar_t* szName = name.c_str();
+			wcscpy(fd.FaceName, szName);
 		}
 	}
 	else if (e == E_QUEST)
@@ -46,8 +48,10 @@ LPD3DXFONT cFontManager::GetFont(eFontType e)
 		fd.PitchAndFamily = FF_DONTCARE;
 
 		{
-			AddFontResource("font/umberto.ttf");
-			strcpy(fd.FaceName, "umberto");
+			AddFontResource(TEXT("font/umberto.ttf"));
+			std::wstring name(L"umberto");
+			const wchar_t* szName = name.c_str();
+			wcscpy(fd.FaceName, szName);
 		}
 	}
 

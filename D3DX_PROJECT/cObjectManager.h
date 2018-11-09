@@ -5,9 +5,6 @@ class cObject;
 
 class cObjectManager
 {
-//public:
-//	cObjectManager();
-//	~cObjectManager();
 private:
 	SINGLETON(cObjectManager);
 private:

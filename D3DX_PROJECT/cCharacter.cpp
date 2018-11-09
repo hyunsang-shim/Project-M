@@ -10,8 +10,6 @@ cCharacter::cCharacter()
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
-	m_ptPrevMouse.x = 0;
-	m_ptPrevMouse.y = 0;
 }
 
 
@@ -33,7 +31,6 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	D3DXVECTOR3 m_vLeftDirection;
 	D3DXVECTOR3 m_vUp(0, 1, 0);
 	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
-
 	LPD3DXANIMATIONSET pCurrentAnimSet = NULL;
 	D3DXTRACK_DESC stTrackDesc;
 
@@ -120,15 +117,22 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	}
 
 
-	RECT rc;
-	GetClientRect(g_hWnd, &rc);
-
 	D3DXMATRIXA16 matR, matT;
 	D3DXMatrixRotationY(&matR, m_fRotY);
 	m_vDirection = D3DXVECTOR3(0, 0, 1);
 
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+	m_matWorld = matR * matT;
+}
+
+void cCharacter::UpdateOtherPlayer(float x, float y, float z, float degree, int action, int actionCount)
+{
+
+	D3DXMATRIXA16 matR, matT;
+	D3DXMatrixRotationY(&matR, degree);
+	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+	D3DXMatrixTranslation(&matT, x, y, z);
 	m_matWorld = matR * matT;
 }
 
@@ -159,22 +163,36 @@ void cCharacter::SetPositionY(float y)
 	this->m_vPosition.y = y;
 }
 
+string cCharacter::getUserData()
+{
+	string message;
+	message += "userData";
+	message += "x ";
+	message += to_string(m_vPosition.x);
+	message += " ";
+	message += to_string(m_vPosition.y);
+	message += " ";
+	message += to_string(m_vPosition.z);
+	message += " ";
+	message += to_string(m_fRotY);
+	message += " ";
+	message += to_string(10);
+	message += " ";
+	message += to_string(10);
+	message += " ";
+	return message;
+}
+
 void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 	case WM_MOUSEMOVE:
-		POINT ptCurrMouse;
-		ptCurrMouse.x = LOWORD(lParam);
-		ptCurrMouse.y = HIWORD(lParam);
-
-		float fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
-		float fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
-
-		m_fRotY += (fDeltaX / 100.f);
-		m_vDirection.x += (fDeltaY / 100.f);
-
-		m_ptPrevMouse = ptCurrMouse;
+		if (!g_pGameInfoManager->isESCPushed)
+		{
+			m_fRotY += (g_pGameInfoManager->mouseMoveX / 100.f);
+			m_vDirection.x += (g_pGameInfoManager->mouseMoveY / 100.f);
+		}
 		break;
 	}
 }

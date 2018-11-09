@@ -13,6 +13,11 @@
 #include "cOBB.h"
 #include "cFrame.h"
 
+DWORD FtoDW(float f)
+{
+	return *((DWORD*)&f);
+}
+
 
 cSCENE_INGAME::cSCENE_INGAME()
 	: m_pCamera(NULL),
@@ -21,7 +26,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pObject(NULL),
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
-	m_pMyCharacter(NULL)
+	m_pMyCharacter(NULL),
+	m_pFont(NULL)
 {
 }
 
@@ -35,6 +41,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pXmodel);
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
+	SAFE_RELEASE(m_pFont);
 }
 
 void cSCENE_INGAME::Setup()
@@ -89,11 +96,50 @@ void cSCENE_INGAME::Setup()
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
+	//마우스 좌표 셋팅
+	beforeMousePos.x = 1920 / 2;
+	beforeMousePos.y = 1080 / 2;
+	nowMousePos.x = 1920 / 2;
+	nowMousePos.y = 1080 / 2;
+	SetCursorPos(1920 / 2, 1080 / 2);
+
+	//임시 셋팅
+	setupUI();
+
 }
 
 void cSCENE_INGAME::Update()
 {
+	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
+
+
+	//마우스 이동값 계산
+
+
+	if (mouseMove == 0)
+	{
+		GetCursorPos(&nowMousePos);
+
+		g_pGameInfoManager->mouseMoveX = nowMousePos.x - beforeMousePos.x;
+		g_pGameInfoManager->mouseMoveY = nowMousePos.y - beforeMousePos.y;
+	
+		beforeMousePos = nowMousePos;
+		if (nowMousePos.x == 0 || nowMousePos.y == 0 || nowMousePos.x >= 1920 || nowMousePos.y >= 1080)
+		{
+			SetCursorPos(1920 / 2, 1080 / 2);	
+			mouseMove = 1;
+		}
+	
+	}
+	else
+	{
+		g_pGameInfoManager->mouseMoveX = 0;
+		g_pGameInfoManager->mouseMoveY = 0;
+		GetCursorPos(&nowMousePos);
+		GetCursorPos(&beforeMousePos);
+		mouseMove = 0;
+	}
 
 	m_pCamera->Update(m_pMyCharacter->GetPosition());
 	if (m_pRootFrame)
@@ -112,15 +158,27 @@ void cSCENE_INGAME::Update()
 
 	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
 
+
+	g_pNetworkManager->SendData(m_pMyCharacter->sendData());
+
 }
 
 void cSCENE_INGAME::Render()
 {
+	SetCursor(NULL);
+	if (g_pGameInfoManager->isESCPushed)
+	{
+		SetCursor(LoadCursor(NULL, IDC_ARROW));
+	}
+	
+
 	m_pSKY->Render();
 	m_pGrid->Render();
 	m_pMap->Render();
 	m_pObject->Render();
 	m_pXmodel->Render();
+
+	g_pOtherPlayerManager->render();
 
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
@@ -128,10 +186,36 @@ void cSCENE_INGAME::Render()
 		if (m_pMyCharacter)
 			m_pMyCharacter->Render(NULL);
 	}
+	renderUI();
+
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	switch (message)
+	{
+	case WM_LBUTTONDOWN:
+		{
+		static int n = 0;
+		//m_pSkinnedMesh->SetAnimationIndex(n++);
+		m_pMyCharacter->SetAnimationIndexBlend(n++);
+		break;
+		}
+	 
+	case WM_KEYUP:
+		switch (wParam) 
+		{
+		case VK_ESCAPE:
+			{
+				g_pGameInfoManager->isESCPushed = ~g_pGameInfoManager->isESCPushed;
+				break;
+			}
+		break;
+		}
+	case WM_RBUTTONUP:
+		//g_pNetworkManager->SendData();
+		break;
+	}
 	if (m_pCamera)
 	{
 		m_pCamera->WndProc(hWnd, message, wParam, lParam);
@@ -139,17 +223,13 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	if (m_pMyCharacter)
 	{
 		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
-	}
-	switch (message)
-	{
-	case WM_LBUTTONDOWN:
-	{
-		static int n = 0;
-		//m_pSkinnedMesh->SetAnimationIndex(n++);
-		m_pMyCharacter->SetAnimationIndexBlend(n++);
-	}
-	break;
-	}
+	}	
+	
+}
+
+void cSCENE_INGAME::RenderOtherPlayer()
+{
+
 }
 
 void cSCENE_INGAME::Setup_HeightMap()
@@ -205,3 +285,145 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 	light.Phi = D3DX_PI / 2.0;
 	return light;
 }
+
+void cSCENE_INGAME::setupUI()
+{
+	D3DXFONT_DESC fd;
+	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
+	fd.Height = 20;
+	fd.Width = 12;
+	fd.Weight = FW_MEDIUM;
+	fd.Italic = false;
+	fd.CharSet = DEFAULT_CHARSET;
+	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+	fd.PitchAndFamily = FF_DONTCARE;
+
+	{
+		AddFontResource(TEXT("font/umberto.ttf"));
+		string narrow_string("굴림체");
+		wstring wide_string = wstring(narrow_string.begin(), narrow_string.end());
+		const wchar_t* result = wide_string.c_str();
+
+		std::wstring name(L"굴림체");
+		const wchar_t* szName = name.c_str();
+		wcscpy(fd.FaceName, szName);
+	}
+	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
+}
+
+void cSCENE_INGAME::renderUI()
+{
+	string sText("o");
+	RECT rc;
+	SetRect(&rc, 1920/2, 1080/2, 1920 / 2+1, 1080 / 2+1 );
+	m_pFont->DrawTextA(NULL, sText.c_str(), sText.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(0, 0, 0));
+}
+/*
+void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
+{
+	D3DXMATRIXA16	matBillBoard;
+	D3DXMatrixIdentity(&matBillBoard);
+	g_pDevice->GetTransform(D3DTS_VIEW, &matBillBoard);
+	D3DXMatrixInverse(&matBillBoard, NULL, &matBillBoard);
+	matBillBoard._41 = 0;
+	matBillBoard._42 = 0;
+	matBillBoard._43 = 0;
+	*pmatWorld = matBillBoard;
+}
+
+void cSCENE_INGAME::Setup_Particle()
+{
+	m_vecVertexParticle.resize(1000);
+	for (int i = 0; i < m_vecVertexParticle.size(); ++i)
+	{
+		float fRadius = rand() % 100 / 10.0f;
+		m_vecVertexParticle[i].p = D3DXVECTOR3(0, 0, fRadius);
+
+		D3DXVECTOR3 vAngle = D3DXVECTOR3(
+			D3DXToRadian(rand() % 3600 / 10.0f),
+			D3DXToRadian(rand() % 3600 / 10.0f),
+			D3DXToRadian(rand() % 3600 / 10.0f)
+		);
+		D3DXMATRIX matRX, matRY, matRZ, matWorld;
+		D3DXMatrixRotationX(&matRX, vAngle.x);
+		D3DXMatrixRotationY(&matRY, vAngle.y);
+		D3DXMatrixRotationZ(&matRZ, vAngle.z);
+		matWorld = matRX* matRY* matRZ;
+
+		D3DXVec3TransformCoord(
+			&m_vecVertexParticle[i].p,
+			&m_vecVertexParticle[i].p,
+			&matWorld);
+		m_vecVertexParticle[i].c = D3DCOLOR_ARGB(255, 180, 70, 20);
+	}
+
+	g_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+	g_pDevice->SetRenderState(D3DRS_POINTSIZE, FtoDW(5.0f));
+
+	g_pDevice->SetRenderState(D3DRS_POINTSCALE_A, FtoDW(0.0f));
+	g_pDevice->SetRenderState(D3DRS_POINTSCALE_B, FtoDW(0.0f));
+	g_pDevice->SetRenderState(D3DRS_POINTSCALE_C, FtoDW(1.0f));
+
+	g_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+	g_pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, FtoDW(0.0f));
+	g_pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, FtoDW(100.0f));
+
+	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+	
+	g_pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	g_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+}
+
+void cSCENE_INGAME::Update_Particle()
+{
+	static int nAlpha = 0;
+	static int nDelta = 4;
+	nAlpha += nDelta;
+
+	if (nAlpha > 255)
+	{
+		nAlpha = 255;
+		nDelta *= -1;
+	}
+	if (nAlpha < 0)
+	{
+		nAlpha = 0;
+		nDelta *= -1;
+	}
+	for (int i = 0; i < m_vecVertexParticle.size(); i++)
+	{
+		if (i % 2) continue;
+
+		m_vecVertexParticle[i].c = D3DCOLOR_ARGB(nAlpha, 180, 70, 20);
+
+	}
+
+}
+
+void cSCENE_INGAME::Render_Particle()
+{
+	D3DXMATRIXA16	matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	g_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+	g_pDevice->SetRenderState(D3DRS_LIGHTING, false);
+	g_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	g_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+
+	g_pDevice->SetFVF(ST_PC_VERTEX::FVF);
+	g_pDevice->SetTexture(0, g_pTextureManager->GetTexture("./images/alpha_tex.tga"));
+	g_pDevice->DrawPrimitiveUP(D3DPT_POINTLIST,
+		m_vecVertexParticle.size(),
+		&m_vecVertexParticle[0],
+		sizeof(ST_PC_VERTEX));
+
+
+	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
+	g_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+	g_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+*/
