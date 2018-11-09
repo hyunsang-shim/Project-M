@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "cCharacter.h"
-
+#include "cMyCharacter.h"
+#include "cSkinnedMesh.h"
 
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
@@ -20,30 +21,99 @@ void cCharacter::SetUP()
 {
 }
 
-void cCharacter::Update()
+void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh)
 {
+	static int CurrentAnimNum = 1;
+	static int beforeAnimNum = 0;
+	static double TotalPeriod = 0.0;
+	static double CurrentPeriod = 0.0;
+	bool OnlyLeftOrRight = true;
 	D3DXVECTOR3 m_vLeftDirection;
 	D3DXVECTOR3 m_vUp(0, 1, 0);
-
 	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
-	if (GetKeyState('A') & 0x8000)
-	{
-		m_vPosition = m_vPosition - (m_vLeftDirection * 0.5f);
-	}
+	LPD3DXANIMATIONSET pCurrentAnimSet = NULL;
+	D3DXTRACK_DESC stTrackDesc;
 
-	if (GetKeyState('D') & 0x8000)
-	{
-		m_vPosition = m_vPosition + (m_vLeftDirection * 0.5f);
-	}
+	m_SkinnedMesh->GetAnimController()->GetTrackDesc(0, &stTrackDesc);
+	m_SkinnedMesh->GetAnimController()->GetAnimationSet(CurrentAnimNum, &pCurrentAnimSet);
 
-	if (GetKeyState('W') & 0x8000)
-	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.5f);
-	}
+	CurrentPeriod = pCurrentAnimSet->GetPeriodicPosition(stTrackDesc.Position);
+	TotalPeriod = pCurrentAnimSet->GetPeriod();
 
-	if (GetKeyState('S') & 0x8000)
+	if (GetKeyState('R') & 0x8000)
 	{
-		m_vPosition = m_vPosition - (m_vDirection * 0.5f);
+		CurrentAnimNum = 2;
+
+		beforeAnimNum = CurrentAnimNum;
+
+		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+	}
+	else
+	{
+		if (GetKeyState('W') & 0x8000)
+		{
+			m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+			CurrentAnimNum = 6;
+			if (GetKeyState(VK_SHIFT) & 0x8000)
+			{
+				m_vPosition = m_vPosition + (m_vDirection * 0.15f);
+
+				if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
+				{
+					OnlyLeftOrRight = false;
+				}
+			}
+			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
+			{
+				OnlyLeftOrRight = false;
+			}
+		}
+		else if (GetKeyState('S') & 0x8000)
+		{
+			m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+			CurrentAnimNum = 3;
+			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
+			{
+				OnlyLeftOrRight = false;
+			}
+		}
+		else
+		{
+			if (TotalPeriod <= CurrentPeriod + 0.1)
+			{
+				CurrentAnimNum = 1;
+			}
+		}
+
+		if (GetKeyState('A') & 0x8000)
+		{
+			m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+			if (OnlyLeftOrRight)
+			{
+				CurrentAnimNum = 5;
+			}
+		}
+
+		if (GetKeyState('D') & 0x8000)
+		{
+			m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+			if (OnlyLeftOrRight)
+			{
+				CurrentAnimNum = 4;
+			}
+
+		}
+
+		if (GetKeyState(VK_LBUTTON) & 0x8000)
+		{
+
+		}
+
+		if (beforeAnimNum != CurrentAnimNum)
+		{
+			beforeAnimNum = CurrentAnimNum;
+			m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+		}
 	}
 
 

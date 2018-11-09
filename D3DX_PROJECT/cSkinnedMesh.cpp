@@ -360,3 +360,7 @@ void cSkinnedMesh::setTransform(D3DXMATRIXA16 * pmat)
 	m_matWorldTM = *pmat;
 }
 
+LPD3DXANIMATIONCONTROLLER cSkinnedMesh::GetAnimController()
+{
+	return m_pAnimController;
+}

@@ -30,7 +30,8 @@ void cOtherCharacter::Setup()
 void cOtherCharacter::Update(float x, float y, float z, float degree, int action, int actionCount)
 {
 	if (m_pCharacterController)
-		m_pCharacterController->UpdateOtherPlayer(x, y, z, degree, action, actionCount);
+	//	m_pCharacterController->UpdateOtherPlayer(x, y, z, degree, action, actionCount);
+//		m_pCharacterController->Update();
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
