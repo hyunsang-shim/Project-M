@@ -26,6 +26,7 @@ void cUITextView::Render(LPD3DXSPRITE pSprite)
 		(int)m_matWorld._42,
 		(int)m_matWorld._41 + (int)m_stSize.nWidth,
 		(int)m_matWorld._42 + (int)m_stSize.nHeight);
+
 	pFont->DrawText(NULL,
 		m_sText.c_str(),
 		m_sText.length(),

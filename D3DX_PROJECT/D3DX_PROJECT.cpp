@@ -158,6 +158,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_CREATE:
+		g_pNetworkManager->SetupNetwork(hWnd);
+		break;
+	case WM_ASYNC:
+		switch (lParam)
+		{
+		case FD_READ:
+			// 넷 상태가 true일 때 진입하도록 수정
+			if (g_pNetworkManager->GetNetStatus())
+					g_pNetworkManager->recvData();
+		default:
+			break;
+		}
 	case WM_TIMER:
 		if (g_pMainGame)
 			g_pMainGame->Update();

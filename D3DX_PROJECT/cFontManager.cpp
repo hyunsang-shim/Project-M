@@ -31,7 +31,7 @@ LPD3DXFONT cFontManager::GetFont(eFontType e)
 		fd.PitchAndFamily = FF_DONTCARE;
 
 		{
-			AddFontResource("font/umberto.ttf");
+			AddFontResource(TEXT("font/umberto.ttf"));
 			strcpy(fd.FaceName, "±¼¸²Ã¼");
 		}
 	}
@@ -46,7 +46,7 @@ LPD3DXFONT cFontManager::GetFont(eFontType e)
 		fd.PitchAndFamily = FF_DONTCARE;
 
 		{
-			AddFontResource("font/umberto.ttf");
+			AddFontResource(TEXT("font/umberto.ttf"));
 			strcpy(fd.FaceName, "umberto");
 		}
 	}

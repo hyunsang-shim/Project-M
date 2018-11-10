@@ -257,6 +257,7 @@ cSkinnedMesh::cSkinnedMesh(char * szFolder, char * szFileName)
 		pSkinnedMesh->m_pAnimController->GetMaxNumEvents(),
 		&m_pAnimController);
 
+	BulletStartBoneName = "BONE_0009F";
 }
 
 LPCWSTR s2ws1(string& s)
@@ -279,7 +280,6 @@ void cSkinnedMesh::Load(char * szFolder, char * szFileName)
 	string sFullPath(szFolder);
 	sFullPath += string("/") + string(szFileName);
 
-	
 	HRESULT  hr = D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,
@@ -338,6 +338,10 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 	}
 	// <<
 
+	if (strcmp(pCurrent->Name, BulletStartBoneName) == 0)
+	{
+		m_vBulletPos = D3DXVECTOR3(pCurrent->CombineTransformationMatrix._41, pCurrent->CombineTransformationMatrix._42, pCurrent->CombineTransformationMatrix._43);
+	}
 
 	if (pCurrent->pFrameSibling)
 	{
@@ -368,3 +372,7 @@ D3DXVECTOR3 cSkinnedMesh::GetHeadPos()
 	return m_vecHeadPos;
 }
 
+LPD3DXANIMATIONCONTROLLER cSkinnedMesh::GetAnimController()
+{
+	return m_pAnimController;
+}

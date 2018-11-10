@@ -9,7 +9,6 @@ private:
 	D3DXVECTOR3 m_vLookAt;
 	D3DXVECTOR3 m_vUp;
 
-	POINT m_ptPrevMouse;
 	BOOL m_isLButtonDown;
 
 	D3DXVECTOR3 m_vCamRotAngle;

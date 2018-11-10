@@ -1,5 +1,4 @@
 #pragma once
-
 #include "cCharacter.h"
 class cSkinnedMesh;
 class cOBB;
@@ -13,8 +12,9 @@ public:
 
 private:
 	cSkinnedMesh* m_pSkinnedMesh;
-	cOBB* m_pOBB;
-	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);	
+	cOBB* m_pOBB;	
+	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
+	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
 	D3DXVECTOR3 MyHeadPos;	// 머리 좌표 구하기 (하이트 맵)
 
 public:
@@ -25,7 +25,9 @@ public:
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);		
-	D3DXVECTOR3 GetMyHeadPos();	// 머리 좌표 구하기 (하이트 맵)
 
+	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	string sendData();
+	D3DXVECTOR3 GetMyHeadPos();	// 머리 좌표 구하기 (하이트 맵)
 };
 

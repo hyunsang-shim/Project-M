@@ -32,7 +32,7 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 {
 	if (m_pCharacterController)
 	{	
-		m_pCharacterController->Update();
+		m_pCharacterController->Update(this, m_pSkinnedMesh);
 	
 	}
 
@@ -40,6 +40,7 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
 	m_pSkinnedMesh->Update();
 	MyHeadPos = m_pSkinnedMesh->GetHeadPos();
+	m_vBulletPos = m_pSkinnedMesh->GetBulletPos();
 }
 
 void cMyCharacter::Render(D3DCOLOR c)
@@ -77,3 +78,9 @@ D3DXVECTOR3 cMyCharacter::GetMyHeadPos()
 {
 	return m_pSkinnedMesh->GetHeadPos();
 }
+
+string cMyCharacter::sendData()
+{
+	return m_pCharacterController->getUserData();
+}
+
