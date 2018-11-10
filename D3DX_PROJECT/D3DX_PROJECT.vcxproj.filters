@@ -266,9 +266,6 @@
     <ClCompile Include="cTextureManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cDeviceManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="cObj_Surface.cpp">
       <Filter>OBJ_Load</Filter>
     </ClCompile>
@@ -280,9 +277,6 @@
     </ClCompile>
     <ClCompile Include="cOtherCharacter.cpp">
       <Filter>Character_OTHER</Filter>
-    </ClCompile>
-    <ClCompile Include="cFontManager.cpp">
-      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="cUITextView.cpp">
       <Filter>UI</Filter>
@@ -319,6 +313,12 @@
     </ClCompile>
     <ClCompile Include="cCrossHairPicking.cpp">
       <Filter>CrossHair</Filter>
+    </ClCompile>
+    <ClCompile Include="cFontManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cDeviceManager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

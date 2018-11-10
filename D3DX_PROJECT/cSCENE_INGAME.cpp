@@ -179,22 +179,6 @@ if (GetKeyState(VK_LBUTTON) & 0x8000)
 
 void cSCENE_INGAME::Render()
 {
-	m_pSKY->Render();
-	m_pGrid->Render();
-	m_pMap->Render();
-	m_pObject->Render();
-	m_pXmodel->Render();
-
-	if (m_pRootFrame)
-		m_pRootFrame->Render();
-	{
-		if (m_pMyCharacter)
-			m_pMyCharacter->Render(NULL);
-	}
-}
-
-void cSCENE_INGAME::Render()
-{
 	SetCursor(NULL);
 
 	if (g_pGameInfoManager->isESCPushed)
