@@ -14,8 +14,8 @@ public:
 private:
 	cSkinnedMesh* m_pSkinnedMesh;
 	cOBB* m_pOBB;
-	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
-	
+	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);	
+	D3DXVECTOR3 MyHeadPos;	// 머리 좌표 구하기 (하이트 맵)
 
 public:
 	void Setup(char * szFolder, char * szFileName);
@@ -24,6 +24,8 @@ public:
 	cOBB* GetOBB();
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
-	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);		
+	D3DXVECTOR3 GetMyHeadPos();	// 머리 좌표 구하기 (하이트 맵)
+
 };
 

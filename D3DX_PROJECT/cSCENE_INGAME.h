@@ -25,7 +25,7 @@ public:
 private:
 	cCamera* m_pCamera;	
 	//cNewObject* m_pMap;
-	cHeightMap* m_pMap;
+	cNewObject* m_pMap;
 	cGrid* m_pGrid;
 	cNewObject* m_pObject;
 	cAseLoader* loader;

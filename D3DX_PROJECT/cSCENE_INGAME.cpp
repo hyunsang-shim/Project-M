@@ -63,10 +63,10 @@ void cSCENE_INGAME::Setup()
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// 하이트맵 셋팅
-	m_pMap = new cHeightMap();
-	m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
-	//	m_pMap = new cNewObject;
-	//m_pMap->Setup("test_map_obj.obj");
+	//m_pMap = new cHeightMap();
+	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
+	m_pMap = new cNewObject;
+	m_pMap->Setup("test_map_obj.obj");
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
@@ -110,8 +110,7 @@ void cSCENE_INGAME::Update()
 
 	float y = m_pMyCharacter->GetPosition().y;
 	if (m_pMap)
-		m_pMap->GetHeight(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z);
-
+		m_pMap->GetY(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z, m_pMyCharacter->GetMyHeadPos());
 	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
 
 }
@@ -156,8 +155,8 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 void cSCENE_INGAME::Setup_HeightMap()
 {
-	cHeightMap* pMap = new cHeightMap;
-	pMap->Setup("Map/", "HeightMap.raw", "terrain.jpg");
+	cNewObject* pMap = new cNewObject;
+	pMap->Setup("test_map_obj.obj");
 	m_pMap = pMap;
 	/*cNewObject* pMap = new cNewObject;
 	pMap->Setup("test_map_obj.obj");

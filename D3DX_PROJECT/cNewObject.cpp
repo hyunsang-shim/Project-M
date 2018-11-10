@@ -5,6 +5,7 @@
 cNewObject::cNewObject() : m_pTexture(NULL), v_translation(0, 0, 0), m_pOBB(NULL), m_vMin(0, 0, 0), m_vMax(0, 0, 0)
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	m_fFallSpeed = 0.186f;
 }
 
 
@@ -282,21 +283,24 @@ cOBB * cNewObject::GetOBB()
 	return m_pOBB;
 }
 
-bool cNewObject::GetY(IN float x, OUT float & y, IN float z)
+bool cNewObject::GetY(IN float x, OUT float & y, IN float z, IN D3DXVECTOR3 HeadPos)
 {
 	BOOL hit = false;
-	float dist = 0.0f;
-	float start = y + 12.0f;
-	float before = y;
+	BOOL hit2 = false;
+	static bool isFalling = false;
+	static float targetY = 0.0f;
+	float beforeY = y; 
+	float dist = 0.0f;	
+	float dist2 = 0.0f;
+	float start2_mod = 6.0f;
 
-	D3DXIntersect(m_pMesh, &D3DXVECTOR3(x, start, z), &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+	D3DXIntersect(m_pMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+	D3DXIntersect(m_pMesh, &(HeadPos + D3DXVECTOR3(0, start2_mod, 0)), &D3DXVECTOR3(0, -1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
 
 	if (hit)
-	{		
-		y = start - dist;
+	{	
 
-		if (y > abs(before - y))
-			y = 0.015f;
 	}
 
 	return true;
