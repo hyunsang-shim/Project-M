@@ -368,4 +368,24 @@ void cGrid::Render()
 		g_pDevice->SetStreamSource(0, m_pPVB, 0, sizeof(ST_PC_VERTEX));
 		g_pDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_nPNumLine);
 	}
+
+	// 캐릭터 크기 확인용
+	// >>
+	D3DXMATRIX backup_g_tMat = g_tMat;
+	D3DXMatrixRotationZ(&g_tMat, -D3DX_PI / 180 * 90);
+	g_pDevice->SetTransform(D3DTS_WORLD, &g_tMat);
+	
+	{
+		g_pDevice->SetStreamSource(0, m_pVB, 0, sizeof(ST_PC_VERTEX));
+		g_pDevice->DrawPrimitive(D3DPT_LINELIST, 0, m_nNumLine);
+	}
+
+	{
+		g_pDevice->SetStreamSource(0, m_pPVB, 0, sizeof(ST_PC_VERTEX));
+		g_pDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_nPNumLine);
+	}
+
+	g_tMat = backup_g_tMat;
+
+	// <<
 }

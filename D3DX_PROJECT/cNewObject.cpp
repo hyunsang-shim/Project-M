@@ -5,6 +5,7 @@
 cNewObject::cNewObject() : m_pTexture(NULL), v_translation(0, 0, 0), m_pOBB(NULL), m_vMin(0, 0, 0), m_vMax(0, 0, 0)
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	m_fFallSpeed = 0.186f;
 }
 
 
@@ -280,4 +281,22 @@ void cNewObject::SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos)
 cOBB * cNewObject::GetOBB()
 {
 	return m_pOBB;
+}
+
+bool cNewObject::GetY(IN float x, OUT float & y, IN float z, IN D3DXVECTOR3 HeadPos)
+{
+	
+	BOOL hit = false;
+	float dist = 0.0f;
+	//float start = y + 12.0f;
+	float before = y;
+
+	D3DXIntersect(m_pMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+	if (hit)
+	{
+		y = float(HeadPos.y) - dist;
+	}
+
+	return true;
 }

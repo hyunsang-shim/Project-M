@@ -16,11 +16,6 @@
 #include "cUIImageView.h"
 #include "cCrossHairPicking.h"
 
-DWORD FtoDW(float f)
-{
-	return *((DWORD*)&f);
-}
-
 
 cSCENE_INGAME::cSCENE_INGAME()
 	: m_pCamera(NULL),
@@ -29,8 +24,7 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pObject(NULL),
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
-	m_pMyCharacter(NULL),
-	m_pFont(NULL)
+	m_pMyCharacter(NULL)
 {
 }
 
@@ -44,15 +38,10 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pXmodel);
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
-	SAFE_RELEASE(m_pFont);
 }
 
 void cSCENE_INGAME::Setup()
 {
-	m_pCrossHairPicking = new cCrossHairPicking;
-
-	GetClientRect(g_hWnd, &m_Worldrc);
-
 	//카메라 셋팅
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
@@ -77,8 +66,10 @@ void cSCENE_INGAME::Setup()
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// 하이트맵 셋팅
-	m_pMap = new cHeightMap();
-	m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
+	//m_pMap = new cHeightMap();
+	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
+	m_pMap = new cNewObject;
+	m_pMap->Setup("test_map_obj.obj");
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
@@ -109,20 +100,13 @@ void cSCENE_INGAME::Setup()
 	nowMousePos.x = 1920 / 2;
 	nowMousePos.y = 1080 / 2;
 	SetCursorPos(1920 / 2, 1080 / 2);
-
-	//임시 셋팅
-	setupUI();
-
+	
 }
 
 void cSCENE_INGAME::Update()
 {
 	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
-
-
-	//마우스 이동값 계산
-
 
 	if (mouseMove == 0)
 	{
@@ -161,12 +145,11 @@ void cSCENE_INGAME::Update()
 
 	float y = m_pMyCharacter->GetPosition().y;
 	if (m_pMap)
-		m_pMap->GetHeight(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z);
-
+		m_pMap->GetY(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z, m_pMyCharacter->GetMyHeadPos());
 	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
 
 
-	if (GetKeyState(VK_LBUTTON) & 0x8000)
+if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
 		m_pCrossHairPicking->Setup();
 
@@ -191,16 +174,33 @@ void cSCENE_INGAME::Update()
 	if (g_pNetworkManager->GetNetStatus())
 		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
+
+}
+
+void cSCENE_INGAME::Render()
+{
+	m_pSKY->Render();
+	m_pGrid->Render();
+	m_pMap->Render();
+	m_pObject->Render();
+	m_pXmodel->Render();
+
+	if (m_pRootFrame)
+		m_pRootFrame->Render();
+	{
+		if (m_pMyCharacter)
+			m_pMyCharacter->Render(NULL);
+	}
 }
 
 void cSCENE_INGAME::Render()
 {
 	SetCursor(NULL);
+
 	if (g_pGameInfoManager->isESCPushed)
 	{
 		SetCursor(LoadCursor(NULL, IDC_ARROW));
 	}
-	
 
 	m_pSKY->Render();
 	m_pGrid->Render();
@@ -213,6 +213,7 @@ void cSCENE_INGAME::Render()
 	{
 		g_pOtherPlayerManager->render();
 	}
+
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 	{
@@ -225,7 +226,6 @@ void cSCENE_INGAME::Render()
 	{
 		Mesh_Render();
 	}
-
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -264,16 +264,10 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	}	
 	
 }
-
-void cSCENE_INGAME::RenderOtherPlayer()
-{
-
-}
-
 void cSCENE_INGAME::Setup_HeightMap()
 {
-	cHeightMap* pMap = new cHeightMap;
-	pMap->Setup("HeightMapData/", "HeightMap.raw", "terrain.jpg");
+	cNewObject* pMap = new cNewObject;
+	pMap->Setup("test_map_obj.obj");
 	m_pMap = pMap;
 }
 

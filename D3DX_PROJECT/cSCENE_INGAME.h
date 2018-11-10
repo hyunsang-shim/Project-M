@@ -34,8 +34,9 @@ public:
 	void RenderOtherPlayer();
 	void Setup_HeightMap();
 private:
-	cCamera* m_pCamera;
-	cHeightMap* m_pMap;
+	cCamera* m_pCamera;	
+	//cNewObject* m_pMap;
+	cNewObject* m_pMap;
 	cGrid* m_pGrid;
 	cNewObject* m_pObject;
 	cAseLoader* loader;

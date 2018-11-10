@@ -10,7 +10,6 @@ cSkinnedMesh::cSkinnedMesh()
 	, m_isAnimBlend(false)
 	, m_vMax(0, 0, 0)
 	, m_vMin(0, 0, 0)
-
 {
 	D3DXMatrixIdentity(&m_matWorldTM);
 }
@@ -322,11 +321,22 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 		pCurrent = (ST_BONE*)m_pRoot;
 
 	pCurrent->CombineTransformationMatrix = pCurrent->TransformationMatrix;
+		
 	if (pmatParent)
 	{
 		pCurrent->CombineTransformationMatrix =
 			pCurrent->CombineTransformationMatrix * (*pmatParent);
 	}
+
+	// 높이 맵 판단용 머리 본 찾기
+	// >>
+	if (pCurrent->Name == m_sHeadName)
+	{
+		m_vecHeadPos.x = pCurrent->CombineTransformationMatrix._41;
+		m_vecHeadPos.y = pCurrent->CombineTransformationMatrix._42;
+		m_vecHeadPos.z = pCurrent->CombineTransformationMatrix._43;
+	}
+	// <<
 
 	if (strcmp(pCurrent->Name, BulletStartBoneName) == 0)
 	{
@@ -343,6 +353,8 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 		Update((ST_BONE*)pCurrent->pFrameFirstChild, &(pCurrent->CombineTransformationMatrix));
 	}
 
+	
+
 }
 
 void cSkinnedMesh::SetRandomTrackPosition()
@@ -353,6 +365,11 @@ void cSkinnedMesh::SetRandomTrackPosition()
 void cSkinnedMesh::setTransform(D3DXMATRIXA16 * pmat)
 {
 	m_matWorldTM = *pmat;
+}
+
+D3DXVECTOR3 cSkinnedMesh::GetHeadPos()
+{
+	return m_vecHeadPos;
 }
 
 LPD3DXANIMATIONCONTROLLER cSkinnedMesh::GetAnimController()

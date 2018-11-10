@@ -24,6 +24,8 @@ public:
 	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
 	cOBB * GetOBB();
 	D3DMATERIAL9 m_mtlColor;
+	bool GetY(IN float x, OUT float &y, IN float z, D3DXVECTOR3 HeadPos);		// 하이트맵 높이값
+
 private:
 	vector<MLT_GROUP> m_vecMLT;
 	vector<ST_PNT_VERTEX> m_vecVertex;
@@ -44,6 +46,8 @@ private:
 	D3DXVECTOR3 m_vScale;
 
 	int m_nNumLine;
+	float m_fFallSpeed;
+
 
 	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
