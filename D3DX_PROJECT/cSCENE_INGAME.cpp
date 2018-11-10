@@ -188,8 +188,8 @@ void cSCENE_INGAME::Update()
 		}
 	}
 
-
-	g_pNetworkManager->SendData(m_pMyCharacter->sendData());
+	if (g_pNetworkManager->GetNetStatus())
+		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
 }
 
@@ -208,8 +208,11 @@ void cSCENE_INGAME::Render()
 	m_pObject->Render();
 	m_pXmodel->Render();
 
-	g_pOtherPlayerManager->render();
-
+	// 넷 상태에 따라 스킵 가능하도록 수정
+	if (g_pNetworkManager->GetNetStatus())
+	{
+		g_pOtherPlayerManager->render();
+	}
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 	{

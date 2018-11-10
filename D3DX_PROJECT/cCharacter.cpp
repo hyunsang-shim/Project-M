@@ -165,21 +165,22 @@ void cCharacter::SetPositionY(float y)
 
 string cCharacter::getUserData()
 {
-	string message;
-	message += "userData";
-	message += "x ";
-	message += to_string(m_vPosition.x);
-	message += " ";
-	message += to_string(m_vPosition.y);
-	message += " ";
-	message += to_string(m_vPosition.z);
-	message += " ";
-	message += to_string(m_fRotY);
-	message += " ";
-	message += to_string(10);
-	message += " ";
-	message += to_string(10);
-	message += " ";
+		string message;
+		message += "userData";
+		message += "x ";
+		message += to_string(m_vPosition.x);
+		message += " ";
+		message += to_string(m_vPosition.y);
+		message += " ";
+		message += to_string(m_vPosition.z);
+		message += " ";
+		message += to_string(m_fRotY);
+		message += " ";
+		message += to_string(10);
+		message += " ";
+		message += to_string(10);
+		message += " ";
+
 	return message;
 }
 

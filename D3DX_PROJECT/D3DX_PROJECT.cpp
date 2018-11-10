@@ -165,7 +165,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 		case FD_READ:
-			g_pNetworkManager->recvData();
+			// 넷 상태가 true일 때 진입하도록 수정
+			if (g_pNetworkManager->GetNetStatus())
+					g_pNetworkManager->recvData();
 		default:
 			break;
 		}
