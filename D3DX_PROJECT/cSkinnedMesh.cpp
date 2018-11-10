@@ -321,16 +321,14 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 		pCurrent = (ST_BONE*)m_pRoot;
 
 	pCurrent->CombineTransformationMatrix = pCurrent->TransformationMatrix;
-
-	
-
+		
 	if (pmatParent)
 	{
 		pCurrent->CombineTransformationMatrix =
 			pCurrent->CombineTransformationMatrix * (*pmatParent);
 	}
 
-	// 머리 좌표 구하기 (하이트 맵)
+	// 높이 맵 판단용 머리 본 찾기
 	// >>
 	if (pCurrent->Name == m_sHeadName)
 	{
@@ -339,6 +337,7 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 		m_vecHeadPos.z = pCurrent->CombineTransformationMatrix._43;
 	}
 	// <<
+
 
 	if (pCurrent->pFrameSibling)
 	{
@@ -349,7 +348,9 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 	{
 		Update((ST_BONE*)pCurrent->pFrameFirstChild, &(pCurrent->CombineTransformationMatrix));
 	}
+
 	
+
 }
 
 void cSkinnedMesh::SetRandomTrackPosition()

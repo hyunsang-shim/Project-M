@@ -285,22 +285,17 @@ cOBB * cNewObject::GetOBB()
 
 bool cNewObject::GetY(IN float x, OUT float & y, IN float z, IN D3DXVECTOR3 HeadPos)
 {
+	
 	BOOL hit = false;
-	BOOL hit2 = false;
-	static bool isFalling = false;
-	static float targetY = 0.0f;
-	float beforeY = y; 
-	float dist = 0.0f;	
-	float dist2 = 0.0f;
-	float start2_mod = 6.0f;
+	float dist = 0.0f;
+	//float start = y + 12.0f;
+	float before = y;
 
 	D3DXIntersect(m_pMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
 
-	D3DXIntersect(m_pMesh, &(HeadPos + D3DXVECTOR3(0, start2_mod, 0)), &D3DXVECTOR3(0, -1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
-
 	if (hit)
-	{	
-
+	{
+		y = float(HeadPos.y) - dist;
 	}
 
 	return true;

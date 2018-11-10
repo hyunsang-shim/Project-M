@@ -34,7 +34,7 @@ private:
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
 	D3DXMATRIXA16		m_matWorldTM;
 	D3DXVECTOR3			m_vecHeadPos;
-	string				m_sHeadName = string("BONE_00012");		// 머리 좌표 구하기 (하이트 맵)
+	string				m_sHeadName = string("HeadTop");		// 머리 좌표 구하기 (하이트 맵)
 
 public:
 	cSkinnedMesh(char* szFolder, char* szFileName);

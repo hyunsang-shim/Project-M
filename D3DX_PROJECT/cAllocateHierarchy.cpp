@@ -88,12 +88,13 @@ STDMETHODIMP cAllocateHierarchy::CreateMeshContainer(
 
 	}
 
-	pMeshData->pMesh->CloneMeshFVF(
+	HRESULT hr = pMeshData->pMesh->CloneMeshFVF(
 		pMeshData->pMesh->GetOptions(),
 		pMeshData->pMesh->GetFVF(),
 		g_pDevice,
 		&pBoneMesh->pOrigMesh);
 
+	
 
 	DWORD dwNumBones = pSkinInfo->GetNumBones();
 	pBoneMesh->ppBoneMatrixPtrs = new D3DXMATRIX*[dwNumBones];
