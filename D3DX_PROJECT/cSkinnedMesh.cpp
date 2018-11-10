@@ -258,6 +258,7 @@ cSkinnedMesh::cSkinnedMesh(char * szFolder, char * szFileName)
 		pSkinnedMesh->m_pAnimController->GetMaxNumEvents(),
 		&m_pAnimController);
 
+	BulletStartBoneName = "BONE_0009F";
 }
 
 LPCWSTR s2ws1(string& s)
@@ -280,18 +281,7 @@ void cSkinnedMesh::Load(char * szFolder, char * szFileName)
 	string sFullPath(szFolder);
 	sFullPath += string("/") + string(szFileName);
 
-	
-	int len;
-	int slength = (int)sFullPath.length() + 1;
-	len = MultiByteToWideChar(CP_ACP, 0, sFullPath.c_str(), slength, 0, 0);
-	wchar_t* buf = new wchar_t[len];
-	MultiByteToWideChar(CP_ACP, 0, sFullPath.c_str(), slength, buf, len);
-	std::wstring r(buf);
-	delete[] buf;
-
-
-
-	HRESULT  hr = D3DXLoadMeshHierarchyFromX(r.c_str(),
+	HRESULT  hr = D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,
 		&ah,
@@ -336,6 +326,11 @@ void cSkinnedMesh::Update(ST_BONE * pCurrent, D3DXMATRIXA16 *pmatParent)
 	{
 		pCurrent->CombineTransformationMatrix =
 			pCurrent->CombineTransformationMatrix * (*pmatParent);
+	}
+
+	if (strcmp(pCurrent->Name, BulletStartBoneName) == 0)
+	{
+		m_vBulletPos = D3DXVECTOR3(pCurrent->CombineTransformationMatrix._41, pCurrent->CombineTransformationMatrix._42, pCurrent->CombineTransformationMatrix._43);
 	}
 
 	if (pCurrent->pFrameSibling)

@@ -9,6 +9,16 @@ class cXModel;
 class cFrame;
 class cSKY;
 class cMyCharacter;
+class cUIObject;
+class cCrossHairPicking;
+
+struct Bullet
+{
+	ID3DXMesh *m_pBulletMesh;
+	D3DXVECTOR3 m_vBulletCreatePos;
+	float Radius = 0.2f;
+	D3DMATERIAL9 m_stMtlCircle;
+};
 
 class cSCENE_INGAME
 {
@@ -48,7 +58,11 @@ public:
 	  
 private:
 	LPD3DXFONT m_pFont;
-	
+	LPD3DXSPRITE		m_pSprite;
+	LPDIRECT3DTEXTURE9	m_pTextureUI;
+	D3DXIMAGE_INFO		m_stImageInfo;
+	cUIObject*			m_pUIRoot;
+	RECT				m_Worldrc;
 public:
 	void setupUI();
 	void renderUI();
@@ -65,5 +79,16 @@ public:
 	void Render_Particle();
 
 	*/
+
+// >> : CrossHair
+private:
+	cCrossHairPicking *m_pCrossHairPicking;
+	D3DXVECTOR3 m_vCrossHairHitPos;
+	D3DXVECTOR3 BulletDirection;
+	BOOL pHit = false;
+	Bullet m_Bullet;
+public:
+	void Mesh_Render();
+// << :
 };
 

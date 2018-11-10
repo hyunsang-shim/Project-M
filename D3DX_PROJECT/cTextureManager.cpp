@@ -38,15 +38,10 @@ LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(char * szFullPath, D3DXIMAGE_INFO
 {
 	if (m_mapTexture.find(szFullPath) == m_mapTexture.end() || m_mapImageInfo.find(szFullPath) == m_mapImageInfo.end())
 	{
-		int nLen = (int)strlen(szFullPath) + 1;
-		wchar_t *pwstrDest;
-		mbstowcs(pwstrDest, szFullPath, nLen);
-
-
 		SAFE_RELEASE(m_mapTexture[szFullPath]);
 		D3DXCreateTextureFromFileEx(
 			g_pDevice,
-			pwstrDest,
+			szFullPath,
 			D3DX_DEFAULT_NONPOW2,
 			D3DX_DEFAULT_NONPOW2,
 			D3DX_DEFAULT,

@@ -12,6 +12,9 @@
 #include "cFontManager.h"
 #include "cOBB.h"
 #include "cFrame.h"
+#include "cUIObject.h"
+#include "cUIImageView.h"
+#include "cCrossHairPicking.h"
 
 DWORD FtoDW(float f)
 {
@@ -46,6 +49,10 @@ cSCENE_INGAME::~cSCENE_INGAME()
 
 void cSCENE_INGAME::Setup()
 {
+	m_pCrossHairPicking = new cCrossHairPicking;
+
+	GetClientRect(g_hWnd, &m_Worldrc);
+
 	//Ä«¸Þ¶ó ¼ÂÆÃ
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
@@ -159,6 +166,29 @@ void cSCENE_INGAME::Update()
 	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
 
 
+	if (GetKeyState(VK_LBUTTON) & 0x8000)
+	{
+		m_pCrossHairPicking->Setup();
+
+		float dist;
+		D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+		if (pHit)
+		{
+
+			m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+
+			BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+
+			D3DXCreateSphere(g_pDevice, m_Bullet.Radius, 20, 10, &m_Bullet.m_pBulletMesh, NULL);
+			m_Bullet.m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
+			m_Bullet.m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			m_Bullet.m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			m_Bullet.m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+		}
+	}
+
+
 	g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
 }
@@ -187,6 +217,11 @@ void cSCENE_INGAME::Render()
 			m_pMyCharacter->Render(NULL);
 	}
 	renderUI();
+
+	if (pHit)
+	{
+		Mesh_Render();
+	}
 
 }
 
@@ -288,36 +323,56 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 
 void cSCENE_INGAME::setupUI()
 {
-	D3DXFONT_DESC fd;
-	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
-	fd.Height = 20;
-	fd.Width = 12;
-	fd.Weight = FW_MEDIUM;
-	fd.Italic = false;
-	fd.CharSet = DEFAULT_CHARSET;
-	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
-	fd.PitchAndFamily = FF_DONTCARE;
+	D3DXCreateSprite(g_pDevice, &m_pSprite);
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±èÅÂÈñ.jpg");
 
-	{
-		AddFontResource(TEXT("font/umberto.ttf"));
-		string narrow_string("±¼¸²Ã¼");
-		wstring wide_string = wstring(narrow_string.begin(), narrow_string.end());
-		const wchar_t* result = wide_string.c_str();
+	D3DXCreateTextureFromFileEx(
+		g_pDevice,
+		"UI/crosshair_p.png",
+		D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT,
+		0,
+		D3DFMT_UNKNOWN,
+		D3DPOOL_MANAGED,
+		D3DX_FILTER_NONE,
+		D3DX_DEFAULT,
+		0,
+		&m_stImageInfo,
+		NULL,
+		&m_pTextureUI);
 
-		std::wstring name(L"±¼¸²Ã¼");
-		const wchar_t* szName = name.c_str();
-		wcscpy(fd.FaceName, szName);
-	}
-	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
+	cUIImageView* pImageView = new cUIImageView;
+	pImageView->SetPosition(0, 0, 0);
+	pImageView->SetTexture("UI/crosshair_p.png");
+	m_pUIRoot = pImageView;
 }
 
 void cSCENE_INGAME::renderUI()
 {
-	string sText("o");
+	m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
+
+	D3DXMATRIXA16 matT, matR, matS, mat;
+	D3DXMatrixTranslation(&matT, m_Worldrc.right / 2 - 10, m_Worldrc.bottom / 2 - 10, 0);
+
+	mat = matT;
+
+	m_pSprite->SetTransform(&mat);
+
 	RECT rc;
-	SetRect(&rc, 1920/2, 1080/2, 1920 / 2+1, 1080 / 2+1 );
-	m_pFont->DrawTextA(NULL, sText.c_str(), sText.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(0, 0, 0));
+	SetRect(&rc, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
+	m_pSprite->Draw(m_pTextureUI,
+		&rc,
+		&D3DXVECTOR3(0, 0, 0),
+		&D3DXVECTOR3(0, 0, 0),
+		D3DCOLOR_ARGB(255, 255, 255, 255));
+	m_pSprite->End();
+
+
+	if (m_pUIRoot)
+		m_pUIRoot->Render(m_pSprite);
 }
+
 /*
 void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
 {
@@ -333,7 +388,7 @@ void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
 
 void cSCENE_INGAME::Setup_Particle()
 {
-	m_vecVertexParticle.resize(1000);
+	m_vecVertexParticle.resize(1000); 
 	for (int i = 0; i < m_vecVertexParticle.size(); ++i)
 	{
 		float fRadius = rand() % 100 / 10.0f;
@@ -427,3 +482,22 @@ void cSCENE_INGAME::Render_Particle()
 }
 
 */
+
+
+void cSCENE_INGAME::Mesh_Render()
+{
+	D3DXMATRIXA16 matWorld, matS, matR, matT;
+	D3DXMatrixIdentity(&matS);
+	D3DXMatrixIdentity(&matR);
+	D3DXMatrixIdentity(&matT);
+
+	matWorld = matS * matR;
+
+	D3DXMatrixTranslation(&matT, m_Bullet.m_vBulletCreatePos.x, m_Bullet.m_vBulletCreatePos.y, m_Bullet.m_vBulletCreatePos.z);
+	matWorld *= matT;
+	g_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+	g_pDevice->SetMaterial(&m_Bullet.m_stMtlCircle);
+	m_Bullet.m_pBulletMesh->DrawSubset(0);
+
+	m_Bullet.m_vBulletCreatePos += BulletDirection / 200;
+}

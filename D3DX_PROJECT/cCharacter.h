@@ -25,8 +25,7 @@ protected:
 
 public:
 	virtual void SetUP();
-	virtual void Update();
-//	virtual void UpdateOtherPlayer(float x, float y, float z, float degree, int action, int actionCount);
+	virtual void UpdateOtherPlayer(float x, float y, float z, float degree, int action, int actionCount);
 
 	virtual void Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh);
 	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);

@@ -32,8 +32,9 @@ public:
 private:
 	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
+	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
 	D3DXMATRIXA16		m_matWorldTM;
-
+	char* BulletStartBoneName;
 public:
 	cSkinnedMesh(char* szFolder, char* szFileName);
 	void Load(char* szFolder, char* szFileName);

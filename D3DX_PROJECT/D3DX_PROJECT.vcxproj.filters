@@ -73,6 +73,9 @@
     <Filter Include="Network">
       <UniqueIdentifier>{f9ebe957-0c39-4488-844e-47a176e3d41f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CrossHair">
+      <UniqueIdentifier>{91b4a492-bb96-4a68-80bf-68ab253fae18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -198,6 +201,9 @@
     <ClInclude Include="cOtherPlayerManager.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="cCrossHairPicking.h">
+      <Filter>CrossHair</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -310,6 +316,9 @@
     </ClCompile>
     <ClCompile Include="cOtherPlayerManager.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="cCrossHairPicking.cpp">
+      <Filter>CrossHair</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

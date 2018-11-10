@@ -38,6 +38,7 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
 	m_pSkinnedMesh->Update();
+	m_vBulletPos = m_pSkinnedMesh->GetBulletPos();
 }
 
 void cMyCharacter::Render(D3DCOLOR c)

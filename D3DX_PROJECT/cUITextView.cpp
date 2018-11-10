@@ -27,12 +27,8 @@ void cUITextView::Render(LPD3DXSPRITE pSprite)
 		(int)m_matWorld._41 + (int)m_stSize.nWidth,
 		(int)m_matWorld._42 + (int)m_stSize.nHeight);
 
-	int nLen = (int)strlen(m_sText.c_str()) + 1;
-	wchar_t *pwstrDest;
-	mbstowcs(pwstrDest, m_sText.c_str(), nLen);
-
 	pFont->DrawText(NULL,
-		pwstrDest,
+		m_sText.c_str(),
 		m_sText.length(),
 		&rc,
 		m_dwDrawTextFormat,

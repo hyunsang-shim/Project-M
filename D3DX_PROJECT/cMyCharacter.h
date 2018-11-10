@@ -14,7 +14,7 @@ private:
 	cSkinnedMesh* m_pSkinnedMesh;
 	cOBB* m_pOBB;
 	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
-	
+	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
 
 public:
 	void Setup(char * szFolder, char * szFileName);

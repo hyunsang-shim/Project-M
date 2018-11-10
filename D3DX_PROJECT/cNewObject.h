@@ -37,7 +37,7 @@ private:
 	D3DXVECTOR3 v_translation;
 
 	vector<DWORD> m_vecAttribute;
-	LPD3DXMESH m_pMesh;
+	SYNTHESIZE(LPD3DXMESH, m_pMesh, MESH);
 
 	D3DXVECTOR3 m_vRot;
 	D3DXVECTOR3 m_vPos;
