@@ -68,8 +68,7 @@ void cSCENE_INGAME::Setup()
 	// 하이트맵 셋팅
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
-	m_pMap = new cNewObject;
-	m_pMap->Setup("test_map_obj.obj");
+	g_pGameInfoManager->setup_Map("test_map_obj.obj");
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
@@ -139,19 +138,21 @@ void cSCENE_INGAME::Update()
 	if (m_pObject)
 		m_pObject->Updata();
 
-	if (m_pMyCharacter)
-		m_pMyCharacter->Update(m_pCamera->getDirection());
 
 
 	float y = m_pMyCharacter->GetPosition().y;
-	if (m_pMap)
-		m_pMap->GetY(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z, m_pMyCharacter->GetMyHeadPos());
-	m_pMyCharacter->GetCharacterController()->SetPositionY(y);
+	/*if (m_pMap && m_pMap->GetY(m_pMyCharacter->GetPosition().x, y, m_pMyCharacter->GetPosition().z, m_pMyCharacter->GetMyHeadPos()))
+	{
+		g_pGameInfoManager->canGo = 1;
+		m_pMyCharacter->GetCharacterController()->SetPositionY(y);
+	}*/
 
+	if (m_pMyCharacter)
+		m_pMyCharacter->Update(m_pCamera->getDirection());
 
 if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
-		m_pCrossHairPicking->Setup();
+		/*m_pCrossHairPicking->Setup();
 
 		float dist;
 		D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
@@ -168,7 +169,7 @@ if (GetKeyState(VK_LBUTTON) & 0x8000)
 			m_Bullet.m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			m_Bullet.m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			m_Bullet.m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
-		}
+		}*/
 	}
 
 	if (g_pNetworkManager->GetNetStatus())
@@ -188,7 +189,7 @@ void cSCENE_INGAME::Render()
 
 	m_pSKY->Render();
 	m_pGrid->Render();
-	m_pMap->Render();
+	g_pGameInfoManager->m_pMap->Render();
 	m_pObject->Render();
 	m_pXmodel->Render();
 
@@ -204,7 +205,7 @@ void cSCENE_INGAME::Render()
 		if (m_pMyCharacter)
 			m_pMyCharacter->Render(NULL);
 	}
-	renderUI();
+	//renderUI();
 
 	if (pHit)
 	{

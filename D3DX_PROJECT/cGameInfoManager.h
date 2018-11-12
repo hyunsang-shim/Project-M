@@ -1,6 +1,7 @@
 #pragma once
 #define g_pGameInfoManager cGameInfoManager::GetInstance()
 
+class cNewObject;
 
 class cGameInfoManager
 {
@@ -10,5 +11,12 @@ public:
 	BOOL isESCPushed;
 	int mouseMoveX;
 	int mouseMoveY;
+	bool canGo;
+
+	cNewObject* m_pMap;
+
+	void setup_Map(string filePath);
+
+
 };
 

@@ -2,6 +2,7 @@
 #include "cCharacter.h"
 #include "cMyCharacter.h"
 #include "cSkinnedMesh.h"
+#include "cNewObject.h"
 
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
@@ -39,6 +40,9 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 	CurrentPeriod = pCurrentAnimSet->GetPeriodicPosition(stTrackDesc.Position);
 	TotalPeriod = pCurrentAnimSet->GetPeriod();
+
+	D3DXVECTOR3 m_vBeforePosition = m_vPosition;
+
 
 	if (GetKeyState('R') & 0x8000)
 	{
@@ -116,6 +120,25 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 	}
 
+	if (g_pGameInfoManager->m_pMap)
+	{
+		float y = 0;
+		D3DXVECTOR3 head = m_vPosition + D3DXVECTOR3(0, 2, 0);
+		if(!g_pGameInfoManager->m_pMap->GetY(m_vPosition.x, y, m_vPosition.z, head))
+			m_vPosition = m_vBeforePosition;
+		else if (y - m_vPosition.y > 0.7)
+		{
+
+		}
+		else
+		{
+			if (m_vPosition.y - y > 0.3)
+				m_vPosition.y -= 0.3f;
+			else
+				m_vPosition.y = y;
+		}
+	}
+	
 
 	D3DXMATRIXA16 matR, matT;
 	D3DXMatrixRotationY(&matR, m_fRotY);
