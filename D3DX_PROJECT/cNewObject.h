@@ -16,6 +16,7 @@ public:
 	~cNewObject();
 public:
 	void Setup(string filePath);
+	void Setup(char* Path, char* Filename);
 	void Updata();
 	void Render();
 	void FileLoad(char* FileName);

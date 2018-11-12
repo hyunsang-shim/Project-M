@@ -1,6 +1,6 @@
 # Max2Obj Version 4.0 Mar 10th, 2001
 #
-mtllib ./box.mtl
+mtllib box.mtl
 g
 # object Box01 to come ...
 #

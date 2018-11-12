@@ -69,11 +69,11 @@ void cSCENE_INGAME::Setup()
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
 	m_pMap = new cNewObject;
-	m_pMap->Setup("test_map_obj.obj");
+	m_pMap->Setup(".", "test_map_obj.obj");
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
-	m_pObject->Setup("box.obj");
+	m_pObject->Setup(".", "box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
 	loader = new cAseLoader();
