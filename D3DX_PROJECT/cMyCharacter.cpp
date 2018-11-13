@@ -38,7 +38,7 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
-	m_pSkinnedMesh->Update();
+//	m_pSkinnedMesh->Update();
 	MyHeadPos = m_pSkinnedMesh->GetHeadPos();
 	m_vBulletPos = m_pSkinnedMesh->GetBulletPos();
 }
@@ -66,7 +66,7 @@ D3DXVECTOR3 cMyCharacter::GetPosition()
 
 void cMyCharacter::SetAnimationIndexBlend(int nIndex)
 {
-	m_pSkinnedMesh->SetAnimationIndexBlend(nIndex);
+	m_pSkinnedMesh->SetAnimationIndex(nIndex);
 }
 
 void cMyCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

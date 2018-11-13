@@ -1,51 +1,49 @@
 #pragma once
 #include "stdafx.h"
-
 struct ST_BONE;
 
 class cSkinnedMesh
 {
-public:
-	cSkinnedMesh();
-	~cSkinnedMesh();
-protected:
-	LPD3DXFRAME			m_pRoot;
-	LPD3DXANIMATIONCONTROLLER m_pAnimController;
-
-	float	m_fBlendTime;
-	float	m_fPassedBlendTime;
-	bool	m_isAnimBlend;
-
-public:
-
-	void Setup(char* szFoler, char* szFile);
-	void Update();
-	void Update(LPD3DXFRAME pFrame, LPD3DXFRAME pParent);
-
-	void Render(LPD3DXFRAME pFrame);
-	void SetupBoneMatrixPtrs(LPD3DXFRAME pFrame);
-	void UpdateSKinnedMesh(LPD3DXFRAME pFrame);
-
-	void SetAnimationIndex(int nIndex);
-	void SetAnimationIndexBlend(int nIndex);
+	friend class cSkinnedMeshManager;
 
 private:
+	ST_BONE*					m_pRootFrame;
+	DWORD						m_dwWorkingPaletteSize;
+	D3DXMATRIX*					m_pmWorkingPalette;
+	LPD3DXEFFECT				m_pEffect;
+
+	LPD3DXANIMATIONCONTROLLER	m_pAnimController;
+	D3DXMATRIXA16				m_matWorldTM;
+
+	/// >> : OBB -
 	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
-	D3DXMATRIXA16		m_matWorldTM;
 	D3DXVECTOR3			m_vecHeadPos;
 	string				m_sHeadName = string("HeadTop");		// 머리 좌표 구하기 (하이트 맵)
 	char* BulletStartBoneName;
 public:
-	cSkinnedMesh(char* szFolder, char* szFileName);
-	void Load(char* szFolder, char* szFileName);
-	void Destroy();
-	void UpdateAndRender();
-	void Update(ST_BONE* pCurrent, D3DXMATRIXA16* pmatParent);
-	void SetRandomTrackPosition();
-	void setTransform(D3DXMATRIXA16* pmat);
-	D3DXVECTOR3 GetHeadPos();				// 머리 좌표 구하기 (하이트 맵)
-	LPD3DXANIMATIONCONTROLLER GetAnimController();
-};
+	cSkinnedMesh(char* szFolder, char* szFilename);
+	~cSkinnedMesh(void);
 
+	void UpdateAndRender();
+	void SetAnimationIndex(int nIndex);
+
+	void SetRandomTrackPosition();
+	void SetTransform(D3DXMATRIXA16* pmat)
+	{
+		m_matWorldTM = *pmat;
+	}
+
+	void setTransform(D3DXMATRIXA16* pmat);
+	LPD3DXANIMATIONCONTROLLER GetAnimController();
+	D3DXVECTOR3 GetHeadPos();				// 머리 좌표 구하기 (하이트 맵)
+private:
+	cSkinnedMesh();
+	void Load(char* szFolder, char* szFilename);
+	LPD3DXEFFECT LoadEffect(char* szFilename);
+	void Update(ST_BONE* pCurrent, D3DXMATRIXA16* pmatParent);
+	void Render(ST_BONE* pBone = NULL);
+	void SetupBoneMatrixPtrs(ST_BONE* pBone);
+	void Destroy();
+};

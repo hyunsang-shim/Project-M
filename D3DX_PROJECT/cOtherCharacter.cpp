@@ -35,7 +35,7 @@ void cOtherCharacter::Update(float x, float y, float z, float degree, int action
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
-	m_pSkinnedMesh->Update();
+	//m_pSkinnedMesh->Update();
 }
 
 void cOtherCharacter::Render(D3DCOLOR c)
@@ -61,5 +61,5 @@ D3DXVECTOR3 cOtherCharacter::GetPosition()
 
 void cOtherCharacter::SetAnimationIndexBlend(int nIndex)
 {
-	m_pSkinnedMesh->SetAnimationIndexBlend(nIndex);
+	m_pSkinnedMesh->SetAnimationIndex(nIndex);
 }

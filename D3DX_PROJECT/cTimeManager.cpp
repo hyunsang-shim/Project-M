@@ -21,10 +21,10 @@ void cTimeManager::Update()
 
 float cTimeManager::GetElapsedTime()
 {
-	return m_fElapsedTime;
+	return m_fElapsedTime * 2.0f;
 }
 
 float cTimeManager::GetLastUpdateTime()
 {
-	return m_dwLastUpdateTime / 2000.0f;
+	return m_dwLastUpdateTime;
 }
