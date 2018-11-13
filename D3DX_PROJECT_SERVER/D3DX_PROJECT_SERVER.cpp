@@ -1,0 +1,373 @@
+// D3DX_PROJECT_SERVER.cpp : 응용 프로그램에 대한 진입점을 정의합니다.
+//
+
+#include "stdafx.h"
+#include "D3DX_PROJECT_SERVER.h"
+
+#include <stdio.h>
+#include <winsock.h>
+#include <vector>
+#include <string>
+#include <d3dx9.h>
+
+using namespace std;
+#pragma comment(lib,"ws2_32.lib")
+#define WM_ASYNC WM_USER+2
+using namespace std;
+#define Tryout 200
+
+typedef struct UserInfo
+{//(int x, int y, int direction, int action, int actionCount)
+
+	char			Header[64];			// 메시지 헤더
+	WORD			ID;				// 세션 ID	
+	char			PlayerName[16];	// 유저이름
+	WORD			Character_No;	// 캐릭터 종류
+	WORD			Attack;			// 공력력
+	DWORD			MaxHP;			// 최대 체력
+	DWORD			CurHP;			// 현재 체력
+	WORD			HP_Regen;		// 체력 재생
+	DWORD			MoveSpeed;		// 이동 속도
+	WORD			Mag_Size;		// 장탄 수
+	WORD			MaxMag;			// 최대 장전 수
+	DWORD			ShootSpeed;		// 연사속도
+	WORD			BulletTime;		// 총알 속도
+	D3DXVECTOR3		CurPos;			// 현재 위치값
+	D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
+	WORD			Status;			// 캐릭터 상태
+	int				isConnect;		// 접속 여부
+	SOCKET			s;				// 소켓
+}UserInfo;
+
+
+bool StartWith(char * FindStr, char * SearchStr)
+{
+	char* temp = strstr(FindStr, SearchStr);
+	if (temp == FindStr)
+		return true;
+	return false;
+}
+
+
+#define MAX_LOADSTRING 100
+
+// 전역 변수:
+HINSTANCE hInst;                                // 현재 인스턴스입니다.
+WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
+WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+
+// 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
+ATOM                MyRegisterClass(HINSTANCE hInstance);
+BOOL                InitInstance(HINSTANCE, int);
+LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+
+    // TODO: 여기에 코드를 입력합니다.
+
+    // 전역 문자열을 초기화합니다.
+    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_D3DX_PROJECT_SERVER, szWindowClass, MAX_LOADSTRING);
+    MyRegisterClass(hInstance);
+
+    // 응용 프로그램 초기화를 수행합니다.
+    if (!InitInstance (hInstance, nCmdShow))
+    {
+        return FALSE;
+    }
+
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_D3DX_PROJECT_SERVER));
+
+    MSG msg;
+
+    // 기본 메시지 루프입니다.
+    while (GetMessage(&msg, nullptr, 0, 0))
+    {
+        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+    }
+
+    return (int) msg.wParam;
+}
+
+
+
+//
+//  함수: MyRegisterClass()
+//
+//  목적: 창 클래스를 등록합니다.
+//
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
+    WNDCLASSEXW wcex;
+
+    wcex.cbSize = sizeof(WNDCLASSEX);
+
+    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc    = WndProc;
+    wcex.cbClsExtra     = 0;
+    wcex.cbWndExtra     = 0;
+    wcex.hInstance      = hInstance;
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_D3DX_PROJECT_SERVER));
+    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_D3DX_PROJECT_SERVER);
+    wcex.lpszClassName  = szWindowClass;
+    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
+    return RegisterClassExW(&wcex);
+}
+
+//
+//   함수: InitInstance(HINSTANCE, int)
+//
+//   목적: 인스턴스 핸들을 저장하고 주 창을 만듭니다.
+//
+//   설명:
+//
+//        이 함수를 통해 인스턴스 핸들을 전역 변수에 저장하고
+//        주 프로그램 창을 만든 다음 표시합니다.
+//
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
+
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
+
+   return TRUE;
+}
+
+//
+//  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  목적:  주 창의 메시지를 처리합니다.
+//
+//  WM_COMMAND  - 응용 프로그램 메뉴를 처리합니다.
+//  WM_PAINT    - 주 창을 그립니다.
+//  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
+//
+//
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	HDC hdc;
+	PAINTSTRUCT ps;
+	static WSADATA wsadata;
+	static SOCKET p1, p2;
+	static vector<UserInfo> user;
+	static SOCKET s;
+	static int arr[20][20] = { 0 };
+	static TCHAR msg[200];
+	static SOCKADDR_IN addr = { 0 }, c_addr;
+	static TCHAR str[10];
+	static TCHAR test[10];
+	static int count;
+	int size, msgLen;
+	char* buffer;
+	int x, y;
+	static bool turn;
+	static WORD playerCnt;
+//	static vector<string> userMsgs;		//유저 상태 메시지
+
+	UserInfo userinst;
+
+	static int userNum;
+
+
+    switch (message)
+    {
+	case WM_CREATE:
+		SetTimer(hWnd, 123, 25, NULL);
+
+		playerCnt = 0;
+		WSAStartup(MAKEWORD(2, 2), &wsadata);
+		s = socket(AF_INET, SOCK_STREAM, 0);
+		addr.sin_family = AF_INET;
+		addr.sin_port = 20;
+		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
+		addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		bind(s, (LPSOCKADDR)&addr, sizeof(addr));
+		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_ACCEPT);
+		turn = 0;
+		test[0] = -1;
+
+
+		if (listen(s, 5) == -1) return 0;
+
+		break;
+
+	case WM_ASYNC:
+		switch (lParam)
+		{
+		case FD_ACCEPT:
+			size = sizeof(c_addr);
+			user.push_back(userinst);
+			user.back().s = accept(s, (LPSOCKADDR)&c_addr, &size);
+			user.back().ID = playerCnt;
+			WSAAsyncSelect(user.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
+			
+			playerCnt++;
+//			userMsgs.resize(user.size());			//
+			InvalidateRgn(hWnd, NULL, FALSE);		//
+			break;
+		case FD_READ:
+			for (int i = 0; i < user.size(); i++)
+			{
+				if (user.at(i).s == (SOCKET)wParam)
+				{
+					recv((SOCKET)wParam, buffer, sizeof(UserInfo) + 1, 0);
+					if (StartWith(buffer, "userData"))
+					{
+						float x, y,z, direc;
+						int actCount, act;
+						UserInfo* Recieved = (UserInfo*)buffer;		// 받은 정보를 cast 하여 임시 구조체에 넣는다.
+					
+						// WORD			ID;				// 세션 ID
+						// char			PlayerName[16];	// 유저이름
+						// WORD			Character_No;	// 캐릭터 종류
+						// WORD			Attack;			// 공력력
+						// DWORD			MaxHP;			// 최대 체력
+						// DWORD			CurHP;			// 현재 체력
+						// WORD			HP_Regen;		// 체력 재생
+						// DWORD			MoveSpeed;		// 이동 속도
+						// WORD			Mag_Size;		// 장탄 수
+						// WORD			MaxMag;			// 최대 장전 수
+						// DWORD			ShootSpeed;		// 연사속도
+						// WORD			BulletTime;		// 총알 속도
+						// D3DXVECTOR3		CurPos;			// 현재 위치값
+						// D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
+						// WORD			Status;
+						user.at(i).CurHP = Recieved->CurHP;
+						user.at(i).CurPos = Recieved->CurPos;
+						user.at(i).Dir = Recieved->Dir;
+						user.at(i).Status = Recieved->Status;
+						
+					}
+				}
+			}
+			break;
+
+		case FD_CLOSE:
+			for (int i = 0; i < user.size(); i++)
+			{
+				if (user.at(i).s == (SOCKET)wParam)
+				{
+					user.erase(user.begin() + i);
+//					userMsgs[i].swap(userMsgs[user.size()-1]);
+//					userMsgs.erase(userMsgs.end());
+				}
+			}
+			break;
+		}
+
+		break;
+	case WM_TIMER:
+		for (int i = 0; i<user.size(); i++)
+		{
+			for (int j = 0; j < user.size(); j++)
+			{			
+				UserInfo PrepareMsg;
+				PrepareMsg = user.at(j);
+
+				if (i == j)
+				{
+					strcpy_s(user.at(j).Header, sizeof(char) * 3, "Hi");
+				}
+			
+
+				// 참고 : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
+				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(UserInfo) + 1, 0) != -1)
+				{
+					user.at(i).isConnect = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
+				}
+				else
+				{
+					user.at(i).isConnect += 1;		// 전송 실패 카운트를 올린다.
+				}
+				
+			}
+		}
+
+		for (int i = 0; i < user.size(); i++)
+		{
+			if (user.at(i).isConnect > Tryout)
+			{
+				/*
+				string message;
+				message += "disconnect ";
+				message += to_string(user.at(i).ID);
+				*/
+
+			//	strcpy(buffer, message.c_str());
+			//	strcpy()
+				for (int j = 0; j < user.size(); j++)
+				{
+					send(user.at(i).s, (char*)&user.at(i), sizeof(UserInfo) + 1, 0);
+				}
+				user.erase(user.begin() + i);
+				i--;
+				playerCnt = user.size();
+				
+			}
+		}
+		InvalidateRgn(hWnd, NULL, FALSE);
+		break;
+    case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hWnd, &ps);
+            // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다.
+			WCHAR msg[64];
+			wsprintf(msg, _T("Connected %d Clients"), playerCnt);
+			TextOut(hdc, 10, 10, msg, lstrlen(msg));			
+            EndPaint(hWnd, &ps);
+        }
+        break;
+    case WM_DESTROY:
+		PostQuitMessage(0);
+		WSACleanup();
+		PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+}
+
+// 정보 대화 상자의 메시지 처리기입니다.
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}

@@ -186,23 +186,24 @@ void cCharacter::SetPositionY(float y)
 	this->m_vPosition.y = y;
 }
 
-string cCharacter::getUserData()
+CharacterStatus_PC cCharacter::getUserData()
 {
-		string message;
-		message += "userData";
-		message += "x ";
-		message += to_string(m_vPosition.x);
-		message += " ";
-		message += to_string(m_vPosition.y);
-		message += " ";
-		message += to_string(m_vPosition.z);
-		message += " ";
-		message += to_string(m_fRotY);
-		message += " ";
-		message += to_string(10);
-		message += " ";
-		message += to_string(10);
-		message += " ";
+	CharacterStatus_PC myData;
+	myData.ID
+	myData.PlayerName
+	myData.Character_No
+	myData.Attack
+	myData.MaxHP
+	myData.CurHP
+	myData.HP_Regen
+	myData.MoveSpeed
+	myData.Mag_Size
+	myData.MaxMag
+	myData.ShootSpeed
+	myData.BulletTime
+	myData.CurPos
+	myData.Dir
+	myData.Status
 
 	return message;
 }

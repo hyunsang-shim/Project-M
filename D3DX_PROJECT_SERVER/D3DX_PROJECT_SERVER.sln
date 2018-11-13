@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3DX_PROJECT", "D3DX_PROJECT.vcxproj", "{C3C912C0-74FE-4A8F-B31F-72A685FECD57}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3DX_PROJECT_SERVER", "..\D3DX_PROJECT_SERVER\D3DX_PROJECT_SERVER.vcxproj", "{5C08BCBF-4D81-4E2B-8E54-9DB6AFA139CC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3DX_PROJECT_SERVER", "D3DX_PROJECT_SERVER.vcxproj", "{5C08BCBF-4D81-4E2B-8E54-9DB6AFA139CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Debug|x64.ActiveCfg = Debug|x64
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Debug|x64.Build.0 = Debug|x64
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Debug|x86.ActiveCfg = Debug|Win32
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Debug|x86.Build.0 = Debug|Win32
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Release|x64.ActiveCfg = Release|x64
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Release|x64.Build.0 = Release|x64
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Release|x86.ActiveCfg = Release|Win32
-		{C3C912C0-74FE-4A8F-B31F-72A685FECD57}.Release|x86.Build.0 = Release|Win32
 		{5C08BCBF-4D81-4E2B-8E54-9DB6AFA139CC}.Debug|x64.ActiveCfg = Debug|x64
 		{5C08BCBF-4D81-4E2B-8E54-9DB6AFA139CC}.Debug|x64.Build.0 = Debug|x64
 		{5C08BCBF-4D81-4E2B-8E54-9DB6AFA139CC}.Debug|x86.ActiveCfg = Debug|Win32
