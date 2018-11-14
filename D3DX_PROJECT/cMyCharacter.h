@@ -15,8 +15,6 @@ private:
 	cOBB* m_pOBB;	
 	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
-	D3DXVECTOR3 MyHeadPos;	// 머리 좌표 구하기 (하이트 맵)
-
 public:
 	void Setup(char * szFolder, char * szFileName);
 	void Update(D3DXVECTOR3 camDirection);

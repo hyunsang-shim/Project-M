@@ -26,6 +26,7 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pSKY(NULL),
 	m_pMyCharacter(NULL)
 {
+	GetClientRect(g_hWnd, &m_Worldrc);
 }
 
 
@@ -42,6 +43,10 @@ cSCENE_INGAME::~cSCENE_INGAME()
 
 void cSCENE_INGAME::Setup()
 {
+	m_pCrossHairPicking = new cCrossHairPicking;
+
+
+
 	//朝五虞 実特
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
@@ -100,6 +105,8 @@ void cSCENE_INGAME::Setup()
 	nowMousePos.y = 1080 / 2;
 	SetCursorPos(1920 / 2, 1080 / 2);
 	
+
+	setupUI();
 }
 
 void cSCENE_INGAME::Update()
@@ -150,16 +157,15 @@ void cSCENE_INGAME::Update()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
 
-if (GetKeyState(VK_LBUTTON) & 0x8000)
+	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
-		/*m_pCrossHairPicking->Setup();
+		m_pCrossHairPicking->CalcPosition();
 
 		float dist;
 		D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
 		if (pHit)
 		{
-
 			m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
 
 			BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
@@ -169,7 +175,7 @@ if (GetKeyState(VK_LBUTTON) & 0x8000)
 			m_Bullet.m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			m_Bullet.m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			m_Bullet.m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
-		}*/
+		}
 	}
 
 	if (g_pNetworkManager->GetNetStatus())
@@ -205,7 +211,8 @@ void cSCENE_INGAME::Render()
 		if (m_pMyCharacter)
 			m_pMyCharacter->Render(NULL);
 	}
-	//renderUI();
+	
+	renderUI();
 
 	if (pHit)
 	{

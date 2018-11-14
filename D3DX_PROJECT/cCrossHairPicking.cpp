@@ -7,17 +7,12 @@ cCrossHairPicking::cCrossHairPicking()
 	GetClientRect(g_hWnd, &rc);
 	cp.x = rc.right / 2;
 	cp.y = rc.bottom / 2;
+	m_vMiddlePos = D3DXVECTOR3(cp.x, cp.y, 1.0f);
 }
 
 
 cCrossHairPicking::~cCrossHairPicking()
 {
-}
-
-void cCrossHairPicking::Setup()
-{
-	m_vMiddlePos = D3DXVECTOR3(cp.x, cp.y, 1.0f);
-	CalcPosition();
 }
 
 void cCrossHairPicking::CalcPosition()

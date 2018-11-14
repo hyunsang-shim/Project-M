@@ -31,7 +31,7 @@ cSkinnedMesh::cSkinnedMesh(char* szFolder, char* szFilename)
 		pSkinnedMesh->m_pAnimController->GetMaxNumEvents(),
 		&m_pAnimController);
 
-	BulletStartBoneName = "BONE_0009F";
+	BulletStartBoneName = "BulletRoot";
 }
 
 cSkinnedMesh::cSkinnedMesh()
@@ -244,13 +244,6 @@ void cSkinnedMesh::Update(ST_BONE* pCurrent, D3DXMATRIXA16* pmatParent)
 			pCurrent->CombinedTransformationMatrix * (*pmatParent);
 	}
 
-	if (pCurrent->Name == m_sHeadName)
-	{
-		m_vecHeadPos.x = pCurrent->CombinedTransformationMatrix._41;
-		m_vecHeadPos.y = pCurrent->CombinedTransformationMatrix._42;
-		m_vecHeadPos.z = pCurrent->CombinedTransformationMatrix._43;
-	}
-
 	if (strcmp(pCurrent->Name, BulletStartBoneName) == 0)
 	{
 		m_vBulletPos = D3DXVECTOR3(pCurrent->CombinedTransformationMatrix._41, pCurrent->CombinedTransformationMatrix._42, pCurrent->CombinedTransformationMatrix._43);
@@ -331,9 +324,4 @@ void cSkinnedMesh::setTransform(D3DXMATRIXA16 * pmat)
 LPD3DXANIMATIONCONTROLLER cSkinnedMesh::GetAnimController()
 {
 	return m_pAnimController;
-}
-
-D3DXVECTOR3 cSkinnedMesh::GetHeadPos()
-{
-	return m_vecHeadPos;
 }

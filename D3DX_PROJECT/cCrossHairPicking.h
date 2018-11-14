@@ -11,7 +11,6 @@ private:
 	SYNTHESIZE(D3DXVECTOR3, m_Direction, Direction);
 	SYNTHESIZE(D3DXVECTOR3, m_Origin, Origin);
 public:
-	void Setup();
 	void CalcPosition();
 };
 
