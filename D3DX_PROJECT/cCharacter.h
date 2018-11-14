@@ -41,7 +41,7 @@ struct CharacterStatus_PC
 	DWORD			ShootSpeed;		// 연사속도
 	WORD			BulletTime;		// 총알 속도
 	D3DXVECTOR3		CurPos;			// 현재 위치값
-	D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
+	float			Dir;				// 캐릭터가 바라보는 방향
 	WORD			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
 	int				FailCnt;		// 접속 여부
@@ -64,7 +64,7 @@ struct CharacterStatus_NPC
 	DWORD			ShootSpeed;		// 연사속도
 	WORD			BulletTime;		// 총알 속도
 	D3DXVECTOR3		CurPos;			// 현재 위치값
-	D3DXVECTOR3		Dir;			// 캐릭터가 바라보는 방향
+	float			Dir;			// 캐릭터가 바라보는 방향
 	WORD			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
 };
@@ -90,7 +90,7 @@ protected:
 
 public:
 	virtual void SetUP();
-	virtual void UpdateOtherPlayer(float x, float y, float z, float degree, int action, int actionCount);
+	virtual void UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status);
 
 	virtual void Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh);
 	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);

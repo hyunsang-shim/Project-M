@@ -149,13 +149,13 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	m_matWorld = matR * matT;
 }
 
-void cCharacter::UpdateOtherPlayer(float x, float y, float z, float degree, int action, int actionCount)
+void cCharacter::UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status)
 {
 
 	D3DXMATRIXA16 matR, matT;
-	D3DXMatrixRotationY(&matR, degree);
+	D3DXMatrixRotationY(&matR, Direction);
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
-	D3DXMatrixTranslation(&matT, x, y, z);
+	D3DXMatrixTranslation(&matT, CurPos.x, CurPos.y, CurPos.z);
 	m_matWorld = matR * matT;
 }
 
@@ -202,7 +202,7 @@ CharacterStatus_PC cCharacter::getUserData()
 	// myData.ShootSpeed
 	// myData.BulletTime
 	myData.CurPos = this->m_vPosition;
-	myData.Dir = this->m_vDirection;
+	myData.Dir = this->m_fRotY;
 	// myData.Status
 
 	return myData;

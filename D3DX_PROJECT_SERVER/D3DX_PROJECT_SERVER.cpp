@@ -16,9 +16,29 @@ using namespace std;
 using namespace std;
 #define Tryout 200
 
-typedef struct UserInfo
-{//(int x, int y, int direction, int action, int actionCount)
+enum character_status {
+	Stand,
+	Stand_Shoot,
+	Run_Front,
+	Run_Front_Shoot,
+	Run_Left,
+	Run_Left_Shoot,
+	Run_Right,
+	Run_Right_Shoot,
+	Run_Back,
+	Run_Back_Shoot,
+	Dash,
+	Reload,
+	Hit,
+	Down,
+	Down_idle,
+	Stand_Up,
+	Dead,
+	NumSize
+};
 
+struct CharacterStatus_PC
+{
 	char			MsgHeader[64];			// 메시지 헤더
 	WORD			ID;				// 세션 ID	
 	char			PlayerName[16];	// 유저이름
@@ -33,12 +53,33 @@ typedef struct UserInfo
 	DWORD			ShootSpeed;		// 연사속도
 	WORD			BulletTime;		// 총알 속도
 	D3DXVECTOR3		CurPos;			// 현재 위치값
-	D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
+	float			Dir;				// 캐릭터가 바라보는 방향
 	WORD			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
-	int				FailCnt;		// 연결 실패 카운트. 일정 수 이상이면 접속을 끊는다. (#define Tryout 참고)
+	int				FailCnt;		// 접속 여부
 	SOCKET			s;				// 소켓
-}UserInfo;
+};
+
+struct CharacterStatus_NPC
+{
+	char			MsgHeader[64];			// 메시지 헤더
+	WORD			ID;				// 세션 ID	
+	char			CharacterName[16];	// 캐릭터 이름
+	WORD			Character_No;	// 캐릭터 종류
+	WORD			Attack;			// 공력력
+	DWORD			MaxHP;			// 최대 체력
+	DWORD			CurHP;			// 현재 체력
+	WORD			HP_Regen;		// 체력 재생
+	DWORD			MoveSpeed;		// 이동 속도
+	WORD			Mag_Cnt;		// 장탄 수
+	WORD			Mag_Max;		// 최대 장전 수
+	DWORD			ShootSpeed;		// 연사속도
+	WORD			BulletTime;		// 총알 속도
+	D3DXVECTOR3		CurPos;			// 현재 위치값
+	float			Dir;			// 캐릭터가 바라보는 방향
+	WORD			Status;			// 캐릭터 상태
+	int				TargetID;		// 공격 한 대상
+};
 
 
 bool StartWith(char * FindStr, char * SearchStr)
@@ -173,7 +214,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	static WSADATA wsadata;
 	static SOCKET p1, p2;
-	static vector<UserInfo> user;
+	static vector<CharacterStatus_PC> user;
 	static SOCKET s;
 	static int arr[20][20] = { 0 };
 	static TCHAR msg[200];
@@ -188,7 +229,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static WORD playerCnt;
 //	static vector<string> userMsgs;		//유저 상태 메시지
 
-	UserInfo userinst;
+	CharacterStatus_PC userinst;
 
 	static int userNum;
 
@@ -204,8 +245,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
 		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
-		// addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
-		addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
+		addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		// addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
 
 		bind(s, (LPSOCKADDR)&addr, sizeof(addr));
 		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_ACCEPT);
@@ -236,10 +277,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				if (user.at(i).s == (SOCKET)wParam)
 				{
-					recv((SOCKET)wParam, buffer, sizeof(UserInfo) + 1, 0);
+					char* buffer;
+					recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
 					if (StartWith(buffer, "userData"))
 					{
-						UserInfo* Recieved = (UserInfo*)buffer;		// 받은 정보를 cast 하여 임시 구조체에 넣는다.
+						CharacterStatus_PC* Recieved = (CharacterStatus_PC*)buffer;		// 받은 정보를 cast 하여 임시 구조체에 넣는다.
 					
 						// WORD			ID;				// 세션 ID
 						// char			PlayerName[16];	// 유저이름
@@ -285,7 +327,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			for (int j = 0; j < user.size(); j++)
 			{			
-				UserInfo PrepareMsg;
+				CharacterStatus_PC PrepareMsg;
 				PrepareMsg = user.at(j);
 
 				if (i == j)
@@ -295,7 +337,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			
 
 				// 참고 : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
-				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(UserInfo) + 1, 0) != -1)
+				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{
 					user.at(i).FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
 				}
@@ -321,7 +363,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//	strcpy()
 				for (int j = 0; j < user.size(); j++)
 				{
-					send(user.at(i).s, (char*)&user.at(i), sizeof(UserInfo) + 1, 0);
+					send(user.at(i).s, (char*)&user.at(i), sizeof(CharacterStatus_PC) + 1, 0);
 				}
 				user.erase(user.begin() + i);
 				i--;
@@ -336,9 +378,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다.
-			WCHAR msg[64];
-			wsprintf(msg, _T("Connected %d Clients"), playerCnt);
-			TextOut(hdc, 10, 10, msg, lstrlen(msg));			
+			CHAR msg[64];
+			sprintf(msg, "Connected %d Clients", playerCnt);
+			TextOut(hdc, 10, 10, msg, strlen(msg));			
             EndPaint(hWnd, &ps);
         }
         break;
