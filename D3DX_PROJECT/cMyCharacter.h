@@ -18,7 +18,7 @@ enum character_status {
 	Dash,
 	Hit,
 	Down,
-	Sleep,
+	Down_idle,
 	Stand_Up,
 	Dead,
 	NumSize
@@ -26,39 +26,39 @@ enum character_status {
 
 struct CharacterStatus_PC
 {
-	WORD			ID;				// ¼¼¼Ç ID
-	char			PlayerName[16];	// À¯ÀúÀÌ¸§
-	WORD			Character_No;	// Ä³¸¯ÅÍ Á¾·ù
-	WORD			Attack;			// °ø·Â·Â
-	DWORD			MaxHP;			// ÃÖ´ë Ã¼·Â
-	DWORD			CurHP;			// ÇöÀç Ã¼·Â
-	WORD			HP_Regen;		// Ã¼·Â Àç»ı
-	DWORD			MoveSpeed;		// ÀÌµ¿ ¼Óµµ
-	WORD			Mag_Size;		// ÀåÅº ¼ö
-	WORD			MaxMag;			// ÃÖ´ë ÀåÀü ¼ö
-	DWORD			ShootSpeed;		// ¿¬»ç¼Óµµ
-	WORD			BulletTime;		// ÃÑ¾Ë ¼Óµµ
-	D3DXVECTOR3		CurPos;			// ÇöÀç À§Ä¡°ª
-	D3DXVECTOR3		Dir;				// Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ¹æÇâ
+	WORD			ID;				// ì„¸ì…˜ ID
+	char			PlayerName[16];	// ìœ ì €ì´ë¦„
+	WORD			Character_No;	// ìºë¦­í„° ì¢…ë¥˜
+	WORD			Attack;			// ê³µë ¥ë ¥
+	DWORD			MaxHP;			// ìµœëŒ€ ì²´ë ¥
+	DWORD			CurHP;			// í˜„ì¬ ì²´ë ¥
+	WORD			HP_Regen;		// ì²´ë ¥ ì¬ìƒ
+	DWORD			MoveSpeed;		// ì´ë™ ì†ë„
+	WORD			Mag_Size;		// ì¥íƒ„ ìˆ˜
+	WORD			MaxMag;			// ìµœëŒ€ ì¥ì „ ìˆ˜
+	DWORD			ShootSpeed;		// ì—°ì‚¬ì†ë„
+	WORD			BulletTime;		// ì´ì•Œ ì†ë„
+	D3DXVECTOR3		CurPos;			// í˜„ì¬ ìœ„ì¹˜ê°’
+	D3DXVECTOR3		Dir;				// ìºë¦­í„°ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥
 	WORD			Status;
 };
 
 struct CharacterStatus_NPC
 {
-	WORD			ID;				// ¼¼¼Ç ID
-	char			MonsterName[16];	// À¯ÀúÀÌ¸§
-	WORD			Character_No;	// Ä³¸¯ÅÍ Á¾·ù
-	WORD			Attack;			// °ø·Â·Â
-	DWORD			MaxHP;			// ÃÖ´ë Ã¼·Â
-	DWORD			CurHP;			// ÇöÀç Ã¼·Â
-	WORD			HP_Regen;		// Ã¼·Â Àç»ı
-	DWORD			MoveSpeed;		// ÀÌµ¿ ¼Óµµ
-	WORD			Mag_Size;		// ÀåÅº ¼ö
-	WORD			MaxMag;			// ÃÖ´ë ÀåÀü ¼ö
-	DWORD			ShootSpeed;		// ¿¬»ç¼Óµµ
-	WORD			BulletTime;		// ÃÑ¾Ë ¼Óµµ
-	D3DXVECTOR3		CurPos;			// ÇöÀç À§Ä¡°ª
-	D3DXVECTOR3		Dir;				// Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ¹æÇâ
+	WORD			ID;				// ì„¸ì…˜ ID
+	char			MonsterName[16];	// ìœ ì €ì´ë¦„
+	WORD			Character_No;	// ìºë¦­í„° ì¢…ë¥˜
+	WORD			Attack;			// ê³µë ¥ë ¥
+	DWORD			MaxHP;			// ìµœëŒ€ ì²´ë ¥
+	DWORD			CurHP;			// í˜„ì¬ ì²´ë ¥
+	WORD			HP_Regen;		// ì²´ë ¥ ì¬ìƒ
+	DWORD			MoveSpeed;		// ì´ë™ ì†ë„
+	WORD			Mag_Size;		// ì¥íƒ„ ìˆ˜
+	WORD			MaxMag;			// ìµœëŒ€ ì¥ì „ ìˆ˜
+	DWORD			ShootSpeed;		// ì—°ì‚¬ì†ë„
+	WORD			BulletTime;		// ì´ì•Œ ì†ë„
+	D3DXVECTOR3		CurPos;			// í˜„ì¬ ìœ„ì¹˜ê°’
+	D3DXVECTOR3		Dir;				// ìºë¦­í„°ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥
 	WORD			Status;
 };
 
@@ -82,6 +82,6 @@ public:
 	void SetAnimationIndexBlend(int nIndex);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	
 	string sendData();
-	D3DXVECTOR3 GetMyHeadPos();	// ¸Ó¸® ÁÂÇ¥ ±¸ÇÏ±â (ÇÏÀÌÆ® ¸Ê)
+	D3DXVECTOR3 GetMyHeadPos();	// ë¨¸ë¦¬ ì¢Œí‘œ êµ¬í•˜ê¸° (í•˜ì´íŠ¸ ë§µ)
 };
 
