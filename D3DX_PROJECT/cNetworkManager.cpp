@@ -26,7 +26,8 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
 	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.66");	// 은호씨
-	 addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
+	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
+	 addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.7"); // 심현상(집)
 	 	
 	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// 성공하면 0 리턴, 아니면 에러 리턴.
 	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ);

@@ -19,7 +19,7 @@ using namespace std;
 typedef struct UserInfo
 {//(int x, int y, int direction, int action, int actionCount)
 
-	char			Header[64];			// 메시지 헤더
+	char			MsgHeader[64];			// 메시지 헤더
 	WORD			ID;				// 세션 ID	
 	char			PlayerName[16];	// 유저이름
 	WORD			Character_No;	// 캐릭터 종류
@@ -28,14 +28,15 @@ typedef struct UserInfo
 	DWORD			CurHP;			// 현재 체력
 	WORD			HP_Regen;		// 체력 재생
 	DWORD			MoveSpeed;		// 이동 속도
-	WORD			Mag_Size;		// 장탄 수
-	WORD			MaxMag;			// 최대 장전 수
+	WORD			Mag_Cnt;		// 장탄 수
+	WORD			Mag_Max;			// 최대 장전 수
 	DWORD			ShootSpeed;		// 연사속도
 	WORD			BulletTime;		// 총알 속도
 	D3DXVECTOR3		CurPos;			// 현재 위치값
 	D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
 	WORD			Status;			// 캐릭터 상태
-	int				isConnect;		// 접속 여부
+	int				TargetID;		// 공격 한 대상
+	int				FailCnt;		// 연결 실패 카운트. 일정 수 이상이면 접속을 끊는다. (#define Tryout 참고)
 	SOCKET			s;				// 소켓
 }UserInfo;
 
@@ -203,7 +204,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
 		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
-		addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		// addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
+
 		bind(s, (LPSOCKADDR)&addr, sizeof(addr));
 		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_ACCEPT);
 		turn = 0;
@@ -236,8 +239,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					recv((SOCKET)wParam, buffer, sizeof(UserInfo) + 1, 0);
 					if (StartWith(buffer, "userData"))
 					{
-						float x, y,z, direc;
-						int actCount, act;
 						UserInfo* Recieved = (UserInfo*)buffer;		// 받은 정보를 cast 하여 임시 구조체에 넣는다.
 					
 						// WORD			ID;				// 세션 ID
@@ -289,18 +290,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				if (i == j)
 				{
-					strcpy_s(user.at(j).Header, sizeof(char) * 3, "Hi");
+					strcpy_s(user.at(j).MsgHeader, sizeof(char) * 3, "Hi");
 				}
 			
 
 				// 참고 : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
 				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(UserInfo) + 1, 0) != -1)
 				{
-					user.at(i).isConnect = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
+					user.at(i).FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
 				}
 				else
 				{
-					user.at(i).isConnect += 1;		// 전송 실패 카운트를 올린다.
+					user.at(i).FailCnt += 1;		// 전송 실패 카운트를 올린다.
 				}
 				
 			}
@@ -308,7 +309,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		for (int i = 0; i < user.size(); i++)
 		{
-			if (user.at(i).isConnect > Tryout)
+			if (user.at(i).FailCnt > Tryout)
 			{
 				/*
 				string message;

@@ -16,6 +16,7 @@ enum character_status {
 	Run_Back,
 	Run_Back_Shoot,
 	Dash,
+	Reload,
 	Hit,
 	Down,
 	Down_idle,
@@ -26,7 +27,8 @@ enum character_status {
 
 struct CharacterStatus_PC
 {
-	WORD			ID;				// 세션 ID
+	char			MsgHeader[64];			// 메시지 헤더
+	WORD			ID;				// 세션 ID	
 	char			PlayerName[16];	// 유저이름
 	WORD			Character_No;	// 캐릭터 종류
 	WORD			Attack;			// 공력력
@@ -34,32 +36,37 @@ struct CharacterStatus_PC
 	DWORD			CurHP;			// 현재 체력
 	WORD			HP_Regen;		// 체력 재생
 	DWORD			MoveSpeed;		// 이동 속도
-	WORD			MagCnt;		// 장탄 수
-	WORD			MaxMag;			// 최대 장전 수
+	WORD			Mag_Cnt;		// 장탄 수
+	WORD			Mag_Max;			// 최대 장전 수
 	DWORD			ShootSpeed;		// 연사속도
 	WORD			BulletTime;		// 총알 속도
 	D3DXVECTOR3		CurPos;			// 현재 위치값
 	D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
-	WORD			Status;
+	WORD			Status;			// 캐릭터 상태
+	int				TargetID;		// 공격 한 대상
+	int				FailCnt;		// 접속 여부
+	SOCKET			s;				// 소켓
 };
 
 struct CharacterStatus_NPC
 {
-	WORD			ID;				// 세션 ID
-	char			MonsterName[16];	// 유저이름
+	char			MsgHeader[64];			// 메시지 헤더
+	WORD			ID;				// 세션 ID	
+	char			CharacterName[16];	// 캐릭터 이름
 	WORD			Character_No;	// 캐릭터 종류
 	WORD			Attack;			// 공력력
 	DWORD			MaxHP;			// 최대 체력
 	DWORD			CurHP;			// 현재 체력
 	WORD			HP_Regen;		// 체력 재생
 	DWORD			MoveSpeed;		// 이동 속도
-	WORD			Mag_Size;		// 장탄 수
-	WORD			MaxMag;			// 최대 장전 수
+	WORD			Mag_Cnt;		// 장탄 수
+	WORD			Mag_Max;		// 최대 장전 수
 	DWORD			ShootSpeed;		// 연사속도
 	WORD			BulletTime;		// 총알 속도
 	D3DXVECTOR3		CurPos;			// 현재 위치값
-	D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
-	WORD			Status;
+	D3DXVECTOR3		Dir;			// 캐릭터가 바라보는 방향
+	WORD			Status;			// 캐릭터 상태
+	int				TargetID;		// 공격 한 대상
 };
 
 class cCharacter:public cObject

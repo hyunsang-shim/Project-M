@@ -189,23 +189,23 @@ void cCharacter::SetPositionY(float y)
 CharacterStatus_PC cCharacter::getUserData()
 {
 	CharacterStatus_PC myData;
-	myData.ID
-	myData.PlayerName
-	myData.Character_No
-	myData.Attack
-	myData.MaxHP
-	myData.CurHP
-	myData.HP_Regen
-	myData.MoveSpeed
-	myData.Mag_Size
-	myData.MaxMag
-	myData.ShootSpeed
-	myData.BulletTime
-	myData.CurPos
-	myData.Dir
-	myData.Status
+	 
+	// myData.PlayerName
+	// myData.Character_No
+	// myData.Attack
+	// myData.MaxHP
+	// myData.CurHP
+	// myData.HP_Regen
+	// myData.MoveSpeed
+	// myData.MagCnt
+	// myData.MaxMag
+	// myData.ShootSpeed
+	// myData.BulletTime
+	myData.CurPos = this->m_vPosition;
+	myData.Dir = this->m_vDirection;
+	// myData.Status
 
-	return message;
+	return myData;
 }
 
 void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

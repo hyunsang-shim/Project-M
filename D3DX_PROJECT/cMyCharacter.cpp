@@ -39,8 +39,20 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
 //	m_pSkinnedMesh->Update();
-	MyHeadPos = m_pSkinnedMesh->GetHeadPos();
-	m_vBulletPos = m_pSkinnedMesh->GetBulletPos();
+	D3DXVECTOR3 myhead = m_pSkinnedMesh->GetHeadPos();
+	D3DXVECTOR3 myBulletPos = m_pSkinnedMesh->GetBulletPos();
+	if (myhead != NULL)
+		MyHeadPos = m_pSkinnedMesh->GetHeadPos();
+	else
+	{
+		printf("MyHeadBone 을 찾을 수 없습니다. 원점으로 대체하여 적용합니다.");
+		m_vBulletPos = D3DXVECTOR3(0, 0, 0);
+	}
+
+	if (myBulletPos != NULL)
+		m_vBulletPos = m_pSkinnedMesh->GetBulletPos();
+	else
+		m_vBulletPos = D3DXVECTOR3(0, 0, 0);
 }
 
 void cMyCharacter::Render(D3DCOLOR c)
