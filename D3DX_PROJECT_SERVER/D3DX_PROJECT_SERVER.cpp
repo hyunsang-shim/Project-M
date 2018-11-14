@@ -277,7 +277,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				if (user.at(i).s == (SOCKET)wParam)
 				{
-					char* buffer;
+					
+					memset(&buffer, 0, sizeof(CharacterStatus_PC) + 1);
 					recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
 					if (StartWith(buffer, "userData"))
 					{
@@ -330,12 +331,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				CharacterStatus_PC PrepareMsg;
 				PrepareMsg = user.at(j);
 
-				if (i == j)
-				{
-					strcpy_s(user.at(j).MsgHeader, sizeof(char) * 3, "Hi");
-				}
-			
-
 				// Âü°í : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
 				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{
@@ -358,12 +353,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				message += "disconnect ";
 				message += to_string(user.at(i).ID);
 				*/
+				CharacterStatus_PC disconnectMsg;
+				disconnectMsg.ID = user.at(i).ID;
+				strcpy(disconnectMsg.MsgHeader, "disconnect");
+				disconnectMsg.MsgHeader[strlen(disconnectMsg.MsgHeader)] = '\0';
 
 			//	strcpy(buffer, message.c_str());
-			//	strcpy()
 				for (int j = 0; j < user.size(); j++)
 				{
-					send(user.at(i).s, (char*)&user.at(i), sizeof(CharacterStatus_PC) + 1, 0);
+					send(user.at(j).s, (char*)&disconnectMsg, sizeof(CharacterStatus_PC) + 1, 0);
 				}
 				user.erase(user.begin() + i);
 				i--;

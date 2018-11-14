@@ -68,7 +68,7 @@ void cNetworkManager::recvData()
 		recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
 		CharacterStatus_PC* tmp = (CharacterStatus_PC*)buffer;
 
-		if (StartWith(tmp->MsgHeader, "userData"))
+		if (StartWith(buffer, "userData"))
 		{
 			//float x, y, z, direc;
 			//int actCount, act, userNum;
@@ -105,7 +105,6 @@ void cNetworkManager::recvData()
 		else if (StartWith(buffer, "disconnect"))
 		{
 			int num;
-			sscanf_s(buffer, "%*s %d", &num);
 			for (int i = 0; i < OtherPlayer.size(); i++)
 			{
 				if (OtherPlayer.at(i)->info.ID == num)
