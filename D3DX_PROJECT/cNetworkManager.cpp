@@ -26,7 +26,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
 	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.66");	// 은호씨
-	addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
+	//addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
 	addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9"); // 심현상(노트북/공유기)
 	// addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.7"); // 심현상(집)
 	 	
@@ -56,6 +56,7 @@ void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 	{
 		
 		strcpy(strPC->MsgHeader, MsgHeader);	
+		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
 	}
 }
 
