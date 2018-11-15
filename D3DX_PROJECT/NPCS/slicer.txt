@@ -1,6 +1,6 @@
 절단 로봇		
 명칭	시작	끝
-HitBig	10	33
+HitBig	10	40
 down	1150	1180
 down_idle	1200	1227
 standup	1240	1269
@@ -11,4 +11,4 @@ Run_Left	150	167
 Shoot	180	220
 Melee	230	280
 idle	290	370
-Winpose	390	470
+Victory	390	470
