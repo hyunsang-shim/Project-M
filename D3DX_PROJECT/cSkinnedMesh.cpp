@@ -294,12 +294,35 @@ void cSkinnedMesh::SetupBoneMatrixPtrs(ST_BONE* pBone)
 
 void cSkinnedMesh::SetAnimationIndex(int nIndex)
 {
-	if (!m_pAnimController)
+	/*if (!m_pAnimController)
 		return;
 	LPD3DXANIMATIONSET pAnimSet = NULL;
 	m_pAnimController->GetAnimationSet(nIndex, &pAnimSet);
 	m_pAnimController->SetTrackAnimationSet(0, pAnimSet);
-	SAFE_RELEASE(pAnimSet);
+	SAFE_RELEASE(pAnimSet);*/
+
+	int num = m_pAnimController->GetNumAnimationSets();
+	if (nIndex > num) nIndex = nIndex % num;
+
+	LPD3DXANIMATIONSET pPrevAnimSet = NULL;
+	LPD3DXANIMATIONSET pNextAnimSet = NULL;
+	
+	D3DXTRACK_DESC stTrackDesc;
+	m_pAnimController->GetTrackDesc(0, &stTrackDesc);
+
+	m_pAnimController->GetAnimationSet(nIndex, &pNextAnimSet);
+	m_pAnimController->SetTrackAnimationSet(0, pNextAnimSet);
+	m_pAnimController->SetTrackPosition(0, 0.0f);
+
+	m_pAnimController->GetTrackAnimationSet(0, &pPrevAnimSet);
+	m_pAnimController->SetTrackAnimationSet(1, pPrevAnimSet);
+	m_pAnimController->SetTrackDesc(1, &stTrackDesc);
+
+	m_pAnimController->SetTrackWeight(0, 0.0f);
+	m_pAnimController->SetTrackWeight(1, 1.0f);
+
+	SAFE_RELEASE(pPrevAnimSet);
+	SAFE_RELEASE(pNextAnimSet);
 }
 
 void cSkinnedMesh::Destroy()

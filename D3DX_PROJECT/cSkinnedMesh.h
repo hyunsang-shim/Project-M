@@ -20,6 +20,9 @@ private:
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
 	char* BulletStartBoneName;
+
+	float m_fPassedBlendTime;
+	float m_isAnimBlend;
 public:
 	cSkinnedMesh(char* szFolder, char* szFilename);
 	~cSkinnedMesh(void);

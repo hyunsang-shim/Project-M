@@ -42,7 +42,9 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 	
 	float AI_To_Distance = D3DXVec3Length(&moveToCharacterDir);
 
-	if (AttackTime - AttackCoolTime > 10000)
+
+
+	if (AttackTime - AttackCoolTime < 2000)
 	{
 		b = false;
 
