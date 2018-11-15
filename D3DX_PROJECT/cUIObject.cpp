@@ -7,7 +7,9 @@ cUIObject::cUIObject()
 	m_pParent(NULL),
 	m_stSize(0,0),
 	m_nTag(0),
-	m_isHidden(false)
+	m_isHidden(false),
+	sizePerX(1.0f),
+	sizePerY(1.0f)
 {
 	D3DXMatrixIdentity(&m_matWorld);
 }
@@ -66,6 +68,18 @@ void cUIObject::Destroy()
 	for each(auto c in m_vecChild)
 		c->Destroy();
 	this->Release();
+}
+
+void cUIObject::setUnable()
+{
+	for each(auto c in m_vecChild)
+		c->setUnable();
+}
+
+void cUIObject::setable()
+{
+	for each(auto c in m_vecChild)
+		c->setable();
 }
 
 cUIObject * cUIObject::FindChildByTag(int nTag)
