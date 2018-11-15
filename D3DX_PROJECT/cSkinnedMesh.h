@@ -19,8 +19,6 @@ private:
 	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
-	D3DXVECTOR3			m_vecHeadPos;
-	string				m_sHeadName = string("HeadTop");		// 머리 좌표 구하기 (하이트 맵)
 	char* BulletStartBoneName;
 public:
 	cSkinnedMesh(char* szFolder, char* szFilename);
@@ -37,7 +35,6 @@ public:
 
 	void setTransform(D3DXMATRIXA16* pmat);
 	LPD3DXANIMATIONCONTROLLER GetAnimController();
-	D3DXVECTOR3 GetHeadPos();				// 머리 좌표 구하기 (하이트 맵)
 private:
 	cSkinnedMesh();
 	void Load(char* szFolder, char* szFilename);
