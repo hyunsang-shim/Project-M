@@ -241,7 +241,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
 		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
-		addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		//addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9");	// 심현상 (노트북/공유기)
 		// addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
 
 
@@ -253,7 +254,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 
 
-		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_ACCEPT | FD_CLOSE);
+		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_ACCEPT | FD_CLOSE);
 
 
 		//
@@ -285,16 +286,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			InvalidateRgn(hWnd, NULL, FALSE);		//
 			
 			break;
-		case FD_READ:
-			for (int i = 0; i < user.size(); i++)			
+		case FD_READ:			
+		{
+			recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+			//CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
+			CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
+			for (int i = 0; i < user.size(); i++)
 			{
-				memset(buffer, 0, sizeof(CharacterStatus_PC)+1); // reset buffer to null;
-				CharacterStatus_PC *recieved;
-				if (user[i].s == (SOCKET)wParam)
-				{
-					msgLen = recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-					buffer[msgLen] = NULL;
 
+				//memset(buffer, 0, sizeof(CharacterStatus_PC)+1); // reset buffer to null;
+				if (user[i].s == recieved->s)
+				{
 					if (strcmp(recieved->MsgHeader, "userData") == 0)
 					{
 						user[i].CurHP = recieved->CurHP;
@@ -313,8 +315,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						strcpy_s(user[i].PlayerName, recieved->PlayerName);
 						printf("recieved : user #%d(%s) Has joined in the Game.\n", user[i].ID, user[i].PlayerName);
 					}
+					else if (strcmp(recieved->MsgHeader, "disconnect") == 0)
+					{
+						for (int i = 0; i < user.size(); i++)
+						{
+							if (user[i].ID == recieved->ID)
+							{
+								user.erase(user.begin() + i);
+								i--;
+								break;
+							}
+						}
+
+						InvalidateRgn(hWnd, NULL, TRUE);
+					}
 				}
-			}			
+			}
+		}
 			break;
 		case FD_CLOSE:
 			for (int i = 0; i < user.size(); i++)
@@ -337,15 +354,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{			
 				CharacterStatus_PC PrepareMsg;
 				PrepareMsg = user.at(j);
+				strcpy(PrepareMsg.MsgHeader, "userData");
+				PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
 
 				// 참고 : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
 				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{
-					user.at(i).FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
+					user[i].FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
 				}
 				else
 				{
-					user.at(i).FailCnt += 1;		// 전송 실패 카운트를 올린다.
+					user[i].FailCnt += 1;		// 전송 실패 카운트를 올린다.
 				}
 				
 			}
@@ -390,9 +409,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				for (int i = 0; i < user.size(); i++)
 				{
-					char tmp[128];
-					sprintf(tmp, "user #%d (%s) is alive", user[i].ID, user[i].PlayerName);
-					tmp[strlen(tmp)] = NULL;
+					char tmp[128] = { NULL, };
+					char tmpName[16] = { '\0' };
+					strcpy(tmpName, user[i].PlayerName);
+					tmpName[strlen(tmpName)] = 
+					sprintf(tmp, "user #%d (%s) is alive", (int)user[i].ID, tmpName);
+					tmp[strlen(tmp)] = '\0';
 					TextOutA(hdc, 10, 10 + (i+1) * 20 , tmp, strlen(tmp));
 				}
 			}
