@@ -19,7 +19,11 @@ private:
 	SYNTHESIZE(D3DXVECTOR3, m_vMin, Min);
 	SYNTHESIZE(D3DXVECTOR3, m_vMax, Max);
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
+	SYNTHESIZE(D3DXVECTOR3, m_vMyHeadPos, HeadPos);
+
 	char* BulletStartBoneName;
+	char* HeadBoneName;
+
 public:
 	cSkinnedMesh(char* szFolder, char* szFilename);
 	~cSkinnedMesh(void);
