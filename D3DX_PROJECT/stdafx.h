@@ -144,28 +144,32 @@ struct ST_SIZEN
 	ST_SIZEN(int _w, int _h): nWidth(_w), nHeight(_h) {}
 
 };
-
+enum character_list {
+	PC_Soldier,
+	PC_Reaper,
+	PC_Reinhardt
+};
 
 
 enum character_status {
-	Stand,
-	Stand_Shoot,
-	Run_Front,
-	Run_Front_Shoot,
-	Run_Left,
-	Run_Left_Shoot,
-	Run_Right,
-	Run_Right_Shoot,
-	Run_Back,
-	Run_Back_Shoot,
-	Dash,
-	Reload,
-	Hit,
-	Down,
-	Down_idle,
-	Stand_Up,
-	Dead,
-	NumSize
+	PC_Stand,
+	PC_Stand_Shoot,
+	PC_Run_Front,
+	PC_Run_Front_Shoot,
+	PC_Run_Left,
+	PC_Run_Left_Shoot,
+	PC_Run_Right,
+	PC_Run_Right_Shoot,
+	PC_Run_Back,
+	PC_Run_Back_Shoot,
+	PC_Dash,
+	PC_Reload,
+	PC_Hit,
+	PC_Down,
+	PC_Down_idle,
+	PC_Stand_Up,
+	PC_Dead,
+	PC_NumSize
 };
 
 struct CharacterStatus_PC

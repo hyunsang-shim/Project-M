@@ -174,6 +174,8 @@ void cSCENE_INGAME::Update()
 			m_Bullet.m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			m_Bullet.m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
 		}
+
+		g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
 	}
 
 	if (g_pNetworkManager->GetNetStatus())

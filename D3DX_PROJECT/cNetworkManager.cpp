@@ -27,6 +27,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_port = 20;
 	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.66");	// 은호씨
 	addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
+	addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9"); // 심현상(노트북/공유기)
 	// addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.7"); // 심현상(집)
 	 	
 	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// 성공하면 0 리턴, 아니면 에러 리턴.
@@ -49,12 +50,12 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 	}
 }
 
-void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC strPC)
+void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 {
 	if (isConnected)
 	{
-		strcpy(strPC.MsgHeader, MsgHeader);
-		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
+		
+		strcpy(strPC->MsgHeader, MsgHeader);	
 	}
 }
 
@@ -102,15 +103,15 @@ void cNetworkManager::recvData()
 				g_pOtherPlayerManager->newPlayer(tmp);
 			}
 		}
-		else if (strcmp(tmp->MsgHeader, "totalUser"))
+		else if (strcmp(tmp->MsgHeader, "totalUser") == 0)
 		{
 			int num;
 			sscanf_s(buffer, "%*s %d", &num);
 			g_pOtherPlayerManager->userNum = num;
 		}
-		else if (strcmp(tmp->MsgHeader, "disconnect"))
+		else if (strcmp(tmp->MsgHeader, "disconnect") == 0)
 		{
-			int num;
+			int num = tmp->ID;
 			for (int i = 0; i < OtherPlayer.size(); i++)
 			{
 				if (OtherPlayer.at(i)->info.ID == num)
@@ -121,7 +122,11 @@ void cNetworkManager::recvData()
 					break;
 				}
 			}
-
+		}
+		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
+		{
+			MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);
+			g_pGameInfoManager->UpdateMyInfo(*tmp);
 		}
 	}
 }

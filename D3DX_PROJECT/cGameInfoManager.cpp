@@ -43,34 +43,57 @@ void cGameInfoManager::setup_Map(string filePath)
 
 }
 
-void cGameInfoManager::UpdateMyInfo(CharacterStatus_PC newInfo)
+void cGameInfoManager::UpdateMyInfo(CharacterStatus_PC &newInfo)
 {
-	m_strMyCharacter = newInfo;
+	memcpy(&m_strMyCharacter, (CharacterStatus_PC*)&newInfo, sizeof(CharacterStatus_PC));
 }
 
-void cGameInfoManager::UpdateOtherPlayers(vector<CharacterStatus_PC> othersInfo)
+void cGameInfoManager::UpdateOtherPlayers(vector<CharacterStatus_PC>& othersInfo)
 {
-	m_vOtherCharacters = othersInfo;
+	memcpy(&m_vOtherCharacters, (vector<CharacterStatus_PC>*)&othersInfo, sizeof(vector<CharacterStatus_PC>));
 }
 
-void cGameInfoManager::UpdateNPCs(vector<CharacterStatus_NPC> npcInfo)
+void cGameInfoManager::UpdateNPCs(vector<CharacterStatus_NPC>& npcInfo)
 {
-	m_vNpcCharacters = npcInfo;
+	memcpy(&m_vNpcCharacters, (vector<CharacterStatus_NPC>*)&npcInfo, sizeof(vector<CharacterStatus_NPC>));
 }
 
-CharacterStatus_PC cGameInfoManager::GetMyInfo()
+CharacterStatus_PC* cGameInfoManager::GetMyInfo()
 {
-	return m_strMyCharacter;
+	return &m_strMyCharacter;
 }
 
-vector<CharacterStatus_PC> cGameInfoManager::GetOthersInfo()
+vector<CharacterStatus_PC>* cGameInfoManager::GetOthersInfo()
 {
-	return m_vOtherCharacters;
+	return &m_vOtherCharacters;
 }
 
-vector<CharacterStatus_NPC> cGameInfoManager::GetNpcsInfo()
+vector<CharacterStatus_NPC>* cGameInfoManager::GetNpcsInfo()
 {
-	return m_vNpcCharacters;
+	return &m_vNpcCharacters;
+}
+
+void cGameInfoManager::SetMyCharacter(int idx)
+{
+	switch (idx)
+	{
+	case PC_Soldier:
+	default:
+		m_strMyCharacter.BulletTime = 1000.0f;
+		m_strMyCharacter.Attack = 10;
+		m_strMyCharacter.Character_No = 0;
+		m_strMyCharacter.CurHP = 100;
+		m_strMyCharacter.MaxHP = 100;
+		m_strMyCharacter.HP_Regen = 1;
+		m_strMyCharacter.CurPos = D3DXVECTOR3(0, 0, 0);
+		m_strMyCharacter.Dir = 0.0f;
+		m_strMyCharacter.Mag_Cnt = 25;
+		m_strMyCharacter.Mag_Max = 25;
+		m_strMyCharacter.MoveSpeed = 2.5f;
+		m_strMyCharacter.ShootSpeed = 4000.0f;
+		m_strMyCharacter.Status = PC_Stand;
+		break;
+	}
 }
 
 void cGameInfoManager::SetMyName()

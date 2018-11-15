@@ -31,12 +31,13 @@ public:
 
 	// Network
 	// >>
-	void UpdateMyInfo(CharacterStatus_PC newInfo);
-	void UpdateOtherPlayers(vector<CharacterStatus_PC> othersInfo);
-	void UpdateNPCs(vector<CharacterStatus_NPC> npcInfo);
-	CharacterStatus_PC GetMyInfo();
-	vector<CharacterStatus_PC> GetOthersInfo();
-	vector<CharacterStatus_NPC> GetNpcsInfo();
+	void UpdateMyInfo(CharacterStatus_PC &newInfo);
+	void UpdateOtherPlayers(vector<CharacterStatus_PC> &othersInfo);
+	void UpdateNPCs(vector<CharacterStatus_NPC> &npcInfo);
+	CharacterStatus_PC* GetMyInfo();
+	vector<CharacterStatus_PC>* GetOthersInfo();
+	vector<CharacterStatus_NPC>* GetNpcsInfo();
+	void SetMyCharacter(int idx);
 	void SetMyName();
 
 	// <<

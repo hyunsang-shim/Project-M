@@ -273,6 +273,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		g_pGameInfoManager->SetMyName();
 		g_pGameInfoManager->sceneChangeTriger = TRUE;
 		g_pGameInfoManager->nextScene = 1;
+		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
 		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
 
 	}
