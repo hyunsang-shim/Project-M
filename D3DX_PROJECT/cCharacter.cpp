@@ -149,13 +149,13 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	m_matWorld = matR * matT;
 }
 
-void cCharacter::UpdateOtherPlayer(float x, float y, float z, float degree, int action, int actionCount)
+void cCharacter::UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status)
 {
 
 	D3DXMATRIXA16 matR, matT;
-	D3DXMatrixRotationY(&matR, degree);
+	D3DXMatrixRotationY(&matR, Direction);
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
-	D3DXMatrixTranslation(&matT, x, y, z);
+	D3DXMatrixTranslation(&matT, CurPos.x, CurPos.y, CurPos.z);
 	m_matWorld = matR * matT;
 }
 
@@ -186,25 +186,26 @@ void cCharacter::SetPositionY(float y)
 	this->m_vPosition.y = y;
 }
 
-string cCharacter::getUserData()
+CharacterStatus_PC cCharacter::getUserData()
 {
-		string message;
-		message += "userData";
-		message += "x ";
-		message += to_string(m_vPosition.x);
-		message += " ";
-		message += to_string(m_vPosition.y);
-		message += " ";
-		message += to_string(m_vPosition.z);
-		message += " ";
-		message += to_string(m_fRotY);
-		message += " ";
-		message += to_string(10);
-		message += " ";
-		message += to_string(10);
-		message += " ";
+	CharacterStatus_PC myData;
+	 
+	// myData.PlayerName
+	// myData.Character_No
+	// myData.Attack
+	// myData.MaxHP
+	// myData.CurHP
+	// myData.HP_Regen
+	// myData.MoveSpeed
+	// myData.MagCnt
+	// myData.MaxMag
+	// myData.ShootSpeed
+	// myData.BulletTime
+	myData.CurPos = this->m_vPosition;
+	myData.Dir = this->m_fRotY;
+	// myData.Status
 
-	return message;
+	return myData;
 }
 
 void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

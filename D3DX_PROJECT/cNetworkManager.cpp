@@ -26,7 +26,8 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
 	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.66");	// 은호씨
-	 addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
+	addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
+	// addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.7"); // 심현상(집)
 	 	
 	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// 성공하면 0 리턴, 아니면 에러 리턴.
 	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ);
@@ -43,13 +44,11 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	// <<
 }
 
-void cNetworkManager::SendData(string str)
+void cNetworkManager::SendData(CharacterStatus_PC strPC)
 {
 	if (isConnected)
-	{
-		char info[1000];
-		strcpy(info, str.c_str());
-		send(s, info, 1000, 0);
+	{		
+		send(s, (char*)&strPC, 1000, 0);
 	}
 }
 
@@ -57,27 +56,37 @@ void cNetworkManager::recvData()
 {
 	if (isConnected)
 	{
-		recv(s, buffer, 1000, 0);
-		UserInfo tmp;
+		/*
+		memset(buffer, 0, 200);
+		bufferLen = recv(s, buffer, 200, 0);
+		buffer[bufferLen] = NULL;
+		OMOK_MSG_SYS* tmpsys = (OMOK_MSG_SYS*)buffer;
+
+		*/
+		memset(buffer, 0, sizeof(CharacterStatus_PC)+1);
+		
+		recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
+		CharacterStatus_PC* tmp = (CharacterStatus_PC*)buffer;
+
 		if (StartWith(buffer, "userData"))
 		{
-			float x, y, z, direc;
-			int actCount, act, userNum;
-			sscanf_s(buffer, "%*s %d %f %f %f %f %d %d", &userNum, &x, &y, &z, &direc, &act, &actCount);
-			tmp.userNum = userNum;
-			tmp.x = x;
-			tmp.y = y;
-			tmp.z = z;
-			tmp.direction = direc;
-			tmp.action = act;
-			tmp.actionCount = actCount;
+			//float x, y, z, direc;
+			//int actCount, act, userNum;
+			//sscanf_s(buffer, "%*s %d %f %f %f %f %d %d", &userNum, &x, &y, &z, &direc, &act, &actCount);
+			//tmp.userNum = userNum;
+			//tmp.x = x;
+			//tmp.y = y;
+			//tmp.z = z;
+			//tmp.direction = direc;
+			//tmp.action = act;
+			//tmp.actionCount = actCount;
 
 			int check = 0;
 			for (int i = 0; i < OtherPlayer.size(); i++)
 			{
-				if (OtherPlayer.at(i)->info.userNum == tmp.userNum)
+				if (OtherPlayer.at(i)->info.ID == tmp->ID)
 				{
-					OtherPlayer.at(i)->Update(tmp.x, tmp.y, tmp.z, tmp.direction, tmp.action, tmp.actionCount);
+					OtherPlayer.at(i)->Update(tmp->CurPos, tmp->Dir, tmp->Status);
 					check = 1;
 					break;
 				}
@@ -96,10 +105,9 @@ void cNetworkManager::recvData()
 		else if (StartWith(buffer, "disconnect"))
 		{
 			int num;
-			sscanf_s(buffer, "%*s %d", &num);
 			for (int i = 0; i < OtherPlayer.size(); i++)
 			{
-				if (OtherPlayer.at(i)->info.userNum == num)
+				if (OtherPlayer.at(i)->info.ID == num)
 				{
 					delete(OtherPlayer.at(i));
 					OtherPlayer.erase(OtherPlayer.begin() + i);

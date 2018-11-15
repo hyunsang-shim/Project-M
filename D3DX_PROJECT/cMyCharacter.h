@@ -80,8 +80,9 @@ public:
 	cOBB* GetOBB();
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
-	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	
-	string sendData();
-	D3DXVECTOR3 GetMyHeadPos();	// ë¨¸ë¦¬ ì¢Œí‘œ êµ¬í•˜ê¸° (í•˜ì´íŠ¸ ë§µ)
+	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	CharacterStatus_PC sendData();
+	D3DXVECTOR3 GetMyHeadPos();	// ¸Ó¸® ÁÂÇ¥ ±¸ÇÏ±â (ÇÏÀÌÆ® ¸Ê)
+
 };
 

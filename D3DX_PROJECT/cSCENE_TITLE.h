@@ -12,5 +12,8 @@ public:
 
 private:
 	cCamera* m_pCamera;
+	char	MyName[16];
+	WORD	MyId;
+	WORD	MyCharacter;
 };
 

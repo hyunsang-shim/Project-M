@@ -18,11 +18,11 @@ private:
 
 public:
 	void Setup();
-	void Update(float x, float y, float z, float degree, int action, int actionCount);
+	void Update(D3DXVECTOR3 CurPos, float rotY, WORD Status);
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
 	cOBB* GetOBB();
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
-	UserInfo info;
+	CharacterStatus_PC info;
 
 };
