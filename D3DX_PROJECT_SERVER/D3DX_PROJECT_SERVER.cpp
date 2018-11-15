@@ -82,13 +82,13 @@ struct CharacterStatus_NPC
 };
 
 
-bool StartWith(char * FindStr, char * SearchStr)
-{
-	char* temp = strstr(FindStr, SearchStr);
-	if (temp == FindStr)
-		return true;
-	return false;
-}
+//bool StartWith(char * FindStr, char * SearchStr)
+//{
+//	char* temp = strstr(FindStr, SearchStr);
+//	if (temp == FindStr)
+//		return true;
+//	return false;
+//}
 
 
 #define MAX_LOADSTRING 100
@@ -280,9 +280,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					
 					memset(&buffer, 0, sizeof(CharacterStatus_PC) + 1);
 					recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-					if (StartWith(buffer, "userData"))
-					{
-						CharacterStatus_PC* Recieved = (CharacterStatus_PC*)buffer;		// 받은 정보를 cast 하여 임시 구조체에 넣는다.
+					CharacterStatus_PC* recieved = (CharacterStatus_PC*)buffer;
+
+					if (strcmp(recieved->MsgHeader, "userData"))
+					{						
 					
 						// WORD			ID;				// 세션 ID
 						// char			PlayerName[16];	// 유저이름
@@ -299,10 +300,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						// D3DXVECTOR3		CurPos;			// 현재 위치값
 						// D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
 						// WORD			Status;
-						user.at(i).CurHP = Recieved->CurHP;
-						user.at(i).CurPos = Recieved->CurPos;
-						user.at(i).Dir = Recieved->Dir;
-						user.at(i).Status = Recieved->Status;
+						user.at(i).CurHP = recieved->CurHP;
+						user.at(i).CurPos = recieved->CurPos;
+						user.at(i).Dir = recieved->Dir;
+						user.at(i).Status = recieved->Status;
 						
 					}
 				}
@@ -378,7 +379,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다.
 			CHAR msg[64];
 			sprintf(msg, "Connected %d Clients", playerCnt);
-			TextOut(hdc, 10, 10, msg, strlen(msg));			
+			TextOut(hdc, 10, 10, msg, strlen(msg));
             EndPaint(hWnd, &ps);
         }
         break;
