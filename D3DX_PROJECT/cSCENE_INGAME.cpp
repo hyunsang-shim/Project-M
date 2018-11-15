@@ -45,8 +45,6 @@ void cSCENE_INGAME::Setup()
 {
 	m_pCrossHairPicking = new cCrossHairPicking;
 
-
-
 	//朝五虞 実特
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
@@ -179,7 +177,7 @@ void cSCENE_INGAME::Update()
 	}
 
 	if (g_pNetworkManager->GetNetStatus())
-		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
+		g_pNetworkManager->SendData(m_pMyCharacter->GatherDataToSend());
 
 
 }

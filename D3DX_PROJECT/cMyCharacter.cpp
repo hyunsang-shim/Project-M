@@ -92,7 +92,7 @@ D3DXVECTOR3 cMyCharacter::GetMyHeadPos()
 	return m_pSkinnedMesh->GetHeadPos();
 }
 
-CharacterStatus_PC cMyCharacter::sendData()
+CharacterStatus_PC cMyCharacter::GatherDataToSend()
 {
 	return m_pCharacterController->getUserData();
 }

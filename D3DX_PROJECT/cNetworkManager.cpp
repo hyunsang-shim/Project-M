@@ -34,14 +34,11 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 	// 연결에 성공하면 플래그를 켠다.
 	// >>
-	if (!x)
-	{
-		isConnected = true;
-	}
+	if (!x) isConnected = true;
+	// <<
 
 	return isConnected;
 	
-	// <<
 }
 
 void cNetworkManager::SendData(CharacterStatus_PC strPC)
@@ -49,6 +46,15 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 	if (isConnected)
 	{		
 		send(s, (char*)&strPC, sizeof(CharacterStatus_PC)+1, 0);
+	}
+}
+
+void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC strPC)
+{
+	if (isConnected)
+	{
+		strcpy(strPC.MsgHeader, MsgHeader);
+		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
 	}
 }
 

@@ -33,5 +33,6 @@ public:
 
 private:
 	cCamera* m_pCamera;
+	CharacterStatus_PC m_strMyCharacter;
 };
 
