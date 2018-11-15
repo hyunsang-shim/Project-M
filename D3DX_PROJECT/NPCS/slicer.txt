@@ -9,6 +9,6 @@ Run_Front	50	67
 Run_Right	120	137
 Run_Left	150	167
 Shoot	180	220
-Melee	240	270
+Melee	230	280
 idle	290	370
 Winpose	390	470
