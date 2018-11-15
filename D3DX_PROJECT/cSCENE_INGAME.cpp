@@ -15,7 +15,7 @@
 #include "cUIObject.h"
 #include "cUIImageView.h"
 #include "cCrossHairPicking.h"
-
+#include "cAI.h"
 
 cSCENE_INGAME::cSCENE_INGAME()
 	: m_pCamera(NULL),
@@ -24,7 +24,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pObject(NULL),
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
-	m_pMyCharacter(NULL)
+	m_pMyCharacter(NULL),
+	m_pAI(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 }
@@ -39,6 +40,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pXmodel);
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
+	SAFE_DELETE(m_pAI);
 }
 
 void cSCENE_INGAME::Setup()
@@ -105,6 +107,11 @@ void cSCENE_INGAME::Setup()
 	nowMousePos.y = 1080 / 2;
 	SetCursorPos(1920 / 2, 1080 / 2);
 	
+	m_pAI = new cAI;
+	m_pAI->Setup("NPCS", "slicer.X");
+	cAI_Controller* pAI_Controller = new cAI_Controller;
+	m_pAI->SetAIController(pAI_Controller);
+
 
 	setupUI();
 }
@@ -157,6 +164,18 @@ void cSCENE_INGAME::Update()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
 
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	{
+		if (m_pAI)
+			m_pAI->Update(true, m_pMyCharacter->GetPosition() - m_pAI->GetPosition());
+	}
+	else
+	{
+		if (m_pAI)
+			m_pAI->Update(false, D3DXVECTOR3(0,0,0));
+	}
+
+
 	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
 		m_pCrossHairPicking->CalcPosition();
@@ -194,7 +213,7 @@ void cSCENE_INGAME::Render()
 	}
 
 	m_pSKY->Render();
-	m_pGrid->Render();
+	//m_pGrid->Render();
 	g_pGameInfoManager->m_pMap->Render();
 	m_pObject->Render();
 	m_pXmodel->Render();
@@ -218,6 +237,9 @@ void cSCENE_INGAME::Render()
 	{
 		Mesh_Render();
 	}
+
+	if(m_pAI)
+		m_pAI->Render(NULL);
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -228,7 +250,8 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		{
 		static int n = 0;
 		//m_pSkinnedMesh->SetAnimationIndex(n++);
-		m_pMyCharacter->SetAnimationIndexBlend(n++);
+		//m_pMyCharacter->SetAnimationIndexBlend(n++);
+		m_pAI->SetAnimationIndexBlend(n++);
 		break;
 		}
 	 

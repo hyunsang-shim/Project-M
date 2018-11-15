@@ -11,6 +11,7 @@ class cSKY;
 class cMyCharacter;
 class cUIObject;
 class cCrossHairPicking;
+class cAI;
 
 struct Bullet
 {
@@ -44,7 +45,7 @@ private:
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
 	cMyCharacter *m_pMyCharacter;
-
+	cAI *m_pAI;
 private:
 	D3DLIGHT9 DirectLight; //¸ÞÀÎ ±¤¿ø
 
