@@ -376,7 +376,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				
 			}
 		}
-		InvalidateRgn(hWnd, NULL, FALSE);
+		InvalidateRgn(hWnd, NULL, TRUE);
 		break;
     case WM_PAINT:
         {
