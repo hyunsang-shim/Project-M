@@ -10,5 +10,5 @@ Run_Right	120	137
 Run_Left	150	167
 Shoot	180	220
 Melee	230	280
-idle	290	370
+idle	270	280
 Victory	390	470
