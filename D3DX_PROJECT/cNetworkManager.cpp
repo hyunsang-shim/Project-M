@@ -68,7 +68,7 @@ void cNetworkManager::recvData()
 		recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
 		CharacterStatus_PC* tmp = (CharacterStatus_PC*)buffer;
 
-		if (StartWith(buffer, "userData"))
+		if (strcmp(tmp->MsgHeader, "userData"))
 		{
 			//float x, y, z, direc;
 			//int actCount, act, userNum;
@@ -96,13 +96,13 @@ void cNetworkManager::recvData()
 				g_pOtherPlayerManager->newPlayer(tmp);
 			}
 		}
-		else if (StartWith(buffer, "totalUser"))
+		else if (strcmp(tmp->MsgHeader, "totalUser"))
 		{
 			int num;
 			sscanf_s(buffer, "%*s %d", &num);
 			g_pOtherPlayerManager->userNum = num;
 		}
-		else if (StartWith(buffer, "disconnect"))
+		else if (strcmp(tmp->MsgHeader, "disconnect"))
 		{
 			int num;
 			for (int i = 0; i < OtherPlayer.size(); i++)
