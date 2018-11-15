@@ -25,8 +25,6 @@ private:
 
 private:
 	int SCENENUM;
-	int Next_SCENEN;
-	BOOL sceneChangeTriger;
 
 private:
 	cSCENE_INGAME* m_pScene_Ingame;

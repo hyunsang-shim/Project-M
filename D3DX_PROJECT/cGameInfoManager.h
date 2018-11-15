@@ -8,6 +8,14 @@ class cGameInfoManager
 public:
 	SINGLETON(cGameInfoManager);
 
+	int GameScreenSizeX;
+	int GameScreenSizeY;
+	int getScreenXPosByPer(int x);
+	int getScreenYPosByPer(int y);
+
+	char userName[25] = { 0 };
+	int namelength;
+
 	BOOL isESCPushed;
 	int mouseMoveX;
 	int mouseMoveY;
@@ -17,6 +25,7 @@ public:
 
 	void setup_Map(string filePath);
 
-
+	BOOL sceneChangeTriger;
+	int nextScene;
 };
 
