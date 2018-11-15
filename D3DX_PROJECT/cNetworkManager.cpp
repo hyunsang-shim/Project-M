@@ -11,13 +11,13 @@ cNetworkManager::~cNetworkManager()
 {
 }
 
-bool StartWith(char * FindStr, char * SearchStr)
-{
-	char* temp = strstr(FindStr, SearchStr);
-	if (temp == FindStr)
-		return true;
-	return false;
-}
+//bool StartWith(char * FindStr, char * SearchStr)
+//{
+//	char* temp = strstr(FindStr, SearchStr);
+//	if (temp == FindStr)
+//		return true;
+//	return false;
+//}
 
 bool cNetworkManager::SetupNetwork(HWND hWnd)
 {
