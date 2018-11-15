@@ -280,7 +280,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					
 					memset(&buffer, 0, sizeof(CharacterStatus_PC) + 1);
 					recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-					CharacterStatus_PC* recieved = (CharacterStatus_PC*)buffer;
+
+					if (!buffer)
+						CharacterStatus_PC* recieved = (CharacterStatus_PC*)buffer;
+					else
+					{
+						CharacterStatus_PC* recieved;
+						strcpy(recieved->MsgHeader, "Hello!");
+					}
+					
 
 					if (strcmp(recieved->MsgHeader, "userData"))
 					{						
