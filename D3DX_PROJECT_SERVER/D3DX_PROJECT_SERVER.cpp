@@ -275,21 +275,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case FD_READ:
 			for (int i = 0; i < user.size(); i++)
 			{
+
+				/*
+				memset(buffer, 0, 200);
+				MsgLen = recv(CurrentPlayer, buffer, 200, 0);
+				buffer[MsgLen] = NULL;
+				OMOK_MSG_SYS* tmpsys = (OMOK_MSG_SYS*)buffer;
+				
+				*/
+
+				memset(&buffer, 0, sizeof(CharacterStatus_PC)+1);
+				int msgLen = recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC)+1, 0);
+				buffer[msgLen] = NULL;
+				CharacterStatus_PC* recieved;
+				
+				if (buffer != NULL)
+					recieved = (CharacterStatus_PC*)buffer;
+				else
+				{
+					strcpy(recieved->MsgHeader, "Hello!");
+				} 
+
 				if (user.at(i).s == (SOCKET)wParam)
 				{
-					
-					memset(&buffer, 0, sizeof(CharacterStatus_PC) + 1);
-					recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-					CharacterStatus_PC* recieved;
-
-					if (!buffer)
-						recieved = (CharacterStatus_PC*)buffer;
-					else
-					{						
-						strcpy(recieved->MsgHeader, "Hello!");
-					}
-					
-
 					if (strcmp(recieved->MsgHeader, "userData"))
 					{						
 					

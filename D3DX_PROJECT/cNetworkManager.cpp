@@ -48,7 +48,7 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 {
 	if (isConnected)
 	{		
-		send(s, (char*)&strPC, 1000, 0);
+		send(s, (char*)&strPC, sizeof(CharacterStatus_PC)+1, 0);
 	}
 }
 
