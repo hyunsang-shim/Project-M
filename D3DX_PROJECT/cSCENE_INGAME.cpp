@@ -191,7 +191,7 @@ void cSCENE_INGAME::Update()
 	}
 
 	if (g_pNetworkManager->GetNetStatus())
-		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
+		g_pNetworkManager->SendData("userData", g_pGameInfoManager->GetMyInfo());
 
 	updateUI();
 
