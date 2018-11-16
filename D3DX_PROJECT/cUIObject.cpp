@@ -82,6 +82,8 @@ void cUIObject::setable()
 		c->setable();
 }
 
+
+
 cUIObject * cUIObject::FindChildByTag(int nTag)
 {
 	if (m_nTag == nTag)

@@ -27,7 +27,6 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_port = 20;
 	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.66");	// 은호씨
 	addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
-	//addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9"); // 심현상(노트북/공유기)
 	// addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.7"); // 심현상(집)
 	 	
 	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// 성공하면 0 리턴, 아니면 에러 리턴.
@@ -35,11 +34,14 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 	// 연결에 성공하면 플래그를 켠다.
 	// >>
-	if (!x) isConnected = true;
-	// <<
+	if (!x)
+	{
+		isConnected = true;
+	}
 
 	return isConnected;
 	
+	// <<
 }
 
 void cNetworkManager::SendData(CharacterStatus_PC strPC)
@@ -50,25 +52,10 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 	}
 }
 
-void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
-{
-	if (isConnected)
-	{
-		
-		strcpy(strPC->MsgHeader, MsgHeader);	
-		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
-		if (strcmp(MsgHeader, "join") == 0)
-		{
-			strcpy(strPC->MsgHeader, "userData");
-		}
-	}
-}
-
 void cNetworkManager::recvData()
 {
 	if (isConnected)
 	{
-
 		/*
 		memset(buffer, 0, 200);
 		bufferLen = recv(s, buffer, 200, 0);
@@ -78,11 +65,10 @@ void cNetworkManager::recvData()
 		*/
 		memset(buffer, 0, sizeof(CharacterStatus_PC)+1);
 		
-		int bufferLen = recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
-		buffer[bufferLen] = NULL;
+		recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
 		CharacterStatus_PC* tmp = (CharacterStatus_PC*)buffer;
 
-		if (strcmp(tmp->MsgHeader, "userData") == 0)
+		if (strcmp(tmp->MsgHeader, "userData"))
 		{
 			//float x, y, z, direc;
 			//int actCount, act, userNum;
@@ -110,15 +96,15 @@ void cNetworkManager::recvData()
 				g_pOtherPlayerManager->newPlayer(tmp);
 			}
 		}
-		else if (strcmp(tmp->MsgHeader, "totalUser") == 0)
+		else if (strcmp(tmp->MsgHeader, "totalUser"))
 		{
 			int num;
 			sscanf_s(buffer, "%*s %d", &num);
 			g_pOtherPlayerManager->userNum = num;
 		}
-		else if (strcmp(tmp->MsgHeader, "disconnect") == 0)
+		else if (strcmp(tmp->MsgHeader, "disconnect"))
 		{
-			int num = tmp->ID;
+			int num;
 			for (int i = 0; i < OtherPlayer.size(); i++)
 			{
 				if (OtherPlayer.at(i)->info.ID == num)
@@ -129,12 +115,7 @@ void cNetworkManager::recvData()
 					break;
 				}
 			}
-		}
-		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
-		{
-			MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
-			tmp->s = s;
-			g_pGameInfoManager->UpdateMyInfo(*tmp);
+
 		}
 	}
 }
