@@ -340,6 +340,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 						InvalidateRgn(hWnd, NULL, TRUE);
 					}
+					else if (strcmp(recieved->MsgHeader, "TitleScene") == 0)
+					{
+						strcmp(user[i].MsgHeader, "TitleScene");
+					}
 				}
 			}
 		}
@@ -368,8 +372,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{			
 				CharacterStatus_PC PrepareMsg;
 				PrepareMsg = user.at(j);
-				strcpy(PrepareMsg.MsgHeader, "userData");
-				PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
+
+				if (strcmp(user[i].MsgHeader, "welcome") == 0)
+				{
+					strcpy(PrepareMsg.MsgHeader, "welcome");
+					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
+
+				}
+				else if (strcmp(user[i].MsgHeader, "TitleScene") == 0)
+				{
+					strcpy(PrepareMsg.MsgHeader, "TitleScene");
+					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
+
+				}
+				else
+				{
+					strcpy(PrepareMsg.MsgHeader, "userData");
+					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
+
+				}
+
 
 				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{

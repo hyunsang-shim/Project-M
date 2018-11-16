@@ -135,6 +135,7 @@ void cNetworkManager::recvData()
 			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
 			tmp->s = s;
 			g_pGameInfoManager->UpdateMyInfo(*tmp);
+			g_pNetworkManager->SendData("TitleScene", g_pGameInfoManager->GetMyInfo());
 		}
 	}
 }
