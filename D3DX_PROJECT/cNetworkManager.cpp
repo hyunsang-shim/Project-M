@@ -57,6 +57,10 @@ void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 		
 		strcpy(strPC->MsgHeader, MsgHeader);	
 		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
+		if (strcmp(MsgHeader, "join") == 0)
+		{
+			strcpy(strPC->MsgHeader, "userData");
+		}
 	}
 }
 
