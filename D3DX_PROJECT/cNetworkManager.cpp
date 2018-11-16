@@ -132,7 +132,7 @@ void cNetworkManager::recvData()
 		}
 		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
 		{
-			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
+			MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
 			tmp->s = s;
 			g_pGameInfoManager->UpdateMyInfo(*tmp);
 		}
