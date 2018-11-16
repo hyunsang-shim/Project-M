@@ -266,12 +266,16 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 	else if (pSender->GetTag() == E_BUTTON_EXIT)
 	{
+		g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
 		exit(0);
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
 	{
+		g_pGameInfoManager->SetMyName();
 		g_pGameInfoManager->sceneChangeTriger = TRUE;
 		g_pGameInfoManager->nextScene = 1;
+		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
+		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == E_BUTTON_CANCLE)
 	{

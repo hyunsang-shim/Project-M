@@ -1,24 +1,25 @@
-// stdafx.h : юзаж ╩Г©КгоаЖ╦╦ юзаж ╨╞╟Ф╣гаЖ╢б ╬й╢б
-// г╔аь ╫ц╫╨еш фВгт фдюо ╤г╢б га╥на╖ф╝ ╟Э╥ц фВгт фдюоюл
-// ╣И╬Н юж╢б фВгт фдюоют╢о╢ы.
+О╩©// stdafx.h : Л·░Лё╪ Л┌╛Л ╘М∙≤Л╖─К╖▄ Л·░Лё╪ КЁ─Й╡╫К░≤Л╖─К┼■ Л∙┼К┼■
+// М▒°Л╓─ Л▀°Л┼╓М┘° М▐╛М∙╗ М▄▄Л²╪ К≤░К┼■ М■└К║°Л═²М┼╦ Й╢─К═╗ М▐╛М∙╗ М▄▄Л²╪Л²╢
+// К⌠╓Л√╢ Л·┬К┼■ М▐╛М∙╗ М▄▄Л²╪Л·┘К▀┬К▀╓.
 //
 
 #pragma once
 
 #include "targetver.h"
 
-#define WIN32_LEAN_AND_MEAN             // ╟еюг ╩Г©К╣гаЖ ╬й╢б Ё╩©Кю╨ Windows гЛ╢У©║╪╜ а╕©эгу╢о╢ы.
-// Windows гЛ╢У фдюо:
+#define WIN32_LEAN_AND_MEAN             // Й╠╟Л²≤ Л┌╛Л ╘К░≤Л╖─ Л∙┼К┼■ К┌╢Л ╘Л²─ Windows М≈╓К█■Л≈░Л└° Л═°Л≥╦М∙╘К▀┬К▀╓.
+// Windows М≈╓К█■ М▄▄Л²╪:
 #include <windows.h>
 
-// C ╥╠е╦юс гЛ╢У фдюоют╢о╢ы.
+// C К÷╟М┐─Л·└ М≈╓К█■ М▄▄Л²╪Л·┘К▀┬К▀╓.
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#include <winsock.h>
 
 
-// TODO: га╥н╠в╥╔©║ гй©Дгя цъ╟║ гЛ╢У╢б ©╘╠Б©║╪╜ бЭа╤гу╢о╢ы.
+// TODO: М■└К║°Й╥╦К·╗Л≈░ М∙└Л ■М∙° Л╤■Й╟─ М≈╓К█■К┼■ Л≈╛Й╦╟Л≈░Л└° Л╟╦Л║╟М∙╘К▀┬К▀╓.
 #include <vector>
 #include <string>
 #include <map>
@@ -142,6 +143,78 @@ struct ST_SIZEN
 	ST_SIZEN(): nWidth(0), nHeight(0) { }
 	ST_SIZEN(int _w, int _h): nWidth(_w), nHeight(_h) {}
 
+};
+
+enum character_list {
+	PC_Soldier,
+	PC_Reaper,
+	PC_Reinhardt
+};
+
+
+enum character_status {
+	PC_Stand,
+	PC_Stand_Shoot,
+	PC_Run_Front,
+	PC_Run_Front_Shoot,
+	PC_Run_Left,
+	PC_Run_Left_Shoot,
+	PC_Run_Right,
+	PC_Run_Right_Shoot,
+	PC_Run_Back,
+	PC_Run_Back_Shoot,
+	PC_Dash,
+	PC_Reload,
+	PC_Hit,
+	PC_Down,
+	PC_Down_idle,
+	PC_Stand_Up,
+	PC_Dead,
+	PC_NumSize
+};
+
+struct CharacterStatus_PC
+{
+	char			MsgHeader[64];			// О©╫ч╫О©╫О©╫О©╫ О©╫О©╫О©╫
+	WORD			ID;				// О©╫О©╫О©╫О©╫ ID	
+	char			PlayerName[16];	// О©╫О©╫О©╫О©╫О©╫л╦О©╫
+	WORD			Character_No;	// дЁО©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+	WORD			Attack;			// О©╫О©╫О©╫б╥О©╫
+	DWORD			MaxHP;			// О©╫ж╢О©╫ ц╪О©╫О©╫
+	DWORD			CurHP;			// О©╫О©╫О©╫О©╫ ц╪О©╫О©╫
+	WORD			HP_Regen;		// ц╪О©╫О©╫ О©╫О©╫О©╫
+	DWORD			MoveSpeed;		// О©╫л╣О©╫ О©╫с╣О©╫
+	WORD			Mag_Cnt;		// О©╫О©╫е╨ О©╫О©╫
+	WORD			Mag_Max;			// О©╫ж╢О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫
+	DWORD			ShootSpeed;		// О©╫О©╫О©╫О©╫с╣О©╫
+	WORD			BulletTime;		// О©╫я╬О©╫ О©╫с╣О©╫
+	D3DXVECTOR3		CurPos;			// О©╫О©╫О©╫О©╫ О©╫О©╫д║О©╫О©╫
+	float			Dir;				// дЁО©╫О©╫О©╫м╟О©╫ О©╫ы╤С╨╦╢О©╫ О©╫О©╫О©╫О©╫
+	WORD			Status;			// дЁО©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+	int				TargetID;		// О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫
+	int				FailCnt;		// О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+	SOCKET			s;				// О©╫О©╫О©╫О©╫
+};
+
+struct CharacterStatus_NPC
+{
+	char			MsgHeader[64];			// О©╫ч╫О©╫О©╫О©╫ О©╫О©╫О©╫
+	WORD			ID;				// О©╫О©╫О©╫О©╫ ID	
+	char			CharacterName[16];	// дЁО©╫О©╫О©╫О©╫ О©╫л╦О©╫
+	WORD			Character_No;	// дЁО©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+	WORD			Attack;			// О©╫О©╫О©╫б╥О©╫
+	DWORD			MaxHP;			// О©╫ж╢О©╫ ц╪О©╫О©╫
+	DWORD			CurHP;			// О©╫О©╫О©╫О©╫ ц╪О©╫О©╫
+	WORD			HP_Regen;		// ц╪О©╫О©╫ О©╫О©╫О©╫
+	DWORD			MoveSpeed;		// О©╫л╣О©╫ О©╫с╣О©╫
+	WORD			Mag_Cnt;		// О©╫О©╫е╨ О©╫О©╫
+	WORD			Mag_Max;		// О©╫ж╢О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫
+	DWORD			ShootSpeed;		// О©╫О©╫О©╫О©╫с╣О©╫
+	WORD			BulletTime;		// О©╫я╬О©╫ О©╫с╣О©╫
+	D3DXVECTOR3		CurPos;			// О©╫О©╫О©╫О©╫ О©╫О©╫д║О©╫О©╫
+	float			Dir;			// дЁО©╫О©╫О©╫м╟О©╫ О©╫ы╤С╨╦╢О©╫ О©╫О©╫О©╫О©╫
+	WORD			Status;			// дЁО©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+	int				TargetID;		// О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫
 };
 
 typedef struct UserInfo

@@ -34,10 +34,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 	// 연결에 성공하면 플래그를 켠다.
 	// >>
-	if (!x)
-	{
-		isConnected = true;
-	}
+	if (!x) isConnected = true;
 
 	return isConnected;
 	
@@ -64,11 +61,14 @@ void cNetworkManager::recvData()
 
 		*/
 		memset(buffer, 0, sizeof(CharacterStatus_PC)+1);
-		
+
+		int bufferLen = recv(s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+		buffer[bufferLen] = NULL;
 		recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
 		CharacterStatus_PC* tmp = (CharacterStatus_PC*)buffer;
 
-		if (strcmp(tmp->MsgHeader, "userData"))
+
+		if (strcmp(tmp->MsgHeader, "userData") == 0)
 		{
 			//float x, y, z, direc;
 			//int actCount, act, userNum;
@@ -96,15 +96,15 @@ void cNetworkManager::recvData()
 				g_pOtherPlayerManager->newPlayer(tmp);
 			}
 		}
-		else if (strcmp(tmp->MsgHeader, "totalUser"))
+		else if (strcmp(tmp->MsgHeader, "totalUser") == 0)
 		{
 			int num;
 			sscanf_s(buffer, "%*s %d", &num);
 			g_pOtherPlayerManager->userNum = num;
 		}
-		else if (strcmp(tmp->MsgHeader, "disconnect"))
+		else if (strcmp(tmp->MsgHeader, "disconnect") == 0)
 		{
-			int num;
+			int num = tmp->ID;
 			for (int i = 0; i < OtherPlayer.size(); i++)
 			{
 				if (OtherPlayer.at(i)->info.ID == num)
@@ -115,7 +115,12 @@ void cNetworkManager::recvData()
 					break;
 				}
 			}
-
+		}
+		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
+		{
+			MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);
+			tmp->s = s;
+			g_pGameInfoManager->UpdateMyInfo(*tmp);
 		}
 	}
 }
@@ -125,3 +130,16 @@ bool cNetworkManager::GetNetStatus()
 	return isConnected;
 }
 
+void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
+{
+	if (isConnected)
+	{
+
+		strcpy(strPC->MsgHeader, MsgHeader);
+		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
+		if (strcmp(MsgHeader, "join") == 0)
+		{
+			strcpy(strPC->MsgHeader, "userData");
+		}
+	}
+}

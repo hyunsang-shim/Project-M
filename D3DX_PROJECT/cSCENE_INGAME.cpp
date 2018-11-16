@@ -65,15 +65,15 @@ void cSCENE_INGAME::Setup()
 
 
 
-	//카메라 셋팅
+	//移대 
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
 
-	// 그리드 세팅
+	// 洹몃━ 명
 	m_pGrid = new cGrid();
 	m_pGrid->Setup();
 
-	// 메인 광원 셋팅
+	// 硫 愿 
 	D3DXVECTOR3 dir(0, -1, 0);
 	D3DXCOLOR c(1.0f, 1.0f, 1.0f, 1.0f);
 	ZeroMemory(&DirectLight, sizeof(D3DLIGHT9));
@@ -88,12 +88,12 @@ void cSCENE_INGAME::Setup()
 	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
-	// 하이트맵 셋팅
+	// 댄몃㏊ 
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
 	g_pGameInfoManager->setup_Map("test_map_obj.obj");
 
-	//테스트 오브젝트 셋팅
+	//ㅽ ㅻ� 
 	m_pObject = new cNewObject;
 	m_pObject->Setup("box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
@@ -102,21 +102,21 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//테스트 엑스모델 셋팅
+	//ㅽ ㅻえ 
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
 	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
-	//하늘 셋팅
+	// 
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
 
-	//질럿 셋팅
+	//吏 
 	m_pMyCharacter = new cMyCharacter;
 	m_pMyCharacter->Setup("Xfile", "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
-	//마우스 좌표 셋팅
+	//留곗 醫 
 	beforeMousePos.x = 1920 / 2;
 	beforeMousePos.y = 1080 / 2;
 	nowMousePos.x = 1920 / 2;
@@ -260,7 +260,7 @@ void cSCENE_INGAME::Render()
 	m_pObject->Render();
 	m_pXmodel->Render();
 
-	// 넷 상태에 따라 스킵 가능하도록 수정
+	//   곕 ㅽ 媛ν濡 �
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		g_pOtherPlayerManager->render();
@@ -379,7 +379,7 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 void cSCENE_INGAME::setupUI()
 {
 	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/김태희.jpg");
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/源.jpg");
 
 
 	{

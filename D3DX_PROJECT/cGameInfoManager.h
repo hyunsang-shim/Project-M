@@ -1,5 +1,6 @@
 #pragma once
 #define g_pGameInfoManager cGameInfoManager::GetInstance()
+#include "stdafx.h"
 
 class cNewObject;
 
@@ -28,7 +29,25 @@ public:
 	int MaxBulletCount;
 	BOOL sceneChangeTriger;
 	int nextScene;
+	// Network
+	// >>
+	void UpdateMyInfo(CharacterStatus_PC &newInfo);
+	void UpdateOtherPlayers(vector<CharacterStatus_PC> &othersInfo);
+	void UpdateNPCs(vector<CharacterStatus_NPC> &npcInfo);
+	CharacterStatus_PC* GetMyInfo();
+	vector<CharacterStatus_PC>* GetOthersInfo();
+	vector<CharacterStatus_NPC>* GetNpcsInfo();
+	void SetMyCharacter(int idx);
+	void SetMyName();
+
+	// <<
 
 	float aimSize;
+private:
+	CharacterStatus_PC m_strMyCharacter;
+	vector<CharacterStatus_PC> m_vOtherCharacters;
+	vector<CharacterStatus_NPC> m_vNpcCharacters;
+
+
 };
 
