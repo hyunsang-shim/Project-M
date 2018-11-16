@@ -38,8 +38,6 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pAI(NULL),
 	BulletCreateCount(0),
 	BulletCreateTime(MAXBulletCreateCount)
-	m_pUIBase(NULL),
-	m_pFont(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -56,7 +54,6 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
 	SAFE_DELETE(m_pAI);
-	if (m_pUIBase) m_pUIBase->Destroy();
 }
 
 void cSCENE_INGAME::Setup()
@@ -65,15 +62,15 @@ void cSCENE_INGAME::Setup()
 
 
 
-	//ç§»ëŒ€Â”Â Â…Â‹ÂŒÂ…
+	//Ä«¸Þ¶ó ¼ÂÆÃ
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
 
-	// æ´¹ëªƒâ”Â“Âœ Â„ëª…ÂŒÂ…
+	// ±×¸®µå ¼¼ÆÃ
 	m_pGrid = new cGrid();
 	m_pGrid->Setup();
 
-	// ï§ŽÂ”Â æ„¿Â‘Â›Â Â…Â‹ÂŒÂ…
+	// ¸ÞÀÎ ±¤¿ø ¼ÂÆÃ
 	D3DXVECTOR3 dir(0, -1, 0);
 	D3DXCOLOR c(1.0f, 1.0f, 1.0f, 1.0f);
 	ZeroMemory(&DirectLight, sizeof(D3DLIGHT9));
@@ -88,12 +85,12 @@ void cSCENE_INGAME::Setup()
 	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
-	// Â•Â˜ÂëŒ„ÂŠëªƒãŠ Â…Â‹ÂŒÂ…
+	// ÇÏÀÌÆ®¸Ê ¼ÂÆÃ
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
 	g_pGameInfoManager->setup_Map("test_map_obj.obj");
 
-	//Â…ÂŒÂŠã…½ÂŠ Â˜ã…»ÂŒï¿½ÂÂŠ Â…Â‹ÂŒÂ…
+	//Å×½ºÆ® ¿ÀºêÁ§Æ® ¼ÂÆÃ
 	m_pObject = new cNewObject;
 	m_pObject->Setup("box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
@@ -102,21 +99,21 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//Â…ÂŒÂŠã…½ÂŠ Â—Â‘ÂŠã…»ãˆÂ Â…Â‹ÂŒÂ…
+	//Å×½ºÆ® ¿¢½º¸ðµ¨ ¼ÂÆÃ
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
 	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
-	//Â•Â˜ÂŠÂ˜ Â…Â‹ÂŒÂ…
+	//ÇÏ´Ã ¼ÂÆÃ
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
 
-	//ï§žÂˆÂŸ Â…Â‹ÂŒÂ…
+	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
 	m_pMyCharacter->Setup("Xfile", "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
-	//ï§ÂˆÂšê³—ÂŠ é†«ÂŒÂ‘Âœ Â…Â‹ÂŒÂ…
+	//¸¶¿ì½º ÁÂÇ¥ ¼ÂÆÃ
 	beforeMousePos.x = 1920 / 2;
 	beforeMousePos.y = 1080 / 2;
 	nowMousePos.x = 1920 / 2;
@@ -127,7 +124,6 @@ void cSCENE_INGAME::Setup()
 	m_pAI->Setup("NPCS", "slicer.X");
 	cAI_Controller* pAI_Controller = new cAI_Controller;
 	m_pAI->SetAIController(pAI_Controller);
-
 
 	setupUI();
 }
@@ -241,8 +237,8 @@ void cSCENE_INGAME::Update()
 	if (g_pNetworkManager->GetNetStatus())
 		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
-	updateUI();
-
+	if(m_pUIBase)
+		m_pUIBase->Update();
 }
 
 void cSCENE_INGAME::Render()
@@ -260,7 +256,7 @@ void cSCENE_INGAME::Render()
 	m_pObject->Render();
 	m_pXmodel->Render();
 
-	// Â„ ÂƒÂÂƒÂœÂ—Â Â”ê³•Â ÂŠã…½Â‚ åª›Â€ÂŠÎ½Â•Â˜Â„æ¿¡Â ÂˆÂ˜ï¿½Â•
+	// ³Ý »óÅÂ¿¡ µû¶ó ½ºÅµ °¡´ÉÇÏµµ·Ï ¼öÁ¤
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		g_pOtherPlayerManager->render();
@@ -293,7 +289,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		static int n = 0;
 		//m_pSkinnedMesh->SetAnimationIndex(n++);
 		//m_pMyCharacter->SetAnimationIndexBlend(n++);
-		//m_pAI->SetAnimationIndexBlend(n++);
+		m_pAI->SetAnimationIndexBlend(n++);
 		break;
 		}
 	 
@@ -310,7 +306,6 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_RBUTTONUP:
 		//g_pNetworkManager->SendData();
 		break;
-	
 	}
 	if (m_pCamera)
 	{
@@ -379,10 +374,8 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 void cSCENE_INGAME::setupUI()
 {
 	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/æºÂ€ÂƒÂœÂ.jpg");
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±èÅÂÈñ.jpg");
 
-
-	{
 		cUIImageView* pImageView = new cUIImageView;
 		pImageView->SetPosition(0, 0, 0);
 		m_pUIBase = pImageView;
@@ -413,7 +406,7 @@ void cSCENE_INGAME::setupUI()
 			"./UI/crosshair_p.png",
 			"./UI/crosshair_p.png");
 		pCrossDown->setSize(1.0f, 1.0f);
-		pCrossDown->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50)+5);
+		pCrossDown->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50) + 5);
 		pCrossDown->SetDelegate(this);
 		pCrossDown->SetTag(CROSS_DOWN);
 		m_pUIBase->AddChild(pCrossDown);
@@ -423,7 +416,7 @@ void cSCENE_INGAME::setupUI()
 			"./UI/crosshair_p_right.png",
 			"./UI/crosshair_p_right.png");
 		pCrossLeft->setSize(1.0f, 1.0f);
-		pCrossLeft->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50)-11, g_pGameInfoManager->getScreenYPosByPer(50));
+		pCrossLeft->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) - 11, g_pGameInfoManager->getScreenYPosByPer(50));
 		pCrossLeft->SetDelegate(this);
 		pCrossLeft->SetTag(CROSS_LEFT);
 		m_pUIBase->AddChild(pCrossLeft);
@@ -459,7 +452,7 @@ void cSCENE_INGAME::setupUI()
 		pFaceLine->SetPosition(g_pGameInfoManager->getScreenXPosByPer(7), g_pGameInfoManager->getScreenYPosByPer(77));
 		pFaceLine->SetDelegate(this);
 		m_pUIBase->AddChild(pFaceLine);
-		
+
 		cUIButton* pFACE = new cUIButton;
 		pFACE->SetTexture("./UI/0000000040C8.01C.dds",
 			"./UI/0000000040C8.01C.dds",
@@ -486,13 +479,10 @@ void cSCENE_INGAME::setupUI()
 		pSkill1->SetPosition(g_pGameInfoManager->getScreenXPosByPer(78), g_pGameInfoManager->getScreenYPosByPer(81));
 		pSkill1->SetDelegate(this);
 		m_pUIBase->AddChild(pSkill1);
-	}
 }
 
 void cSCENE_INGAME::renderUI()
 {
-
-
 	if (m_pUIBase)
 		m_pUIBase->Render(m_pSprite);
 }
@@ -509,7 +499,7 @@ void cSCENE_INGAME::OnClick(cUIButton * pSender)
 
 void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
 {
-	float aimSize =0.0f;
+	float aimSize = 0.0f;
 	//aimSize = g_pGameInfoManager->aimSize;
 
 	if (pSender->GetTag() == HP_BAR)
@@ -523,20 +513,20 @@ void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
 	else if (pSender->GetTag() == CROSS_RIGHT)
 	{
 
-		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) + 5+ aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) + 5 + aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
 	}
 	else if (pSender->GetTag() == CROSS_DOWN)
 	{
 
-		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50) + 5+ aimSize);
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50) + 5 + aimSize);
 	}
 	else if (pSender->GetTag() == CROSS_LEFT)
 	{
 
-		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) - 11- aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) - 11 - aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
 	}
 
-	
+
 }
 
 void cSCENE_INGAME::Creat_Font()
@@ -546,7 +536,6 @@ void cSCENE_INGAME::Creat_Font()
 void cSCENE_INGAME::Render_Text()
 {
 }
-
 /*
 void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
 {

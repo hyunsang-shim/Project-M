@@ -7,7 +7,7 @@
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
-	, m_vPosition(0, 0, 0)
+	, m_vPosition(0, 0, -5)
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
@@ -24,7 +24,7 @@ void cCharacter::SetUP()
 
 void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh)
 {
-	static int CurrentAnimNum = 1;
+	static int CurrentAnimNum = 10;
 	static int beforeAnimNum = 0;
 	static double TotalPeriod = 0.0;
 	static double CurrentPeriod = 0.0;
@@ -46,9 +46,11 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 	if (GetKeyState('R') & 0x8000)
 	{
-		CurrentAnimNum = 2;
+		CurrentAnimNum = 1;
 
 		beforeAnimNum = CurrentAnimNum;
+
+		g_pGameInfoManager->MaxBulletCount = 30;
 
 		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
 	}
@@ -57,11 +59,11 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		if (GetKeyState('W') & 0x8000)
 		{
 			m_vPosition = m_vPosition + (m_vDirection * 0.1f);
-			CurrentAnimNum = 6;
+			CurrentAnimNum = 8;
 			if (GetKeyState(VK_SHIFT) & 0x8000)
 			{
 				m_vPosition = m_vPosition + (m_vDirection * 0.15f);
-
+				CurrentAnimNum = 4;
 				if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
 				{
 					OnlyLeftOrRight = false;
@@ -75,7 +77,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		else if (GetKeyState('S') & 0x8000)
 		{
 			m_vPosition = m_vPosition - (m_vDirection * 0.1f);
-			CurrentAnimNum = 3;
+			CurrentAnimNum = 5;
 			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
 			{
 				OnlyLeftOrRight = false;
@@ -83,9 +85,13 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 		else
 		{
-			if (TotalPeriod <= CurrentPeriod + 0.1)
+			if (GetKeyState(VK_LBUTTON) & 0x8000 && g_pGameInfoManager->MaxBulletCount != 0)
 			{
-				CurrentAnimNum = 1;
+				CurrentAnimNum = 9;
+			}
+			else if (TotalPeriod <= CurrentPeriod + 0.1)
+			{
+				CurrentAnimNum = 10;
 			}
 		}
 
@@ -94,7 +100,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 			if (OnlyLeftOrRight)
 			{
-				CurrentAnimNum = 5;
+				CurrentAnimNum = 7;
 			}
 		}
 
@@ -103,14 +109,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 			if (OnlyLeftOrRight)
 			{
-				CurrentAnimNum = 4;
+				CurrentAnimNum = 6;
 			}
-
-		}
-
-		if (GetKeyState(VK_LBUTTON) & 0x8000)
-		{
-
 		}
 
 		if (beforeAnimNum != CurrentAnimNum)
@@ -151,7 +151,6 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 void cCharacter::UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status)
 {
-
 	D3DXMATRIXA16 matR, matT;
 	D3DXMatrixRotationY(&matR, Direction);
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
@@ -189,21 +188,8 @@ void cCharacter::SetPositionY(float y)
 CharacterStatus_PC cCharacter::getUserData()
 {
 	CharacterStatus_PC myData;
-	 
-	// myData.PlayerName
-	// myData.Character_No
-	// myData.Attack
-	// myData.MaxHP
-	// myData.CurHP
-	// myData.HP_Regen
-	// myData.MoveSpeed
-	// myData.MagCnt
-	// myData.MaxMag
-	// myData.ShootSpeed
-	// myData.BulletTime
 	myData.CurPos = this->m_vPosition;
 	myData.Dir = this->m_fRotY;
-	// myData.Status
 
 	return myData;
 }

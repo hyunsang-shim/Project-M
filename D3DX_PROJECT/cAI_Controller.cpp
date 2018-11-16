@@ -24,7 +24,7 @@ void cAI_Controller::SetUP()
 
 void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, cSkinnedMesh* m_SkinnedMesh)
 {
-	static int CurrentAnimNum = 9;
+	static int CurrentAnimNum = 0;
 	static int beforeAnimNum = 0;
 	static double TotalPeriod = 0.0;
 	static double CurrentPeriod = 0.0;
@@ -44,7 +44,7 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 
 
 
-	if (AttackTime - AttackCoolTime < 2000)
+	if (AttackTime - AttackCoolTime < 5000)
 	{
 		b = false;
 
@@ -62,13 +62,13 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 	{
 		if (AI_To_Distance > 4.0f)
 		{
-			CurrentAnimNum = 3;
+			CurrentAnimNum = 6;
 			D3DXVec3Normalize(&moveToCharacterDir, &moveToCharacterDir);
 			m_vPosition += moveToCharacterDir / 10;
 		}
 		else
 		{
-			CurrentAnimNum = 7;
+			CurrentAnimNum = 2;
 			D3DXVec3Normalize(&moveToCharacterDir, &moveToCharacterDir);
 			AttackCoolTime = AttackTime;
 		}
@@ -77,7 +77,7 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 	{
 		if (TotalPeriod <= CurrentPeriod + 0.05)
 		{
-			CurrentAnimNum = 9;
+			CurrentAnimNum = 0;
 		}	
 	}
 
