@@ -16,7 +16,8 @@ cGameInfoManager::cGameInfoManager() :
 	nextScene(0),
 	aimSize(0.0f),
 	m_vOtherCharacters(NULL),
-	m_vNpcCharacters(NULL)
+	m_vNpcCharacters(NULL),  
+	MaxBulletCount(30)
 {
 }
 

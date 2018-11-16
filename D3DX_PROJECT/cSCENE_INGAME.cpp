@@ -15,6 +15,7 @@
 #include "cUIObject.h"
 #include "cUIImageView.h"
 #include "cCrossHairPicking.h"
+#include "cAI.h"
 
 enum
 {
@@ -34,10 +35,14 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
 	m_pMyCharacter(NULL),
+	m_pAI(NULL),
+	BulletCreateCount(0),
+	BulletCreateTime(MAXBulletCreateCount)
 	m_pUIBase(NULL),
 	m_pFont(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
+	m_Bullet.resize(30);
 }
 
 
@@ -50,6 +55,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pXmodel);
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
+	SAFE_DELETE(m_pAI);
 	if (m_pUIBase) m_pUIBase->Destroy();
 }
 
@@ -59,15 +65,15 @@ void cSCENE_INGAME::Setup()
 
 
 
-	//ƒ´∏ﬁ∂Û º¬∆√
+	//ÁßªÎåÄ¬î¬ù ¬Ö¬ã¬å¬Ö
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
 
-	// ±◊∏ÆµÂ ºº∆√
+	// Ê¥πÎ™É‚îÅ¬ì¬ú ¬ÑÎ™Ö¬å¬Ö
 	m_pGrid = new cGrid();
 	m_pGrid->Setup();
 
-	// ∏ﬁ¿Œ ±§ø¯ º¬∆√
+	// Ôßé¬î¬ù ÊÑø¬ë¬õ¬ê ¬Ö¬ã¬å¬Ö
 	D3DXVECTOR3 dir(0, -1, 0);
 	D3DXCOLOR c(1.0f, 1.0f, 1.0f, 1.0f);
 	ZeroMemory(&DirectLight, sizeof(D3DLIGHT9));
@@ -82,12 +88,12 @@ void cSCENE_INGAME::Setup()
 	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
-	// «œ¿Ã∆Æ∏  º¬∆√
+	// ¬ï¬ò¬ùÎåÑ¬äÎ™É„èä ¬Ö¬ã¬å¬Ö
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
 	g_pGameInfoManager->setup_Map("test_map_obj.obj");
 
-	//≈◊Ω∫∆Æ ø¿∫Í¡ß∆Æ º¬∆√
+	//¬Ö¬å¬ä„ÖΩ¬ä ¬ò„Öª¬åÔøΩ¬ù¬ä ¬Ö¬ã¬å¬Ö
 	m_pObject = new cNewObject;
 	m_pObject->Setup("box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
@@ -96,27 +102,32 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//≈◊Ω∫∆Æ ø¢Ω∫∏µ® º¬∆√
+	//¬Ö¬å¬ä„ÖΩ¬ä ¬ó¬ë¬ä„Öª„Åà¬ç ¬Ö¬ã¬å¬Ö
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
 	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
-	//«œ¥√ º¬∆√
+	//¬ï¬ò¬ä¬ò ¬Ö¬ã¬å¬Ö
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
 
-	//¡˙∑µ º¬∆√
+	//Ôßû¬à¬ü ¬Ö¬ã¬å¬Ö
 	m_pMyCharacter = new cMyCharacter;
 	m_pMyCharacter->Setup("Xfile", "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
-	//∏∂øÏΩ∫ ¡¬«• º¬∆√
+	//Ôßç¬à¬öÍ≥ó¬ä ÈÜ´¬å¬ë¬ú ¬Ö¬ã¬å¬Ö
 	beforeMousePos.x = 1920 / 2;
 	beforeMousePos.y = 1080 / 2;
 	nowMousePos.x = 1920 / 2;
 	nowMousePos.y = 1080 / 2;
 	SetCursorPos(1920 / 2, 1080 / 2);
 	
+	m_pAI = new cAI;
+	m_pAI->Setup("NPCS", "slicer.X");
+	cAI_Controller* pAI_Controller = new cAI_Controller;
+	m_pAI->SetAIController(pAI_Controller);
+
 
 	setupUI();
 }
@@ -169,29 +180,66 @@ void cSCENE_INGAME::Update()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
 
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	{
+		if (m_pAI)
+			m_pAI->Update(true, m_pMyCharacter->GetPosition() - m_pAI->GetPosition());
+	}
+	else
+	{
+		if (m_pAI)
+			m_pAI->Update(false, D3DXVECTOR3(0,0,0));
+	}
+
+
 	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
-		m_pCrossHairPicking->CalcPosition();
-
-		float dist;
-		D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
-
-		if (pHit)
+		if (g_pGameInfoManager->MaxBulletCount != 0)
 		{
-			m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+			m_pCrossHairPicking->CalcPosition();
 
-			BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+			float dist;
+			D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
-			D3DXCreateSphere(g_pDevice, m_Bullet.Radius, 20, 10, &m_Bullet.m_pBulletMesh, NULL);
-			m_Bullet.m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
-			m_Bullet.m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			m_Bullet.m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			m_Bullet.m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+
+			if (pHit && BulletCreateTime == MAXBulletCreateCount)
+			{
+				m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+
+				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+
+				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
+				m_Bullet[BulletCreateCount].m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+				m_Bullet[BulletCreateCount].BulletLiveTime = 500;
+
+				BulletCreateCount++;
+
+				BulletCreateTime = 0;
+
+				g_pGameInfoManager->MaxBulletCount--;
+			}
+			else
+			{
+				if (BulletCreateTime < MAXBulletCreateCount)
+				{
+					BulletCreateTime++;
+				}
+			}
+		}
+		else
+		{
+			BulletCreateCount = 0;
+			m_Bullet.clear();
+			m_Bullet.resize(30);
 		}
 	}
 
+
 	if (g_pNetworkManager->GetNetStatus())
-		g_pNetworkManager->SendData("userData", g_pGameInfoManager->GetMyInfo());
+		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
 	updateUI();
 
@@ -207,12 +255,12 @@ void cSCENE_INGAME::Render()
 	}
 
 	m_pSKY->Render();
-	m_pGrid->Render();
+	//m_pGrid->Render();
 	g_pGameInfoManager->m_pMap->Render();
 	m_pObject->Render();
 	m_pXmodel->Render();
 
-	// ≥› ªÛ≈¬ø° µ˚∂Û Ω∫≈µ ∞°¥…«œµµ∑œ ºˆ¡§
+	// ¬Ñ ¬É¬Å¬É¬ú¬ó¬ê ¬îÍ≥ï¬ù ¬ä„ÖΩ¬Ç Â™õ¬Ä¬äŒΩ¬ï¬ò¬ÑÊø°¬ù ¬à¬òÔøΩ¬ï
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		g_pOtherPlayerManager->render();
@@ -231,6 +279,9 @@ void cSCENE_INGAME::Render()
 	{
 		Mesh_Render();
 	}
+
+	if(m_pAI)
+		m_pAI->Render(NULL);
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -241,7 +292,8 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		{
 		static int n = 0;
 		//m_pSkinnedMesh->SetAnimationIndex(n++);
-		m_pMyCharacter->SetAnimationIndexBlend(n++);
+		//m_pMyCharacter->SetAnimationIndexBlend(n++);
+		//m_pAI->SetAnimationIndexBlend(n++);
 		break;
 		}
 	 
@@ -327,7 +379,7 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 void cSCENE_INGAME::setupUI()
 {
 	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±Ë≈¬»Ò.jpg");
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/Ê∫ê¬Ä¬É¬ú¬ù.jpg");
 
 
 	{
@@ -608,18 +660,21 @@ void cSCENE_INGAME::Render_Particle()
 
 void cSCENE_INGAME::Mesh_Render()
 {
-	D3DXMATRIXA16 matWorld, matS, matR, matT;
-	D3DXMatrixIdentity(&matS);
-	D3DXMatrixIdentity(&matR);
-	D3DXMatrixIdentity(&matT);
+	for (int i = 0; i < BulletCreateCount; i++)
+	{
+		D3DXMatrixTranslation(&m_Bullet[i].matT, m_Bullet[i].m_vBulletCreatePos.x, m_Bullet[i].m_vBulletCreatePos.y, m_Bullet[i].m_vBulletCreatePos.z);
+		g_pDevice->SetTransform(D3DTS_WORLD, &m_Bullet[i].matT);
+		g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
+		m_Bullet[i].m_pBulletMesh->DrawSubset(0);
 
-	matWorld = matS * matR;
+		m_Bullet[i].m_vBulletCreatePos += m_Bullet[i].BulletDirection;
 
-	D3DXMatrixTranslation(&matT, m_Bullet.m_vBulletCreatePos.x, m_Bullet.m_vBulletCreatePos.y, m_Bullet.m_vBulletCreatePos.z);
-	matWorld *= matT;
-	g_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
-	g_pDevice->SetMaterial(&m_Bullet.m_stMtlCircle);
-	m_Bullet.m_pBulletMesh->DrawSubset(0);
+		m_Bullet[i].BulletLiveTime--;
 
-	m_Bullet.m_vBulletCreatePos += BulletDirection / 200;
+		if (m_Bullet[i].BulletLiveTime == 0)
+		{
+			m_Bullet.erase(m_Bullet.begin() + i);
+			BulletCreateCount--;
+		}
+	}
 }

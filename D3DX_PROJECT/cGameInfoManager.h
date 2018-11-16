@@ -26,6 +26,7 @@ public:
 
 	void setup_Map(string filePath);
 
+	int MaxBulletCount;
 	BOOL sceneChangeTriger;
 	int nextScene;
 	// Network
