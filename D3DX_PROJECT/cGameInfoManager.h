@@ -8,6 +8,14 @@ class cGameInfoManager
 public:
 	SINGLETON(cGameInfoManager);
 
+	int GameScreenSizeX;
+	int GameScreenSizeY;
+	int getScreenXPosByPer(float x);
+	int getScreenYPosByPer(float y);
+
+	char userName[25] = { 0 };
+	int namelength;
+
 	BOOL isESCPushed;
 	int mouseMoveX;
 	int mouseMoveY;
@@ -18,5 +26,9 @@ public:
 	void setup_Map(string filePath);
 
 	int MaxBulletCount;
+	BOOL sceneChangeTriger;
+	int nextScene;
+
+	float aimSize;
 };
 

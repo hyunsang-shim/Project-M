@@ -1,0 +1,14 @@
+절단 로봇		
+명칭	시작	끝
+HitBig	10	40
+down	1150	1180
+down_idle	1200	1227
+standup	1240	1269
+Hit	1280	1310
+Run_Front	50	67
+Run_Right	120	137
+Run_Left	150	167
+Shoot	180	220
+Melee	230	280
+idle	270	280
+Victory	390	470

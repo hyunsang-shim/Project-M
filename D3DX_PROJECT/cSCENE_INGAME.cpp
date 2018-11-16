@@ -17,6 +17,16 @@
 #include "cCrossHairPicking.h"
 #include "cAI.h"
 
+enum
+{
+	HP_BAR = 11,
+	CROSS_UP,
+	CROSS_RIGHT,
+	CROSS_DOWN,
+	CROSS_LEFT,
+
+};
+
 cSCENE_INGAME::cSCENE_INGAME()
 	: m_pCamera(NULL),
 	m_pGrid(NULL),
@@ -28,6 +38,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pAI(NULL),
 	BulletCreateCount(0),
 	BulletCreateTime(MAXBulletCreateCount)
+	m_pUIBase(NULL),
+	m_pFont(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -44,6 +56,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
 	SAFE_DELETE(m_pAI);
+	if (m_pUIBase) m_pUIBase->Destroy();
 }
 
 void cSCENE_INGAME::Setup()
@@ -52,15 +65,15 @@ void cSCENE_INGAME::Setup()
 
 
 
-	//Ä«¸Þ¶ó ¼ÂÆÃ
+	//ì¹´ë©”ë¼ ì…‹íŒ…
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
 
-	// ±×¸®µå ¼¼ÆÃ
+	// ê·¸ë¦¬ë“œ ì„¸íŒ…
 	m_pGrid = new cGrid();
 	m_pGrid->Setup();
 
-	// ¸ÞÀÎ ±¤¿ø ¼ÂÆÃ
+	// ë©”ì¸ ê´‘ì› ì…‹íŒ…
 	D3DXVECTOR3 dir(0, -1, 0);
 	D3DXCOLOR c(1.0f, 1.0f, 1.0f, 1.0f);
 	ZeroMemory(&DirectLight, sizeof(D3DLIGHT9));
@@ -75,12 +88,12 @@ void cSCENE_INGAME::Setup()
 	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
-	// ÇÏÀÌÆ®¸Ê ¼ÂÆÃ
+	// í•˜ì´íŠ¸ë§µ ì…‹íŒ…
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
 	g_pGameInfoManager->setup_Map("test_map_obj.obj");
 
-	//Å×½ºÆ® ¿ÀºêÁ§Æ® ¼ÂÆÃ
+	//í…ŒìŠ¤íŠ¸ ì˜¤ë¸Œì íŠ¸ ì…‹íŒ…
 	m_pObject = new cNewObject;
 	m_pObject->Setup("box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
@@ -89,21 +102,21 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//Å×½ºÆ® ¿¢½º¸ðµ¨ ¼ÂÆÃ
+	//í…ŒìŠ¤íŠ¸ ì—‘ìŠ¤ëª¨ë¸ ì…‹íŒ…
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
 	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
-	//ÇÏ´Ã ¼ÂÆÃ
+	//í•˜ëŠ˜ ì…‹íŒ…
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
 
-	//Áú·µ ¼ÂÆÃ
+	//ì§ˆëŸ¿ ì…‹íŒ…
 	m_pMyCharacter = new cMyCharacter;
 	m_pMyCharacter->Setup("Xfile", "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
 
-	//¸¶¿ì½º ÁÂÇ¥ ¼ÂÆÃ
+	//ë§ˆìš°ìŠ¤ ì¢Œí‘œ ì…‹íŒ…
 	beforeMousePos.x = 1920 / 2;
 	beforeMousePos.y = 1080 / 2;
 	nowMousePos.x = 1920 / 2;
@@ -228,6 +241,7 @@ void cSCENE_INGAME::Update()
 	if (g_pNetworkManager->GetNetStatus())
 		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
+	updateUI();
 
 }
 
@@ -246,7 +260,7 @@ void cSCENE_INGAME::Render()
 	m_pObject->Render();
 	m_pXmodel->Render();
 
-	// ³Ý »óÅÂ¿¡ µû¶ó ½ºÅµ °¡´ÉÇÏµµ·Ï ¼öÁ¤
+	// ë„· ìƒíƒœì— ë”°ë¼ ìŠ¤í‚µ ê°€ëŠ¥í•˜ë„ë¡ ìˆ˜ì •
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		g_pOtherPlayerManager->render();
@@ -296,6 +310,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_RBUTTONUP:
 		//g_pNetworkManager->SendData();
 		break;
+	
 	}
 	if (m_pCamera)
 	{
@@ -364,53 +379,172 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 void cSCENE_INGAME::setupUI()
 {
 	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±èÅÂÈñ.jpg");
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/ê¹€íƒœí¬.jpg");
 
-	D3DXCreateTextureFromFileEx(
-		g_pDevice,
-		"UI/crosshair_p.png",
-		D3DX_DEFAULT_NONPOW2,
-		D3DX_DEFAULT_NONPOW2,
-		D3DX_DEFAULT,
-		0,
-		D3DFMT_UNKNOWN,
-		D3DPOOL_MANAGED,
-		D3DX_FILTER_NONE,
-		D3DX_DEFAULT,
-		0,
-		&m_stImageInfo,
-		NULL,
-		&m_pTextureUI);
 
-	cUIImageView* pImageView = new cUIImageView;
-	pImageView->SetPosition(0, 0, 0);
-	pImageView->SetTexture("UI/crosshair_p.png");
-	m_pUIRoot = pImageView;
+	{
+		cUIImageView* pImageView = new cUIImageView;
+		pImageView->SetPosition(0, 0, 0);
+		m_pUIBase = pImageView;
+
+
+		cUIButton* pCrossUp = new cUIButton;
+		pCrossUp->SetTexture("./UI/crosshair_p.png",
+			"./UI/crosshair_p.png",
+			"./UI/crosshair_p.png");
+		pCrossUp->setSize(1.0f, 1.0f);
+		pCrossUp->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50) - 10);
+		pCrossUp->SetDelegate(this);
+		pCrossUp->SetTag(CROSS_UP);
+		m_pUIBase->AddChild(pCrossUp);
+
+		cUIButton* pCrossRight = new cUIButton;
+		pCrossRight->SetTexture("./UI/crosshair_p_right.png",
+			"./UI/crosshair_p_right.png",
+			"./UI/crosshair_p_right.png");
+		pCrossRight->setSize(1.0f, 1.0f);
+		pCrossRight->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) + 5, g_pGameInfoManager->getScreenYPosByPer(50));
+		pCrossRight->SetDelegate(this);
+		pCrossRight->SetTag(CROSS_RIGHT);
+		m_pUIBase->AddChild(pCrossRight);
+
+		cUIButton* pCrossDown = new cUIButton;
+		pCrossDown->SetTexture("./UI/crosshair_p.png",
+			"./UI/crosshair_p.png",
+			"./UI/crosshair_p.png");
+		pCrossDown->setSize(1.0f, 1.0f);
+		pCrossDown->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50)+5);
+		pCrossDown->SetDelegate(this);
+		pCrossDown->SetTag(CROSS_DOWN);
+		m_pUIBase->AddChild(pCrossDown);
+
+		cUIButton* pCrossLeft = new cUIButton;
+		pCrossLeft->SetTexture("./UI/crosshair_p_right.png",
+			"./UI/crosshair_p_right.png",
+			"./UI/crosshair_p_right.png");
+		pCrossLeft->setSize(1.0f, 1.0f);
+		pCrossLeft->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50)-11, g_pGameInfoManager->getScreenYPosByPer(50));
+		pCrossLeft->SetDelegate(this);
+		pCrossLeft->SetTag(CROSS_LEFT);
+		m_pUIBase->AddChild(pCrossLeft);
+
+
+
+
+
+		cUIButton* pHPBar = new cUIButton;
+		pHPBar->SetTexture("./UI/PlayerHealthBar.png",
+			"./UI/PlayerHealthBar.png",
+			"./UI/PlayerHealthBar.png");
+		pHPBar->setSize(1.0f, 2.0f);
+		pHPBar->SetPosition(g_pGameInfoManager->getScreenXPosByPer(12), g_pGameInfoManager->getScreenYPosByPer(80));
+		pHPBar->SetDelegate(this);
+		pHPBar->SetTag(HP_BAR);
+		m_pUIBase->AddChild(pHPBar);
+
+		cUIButton* pHPBarLoss = new cUIButton;
+		pHPBarLoss->SetTexture("./UI/PlayerHealthBarLoss.png",
+			"./UI/PlayerHealthBarLoss.png",
+			"./UI/PlayerHealthBarLoss.png");
+		pHPBarLoss->setSize(1.0f, 2.0f);
+		pHPBarLoss->SetPosition(g_pGameInfoManager->getScreenXPosByPer(12), g_pGameInfoManager->getScreenYPosByPer(80));
+		pHPBarLoss->SetDelegate(this);
+		m_pUIBase->AddChild(pHPBarLoss);
+
+		cUIButton* pFaceLine = new cUIButton;
+		pFaceLine->SetTexture("./UI/chaback.png",
+			"./UI/chaback.png",
+			"./UI/chaback.png");
+		pFaceLine->setSize(1.0f, 1.0f);
+		pFaceLine->SetPosition(g_pGameInfoManager->getScreenXPosByPer(7), g_pGameInfoManager->getScreenYPosByPer(77));
+		pFaceLine->SetDelegate(this);
+		m_pUIBase->AddChild(pFaceLine);
+		
+		cUIButton* pFACE = new cUIButton;
+		pFACE->SetTexture("./UI/0000000040C8.01C.dds",
+			"./UI/0000000040C8.01C.dds",
+			"./UI/0000000040C8.01C.dds");
+		pFACE->setSize(1.0f, 2.0f);
+		pFACE->SetPosition(g_pGameInfoManager->getScreenXPosByPer(7), g_pGameInfoManager->getScreenYPosByPer(77));
+		pFACE->SetDelegate(this);
+		m_pUIBase->AddChild(pFACE);
+
+		cUIButton* pWeapon = new cUIButton;
+		pWeapon->SetTexture("./UI/Weapon.png",
+			"./UI/Weapon.png",
+			"./UI/Weapon.png");
+		pWeapon->setSize(1.0f, 1.0f);
+		pWeapon->SetPosition(g_pGameInfoManager->getScreenXPosByPer(85), g_pGameInfoManager->getScreenYPosByPer(81));
+		pWeapon->SetDelegate(this);
+		m_pUIBase->AddChild(pWeapon);
+
+		cUIButton* pSkill1 = new cUIButton;
+		pSkill1->SetTexture("./UI/E_skill1.png",
+			"./UI/E_skill1.png",
+			"./UI/E_skill1.png");
+		pSkill1->setSize(1.0f, 1.0f);
+		pSkill1->SetPosition(g_pGameInfoManager->getScreenXPosByPer(78), g_pGameInfoManager->getScreenYPosByPer(81));
+		pSkill1->SetDelegate(this);
+		m_pUIBase->AddChild(pSkill1);
+	}
 }
 
 void cSCENE_INGAME::renderUI()
 {
-	m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
-
-	D3DXMATRIXA16 matT, matR, matS, mat;
-	D3DXMatrixTranslation(&matT, m_Worldrc.right / 2 - 10, m_Worldrc.bottom / 2 - 10, 0);
-
-	mat = matT;
-
-	m_pSprite->SetTransform(&mat);
-
-	RECT rc;
-	SetRect(&rc, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
-	m_pSprite->Draw(m_pTextureUI,
-		&rc,
-		&D3DXVECTOR3(0, 0, 0),
-		&D3DXVECTOR3(0, 0, 0),
-		D3DCOLOR_ARGB(255, 255, 255, 255));
-	m_pSprite->End();
 
 
-	if (m_pUIRoot)
-		m_pUIRoot->Render(m_pSprite);
+	if (m_pUIBase)
+		m_pUIBase->Render(m_pSprite);
+}
+
+void cSCENE_INGAME::updateUI()
+{
+	if (m_pUIBase)
+		m_pUIBase->Update();
+}
+
+void cSCENE_INGAME::OnClick(cUIButton * pSender)
+{
+}
+
+void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
+{
+	float aimSize =0.0f;
+	//aimSize = g_pGameInfoManager->aimSize;
+
+	if (pSender->GetTag() == HP_BAR)
+	{
+		pSender->cutSize(0.65f, 1.0f);
+	}
+	else if (pSender->GetTag() == CROSS_UP)
+	{
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50) - 10 - aimSize);
+	}
+	else if (pSender->GetTag() == CROSS_RIGHT)
+	{
+
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) + 5+ aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
+	}
+	else if (pSender->GetTag() == CROSS_DOWN)
+	{
+
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50), g_pGameInfoManager->getScreenYPosByPer(50) + 5+ aimSize);
+	}
+	else if (pSender->GetTag() == CROSS_LEFT)
+	{
+
+		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) - 11- aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
+	}
+
+	
+}
+
+void cSCENE_INGAME::Creat_Font()
+{
+}
+
+void cSCENE_INGAME::Render_Text()
+{
 }
 
 /*

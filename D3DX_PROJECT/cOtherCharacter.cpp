@@ -27,11 +27,11 @@ void cOtherCharacter::Setup()
 	m_pOBB->Setup(m_pSkinnedMesh);
 }
 
-void cOtherCharacter::Update(float x, float y, float z, float degree, int action, int actionCount)
+void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 {
 	if (m_pCharacterController)
-	//	m_pCharacterController->UpdateOtherPlayer(x, y, z, degree, action, actionCount);
-//		m_pCharacterController->Update();
+		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);
+	//	m_pCharacterController->Update();
 
 	if (m_pOBB)
 		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);

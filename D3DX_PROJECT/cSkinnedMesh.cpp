@@ -32,6 +32,7 @@ cSkinnedMesh::cSkinnedMesh(char* szFolder, char* szFilename)
 		&m_pAnimController);
 
 	BulletStartBoneName = "BulletRoot";
+	HeadBoneName = "HeadTop";
 }
 
 cSkinnedMesh::cSkinnedMesh()
@@ -42,7 +43,9 @@ cSkinnedMesh::cSkinnedMesh()
 	, m_pEffect(NULL)
 	, m_vMin(0, 0, 0) /// >> : OBB
 	, m_vMax(0, 0, 0) /// >> : OBB
+	, m_vMyHeadPos(D3DXVECTOR3(0, 0, 0))
 {
+	
 }
 
 cSkinnedMesh::~cSkinnedMesh(void)
@@ -242,6 +245,11 @@ void cSkinnedMesh::Update(ST_BONE* pCurrent, D3DXMATRIXA16* pmatParent)
 	{
 		pCurrent->CombinedTransformationMatrix =
 			pCurrent->CombinedTransformationMatrix * (*pmatParent);
+	}
+
+	if (strcmp(pCurrent->Name, HeadBoneName) == 0)
+	{
+		m_vMyHeadPos = D3DXVECTOR3(pCurrent->CombinedTransformationMatrix._41, pCurrent->CombinedTransformationMatrix._42, pCurrent->CombinedTransformationMatrix._43);
 	}
 
 	if (strcmp(pCurrent->Name, BulletStartBoneName) == 0)

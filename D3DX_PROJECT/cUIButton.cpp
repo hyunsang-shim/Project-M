@@ -4,7 +4,10 @@
 
 cUIButton::cUIButton()
 	:m_eButtonState(E_NORMAL),
-	m_pDelegate(NULL)
+	m_pDelegate(NULL),
+	sizeX(1.0f),
+	sizeY(1.0f),
+	unable(FALSE)
 {
 }
 
@@ -15,7 +18,6 @@ cUIButton::~cUIButton()
 
 void cUIButton::SetTexture(char * szNor, char * szOver, char * szSel)
 {
-	D3DXIMAGE_INFO stImageInfo;
 	m_aTexture[E_NORMAL] = g_pTextureManager->GetTexture(szNor, &stImageInfo);
 
 	m_stSize.nWidth = stImageInfo.Width;
@@ -33,7 +35,8 @@ void cUIButton::Update()
 	POINT pt;
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
-
+	if (m_pDelegate)
+		m_pDelegate->buttonUpdate(this);
 	RECT rc;
 	SetRect(
 		&rc,
@@ -41,7 +44,7 @@ void cUIButton::Update()
 		(int)m_matWorld._42,
 		(int)m_matWorld._41 + (int)m_stSize.nWidth,
 		(int)m_matWorld._42 + (int)m_stSize.nHeight);
-	if (PtInRect(&rc, pt))
+	if (PtInRect(&rc, pt) && !unable)
 	{
 		if (GetKeyState(VK_LBUTTON) & 0X8000)
 		{
@@ -71,8 +74,15 @@ void cUIButton::Render(LPD3DXSPRITE pSprite)
 {
 	if (m_isHidden) return;
 
+	D3DXMATRIXA16 matS, matW;
+
+	D3DXMatrixIdentity(&matS);
+	D3DXMatrixIdentity(&matW);
+
+	D3DXMatrixScaling(&matS, sizeX, sizeY, 1.0f);
+	matW = matS * m_matWorld;
 	pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
-	pSprite->SetTransform(&m_matWorld);
+	pSprite->SetTransform(&matW);
 
 	RECT rc;
 	SetRect(&rc, 0, 0, m_stSize.nWidth, m_stSize.nHeight);
@@ -85,6 +95,28 @@ void cUIButton::Render(LPD3DXSPRITE pSprite)
 	pSprite->End();
 
 	cUIObject::Render(pSprite);
+}
+
+void cUIButton::setUnable()
+{
+	this->unable = true;
+}
+
+void cUIButton::setable()
+{
+	this->unable = FALSE;
+}
+
+void cUIButton::setSize(float x, float y)
+{
+	sizeX = x;
+	sizeY = y;
+}
+
+void cUIButton::cutSize(float xSize, float ySize)
+{
+	m_stSize.nWidth = stImageInfo.Width * xSize;
+	m_stSize.nHeight = stImageInfo.Height * ySize;
 }
 
 void cUIButton::SetTexture(char * szNor, char * szOver, char * szSel, string str)

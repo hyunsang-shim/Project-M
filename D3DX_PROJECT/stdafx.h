@@ -26,7 +26,10 @@
 #include <list>
 #include <time.h>
 #include <fstream>
+#include <stdio.h>
 using namespace std;
+
+
 #include <assert.h>
 
 #include <d3dx9.h>

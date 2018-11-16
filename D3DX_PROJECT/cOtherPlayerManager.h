@@ -12,7 +12,7 @@ public:
 	int userNum;
 	vector<cOtherCharacter*> otherPlayerInfo;
 
-	void newPlayer(UserInfo info);
+	void newPlayer(CharacterStatus_PC* info);
 	void render();
 
 };

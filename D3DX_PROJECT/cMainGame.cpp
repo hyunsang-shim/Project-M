@@ -2,9 +2,7 @@
 #include "cMainGame.h"
 
 cMainGame::cMainGame() :
-	SCENENUM(1),
-	Next_SCENEN(0),
-	sceneChangeTriger(0),
+	SCENENUM(0),
 	m_pScene_Ingame(NULL),
 	m_pScene_Result(NULL),
 	m_pScene_Title(NULL)
@@ -56,7 +54,7 @@ void cMainGame::Update()
 	default:
 		break;
 	}
-	if (sceneChangeTriger)
+	if (g_pGameInfoManager->sceneChangeTriger)
 		this->SceneChangeNum();
 }
 
@@ -111,7 +109,8 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void cMainGame::SetSceneChangeTriger(int sceneNum)
 {
-	sceneChangeTriger = true;
+	g_pGameInfoManager->nextScene = sceneNum;
+	g_pGameInfoManager->sceneChangeTriger = true;
 }
 
 void cMainGame::SceneChangeNum()
@@ -120,7 +119,7 @@ void cMainGame::SceneChangeNum()
 	SAFE_DELETE(m_pScene_Result);
 	SAFE_DELETE(m_pScene_Title);
 
-	SCENENUM = Next_SCENEN;
+	SCENENUM = g_pGameInfoManager->nextScene;
 
 	switch (getSceneNum())
 	{
@@ -139,7 +138,7 @@ void cMainGame::SceneChangeNum()
 	default:
 		break;
 	}
-	sceneChangeTriger = FALSE;
+	g_pGameInfoManager->sceneChangeTriger = FALSE;
 
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "cUIButton.h"
 
 class cCamera;
 class cHeightMap;
@@ -26,7 +27,7 @@ struct Bullet
 	int BulletLiveTime;
 };
 
-class cSCENE_INGAME
+class cSCENE_INGAME: public iButtonDelegate
 {
 public:
 	cSCENE_INGAME();
@@ -64,15 +65,28 @@ public:
 	POINT nowMousePos;
 	  
 private:
-	LPD3DXFONT m_pFont;
 	LPD3DXSPRITE		m_pSprite;
 	LPDIRECT3DTEXTURE9	m_pTextureUI;
 	D3DXIMAGE_INFO		m_stImageInfo;
-	cUIObject*			m_pUIRoot;
+	cUIObject*			m_pUIBase;
+
 	RECT				m_Worldrc;
 public:
 	void setupUI();
 	void renderUI();
+	void updateUI();
+
+
+	virtual void OnClick(cUIButton* pSender) override;
+	virtual void buttonUpdate(cUIButton* pSender) override;
+
+
+private:
+	LPD3DXFONT m_pFont;
+public:
+	void Creat_Font();
+	void Render_Text();
+
 	/*
 	// : billborard
 	void Set_Billboard(D3DXMATRIXA16* pmatWorld);

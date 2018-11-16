@@ -5,7 +5,7 @@
 #pragma comment(lib,"ws2_32.lib")
 
 #include <winsock.h>
-
+#include "cCharacter.h"
 
 
 class cNetworkManager
@@ -24,7 +24,7 @@ private:
 
 public:
 	bool SetupNetwork(HWND hWnd);
-	void SendData(string str);
+	void SendData(CharacterStatus_PC strPC);
 	void recvData();
 	bool GetNetStatus();		// 네트워크 확인용
 

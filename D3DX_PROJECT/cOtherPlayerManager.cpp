@@ -11,13 +11,13 @@ cOtherPlayerManager::~cOtherPlayerManager()
 {
 }
 
-void cOtherPlayerManager::newPlayer(UserInfo info)
+void cOtherPlayerManager::newPlayer(CharacterStatus_PC* info)
 {
 	cOtherCharacter *tmp = new cOtherCharacter;
 	tmp->Setup();
 	cCharacter* pCharacter = new cCharacter;
 	tmp->SetCharacterController(pCharacter);
-	tmp->info = info;
+	tmp->info = *(info);
 	otherPlayerInfo.push_back(tmp);
 
 
