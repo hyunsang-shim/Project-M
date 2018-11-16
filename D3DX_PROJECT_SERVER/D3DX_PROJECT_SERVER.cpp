@@ -5,6 +5,7 @@
 #include "D3DX_PROJECT_SERVER.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <winsock.h>
 #include <vector>
 #include <string>
@@ -228,7 +229,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	CharacterStatus_PC TmpUser;
 
 	static int userNum;
-
+	buffer = (char*)malloc(sizeof(CharacterStatus_NPC) + 1);
+	ZeroMemory(buffer, 0, sizeof(CharacterStatus_PC) + 1);
 
     switch (message)
     {
@@ -241,8 +243,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
 		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
-		//addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
-		addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9");	// 심현상 (노트북/공유기)
+		addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71");		// 심현상
+		//addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9");	// 심현상 (노트북/공유기)
 		// addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
 
 
@@ -287,15 +289,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			
 			break;
 		case FD_READ:			
-		{
-			recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-			//CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
-			CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
+		{					
 			for (int i = 0; i < user.size(); i++)
 			{
+				buffer[sizeof(CharacterStatus_PC)] = NULL;
+				int bufferLen = recv(user[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+				buffer[bufferLen] = NULL;
+				CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
 
-				//memset(buffer, 0, sizeof(CharacterStatus_PC)+1); // reset buffer to null;
-				if (user[i].s == recieved->s)
+			//	if (user[i].s == recieved->s)
 				{
 					if (strcmp(recieved->MsgHeader, "userData") == 0)
 					{
@@ -308,6 +310,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 					else if (strcmp(recieved->MsgHeader, "join") == 0)
 					{
+						char tmp[16];
+						string s;
+						itoa(recieved->ID, tmp, 10);
+						s = "User # (";
+						s.append(tmp);
+						s.append(recieved->PlayerName);
+						s.append(") Joinned the Game");
+						MessageBox(NULL, s.c_str(), _T("New User!"), MB_OK);
+
 						user[i].CurHP = recieved->CurHP;
 						user[i].MaxHP = recieved->MaxHP;
 						user[i].Dir = recieved->Dir;
@@ -337,8 +348,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			for (int i = 0; i < user.size(); i++)
 			{
 				if (user.at(i).s == (SOCKET)wParam)
-				{
-					user.erase(user.begin() + i);
+				{					
+					user.push_back(user[i]);
+					user[i] = user[user.size() - 2];
+					user.pop_back();
+
 //					userMsgs[i].swap(userMsgs[user.size()-1]);
 //					userMsgs.erase(userMsgs.end());
 				}
@@ -357,7 +371,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				strcpy(PrepareMsg.MsgHeader, "userData");
 				PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
 
-				// 참고 : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
 				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{
 					user[i].FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
@@ -374,11 +387,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			if (user.at(i).FailCnt > Tryout)
 			{
-				/*
-				string message;
-				message += "disconnect ";
-				message += to_string(user.at(i).ID);
-				*/
+				
 				CharacterStatus_PC disconnectMsg;
 				disconnectMsg.ID = user.at(i).ID;
 				strcpy(disconnectMsg.MsgHeader, "disconnect");
@@ -409,13 +418,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				for (int i = 0; i < user.size(); i++)
 				{
-					char tmp[128] = { NULL, };
-					char tmpName[16] = { '\0' };
-					strcpy(tmpName, user[i].PlayerName);
-					tmpName[strlen(tmpName)] = 
-					sprintf(tmp, "user #%d (%s) is alive", (int)user[i].ID, tmpName);
-					tmp[strlen(tmp)] = '\0';
-					TextOutA(hdc, 10, 10 + (i+1) * 20 , tmp, strlen(tmp));
+					string tmp;
+					tmp.append("user #");
+					char sTmp[12];
+					tmp.append(itoa((int)user[i].ID, sTmp, 10));
+					tmp.append(" id : ");
+					tmp.append(user[i].PlayerName);
+					TextOut(hdc, 10, 10 + (i+1) * 20 , tmp.c_str(), strlen(tmp.c_str()));
 				}
 			}
 
