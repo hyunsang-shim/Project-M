@@ -27,6 +27,7 @@
 #include <time.h>
 #include <fstream>
 #include <stdio.h>
+#include <winsock.h>
 using namespace std;
 
 
@@ -143,18 +144,79 @@ struct ST_SIZEN
 	ST_SIZEN(int _w, int _h): nWidth(_w), nHeight(_h) {}
 
 };
+enum character_list {
+	PC_Soldier,
+	PC_Reaper,
+	PC_Reinhardt
+};
 
-typedef struct UserInfo
-{//(int x, int y, int direction, int action, int actionCount)
 
-	int userNum;
-	float x;
-	float y;
-	float z;
-	float direction;
-	int action;
-	int actionCount;
-}UserInfo;
+enum character_status {
+	PC_Stand,
+	PC_Stand_Shoot,
+	PC_Run_Front,
+	PC_Run_Front_Shoot,
+	PC_Run_Left,
+	PC_Run_Left_Shoot,
+	PC_Run_Right,
+	PC_Run_Right_Shoot,
+	PC_Run_Back,
+	PC_Run_Back_Shoot,
+	PC_Dash,
+	PC_Reload,
+	PC_Hit,
+	PC_Down,
+	PC_Down_idle,
+	PC_Stand_Up,
+	PC_Dead,
+	PC_NumSize
+};
+
+struct CharacterStatus_PC
+{
+	char			MsgHeader[64];			// 메시지 헤더
+	WORD			ID;				// 세션 ID	
+	char			PlayerName[16];	// 유저이름
+	WORD			Character_No;	// 캐릭터 종류
+	WORD			Attack;			// 공력력
+	DWORD			MaxHP;			// 최대 체력
+	DWORD			CurHP;			// 현재 체력
+	WORD			HP_Regen;		// 체력 재생
+	DWORD			MoveSpeed;		// 이동 속도
+	WORD			Mag_Cnt;		// 장탄 수
+	WORD			Mag_Max;			// 최대 장전 수
+	DWORD			ShootSpeed;		// 연사속도
+	WORD			BulletTime;		// 총알 속도
+	D3DXVECTOR3		CurPos;			// 현재 위치값
+	float			Dir;				// 캐릭터가 바라보는 방향
+	WORD			Status;			// 캐릭터 상태
+	int				TargetID;		// 공격 한 대상
+	int				FailCnt;		// 접속 여부
+	SOCKET			s;				// 소켓
+};
+
+struct CharacterStatus_NPC
+{
+	char			MsgHeader[64];			// 메시지 헤더
+	WORD			ID;				// 세션 ID	
+	char			CharacterName[16];	// 캐릭터 이름
+	WORD			Character_No;	// 캐릭터 종류
+	WORD			Attack;			// 공력력
+	DWORD			MaxHP;			// 최대 체력
+	DWORD			CurHP;			// 현재 체력
+	WORD			HP_Regen;		// 체력 재생
+	DWORD			MoveSpeed;		// 이동 속도
+	WORD			Mag_Cnt;		// 장탄 수
+	WORD			Mag_Max;		// 최대 장전 수
+	DWORD			ShootSpeed;		// 연사속도
+	WORD			BulletTime;		// 총알 속도
+	D3DXVECTOR3		CurPos;			// 현재 위치값
+	float			Dir;			// 캐릭터가 바라보는 방향
+	WORD			Status;			// 캐릭터 상태
+	int				TargetID;		// 공격 한 대상
+};
+
+
 
 
 #include "cMainGame.h"
@@ -186,7 +248,6 @@ namespace d3d
 #include "cNetworkManager.h"
 #include "cOtherPlayerManager.h"
 
-using namespace std;
 
 
 //<< :

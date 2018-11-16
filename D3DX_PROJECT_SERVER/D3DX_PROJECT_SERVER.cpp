@@ -5,6 +5,7 @@
 #include "D3DX_PROJECT_SERVER.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <winsock.h>
 #include <vector>
 #include <string>
@@ -210,8 +211,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc;
-	PAINTSTRUCT ps;
+
 	static WSADATA wsadata;
 	static SOCKET p1, p2;
 	static vector<CharacterStatus_PC> user;
@@ -220,19 +220,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static TCHAR msg[200];
 	static SOCKADDR_IN addr = { 0 }, c_addr;
 	static TCHAR str[10];
-	static TCHAR test[10];
-	static int count;
 	int size, msgLen;
 	char* buffer;
-	int x, y;
 	static bool turn;
 	static WORD playerCnt;
 //	static vector<string> userMsgs;		//유저 상태 메시지
 
-	CharacterStatus_PC userinst;
+	CharacterStatus_PC TmpUser;
 
 	static int userNum;
-
+	buffer = (char*)malloc(sizeof(CharacterStatus_NPC) + 1);
+	ZeroMemory(buffer, 0, sizeof(CharacterStatus_PC) + 1);
 
     switch (message)
     {
@@ -245,16 +243,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
 		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
-		addr.sin_addr.s_addr = inet_addr("165.246.163.71");		// 심현상
+		addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71");		// 심현상
+		//addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9");	// 심현상 (노트북/공유기)
 		// addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
 
-		bind(s, (LPSOCKADDR)&addr, sizeof(addr));
-		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_ACCEPT);
-		turn = 0;
-		test[0] = -1;
+
+		// Network Bind Test
+		if (bind(s, (LPSOCKADDR)&addr, sizeof(addr)))
+		{
+			MessageBox(NULL, _T("Binding Failed!"), _T("Error"), MB_OK);
+			return 0;
+		}
 
 
-		if (listen(s, 5) == -1) return 0;
+		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_ACCEPT | FD_CLOSE);
+
+
+		//
+		// Check Listening
+		if (listen(s, 5) == SOCKET_ERROR)
+		{
+			MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
+			return 0;
+		}
 
 		break;
 
@@ -263,75 +274,85 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case FD_ACCEPT:
 			size = sizeof(c_addr);
-			user.push_back(userinst);
+			user.push_back(TmpUser);
 			user.back().s = accept(s, (LPSOCKADDR)&c_addr, &size);
 			user.back().ID = playerCnt;
 			WSAAsyncSelect(user.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
 			
+			// Add Current User into Total User List
 			playerCnt++;
+
+			strcpy(user.back().MsgHeader, "welcome");
+			send(user.back().s, (char*)&user.back(), sizeof(CharacterStatus_PC) + 1, 0);
 //			userMsgs.resize(user.size());			//
 			InvalidateRgn(hWnd, NULL, FALSE);		//
+			
 			break;
-		case FD_READ:
+		case FD_READ:			
+		{					
 			for (int i = 0; i < user.size(); i++)
 			{
+				buffer[sizeof(CharacterStatus_PC)] = NULL;
+				int bufferLen = recv(user[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+				buffer[bufferLen] = NULL;
+				CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
 
-				/*
-				memset(buffer, 0, 200);
-				MsgLen = recv(CurrentPlayer, buffer, 200, 0);
-				buffer[MsgLen] = NULL;
-				OMOK_MSG_SYS* tmpsys = (OMOK_MSG_SYS*)buffer;
-				
-				*/
-
-				memset(&buffer, 0, sizeof(CharacterStatus_PC)+1);
-				int msgLen = recv((SOCKET)wParam, buffer, sizeof(CharacterStatus_PC)+1, 0);
-				buffer[msgLen] = NULL;
-				CharacterStatus_PC* recieved;
-				
-				if (buffer != NULL)
-					recieved = (CharacterStatus_PC*)buffer;
-				else
+			//	if (user[i].s == recieved->s)
 				{
-					strcpy(recieved->MsgHeader, "Hello!");
-				} 
+					if (strcmp(recieved->MsgHeader, "userData") == 0)
+					{
+						user[i].CurHP = recieved->CurHP;
+						user[i].MaxHP = recieved->MaxHP;
+						user[i].Dir = recieved->Dir;
+						user[i].Status = recieved->Status;
 
-				if (user.at(i).s == (SOCKET)wParam)
-				{
-					if (strcmp(recieved->MsgHeader, "userData"))
-					{						
-					
-						// WORD			ID;				// 세션 ID
-						// char			PlayerName[16];	// 유저이름
-						// WORD			Character_No;	// 캐릭터 종류
-						// WORD			Attack;			// 공력력
-						// DWORD			MaxHP;			// 최대 체력
-						// DWORD			CurHP;			// 현재 체력
-						// WORD			HP_Regen;		// 체력 재생
-						// DWORD			MoveSpeed;		// 이동 속도
-						// WORD			Mag_Size;		// 장탄 수
-						// WORD			MaxMag;			// 최대 장전 수
-						// DWORD			ShootSpeed;		// 연사속도
-						// WORD			BulletTime;		// 총알 속도
-						// D3DXVECTOR3		CurPos;			// 현재 위치값
-						// D3DXVECTOR3		Dir;				// 캐릭터가 바라보는 방향
-						// WORD			Status;
-						user.at(i).CurHP = recieved->CurHP;
-						user.at(i).CurPos = recieved->CurPos;
-						user.at(i).Dir = recieved->Dir;
-						user.at(i).Status = recieved->Status;
-						
+						printf("recieved : user #%d's userData\n", user[i].ID);
+					}
+					else if (strcmp(recieved->MsgHeader, "join") == 0)
+					{
+						char tmp[16];
+						string s;
+						itoa(recieved->ID, tmp, 10);
+						s = "User # (";
+						s.append(tmp);
+						s.append(recieved->PlayerName);
+						s.append(") Joinned the Game");
+						MessageBox(NULL, s.c_str(), _T("New User!"), MB_OK);
+
+						user[i].CurHP = recieved->CurHP;
+						user[i].MaxHP = recieved->MaxHP;
+						user[i].Dir = recieved->Dir;
+						user[i].Status = recieved->Status;
+						strcpy_s(user[i].PlayerName, recieved->PlayerName);
+						printf("recieved : user #%d(%s) Has joined in the Game.\n", user[i].ID, user[i].PlayerName);
+					}
+					else if (strcmp(recieved->MsgHeader, "disconnect") == 0)
+					{
+						for (int i = 0; i < user.size(); i++)
+						{
+							if (user[i].ID == recieved->ID)
+							{
+								user.erase(user.begin() + i);
+								i--;
+								break;
+							}
+						}
+
+						InvalidateRgn(hWnd, NULL, TRUE);
 					}
 				}
 			}
+		}
 			break;
-
 		case FD_CLOSE:
 			for (int i = 0; i < user.size(); i++)
 			{
 				if (user.at(i).s == (SOCKET)wParam)
-				{
-					user.erase(user.begin() + i);
+				{					
+					user.push_back(user[i]);
+					user[i] = user[user.size() - 2];
+					user.pop_back();
+
 //					userMsgs[i].swap(userMsgs[user.size()-1]);
 //					userMsgs.erase(userMsgs.end());
 				}
@@ -347,15 +368,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{			
 				CharacterStatus_PC PrepareMsg;
 				PrepareMsg = user.at(j);
+				strcpy(PrepareMsg.MsgHeader, "userData");
+				PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
 
-				// 참고 : send(cs[0], (char*)&GameMessage, sizeof(GameMessage) + 1, 0);
 				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{
-					user.at(i).FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
+					user[i].FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
 				}
 				else
 				{
-					user.at(i).FailCnt += 1;		// 전송 실패 카운트를 올린다.
+					user[i].FailCnt += 1;		// 전송 실패 카운트를 올린다.
 				}
 				
 			}
@@ -365,11 +387,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			if (user.at(i).FailCnt > Tryout)
 			{
-				/*
-				string message;
-				message += "disconnect ";
-				message += to_string(user.at(i).ID);
-				*/
+				
 				CharacterStatus_PC disconnectMsg;
 				disconnectMsg.ID = user.at(i).ID;
 				strcpy(disconnectMsg.MsgHeader, "disconnect");
@@ -386,16 +404,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				
 			}
 		}
-		InvalidateRgn(hWnd, NULL, FALSE);
+		InvalidateRgn(hWnd, NULL, TRUE);
 		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다.
-			CHAR msg[64];
+			char msg[64];
 			sprintf(msg, "Connected %d Clients", playerCnt);
-			TextOut(hdc, 10, 10, msg, strlen(msg));
+			TextOutA(hdc, 10, 10, msg, strlen(msg));
+			if (user.size() > 0)
+			{
+				for (int i = 0; i < user.size(); i++)
+				{
+					string tmp;
+					tmp.append("user #");
+					char sTmp[12];
+					tmp.append(itoa((int)user[i].ID, sTmp, 10));
+					tmp.append(" id : ");
+					tmp.append(user[i].PlayerName);
+					TextOut(hdc, 10, 10 + (i+1) * 20 , tmp.c_str(), strlen(tmp.c_str()));
+				}
+			}
+
             EndPaint(hWnd, &ps);
         }
         break;

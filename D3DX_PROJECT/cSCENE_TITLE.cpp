@@ -70,7 +70,7 @@ void cSCENE_TITLE::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 			else if (g_pGameInfoManager->namelength < 10)g_pGameInfoManager->userName[g_pGameInfoManager->namelength++] = wParam;
 			g_pGameInfoManager->userName[g_pGameInfoManager->namelength] = NULL;
 
-			m_pNameInput->Settext(g_pGameInfoManager->userName);
+			m_pNameInput->Settext(g_pGameInfoManager->userName);			
 		}
 		break;
 
@@ -270,8 +270,12 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
 	{
+		g_pGameInfoManager->SetMyName();
 		g_pGameInfoManager->sceneChangeTriger = TRUE;
 		g_pGameInfoManager->nextScene = 1;
+		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
+		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
+
 	}
 	else if (pSender->GetTag() == E_BUTTON_CANCLE)
 	{
