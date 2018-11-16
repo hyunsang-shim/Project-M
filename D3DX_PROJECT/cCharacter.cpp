@@ -50,6 +50,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 		beforeAnimNum = CurrentAnimNum;
 
+		g_pGameInfoManager->MaxBulletCount = 30;
+
 		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
 	}
 	else
@@ -83,7 +85,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 		else
 		{
-			if (GetKeyState(VK_LBUTTON) & 0x8000)
+			if (GetKeyState(VK_LBUTTON) & 0x8000 && g_pGameInfoManager->MaxBulletCount != 0)
 			{
 				CurrentAnimNum = 9;
 			}

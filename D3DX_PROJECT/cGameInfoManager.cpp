@@ -8,10 +8,10 @@ cGameInfoManager::cGameInfoManager() :
 	mouseMoveX(0),
 	mouseMoveY(0),
 	canGo(1),
-	m_pMap(NULL)
+	m_pMap(NULL),
+	MaxBulletCount(30)
 {
 }
-
 
 cGameInfoManager::~cGameInfoManager()
 {

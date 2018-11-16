@@ -17,6 +17,6 @@ public:
 
 	void setup_Map(string filePath);
 
-
+	int MaxBulletCount;
 };
 

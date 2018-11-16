@@ -13,12 +13,17 @@ class cUIObject;
 class cCrossHairPicking;
 class cAI;
 
+#define MAXBulletCreateCount 5
+
 struct Bullet
 {
 	ID3DXMesh *m_pBulletMesh;
 	D3DXVECTOR3 m_vBulletCreatePos;
 	float Radius = 0.2f;
 	D3DMATERIAL9 m_stMtlCircle;
+	D3DXVECTOR3 BulletDirection;
+	D3DXMATRIXA16 matT;
+	int BulletLiveTime;
 };
 
 class cSCENE_INGAME
@@ -86,9 +91,10 @@ public:
 private:
 	cCrossHairPicking *m_pCrossHairPicking;
 	D3DXVECTOR3 m_vCrossHairHitPos;
-	D3DXVECTOR3 BulletDirection;
 	BOOL pHit = false;
-	Bullet m_Bullet;
+	vector<Bullet> m_Bullet;
+	int BulletCreateTime;
+	int BulletCreateCount;
 public:
 	void Mesh_Render();
 // << :

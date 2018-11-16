@@ -25,9 +25,12 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pXmodel(NULL),
 	m_pSKY(NULL),
 	m_pMyCharacter(NULL),
-	m_pAI(NULL)
+	m_pAI(NULL),
+	BulletCreateCount(0),
+	BulletCreateTime(MAXBulletCreateCount)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
+	m_Bullet.resize(30);
 }
 
 
@@ -178,24 +181,49 @@ void cSCENE_INGAME::Update()
 
 	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
-		m_pCrossHairPicking->CalcPosition();
-
-		float dist;
-		D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
-
-		if (pHit)
+		if (g_pGameInfoManager->MaxBulletCount != 0)
 		{
-			m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+			m_pCrossHairPicking->CalcPosition();
 
-			BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+			float dist;
+			D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
-			D3DXCreateSphere(g_pDevice, m_Bullet.Radius, 20, 10, &m_Bullet.m_pBulletMesh, NULL);
-			m_Bullet.m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
-			m_Bullet.m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			m_Bullet.m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			m_Bullet.m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+
+			if (pHit && BulletCreateTime == MAXBulletCreateCount)
+			{
+				m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+
+				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+
+				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
+				m_Bullet[BulletCreateCount].m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+				m_Bullet[BulletCreateCount].BulletLiveTime = 500;
+
+				BulletCreateCount++;
+
+				BulletCreateTime = 0;
+
+				g_pGameInfoManager->MaxBulletCount--;
+			}
+			else
+			{
+				if (BulletCreateTime < MAXBulletCreateCount)
+				{
+					BulletCreateTime++;
+				}
+			}
+		}
+		else
+		{
+			BulletCreateCount = 0;
+			m_Bullet.clear();
+			m_Bullet.resize(30);
 		}
 	}
+
 
 	if (g_pNetworkManager->GetNetStatus())
 		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
@@ -251,7 +279,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		static int n = 0;
 		//m_pSkinnedMesh->SetAnimationIndex(n++);
 		//m_pMyCharacter->SetAnimationIndexBlend(n++);
-		m_pAI->SetAnimationIndexBlend(n++);
+		//m_pAI->SetAnimationIndexBlend(n++);
 		break;
 		}
 	 
@@ -498,18 +526,21 @@ void cSCENE_INGAME::Render_Particle()
 
 void cSCENE_INGAME::Mesh_Render()
 {
-	D3DXMATRIXA16 matWorld, matS, matR, matT;
-	D3DXMatrixIdentity(&matS);
-	D3DXMatrixIdentity(&matR);
-	D3DXMatrixIdentity(&matT);
+	for (int i = 0; i < BulletCreateCount; i++)
+	{
+		D3DXMatrixTranslation(&m_Bullet[i].matT, m_Bullet[i].m_vBulletCreatePos.x, m_Bullet[i].m_vBulletCreatePos.y, m_Bullet[i].m_vBulletCreatePos.z);
+		g_pDevice->SetTransform(D3DTS_WORLD, &m_Bullet[i].matT);
+		g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
+		m_Bullet[i].m_pBulletMesh->DrawSubset(0);
 
-	matWorld = matS * matR;
+		m_Bullet[i].m_vBulletCreatePos += m_Bullet[i].BulletDirection;
 
-	D3DXMatrixTranslation(&matT, m_Bullet.m_vBulletCreatePos.x, m_Bullet.m_vBulletCreatePos.y, m_Bullet.m_vBulletCreatePos.z);
-	matWorld *= matT;
-	g_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
-	g_pDevice->SetMaterial(&m_Bullet.m_stMtlCircle);
-	m_Bullet.m_pBulletMesh->DrawSubset(0);
+		m_Bullet[i].BulletLiveTime--;
 
-	m_Bullet.m_vBulletCreatePos += BulletDirection / 200;
+		if (m_Bullet[i].BulletLiveTime == 0)
+		{
+			m_Bullet.erase(m_Bullet.begin() + i);
+			BulletCreateCount--;
+		}
+	}
 }
