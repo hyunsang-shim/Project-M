@@ -26,7 +26,7 @@ public:
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	CharacterStatus_PC GatherDataToSend();
+	CharacterStatus_PC sendData();
 	D3DXVECTOR3 GetMyHeadPos();	// 머리 좌표 구하기 (하이트 맵)
 
 };
