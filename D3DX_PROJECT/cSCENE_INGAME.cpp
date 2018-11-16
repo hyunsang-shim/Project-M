@@ -88,7 +88,7 @@ void cSCENE_INGAME::Setup()
 	// 하이트맵 셋팅
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
-	g_pGameInfoManager->setup_Map("test_map_obj.obj");
+	g_pGameInfoManager->setup_Map("map", "Rialto.obj");
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;

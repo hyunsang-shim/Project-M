@@ -78,6 +78,75 @@ void cNewObject::Setup(string filePath)
 	m_pOBB->Setup(this);
 }
 
+void cNewObject::Setup(char* szFolder, char* szFilename)
+{
+
+	string sFullPath(szFolder);
+	sFullPath += string("/") + string(szFilename);
+
+
+	m_mtlColor.Emissive.r = 0.0f;
+	m_mtlColor.Emissive.g = 0.0f;
+	m_mtlColor.Emissive.b = 0.0f;
+	m_mtlColor.Emissive.a = 1.0f;
+	//FileLoad("box.obj");
+
+	char * writable = new char[sFullPath.size() + 1];
+	std::copy(sFullPath.begin(), sFullPath.end(), writable);
+	writable[sFullPath.size()] = '\0';
+
+	FileLoad(writable);
+
+	delete[] writable;
+
+	D3DXCreateMeshFVF(
+		m_vecVertex.size() / 3,
+		m_vecVertex.size(),
+		D3DXMESH_MANAGED,
+		ST_PNT_VERTEX::FVF,
+		g_pDevice,
+		&m_pMesh
+	);
+
+	ST_PNT_VERTEX* vertex;
+	m_pMesh->LockVertexBuffer(0, (void**)&vertex);
+	memcpy(vertex, &m_vecVertex[0], m_vecVertex.size() * sizeof(ST_PNT_VERTEX));
+	m_pMesh->UnlockVertexBuffer();
+
+	D3DXVECTOR3 vMin(0, 0, 0), vMax(0, 0, 0);
+
+	LPVOID pV = NULL;
+	m_pMesh->LockVertexBuffer(0, &pV);
+	D3DXComputeBoundingBox((D3DXVECTOR3*)pV,
+		m_pMesh->GetNumVertices(),
+		D3DXGetFVFVertexSize(m_pMesh->GetFVF()),
+		&vMin,
+		&vMax);
+
+	D3DXVec3Minimize(&m_vMin, &m_vMin, &vMin);
+	D3DXVec3Maximize(&m_vMax, &m_vMax, &vMax);
+
+	m_pMesh->UnlockVertexBuffer();
+
+
+	WORD* Index = 0;
+	m_pMesh->LockIndexBuffer(0, (void**)&Index);
+	for (int i = 0; i < m_vecVertex.size(); i++)
+	{
+		Index[i] = i;
+	}
+	m_pMesh->UnlockIndexBuffer();
+
+
+	DWORD* Attribute = 0;
+	m_pMesh->LockAttributeBuffer(0, &Attribute);
+	memcpy(Attribute, &m_vecAttribute[0], m_vecAttribute.size() * sizeof(DWORD));
+	m_pMesh->UnlockAttributeBuffer();
+
+	m_pOBB = new cOBB();
+	m_pOBB->Setup(this);
+}
+
 void cNewObject::Updata()
 {
 	if (m_pOBB)
@@ -136,7 +205,14 @@ void cNewObject::FileLoad(char * FileName)
 			char mltBuf[1024];
 
 			sscanf_s(buf, "%*s %s", mltBuf, 1024);
-			ProcessMtl(mltBuf);
+			string sFullPath = FileName;
+			sFullPath.erase(sFullPath.find_last_of("/") + 1, sFullPath.length() - sFullPath.find_last_of("/"));
+			sFullPath.append(mltBuf);
+			char * writable = new char[sFullPath.size() + 1];
+			std::copy(sFullPath.begin(), sFullPath.end(), writable);
+			writable[sFullPath.size()] = '\0';
+
+			ProcessMtl(writable);
 		}
 		else if (StartWith(buf, "vt"))
 		{

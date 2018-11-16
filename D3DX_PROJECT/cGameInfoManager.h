@@ -24,7 +24,7 @@ public:
 
 	cNewObject* m_pMap;
 
-	void setup_Map(string filePath);
+	void setup_Map(char* Path, char* Filename);
 
 	int MaxBulletCount;
 	BOOL sceneChangeTriger;

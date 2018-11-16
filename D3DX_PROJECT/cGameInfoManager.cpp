@@ -37,11 +37,11 @@ int cGameInfoManager::getScreenYPosByPer(float y)
 	return  (float)GameScreenSizeY / 100.0f*(float)y;
 }
 
-void cGameInfoManager::setup_Map(string filePath)
+void cGameInfoManager::setup_Map(char* Path, char* Filename)
 {
 	SAFE_DELETE(m_pMap);
 	m_pMap = new cNewObject;
-	m_pMap->Setup("test_map_obj.obj");
+	m_pMap->Setup(Path, Filename);
 
 }
 
