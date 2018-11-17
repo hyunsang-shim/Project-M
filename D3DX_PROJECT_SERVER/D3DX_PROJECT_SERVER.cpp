@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <winsock.h>
+#include <winsock2.h>
 #include <vector>
 #include <string>
 #include <d3dx9.h>
@@ -284,6 +284,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			strcpy(user.back().MsgHeader, "welcome");
 			send(user.back().s, (char*)&user.back(), sizeof(CharacterStatus_PC) + 1, 0);
+			strcpy(user.back().MsgHeader, "TitleScene");
 //			userMsgs.resize(user.size());			//
 			InvalidateRgn(hWnd, NULL, FALSE);		//
 			
@@ -426,7 +427,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				
 			}
 		}
-		InvalidateRgn(hWnd, NULL, TRUE);
 		break;
     case WM_PAINT:
         {

@@ -124,7 +124,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
 	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
-		0, 0, 1920, 1080, GetDesktopWindow(), nullptr, hInstance, nullptr);
+		0, 0, 1366, 768, GetDesktopWindow(), nullptr, hInstance, nullptr);
 
 	if (!hWnd)
 	{

@@ -21,7 +21,10 @@ cNetworkManager::~cNetworkManager()
 
 bool cNetworkManager::SetupNetwork(HWND hWnd)
 {
-	WSAStartup(MAKEWORD(2, 2), &wsadata);
+	if (WSAStartup(MAKEWORD(2, 2), &wsadata) != 0)
+	{
+		MessageBox(g_hWnd, "WSAstartup Error!", "WSAstartup Error!", 0);
+	}
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
@@ -57,6 +60,7 @@ void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 		
 		strcpy(strPC->MsgHeader, MsgHeader);	
 		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
+
 		if (strcmp(MsgHeader, "join") == 0)
 		{
 			strcpy(strPC->MsgHeader, "userData");
@@ -133,7 +137,7 @@ void cNetworkManager::recvData()
 		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
 		{
 			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
-			tmp->s = s;
+			//tmp->s = s;
 			g_pGameInfoManager->UpdateMyInfo(*tmp);
 			g_pNetworkManager->SendData("TitleScene", g_pGameInfoManager->GetMyInfo());
 		}
