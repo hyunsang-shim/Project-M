@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "cNetworkManager.h"
 
+// Server IP Addresses.
+// should activated only one at once;
+//#define SERVER_ADDR "165.246.163.66"	// 은호씨
+//#define SERVER_ADDR "165.246.163.71"		// 심현상
+//#define SERVER_ADDR "192.168.0.9"	// 심현상 (노트북/공유기)
+#define SERVER_ADDR "192.168.0.3"		// 심현상 (집)
+
 
 cNetworkManager::cNetworkManager()
 {
@@ -28,10 +35,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
-	// addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.66");	// 은호씨
-	addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71"); // 심현상
-	//addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9"); // 심현상(노트북/공유기)
-	// addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.7"); // 심현상(집)
+	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 	 	
 	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// 성공하면 0 리턴, 아니면 에러 리턴.
 	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ);
@@ -137,7 +141,7 @@ void cNetworkManager::recvData()
 		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
 		{
 			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
-			//tmp->s = s;
+			tmp->s = s;
 			g_pGameInfoManager->UpdateMyInfo(*tmp);
 			g_pNetworkManager->SendData("TitleScene", g_pGameInfoManager->GetMyInfo());
 		}

@@ -1,5 +1,3 @@
-// D3DX_PROJECT_SERVER.cpp : 응용 프로그램에 대한 진입점을 정의합니다.
-//
 
 #include "stdafx.h"
 #include "D3DX_PROJECT_SERVER.h"
@@ -10,12 +8,31 @@
 #include <vector>
 #include <string>
 #include <d3dx9.h>
+#include <process.h>
+#include <time.h>
+
+
+#pragma comment(lib,"ws2_32.lib")
+
+#define WM_ASYNC WM_USER+2
+#define Tryout 200
+#define MAX_USER 10
+
+// Server IP Addresses.
+// should activated only one at once;
+//#define SERVER_ADDR "165.246.163.66"	// 은호씨
+//#define SERVER_ADDR "165.246.163.71"		// 심현상
+//#define SERVER_ADDR "192.168.0.9"	// 심현상 (노트북/공유기)
+#define SERVER_ADDR "192.168.0.3"	// 심현상 (집)
 
 using namespace std;
-#pragma comment(lib,"ws2_32.lib")
-#define WM_ASYNC WM_USER+2
-using namespace std;
-#define Tryout 200
+
+// global variables.
+HWND			g_hWnd;
+int				i;
+
+
+
 
 enum character_status {
 	Stand,
@@ -83,27 +100,23 @@ struct CharacterStatus_NPC
 };
 
 
-//bool StartWith(char * FindStr, char * SearchStr)
-//{
-//	char* temp = strstr(FindStr, SearchStr);
-//	if (temp == FindStr)
-//		return true;
-//	return false;
-//}
-
-
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
-HINSTANCE hInst;                                // 현재 인스턴스입니다.
-WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
-WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+HINSTANCE					hInst;                              // 현재 인스턴스입니다.
+WCHAR						szTitle[MAX_LOADSTRING];            // 제목 표시줄 텍스트입니다.
+WCHAR						szWindowClass[MAX_LOADSTRING];      // 기본 창 클래스 이름입니다.
+static						HANDLE hThread[MAX_USER];			// handles array for Thread 
+HANDLE						hEvent;								// Handle for creating thread
+CRITICAL_SECTION			crit;								// Critical Section for threads
+vector<CharacterStatus_PC>	g_users;							// 유저 정보 구조체
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+void				threadUpdateUserInfo(void *user);
+void CALLBACK		TimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -164,7 +177,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_D3DX_PROJECT_SERVER));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_D3DX_PROJECT_SERVER);
+	wcex.lpszMenuName = nullptr;
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -185,19 +198,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
+   if (!g_hWnd)
    {
       return FALSE;
    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+   ShowWindow(g_hWnd, nCmdShow);
+   UpdateWindow(g_hWnd);
 
    return TRUE;
 }
+
+
 
 //
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
@@ -214,7 +229,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	static WSADATA wsadata;
 	static SOCKET p1, p2;
-	static vector<CharacterStatus_PC> user;
 	static SOCKET s;
 	static int arr[20][20] = { 0 };
 	static TCHAR msg[200];
@@ -224,139 +238,85 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	char* buffer;
 	static bool turn;
 	static WORD playerCnt;
-//	static vector<string> userMsgs;		//유저 상태 메시지
+	
+	
 
-	CharacterStatus_PC TmpUser;
-
-	static int userNum;
+	static int userNum = 0;
 	buffer = (char*)malloc(sizeof(CharacterStatus_NPC) + 1);
-	ZeroMemory(buffer, 0, sizeof(CharacterStatus_PC) + 1);
+	ZeroMemory(buffer, sizeof(CharacterStatus_PC) + 1);
 
     switch (message)
     {
 	case WM_CREATE:
-		SetTimer(hWnd, 123, 25, NULL);
-
+		SetTimer(hWnd, 123, 100, NULL);
+		InitializeCriticalSection(&crit);
 		playerCnt = 0;
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		s = socket(AF_INET, SOCK_STREAM, 0);
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
-		// addr.sin_addr.s_addr = inet_addr("165.246.163.66");	// 은호씨
-		addr.sin_addr.S_un.S_addr = inet_addr("165.246.163.71");		// 심현상
-		//addr.sin_addr.S_un.S_addr = inet_addr("192.168.0.9");	// 심현상 (노트북/공유기)
-		// addr.sin_addr.s_addr = inet_addr("192.168.0.7");		// 심현상 (집)
-
+		addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 
 		// Network Bind Test
-		if (bind(s, (LPSOCKADDR)&addr, sizeof(addr)))
+		// Success ==0 / FAIL = -1
+		if (bind(s, (LPSOCKADDR)&addr, sizeof(addr)) != 0)
 		{
 			MessageBox(NULL, _T("Binding Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
-
-
+		
 		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_ACCEPT | FD_CLOSE);
-
-
+		
 		//
 		// Check Listening
-		if (listen(s, 5) == SOCKET_ERROR)
+		if (listen(s, MAX_USER) == SOCKET_ERROR)
 		{
 			MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
 
-		break;
 
+		break;
 	case WM_ASYNC:
 		switch (lParam)
 		{
 		case FD_ACCEPT:
+		{
+			CharacterStatus_PC TmpUser;
 			size = sizeof(c_addr);
-			user.push_back(TmpUser);
-			user.back().s = accept(s, (LPSOCKADDR)&c_addr, &size);
-			user.back().ID = playerCnt;
-			WSAAsyncSelect(user.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
-			
+			g_users.push_back(TmpUser);
+			g_users.back().s = accept(s, (LPSOCKADDR)&c_addr, &size);
+			g_users.back().ID = playerCnt;
+			WSAAsyncSelect(g_users.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
+
 			// Add Current User into Total User List
 			playerCnt++;
 
-			strcpy(user.back().MsgHeader, "welcome");
-			send(user.back().s, (char*)&user.back(), sizeof(CharacterStatus_PC) + 1, 0);
-			strcpy(user.back().MsgHeader, "TitleScene");
-//			userMsgs.resize(user.size());			//
-			InvalidateRgn(hWnd, NULL, FALSE);		//
-			
+			strcpy(g_users.back().MsgHeader, "welcome");
+			send(g_users.back().s, (char*)&g_users.back(), sizeof(CharacterStatus_PC) + 1, 0);
+			strcpy(g_users.back().MsgHeader, "TitleScene");
+
+		}
 			break;
 		case FD_READ:			
-		{					
-			for (int i = 0; i < user.size(); i++)
-			{
+		{			
+			
 				buffer[sizeof(CharacterStatus_PC)] = NULL;
-				int bufferLen = recv(user[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-				buffer[bufferLen] = NULL;
+				msgLen = recv(g_users[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+				buffer[msgLen] = NULL;
 				CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
 
-			//	if (user[i].s == recieved->s)
-				{
-					if (strcmp(recieved->MsgHeader, "userData") == 0)
-					{
-						user[i].CurHP = recieved->CurHP;
-						user[i].MaxHP = recieved->MaxHP;
-						user[i].Dir = recieved->Dir;
-						user[i].Status = recieved->Status;
-
-						printf("recieved : user #%d's userData\n", user[i].ID);
-					}
-					else if (strcmp(recieved->MsgHeader, "join") == 0)
-					{
-						char tmp[16];
-						string s;
-						itoa(recieved->ID, tmp, 10);
-						s = "User # (";
-						s.append(tmp);
-						s.append(recieved->PlayerName);
-						s.append(") Joinned the Game");
-						MessageBox(NULL, s.c_str(), _T("New User!"), MB_OK);
-
-						user[i].CurHP = recieved->CurHP;
-						user[i].MaxHP = recieved->MaxHP;
-						user[i].Dir = recieved->Dir;
-						user[i].Status = recieved->Status;
-						strcpy_s(user[i].PlayerName, recieved->PlayerName);
-						printf("recieved : user #%d(%s) Has joined in the Game.\n", user[i].ID, user[i].PlayerName);
-					}
-					else if (strcmp(recieved->MsgHeader, "disconnect") == 0)
-					{
-						for (int i = 0; i < user.size(); i++)
-						{
-							if (user[i].ID == recieved->ID)
-							{
-								user.erase(user.begin() + i);
-								i--;
-								break;
-							}
-						}
-
-						InvalidateRgn(hWnd, NULL, TRUE);
-					}
-					else if (strcmp(recieved->MsgHeader, "TitleScene") == 0)
-					{
-						strcmp(user[i].MsgHeader, "TitleScene");
-					}
-				}
-			}
+				hThread[i] = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall *)(void *))threadUpdateUserInfo, (void *)&recieved, 0, NULL);
 		}
 			break;
 		case FD_CLOSE:
-			for (int i = 0; i < user.size(); i++)
+			for (int i = 0; i < g_users.size(); i++)
 			{
-				if (user.at(i).s == (SOCKET)wParam)
+				if (g_users.at(i).s == (SOCKET)wParam)
 				{					
-					user.push_back(user[i]);
-					user[i] = user[user.size() - 2];
-					user.pop_back();
+					g_users.push_back(g_users[i]);
+					g_users[i] = g_users[g_users.size() - 2];
+					g_users.pop_back();
 
 //					userMsgs[i].swap(userMsgs[user.size()-1]);
 //					userMsgs.erase(userMsgs.end());
@@ -367,20 +327,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		break;
 	case WM_TIMER:
-		for (int i = 0; i<user.size(); i++)
+		for (int i = 0; i<g_users.size(); i++)
 		{
-			for (int j = 0; j < user.size(); j++)
+			for (int j = 0; j < g_users.size(); j++)
 			{			
 				CharacterStatus_PC PrepareMsg;
-				PrepareMsg = user.at(j);
+				PrepareMsg = g_users.at(j);
 
-				if (strcmp(user[i].MsgHeader, "welcome") == 0)
+				if (strcmp(g_users[i].MsgHeader, "welcome") == 0)
 				{
 					strcpy(PrepareMsg.MsgHeader, "welcome");
 					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
 
 				}
-				else if (strcmp(user[i].MsgHeader, "TitleScene") == 0)
+				else if (strcmp(g_users[i].MsgHeader, "TitleScene") == 0)
 				{
 					strcpy(PrepareMsg.MsgHeader, "TitleScene");
 					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
@@ -394,36 +354,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 
 
-				if (send(user.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
+				if (send(g_users.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
 				{
-					user[i].FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
+					g_users[i].FailCnt = 0;		// 전송 성공하면 접종 카운트를 초기화 한다.
 				}
 				else
 				{
-					user[i].FailCnt += 1;		// 전송 실패 카운트를 올린다.
+					g_users[i].FailCnt += 1;		// 전송 실패 카운트를 올린다.
 				}
 				
 			}
 		}
 
-		for (int i = 0; i < user.size(); i++)
+		for (int i = 0; i < g_users.size(); i++)
 		{
-			if (user.at(i).FailCnt > Tryout)
+			if (g_users.at(i).FailCnt > Tryout)
 			{
 				
 				CharacterStatus_PC disconnectMsg;
-				disconnectMsg.ID = user.at(i).ID;
+				disconnectMsg.ID = g_users.at(i).ID;
 				strcpy(disconnectMsg.MsgHeader, "disconnect");
 				disconnectMsg.MsgHeader[strlen(disconnectMsg.MsgHeader)] = '\0';
 
 			//	strcpy(buffer, message.c_str());
-				for (int j = 0; j < user.size(); j++)
+				for (int j = 0; j < g_users.size(); j++)
 				{
-					send(user.at(j).s, (char*)&disconnectMsg, sizeof(CharacterStatus_PC) + 1, 0);
+					send(g_users.at(j).s, (char*)&disconnectMsg, sizeof(CharacterStatus_PC) + 1, 0);
 				}
-				user.erase(user.begin() + i);
+				g_users.erase(g_users.begin() + i);
 				i--;
-				playerCnt = user.size();
+				playerCnt = g_users.size();
 				
 			}
 		}
@@ -436,21 +396,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			char msg[64];
 			sprintf(msg, "Connected %d Clients", playerCnt);
 			TextOutA(hdc, 10, 10, msg, strlen(msg));
-			if (user.size() > 0)
+			if (g_users.size() > 0)
 			{
-				for (int i = 0; i < user.size(); i++)
+				for (int i = 0; i < g_users.size(); i++)
 				{
 					string tmp;
 					tmp.append("user #");
 					char sTmp[12];
-					tmp.append(itoa((int)user[i].ID, sTmp, 10));
+					tmp.append(itoa((int)g_users[i].ID, sTmp, 10));
 					tmp.append(" id : ");
-					tmp.append(user[i].PlayerName);
+					tmp.append(g_users[i].PlayerName);
 					TextOut(hdc, 10, 10 + (i+1) * 20 , tmp.c_str(), strlen(tmp.c_str()));
 				}
 			}
 
             EndPaint(hWnd, &ps);
+			DeleteObject(hdc);			
         }
         break;
     case WM_DESTROY:
@@ -464,22 +425,65 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// 정보 대화 상자의 메시지 처리기입니다.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+// Thread
+void threadUpdateUserInfo(void *strUser)
 {
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
+	static CharacterStatus_PC TmpUser = *((CharacterStatus_PC*)&strUser);
 
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
+	int idx = TmpUser.ID;
+	EnterCriticalSection(&crit);
+	// do something here
+	if (strcmp(TmpUser.MsgHeader, "userData") == 0)
+	{
+		g_users[idx].CurHP = TmpUser.CurHP;
+		g_users[idx].MaxHP = TmpUser.MaxHP;
+		g_users[idx].Dir = TmpUser.Dir;
+		g_users[idx].Status = TmpUser.Status;
+
+		printf("recieved : user #%d's userData\n", g_users[idx].ID);
+	}
+	else if (strcmp(TmpUser.MsgHeader, "join") == 0)
+	{
+		char tmp[16];
+		string s;
+		itoa(TmpUser.ID, tmp, 10);
+		s = "User # (";
+		s.append(tmp);
+		s.append(TmpUser.PlayerName);
+		s.append(") Joinned the Game");
+		MessageBox(NULL, s.c_str(), _T("New User!"), MB_OK);
+
+		g_users[idx].CurHP = TmpUser.CurHP;
+		g_users[idx].MaxHP = TmpUser.MaxHP;
+		g_users[idx].Dir = TmpUser.Dir;
+		g_users[idx].Status = TmpUser.Status;
+		strcpy_s(g_users[idx].PlayerName, TmpUser.PlayerName);
+		printf("recieved : user #%d(%s) Has joined in the Game.\n", g_users[idx].ID, g_users[idx].PlayerName);
+	}
+	else if (strcmp(TmpUser.MsgHeader, "disconnect") == 0)
+	{
+		for (int i = 0; i < g_users.size(); i++)
+		{
+			if (g_users[i].ID == TmpUser.ID)
+			{
+				g_users.erase(g_users.begin() + i);
+				i--;
+				break;
+			}
+		}
+
+		InvalidateRgn(g_hWnd, NULL, TRUE);
+	}
+	else if (strcmp(TmpUser.MsgHeader, "TitleScene") == 0)
+	{
+		strcmp(g_users[i].MsgHeader, "TitleScene");
+	}
+	LeaveCriticalSection(&crit);
+
+	return;
+}
+
+void CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
+{
+	InvalidateRgn(hWnd, NULL, FALSE);
 }
