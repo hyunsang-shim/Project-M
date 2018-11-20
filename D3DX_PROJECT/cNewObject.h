@@ -7,6 +7,14 @@ struct MLT_GROUP
 	char c[1024];
 	D3DMATERIAL9 m_mtlColor;
 	LPDIRECT3DTEXTURE9 m_pTexture;
+	bool operator==(const char value[])
+	{
+		if (strcmp(value, c) == 0)
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 class cNewObject
@@ -19,8 +27,8 @@ public:
 	void Setup(char* Path, char* Filename);
 	void Updata();
 	void Render();
-	void FileLoad(char* FileName);
-	void ProcessMtl(char* FileName);
+	void FileLoad(char* szFolder, char* szFile);
+	void ProcessMtl(char* szFolder, char* szFile);
 	bool StartWith(char* FindStr, char* SearchStr);
 	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
 	cOBB * GetOBB();
@@ -29,6 +37,7 @@ public:
 
 private:
 	vector<MLT_GROUP> m_vecMLT;
+	map<string, DWORD> m_MtlNameComp;
 	vector<ST_PNT_VERTEX> m_vecVertex;
 	vector<D3DXVECTOR3> m_vecPoint;
 	vector<D3DXVECTOR2> m_vecTexture;

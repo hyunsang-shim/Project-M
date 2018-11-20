@@ -37,7 +37,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pMyCharacter(NULL),
 	m_pAI(NULL),
 	BulletCreateCount(0),
-	BulletCreateTime(MAXBulletCreateCount)
+	BulletCreateTime(MAXBulletCreateCount),
+	load(FALSE)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -60,7 +61,7 @@ void cSCENE_INGAME::Setup()
 {
 	m_pCrossHairPicking = new cCrossHairPicking;
 
-
+	
 
 	//카메라 셋팅
 	m_pCamera = new cCamera();
@@ -76,25 +77,28 @@ void cSCENE_INGAME::Setup()
 	ZeroMemory(&DirectLight, sizeof(D3DLIGHT9));
 	DirectLight = InitDirectionalLight(&dir, &c);
 	g_pDevice->SetLight(0, &DirectLight);
-	g_pDevice->SetLight(1, &DirectLight);
-	g_pDevice->SetLight(2, &DirectLight);
-	g_pDevice->SetLight(3, &DirectLight);
+	//g_pDevice->SetLight(1, &DirectLight);
+	//g_pDevice->SetLight(2, &DirectLight);
+	//g_pDevice->SetLight(3, &DirectLight);
 	g_pDevice->LightEnable(0, TRUE);
-	g_pDevice->LightEnable(1, TRUE);
-	g_pDevice->LightEnable(2, TRUE);
-	g_pDevice->LightEnable(3, TRUE);
+	//g_pDevice->LightEnable(1, TRUE);
+	//g_pDevice->LightEnable(2, TRUE);
+	//g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// 하이트맵 셋팅
 	//m_pMap = new cHeightMap();
 	//m_pMap->Setup("map/", "HeightMap.raw", "terrain.jpg", 1);
-	g_pGameInfoManager->setup_Map("map", "Rialto.obj");
+
 
 	//테스트 오브젝트 셋팅
 	m_pObject = new cNewObject;
-	m_pObject->Setup("box.obj");
+	m_pObject->Setup("map", "box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
+
+	g_pGameInfoManager->setup_Map("map", "rialto_small.obj");
+
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
@@ -126,6 +130,8 @@ void cSCENE_INGAME::Setup()
 	m_pAI->SetAIController(pAI_Controller);
 
 	setupUI();
+
+	load = TRUE;
 }
 
 void cSCENE_INGAME::Update()

@@ -128,7 +128,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			m_vPosition = m_vBeforePosition;
 		else if (y - m_vPosition.y > 0.7)
 		{
-
+		
 		}
 		else
 		{

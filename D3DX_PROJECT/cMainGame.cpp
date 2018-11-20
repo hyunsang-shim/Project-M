@@ -46,7 +46,8 @@ void cMainGame::Update()
 		m_pScene_Title->Update();
 		break;
 	case 1:
-		m_pScene_Ingame->Update();
+		if (m_pScene_Ingame->load)
+			m_pScene_Ingame->Update();
 		break;
 	case 3:
 		m_pScene_Result->Update();
@@ -70,7 +71,8 @@ void cMainGame::Render()
 		m_pScene_Title->Render();
 		break;
 	case 1:
-		m_pScene_Ingame->Render();
+		if (m_pScene_Ingame->load)
+			m_pScene_Ingame->Render();
 		break;
 	case 3:
 		m_pScene_Result->Render();

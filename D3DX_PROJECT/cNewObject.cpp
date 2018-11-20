@@ -26,7 +26,7 @@ void cNewObject::Setup(string filePath)
 	std::copy(filePath.begin(), filePath.end(), writable);
 	writable[filePath.size()] = '\0';
 
-	FileLoad(writable);
+	FileLoad(NULL, writable);
 
 	delete[] writable;
 
@@ -81,8 +81,8 @@ void cNewObject::Setup(string filePath)
 void cNewObject::Setup(char* szFolder, char* szFilename)
 {
 
-	string sFullPath(szFolder);
-	sFullPath += string("/") + string(szFilename);
+	/*string sFullPath(szFolder);
+	sFullPath += string("/") + string(szFilename);*/
 
 
 	m_mtlColor.Emissive.r = 0.0f;
@@ -91,18 +91,18 @@ void cNewObject::Setup(char* szFolder, char* szFilename)
 	m_mtlColor.Emissive.a = 1.0f;
 	//FileLoad("box.obj");
 
-	char * writable = new char[sFullPath.size() + 1];
+	/*char * writable = new char[sFullPath.size() + 1];
 	std::copy(sFullPath.begin(), sFullPath.end(), writable);
-	writable[sFullPath.size()] = '\0';
+	writable[sFullPath.size()] = '\0';*/
 
-	FileLoad(writable);
+	FileLoad(szFolder, szFilename);
 
-	delete[] writable;
+	//delete[] writable;
 
 	D3DXCreateMeshFVF(
-		m_vecVertex.size() / 3,
+		m_vecAttribute.size(),
 		m_vecVertex.size(),
-		D3DXMESH_MANAGED,
+		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		ST_PNT_VERTEX::FVF,
 		g_pDevice,
 		&m_pMesh
@@ -129,7 +129,7 @@ void cNewObject::Setup(char* szFolder, char* szFilename)
 	m_pMesh->UnlockVertexBuffer();
 
 
-	WORD* Index = 0;
+	DWORD* Index = 0;
 	m_pMesh->LockIndexBuffer(0, (void**)&Index);
 	for (int i = 0; i < m_vecVertex.size(); i++)
 	{
@@ -142,6 +142,16 @@ void cNewObject::Setup(char* szFolder, char* szFilename)
 	m_pMesh->LockAttributeBuffer(0, &Attribute);
 	memcpy(Attribute, &m_vecAttribute[0], m_vecAttribute.size() * sizeof(DWORD));
 	m_pMesh->UnlockAttributeBuffer();
+
+	/*std::vector<DWORD> vecAdj(m_vecVertex.size());
+	m_pMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+
+	m_pMesh->OptimizeInplace(
+		D3DXMESHOPT_ATTRSORT |
+		D3DXMESHOPT_COMPACT |
+		D3DXMESHOPT_VERTEXCACHE,
+		&vecAdj[0],
+		0, 0, 0);*/
 
 	m_pOBB = new cOBB();
 	m_pOBB->Setup(this);
@@ -178,15 +188,18 @@ void cNewObject::Render()
 	m_pOBB->OBBBox_Render(c);
 }
 
-void cNewObject::FileLoad(char * FileName)
+void cNewObject::FileLoad(char* szFolder, char* szFile)
 {
+	std::string sFullPath(szFolder);
+	sFullPath += (std::string("/") + std::string(szFile));
+
 	char buf[1024];
 
 	char mtbuf[1024];
 
 	FILE* fp;
 
-	fopen_s(&fp, FileName, "r");
+	fopen_s(&fp, sFullPath.c_str(), "r");
 
 	while (!feof(fp))
 	{
@@ -205,14 +218,8 @@ void cNewObject::FileLoad(char * FileName)
 			char mltBuf[1024];
 
 			sscanf_s(buf, "%*s %s", mltBuf, 1024);
-			string sFullPath = FileName;
-			sFullPath.erase(sFullPath.find_last_of("/") + 1, sFullPath.length() - sFullPath.find_last_of("/"));
-			sFullPath.append(mltBuf);
-			char * writable = new char[sFullPath.size() + 1];
-			std::copy(sFullPath.begin(), sFullPath.end(), writable);
-			writable[sFullPath.size()] = '\0';
 
-			ProcessMtl(writable);
+			ProcessMtl(szFolder, mltBuf);
 		}
 		else if (StartWith(buf, "vt"))
 		{
@@ -251,26 +258,24 @@ void cNewObject::FileLoad(char * FileName)
 				m_vecVertex.push_back(v);
 			}
 
-			for (int j = 0; j < m_vecMLT.size(); j++)
-			{
-				if (strcmp(mtbuf, m_vecMLT[j].c) == 0)
-				{
-					m_vecAttribute.push_back(j);
-				}
-			}
+			m_vecAttribute.push_back(m_MtlNameComp[mtbuf]);
 		}
 	}
 	fclose(fp);
 }
 
-void cNewObject::ProcessMtl(char * FileName)
+void cNewObject::ProcessMtl(char* szFolder, char* szFile)
 {
+	std::string sFullPath(szFolder);
+	sFullPath += (std::string("/") + std::string(szFile));
+
 	char buf[1024];
 
 	FILE* fp;
 	MLT_GROUP m;
+	DWORD count = 0;
 
-	fopen_s(&fp, FileName, "r");
+	fopen_s(&fp, sFullPath.c_str(), "r");
 
 	while (!feof(fp))
 	{
@@ -286,11 +291,18 @@ void cNewObject::ProcessMtl(char * FileName)
 
 			sscanf_s(buf, "%*s %s", mltBuf, 1024);
 			strcpy_s(m.c, mltBuf);
+
+			if (find(m_vecMLT.begin(), m_vecMLT.end(), mltBuf) == m_vecMLT.end())
+			{
+				m_MtlNameComp.insert(pair<string, DWORD>(mltBuf, count));
+				count++;
+			}
 		}
 		else if (StartWith(buf, "Ka"))
 		{
 			float r, g, b;
 			sscanf_s(buf, "%*s %f %f %f", &r, &g, &b);
+
 			m_mtlColor.Ambient = D3DXCOLOR(r, g, b, 1.0f);
 		}
 		else if (StartWith(buf, "Kd"))
@@ -316,13 +328,18 @@ void cNewObject::ProcessMtl(char * FileName)
 			char c[1024];
 			sscanf_s(buf, "%*s %s", c, 1024);
 
-			wchar_t wt[1024] = { 0 };
+			sFullPath = std::string(szFolder);
+			sFullPath += (std::string("/") + std::string(c));
+
+			/*wchar_t wt[1024] = { 0 };
 			::MultiByteToWideChar(CP_ACP, NULL, c, -1, wt, strlen(c));
 
-			D3DXCreateTextureFromFileW(g_pDevice, wt, &m_pTexture);
+			D3DXCreateTextureFromFileW(g_pDevice, wt, &m_pTexture);*/
+
+			LPDIRECT3DTEXTURE9 pTexture = g_pTextureManager->GetTexture(sFullPath);
 
 			m.m_mtlColor = m_mtlColor;
-			m.m_pTexture = m_pTexture;
+			m.m_pTexture = pTexture;
 
 			m_vecMLT.push_back(m);
 		}

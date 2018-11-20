@@ -112,5 +112,6 @@ private:
 public:
 	void Mesh_Render();
 // << :
+	BOOL load;
 };
 
