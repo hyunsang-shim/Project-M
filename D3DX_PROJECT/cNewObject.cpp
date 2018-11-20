@@ -143,7 +143,7 @@ void cNewObject::Setup(char* szFolder, char* szFilename)
 	memcpy(Attribute, &m_vecAttribute[0], m_vecAttribute.size() * sizeof(DWORD));
 	m_pMesh->UnlockAttributeBuffer();
 
-	/*std::vector<DWORD> vecAdj(m_vecVertex.size());
+	std::vector<DWORD> vecAdj(m_vecVertex.size());
 	m_pMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
 
 	m_pMesh->OptimizeInplace(
@@ -151,7 +151,7 @@ void cNewObject::Setup(char* szFolder, char* szFilename)
 		D3DXMESHOPT_COMPACT |
 		D3DXMESHOPT_VERTEXCACHE,
 		&vecAdj[0],
-		0, 0, 0);*/
+		0, 0, 0);
 
 	m_pOBB = new cOBB();
 	m_pOBB->Setup(this);
