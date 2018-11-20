@@ -239,3 +239,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+D3DX_PROJECT/D3DX_PROJECT.exe
+D3DX_PROJECT/D3DX_PROJECT_SERVER.exe
