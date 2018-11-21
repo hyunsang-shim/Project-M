@@ -2,121 +2,34 @@
 #include "stdafx.h"
 #include "D3DX_PROJECT_SERVER.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <winsock2.h>
-#include <vector>
-#include <string>
-#include <d3dx9.h>
-#include <process.h>
-#include <time.h>
-
-
-#pragma comment(lib,"ws2_32.lib")
-
-#define WM_ASYNC WM_USER+2
-#define Tryout 200
-#define MAX_USER 10
-
-// Server IP Addresses.
-// should activated only one at once;
-//#define SERVER_ADDR "165.246.163.66"	// ÀºÈ£¾¾
-//#define SERVER_ADDR "165.246.163.71"		// ½ÉÇö»ó
-//#define SERVER_ADDR "192.168.0.9"	// ½ÉÇö»ó (³ëÆ®ºÏ/°øÀ¯±â)
-#define SERVER_ADDR "192.168.0.3"	// ½ÉÇö»ó (Áý)
-
-using namespace std;
-
-// global variables.
-HWND			g_hWnd;
-int				i;
-
-
-
-
-enum character_status {
-	Stand,
-	Stand_Shoot,
-	Run_Front,
-	Run_Front_Shoot,
-	Run_Left,
-	Run_Left_Shoot,
-	Run_Right,
-	Run_Right_Shoot,
-	Run_Back,
-	Run_Back_Shoot,
-	Dash,
-	Reload,
-	Hit,
-	Down,
-	Down_idle,
-	Stand_Up,
-	Dead,
-	NumSize
-};
-
-struct CharacterStatus_PC
-{
-	char			MsgHeader[64];			// ¸Þ½ÃÁö Çì´õ
-	WORD			ID;				// ¼¼¼Ç ID	
-	char			PlayerName[16];	// À¯ÀúÀÌ¸§
-	WORD			Character_No;	// Ä³¸¯ÅÍ Á¾·ù
-	WORD			Attack;			// °ø·Â·Â
-	DWORD			MaxHP;			// ÃÖ´ë Ã¼·Â
-	DWORD			CurHP;			// ÇöÀç Ã¼·Â
-	WORD			HP_Regen;		// Ã¼·Â Àç»ý
-	DWORD			MoveSpeed;		// ÀÌµ¿ ¼Óµµ
-	WORD			Mag_Cnt;		// ÀåÅº ¼ö
-	WORD			Mag_Max;			// ÃÖ´ë ÀåÀü ¼ö
-	DWORD			ShootSpeed;		// ¿¬»ç¼Óµµ
-	WORD			BulletTime;		// ÃÑ¾Ë ¼Óµµ
-	D3DXVECTOR3		CurPos;			// ÇöÀç À§Ä¡°ª
-	float			Dir;				// Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ¹æÇâ
-	WORD			Status;			// Ä³¸¯ÅÍ »óÅÂ
-	int				TargetID;		// °ø°Ý ÇÑ ´ë»ó
-	int				FailCnt;		// Á¢¼Ó ¿©ºÎ
-	SOCKET			s;				// ¼ÒÄÏ
-};
-
-struct CharacterStatus_NPC
-{
-	char			MsgHeader[64];			// ¸Þ½ÃÁö Çì´õ
-	WORD			ID;				// ¼¼¼Ç ID	
-	char			CharacterName[16];	// Ä³¸¯ÅÍ ÀÌ¸§
-	WORD			Character_No;	// Ä³¸¯ÅÍ Á¾·ù
-	WORD			Attack;			// °ø·Â·Â
-	DWORD			MaxHP;			// ÃÖ´ë Ã¼·Â
-	DWORD			CurHP;			// ÇöÀç Ã¼·Â
-	WORD			HP_Regen;		// Ã¼·Â Àç»ý
-	DWORD			MoveSpeed;		// ÀÌµ¿ ¼Óµµ
-	WORD			Mag_Cnt;		// ÀåÅº ¼ö
-	WORD			Mag_Max;		// ÃÖ´ë ÀåÀü ¼ö
-	DWORD			ShootSpeed;		// ¿¬»ç¼Óµµ
-	WORD			BulletTime;		// ÃÑ¾Ë ¼Óµµ
-	D3DXVECTOR3		CurPos;			// ÇöÀç À§Ä¡°ª
-	float			Dir;			// Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ¹æÇâ
-	WORD			Status;			// Ä³¸¯ÅÍ »óÅÂ
-	int				TargetID;		// °ø°Ý ÇÑ ´ë»ó
-};
+// Server Addresses
+// should activated just one.
+//#define SERVER_ADDR "165.246.163.66"	// ï¿½ï¿½ï¿½ï¿½È£.
+#define SERVER_ADDR "165.246.163.71"	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+//#define SERVER_ADDR "192.168.0.9"		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1)
+//#define SERVER_ADDR "192.168.0.7"		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2)
 
 
 #define MAX_LOADSTRING 100
+#define MAX_USERS 10
 
-// Àü¿ª º¯¼ö:
-HINSTANCE					hInst;                              // ÇöÀç ÀÎ½ºÅÏ½ºÀÔ´Ï´Ù.
-WCHAR						szTitle[MAX_LOADSTRING];            // Á¦¸ñ Ç¥½ÃÁÙ ÅØ½ºÆ®ÀÔ´Ï´Ù.
-WCHAR						szWindowClass[MAX_LOADSTRING];      // ±âº» Ã¢ Å¬·¡½º ÀÌ¸§ÀÔ´Ï´Ù.
-static						HANDLE hThread[MAX_USER];			// handles array for Thread 
-HANDLE						hEvent;								// Handle for creating thread
-CRITICAL_SECTION			crit;								// Critical Section for threads
-vector<CharacterStatus_PC>	g_users;							// À¯Àú Á¤º¸ ±¸Á¶Ã¼
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½:
+HINSTANCE hInst;                                // ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½Ô´Ï´ï¿½.
+WCHAR szTitle[MAX_LOADSTRING];                  // ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½Ô´Ï´ï¿½.
+WCHAR szWindowClass[MAX_LOADSTRING];            // ï¿½âº» Ã¢ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½Ô´Ï´ï¿½.
+static vector<CharacterStatus_PC> g_vUsers;
+CRITICAL_SECTION	crit;
+HANDLE	g_thrThreads[MAX_USERS];
+int	g_isAliveThread[MAX_USERS] = { 0 };
+HWND hWnd;
 
-// ÀÌ ÄÚµå ¸ðµâ¿¡ µé¾î ÀÖ´Â ÇÔ¼öÀÇ Á¤¹æÇâ ¼±¾ðÀÔ´Ï´Ù.
+
+// ï¿½ï¿½ ï¿½Úµï¿½ ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-void				threadUpdateUserInfo(void *user);
-void CALLBACK		TimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime);
+int					UpdateAndSend(void* idx);
+void CALLBACK		TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -126,14 +39,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: ¿©±â¿¡ ÄÚµå¸¦ ÀÔ·ÂÇÕ´Ï´Ù.
+    // TODO: ï¿½ï¿½ï¿½â¿¡ ï¿½Úµå¸¦ ï¿½Ô·ï¿½ï¿½Õ´Ï´ï¿½.
 
-    // Àü¿ª ¹®ÀÚ¿­À» ÃÊ±âÈ­ÇÕ´Ï´Ù.
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Õ´Ï´ï¿½.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_D3DX_PROJECT_SERVER, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // ÀÀ¿ë ÇÁ·Î±×·¥ ÃÊ±âÈ­¸¦ ¼öÇàÇÕ´Ï´Ù.
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
@@ -143,7 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    // ±âº» ¸Þ½ÃÁö ·çÇÁÀÔ´Ï´Ù.
+    // ï¿½âº» ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
     while (GetMessage(&msg, nullptr, 0, 0))
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -157,12 +70,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 }
 
 
-
-//
-//  ÇÔ¼ö: MyRegisterClass()
-//
-//  ¸ñÀû: Ã¢ Å¬·¡½º¸¦ µî·ÏÇÕ´Ï´Ù.
-//
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -184,22 +91,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassExW(&wcex);
 }
 
-//
-//   ÇÔ¼ö: InitInstance(HINSTANCE, int)
-//
-//   ¸ñÀû: ÀÎ½ºÅÏ½º ÇÚµéÀ» ÀúÀåÇÏ°í ÁÖ Ã¢À» ¸¸µì´Ï´Ù.
-//
-//   ¼³¸í:
-//
-//        ÀÌ ÇÔ¼ö¸¦ ÅëÇØ ÀÎ½ºÅÏ½º ÇÚµéÀ» Àü¿ª º¯¼ö¿¡ ÀúÀåÇÏ°í
-//        ÁÖ ÇÁ·Î±×·¥ Ã¢À» ¸¸µç ´ÙÀ½ Ç¥½ÃÇÕ´Ï´Ù.
-//
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // ÀÎ½ºÅÏ½º ÇÚµéÀ» Àü¿ª º¯¼ö¿¡ ÀúÀåÇÕ´Ï´Ù.
-
-   g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   hInst = hInstance; // ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+   
+   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, 600, 400, nullptr, nullptr, hInstance, nullptr);
 
    if (!g_hWnd)
    {
@@ -212,34 +109,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-
-
-//
-//  ÇÔ¼ö: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  ¸ñÀû:  ÁÖ Ã¢ÀÇ ¸Þ½ÃÁö¸¦ Ã³¸®ÇÕ´Ï´Ù.
-//
-//  WM_COMMAND  - ÀÀ¿ë ÇÁ·Î±×·¥ ¸Þ´º¸¦ Ã³¸®ÇÕ´Ï´Ù.
-//  WM_PAINT    - ÁÖ Ã¢À» ±×¸³´Ï´Ù.
-//  WM_DESTROY  - Á¾·á ¸Þ½ÃÁö¸¦ °Ô½ÃÇÏ°í ¹ÝÈ¯ÇÕ´Ï´Ù.
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
 	static WSADATA wsadata;
-	static SOCKET p1, p2;
-	static SOCKET s;
-	static int arr[20][20] = { 0 };
-	static TCHAR msg[200];
-	static SOCKADDR_IN addr = { 0 }, c_addr;
-	static TCHAR str[10];
-	int size, msgLen;
+	static SOCKET ServerSocket;
+	static SOCKADDR_IN addr = { 0 }, c_addr;	
 	char* buffer;
-	static bool turn;
-	static WORD playerCnt;
-	
-	
+	int size;
+	static int playerCnt;
+//	static vector<string> userMsgs;		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½
 
 	static int userNum = 0;
 	buffer = (char*)malloc(sizeof(CharacterStatus_NPC) + 1);
@@ -248,170 +127,189 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
 	case WM_CREATE:
-		SetTimer(hWnd, 123, 100, NULL);
+		MoveWindow(hWnd,
+			GetSystemMetrics(SM_CXSCREEN) -370, GetSystemMetrics(SM_CYSCREEN) -230,
+			300, 220,
+			TRUE);
+
 		InitializeCriticalSection(&crit);
+		SetTimer(hWnd, 123, 25, TimerProc);
 		playerCnt = 0;
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
-		s = socket(AF_INET, SOCK_STREAM, 0);
+		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
 		addr.sin_family = AF_INET;
 		addr.sin_port = 20;
 		addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 
 		// Network Bind Test
-		// Success ==0 / FAIL = -1
-		if (bind(s, (LPSOCKADDR)&addr, sizeof(addr)) != 0)
+		if (bind(ServerSocket, (LPSOCKADDR)&addr, sizeof(addr)))
 		{
 			MessageBox(NULL, _T("Binding Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
-		
-		WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_ACCEPT | FD_CLOSE);
+
+		WSAAsyncSelect(ServerSocket, hWnd, WM_ASYNC, FD_ACCEPT);
 		
 		//
 		// Check Listening
-		if (listen(s, MAX_USER) == SOCKET_ERROR)
+		if (listen(ServerSocket, 5) == SOCKET_ERROR)
 		{
 			MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
 
-
 		break;
 	case WM_ASYNC:
 		switch (lParam)
 		{
-		case FD_ACCEPT:
-		{
-			CharacterStatus_PC TmpUser;
-			size = sizeof(c_addr);
-			g_users.push_back(TmpUser);
-			g_users.back().s = accept(s, (LPSOCKADDR)&c_addr, &size);
-			g_users.back().ID = playerCnt;
-			WSAAsyncSelect(g_users.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
-
-			// Add Current User into Total User List
-			playerCnt++;
-
-			strcpy(g_users.back().MsgHeader, "welcome");
-			send(g_users.back().s, (char*)&g_users.back(), sizeof(CharacterStatus_PC) + 1, 0);
-			strcpy(g_users.back().MsgHeader, "TitleScene");
-
-		}
-			break;
-		case FD_READ:			
-		{			
-			
-				buffer[sizeof(CharacterStatus_PC)] = NULL;
-				msgLen = recv(g_users[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-				buffer[msgLen] = NULL;
-				CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
-
-				hThread[i] = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall *)(void *))threadUpdateUserInfo, (void *)&recieved, 0, NULL);
-		}
-			break;
-		case FD_CLOSE:
-			for (int i = 0; i < g_users.size(); i++)
+			case FD_ACCEPT:
 			{
-				if (g_users.at(i).s == (SOCKET)wParam)
-				{					
-					g_users.push_back(g_users[i]);
-					g_users[i] = g_users[g_users.size() - 2];
-					g_users.pop_back();
+				HANDLE hThread = new HANDLE;
+				size = sizeof(c_addr);
+				g_vUsers.push_back(TmpUser);
+				g_vUsers.back().s = accept(ServerSocket, (LPSOCKADDR)&c_addr, &size);
+				g_vUsers.back().ID = playerCnt;
+				g_vUsers.back().FailCnt = 0;
+				WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_CLOSE | FD_WRITE);
 
-//					userMsgs[i].swap(userMsgs[user.size()-1]);
-//					userMsgs.erase(userMsgs.end());
-				}
+				playerCnt++;
+
+				strcpy(g_vUsers.back().MsgHeader, "welcome");
+				send(g_vUsers.back().s, (char*)&g_vUsers.back(), sizeof(CharacterStatus_PC) + 1, 0);
+				strcpy(g_vUsers.back().MsgHeader, "TitleScene");
+
+				g_isAliveThread[(int)g_vUsers.back().ID] = 0;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½Ñ´ï¿½.
+				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))UpdateAndSend, (void *)g_vUsers.back().ID, 0, NULL);
+				g_thrThreads[(int)g_vUsers.back().ID] = hThread;
+
+				CloseHandle(hThread);
 			}
 			break;
-		}
-
-		break;
-	case WM_TIMER:
-		for (int i = 0; i<g_users.size(); i++)
-		{
-			for (int j = 0; j < g_users.size(); j++)
-			{			
-				CharacterStatus_PC PrepareMsg;
-				PrepareMsg = g_users.at(j);
-
-				if (strcmp(g_users[i].MsgHeader, "welcome") == 0)
-				{
-					strcpy(PrepareMsg.MsgHeader, "welcome");
-					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
-
-				}
-				else if (strcmp(g_users[i].MsgHeader, "TitleScene") == 0)
-				{
-					strcpy(PrepareMsg.MsgHeader, "TitleScene");
-					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
-
-				}
-				else
-				{
-					strcpy(PrepareMsg.MsgHeader, "userData");
-					PrepareMsg.MsgHeader[strlen(PrepareMsg.MsgHeader)] = NULL;
-
-				}
-
-
-				if (send(g_users.at(i).s, (char*)&PrepareMsg, sizeof(CharacterStatus_PC) + 1, 0) != -1)
-				{
-					g_users[i].FailCnt = 0;		// Àü¼Û ¼º°øÇÏ¸é Á¢Á¾ Ä«¿îÆ®¸¦ ÃÊ±âÈ­ ÇÑ´Ù.
-				}
-				else
-				{
-					g_users[i].FailCnt += 1;		// Àü¼Û ½ÇÆÐ Ä«¿îÆ®¸¦ ¿Ã¸°´Ù.
-				}
-				
-			}
-		}
-
-		for (int i = 0; i < g_users.size(); i++)
-		{
-			if (g_users.at(i).FailCnt > Tryout)
+			case FD_CLOSE:
 			{
-				
-				CharacterStatus_PC disconnectMsg;
-				disconnectMsg.ID = g_users.at(i).ID;
-				strcpy(disconnectMsg.MsgHeader, "disconnect");
-				disconnectMsg.MsgHeader[strlen(disconnectMsg.MsgHeader)] = '\0';
-
-			//	strcpy(buffer, message.c_str());
-				for (int j = 0; j < g_users.size(); j++)
+				int idx = -1;
+				for (int i = 0; i < g_vUsers.size(); i++)
 				{
-					send(g_users.at(j).s, (char*)&disconnectMsg, sizeof(CharacterStatus_PC) + 1, 0);
+					char* buffer;
+					buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
+					CharacterStatus_PC* userData = (CharacterStatus_PC*)&buffer;
+
+					if (g_vUsers[i].s == userData->s)
+					{					
+						closesocket((g_vUsers[i].s));
+						g_isAliveThread[i] = -1;
+						break;
+					}
 				}
-				g_users.erase(g_users.begin() + i);
-				i--;
-				playerCnt = g_users.size();
 				
 			}
+			break;
+//		case FD_READ:			
+//		{					
+//			for (int i = 0; i < user.size(); i++)
+//			{
+//				buffer[sizeof(CharacterStatus_PC)] = NULL;
+//				int bufferLen = recv(user[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+//				buffer[bufferLen] = NULL;
+//				CharacterStatus_PC *recieved = (CharacterStatus_PC*)&buffer;
+//
+//			//	if (user[i].s == recieved->s)
+//				{
+//					if (strcmp(recieved->MsgHeader, "userData") == 0)
+//					{
+//						user[i].CurHP = recieved->CurHP;
+//						user[i].MaxHP = recieved->MaxHP;
+//						user[i].Dir = recieved->Dir;
+//						user[i].Status = recieved->Status;
+//
+//						printf("recieved : user #%d's userData\n", user[i].ID);
+//					}
+//					else if (strcmp(recieved->MsgHeader, "join") == 0)
+//					{
+//						char tmp[16];
+//						string s;
+//						itoa(recieved->ID, tmp, 10);
+//						s = "User # (";
+//						s.append(tmp);
+//						s.append(recieved->PlayerName);
+//						s.append(") Joinned the Game");
+//						MessageBox(NULL, s.c_str(), _T("New User!"), MB_OK);
+//
+//						user[i].CurHP = recieved->CurHP;
+//						user[i].MaxHP = recieved->MaxHP;
+//						user[i].Dir = recieved->Dir;
+//						user[i].Status = recieved->Status;
+//						strcpy_s(user[i].PlayerName, recieved->PlayerName);
+//						printf("recieved : user #%d(%s) Has joined in the Game.\n", user[i].ID, user[i].PlayerName);
+//					}
+//					else if (strcmp(recieved->MsgHeader, "disconnect") == 0)
+//					{
+//						for (int i = 0; i < user.size(); i++)
+//						{
+//							if (user[i].ID == recieved->ID)
+//							{
+//								user.erase(user.begin() + i);
+//								i--;
+//								break;
+//							}
+//						}
+//
+//						InvalidateRgn(hWnd, NULL, TRUE);
+//					}
+//					else if (strcmp(recieved->MsgHeader, "TitleScene") == 0)
+//					{
+//						strcmp(user[i].MsgHeader, "TitleScene");
+//					}
+//				}
+//			}
+//		}
+//			break;
+//		case FD_CLOSE:
+//			for (int i = 0; i < user.size(); i++)
+//			{
+//				if (user.at(i).s == (SOCKET)wParam)
+//				{					
+//					user.push_back(user[i]);
+//					user[i] = user[user.size() - 2];
+//					user.pop_back();
+//
+////					userMsgs[i].swap(userMsgs[user.size()-1]);
+////					userMsgs.erase(userMsgs.end());
+//				}
+//			}
+//			break;
 		}
 		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: ¿©±â¿¡ hdc¸¦ »ç¿ëÇÏ´Â ±×¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
-			char msg[64];
-			sprintf(msg, "Connected %d Clients", playerCnt);
-			TextOutA(hdc, 10, 10, msg, strlen(msg));
-			if (g_users.size() > 0)
-			{
-				for (int i = 0; i < g_users.size(); i++)
+			char *tmp;
+			tmp = (char*)calloc(32, sizeof(char));
+            // TODO: ï¿½ï¿½ï¿½â¿¡ hdcï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½ß°ï¿½ï¿½Õ´Ï´ï¿½.
+			if (g_vUsers.size() == 0)
+				TextOut(hdc, 10, 10, "No Player is online", strlen("No Player is online"));
+			else
+			{				
+				TextOut(hdc, 10, 10, itoa((g_vUsers.size()), tmp, 10), strlen(tmp));
+				TextOut(hdc, 50, 10, "Player(s) online", strlen("Player(s) online"));
+
+				for (int i = 0; i < g_vUsers.size(); i++)
 				{
-					string tmp;
-					tmp.append("user #");
-					char sTmp[12];
-					tmp.append(itoa((int)g_users[i].ID, sTmp, 10));
-					tmp.append(" id : ");
-					tmp.append(g_users[i].PlayerName);
-					TextOut(hdc, 10, 10 + (i+1) * 20 , tmp.c_str(), strlen(tmp.c_str()));
+					int nfailcount = g_vUsers[i].FailCnt;
+					itoa(g_isAliveThread[i], tmp, 10);
+					TextOut(hdc, 10, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+					itoa(g_vUsers[i].ID, tmp, 10);
+					TextOut(hdc, 100, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+					itoa((int)(g_vUsers[i].s), tmp, 10);
+					TextOut(hdc, 200, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
 				}
+
 			}
 
-            EndPaint(hWnd, &ps);
-			DeleteObject(hdc);			
+			
+			DeleteObject(hdc);
+			EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
@@ -425,65 +323,61 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Thread
-void threadUpdateUserInfo(void *strUser)
+
+int UpdateAndSend(void* idx)
 {
-	static CharacterStatus_PC TmpUser = *((CharacterStatus_PC*)&strUser);
+	int i = (int)idx;
+	int buffLen = 0;
+	char* buffer;
+	buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
+	static int tryout = 0;
+	g_vUsers[i].FailCnt = 0;
 
-	int idx = TmpUser.ID;
-	EnterCriticalSection(&crit);
-	// do something here
-	if (strcmp(TmpUser.MsgHeader, "userData") == 0)
+	
+	while (g_isAliveThread[i] != -1)
 	{
-		g_users[idx].CurHP = TmpUser.CurHP;
-		g_users[idx].MaxHP = TmpUser.MaxHP;
-		g_users[idx].Dir = TmpUser.Dir;
-		g_users[idx].Status = TmpUser.Status;
-
-		printf("recieved : user #%d's userData\n", g_users[idx].ID);
-	}
-	else if (strcmp(TmpUser.MsgHeader, "join") == 0)
-	{
-		char tmp[16];
-		string s;
-		itoa(TmpUser.ID, tmp, 10);
-		s = "User # (";
-		s.append(tmp);
-		s.append(TmpUser.PlayerName);
-		s.append(") Joinned the Game");
-		MessageBox(NULL, s.c_str(), _T("New User!"), MB_OK);
-
-		g_users[idx].CurHP = TmpUser.CurHP;
-		g_users[idx].MaxHP = TmpUser.MaxHP;
-		g_users[idx].Dir = TmpUser.Dir;
-		g_users[idx].Status = TmpUser.Status;
-		strcpy_s(g_users[idx].PlayerName, TmpUser.PlayerName);
-		printf("recieved : user #%d(%s) Has joined in the Game.\n", g_users[idx].ID, g_users[idx].PlayerName);
-	}
-	else if (strcmp(TmpUser.MsgHeader, "disconnect") == 0)
-	{
-		for (int i = 0; i < g_users.size(); i++)
+		buffLen = recv(g_vUsers[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+		CharacterStatus_PC* userData = (CharacterStatus_PC*)&buffer;
+		
+		EnterCriticalSection(&crit);		
+		
+		if (strcmp(userData->MsgHeader, "join") == 0)
+			strcpy(userData->MsgHeader, "userData");
+		else if (strcmp(userData->MsgHeader, "disconnect") == 0)
 		{
-			if (g_users[i].ID == TmpUser.ID)
-			{
-				g_users.erase(g_users.begin() + i);
-				i--;
-				break;
-			}
+			g_isAliveThread[i] = -1;
+			break;
 		}
 
-		InvalidateRgn(g_hWnd, NULL, TRUE);
+		g_vUsers[i] = *userData;
+		
+		int result;
+		for (int n = 0; n < g_vUsers.size(); n++)
+		{			
+				result = send(g_vUsers[n].s, (char*)userData, sizeof(CharacterStatus_PC) + 1, 0);
+
+				if (result != -1 && result != 0)
+					g_vUsers[n].FailCnt = 0;
+				else
+					g_vUsers[n].FailCnt += 1;
+				
+				if (g_vUsers[n].FailCnt > TRYOUT_CNT)
+				{
+					g_isAliveThread[n] = -1;
+					break;
+				}
+
+		}
+		LeaveCriticalSection(&crit);
 	}
-	else if (strcmp(TmpUser.MsgHeader, "TitleScene") == 0)
-	{
-		strcmp(g_users[i].MsgHeader, "TitleScene");
-	}
+
 	LeaveCriticalSection(&crit);
 
-	return;
+	return 0;
 }
 
-void CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
+
+void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-	InvalidateRgn(hWnd, NULL, FALSE);
+	InvalidateRgn(hwnd, NULL, TRUE);
 }

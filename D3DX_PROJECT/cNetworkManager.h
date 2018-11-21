@@ -25,9 +25,10 @@ private:
 public:
 	bool SetupNetwork(HWND hWnd);
 	void SendData(CharacterStatus_PC strPC);
-	void SendData(char* MsgHeader, CharacterStatus_PC* strPC);
+	int SendData(char* MsgHeader, CharacterStatus_PC* strPC);
 	void recvData();
 	bool GetNetStatus();		// 네트워크 확인용
+	SOCKET GetServerSocket();
 
 };
 

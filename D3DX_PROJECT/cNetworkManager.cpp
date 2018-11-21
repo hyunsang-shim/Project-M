@@ -3,19 +3,27 @@
 
 // Server IP Addresses.
 // should activated only one at once;
-//#define SERVER_ADDR "165.246.163.66"	// ÀºÈ£¾¾
-//#define SERVER_ADDR "165.246.163.71"		// ½ÉÇö»ó
-//#define SERVER_ADDR "192.168.0.9"	// ½ÉÇö»ó (³ëÆ®ºÏ/°øÀ¯±â)
-#define SERVER_ADDR "192.168.0.3"		// ½ÉÇö»ó (Áý)
+//#define SERVER_ADDR "165.246.163.66"	// ï¿½ï¿½È£ï¿½ï¿½
+//#define SERVER_ADDR "165.246.163.71"		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//#define SERVER_ADDR "192.168.0.9"	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Æ®ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+#define SERVER_ADDR "192.168.0.3"		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½)
+
+
+// ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½
+// ï¿½Æ·ï¿½ ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½.
+//#define SERVER_ADDR "165.246.163.66"	// ï¿½ï¿½È£ï¿½ï¿½
+#define SERVER_ADDR "165.246.163.71"	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//#define SERVER_ADDR "192.168.0.9"		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Æ®ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+//#define SERVER_ADDR "192.168.0.7"		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½)
+//#define SERVER_ADDR "127.0.0.1"	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 cNetworkManager::cNetworkManager()
 {
 }
 
-
 cNetworkManager::~cNetworkManager()
-{
+{	
 }
 
 //bool StartWith(char * FindStr, char * SearchStr)
@@ -35,12 +43,12 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
-	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
+	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 	
-	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// ¼º°øÇÏ¸é 0 ¸®ÅÏ, ¾Æ´Ï¸é ¿¡·¯ ¸®ÅÏ.
+	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ 0 ï¿½ï¿½ï¿½ï¿½, ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ);
 
-	// ¿¬°á¿¡ ¼º°øÇÏ¸é ÇÃ·¡±×¸¦ ÄÒ´Ù.
+	// ï¿½ï¿½ï¿½á¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ã·ï¿½ï¿½×¸ï¿½ ï¿½Ò´ï¿½.
 	// >>
 	if (!x) isConnected = true;
 	// <<
@@ -57,33 +65,28 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 	}
 }
 
-void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
+int cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 {
+	int result;
 	if (isConnected)
 	{
 		
 		strcpy(strPC->MsgHeader, MsgHeader);	
-		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
+		result = send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
 
 		if (strcmp(MsgHeader, "join") == 0)
 		{
 			strcpy(strPC->MsgHeader, "userData");
 		}
 	}
+
+	return result;
 }
 
 void cNetworkManager::recvData()
 {
 	if (isConnected)
 	{
-
-		/*
-		memset(buffer, 0, 200);
-		bufferLen = recv(s, buffer, 200, 0);
-		buffer[bufferLen] = NULL;
-		OMOK_MSG_SYS* tmpsys = (OMOK_MSG_SYS*)buffer;
-
-		*/
 		memset(buffer, 0, sizeof(CharacterStatus_PC)+1);
 		
 		int bufferLen = recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
@@ -92,16 +95,6 @@ void cNetworkManager::recvData()
 
 		if (strcmp(tmp->MsgHeader, "userData") == 0)
 		{
-			//float x, y, z, direc;
-			//int actCount, act, userNum;
-			//sscanf_s(buffer, "%*s %d %f %f %f %f %d %d", &userNum, &x, &y, &z, &direc, &act, &actCount);
-			//tmp.userNum = userNum;
-			//tmp.x = x;
-			//tmp.y = y;
-			//tmp.z = z;
-			//tmp.direction = direc;
-			//tmp.action = act;
-			//tmp.actionCount = actCount;
 
 			int check = 0;
 			for (int i = 0; i < OtherPlayer.size(); i++)
@@ -113,6 +106,7 @@ void cNetworkManager::recvData()
 					break;
 				}
 			}
+
 			if (check == 0)
 			{
 				g_pOtherPlayerManager->newPlayer(tmp);
@@ -151,5 +145,10 @@ void cNetworkManager::recvData()
 bool cNetworkManager::GetNetStatus()
 {
 	return isConnected;
+}
+
+SOCKET cNetworkManager::GetServerSocket()
+{
+	return s;
 }
 
