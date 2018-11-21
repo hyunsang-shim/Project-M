@@ -16,6 +16,7 @@
 #include "cUIImageView.h"
 #include "cCrossHairPicking.h"
 #include "cAI.h"
+#include "cUITextView.h"
 
 enum
 {
@@ -24,8 +25,10 @@ enum
 	CROSS_RIGHT,
 	CROSS_DOWN,
 	CROSS_LEFT,
-
+	EXIT_OK,
+	EXIT_CANCLE
 };
+
 
 cSCENE_INGAME::cSCENE_INGAME()
 	: m_pCamera(NULL),
@@ -38,7 +41,9 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pAI(NULL),
 	BulletCreateCount(0),
 	BulletCreateTime(MAXBulletCreateCount),
-	load(FALSE)
+	load(FALSE),
+	m_pUIShadowRoot(NULL),
+	m_pUIBase(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -55,13 +60,16 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
 	SAFE_DELETE(m_pAI);
+	SAFE_DELETE(m_pUIBase);
+	SAFE_DELETE(m_pUIShadowRoot);
+
 }
 
 void cSCENE_INGAME::Setup()
 {
 	m_pCrossHairPicking = new cCrossHairPicking;
 
-	
+
 
 	//카메라 셋팅
 	m_pCamera = new cCamera();
@@ -73,17 +81,22 @@ void cSCENE_INGAME::Setup()
 
 	// 메인 광원 셋팅
 	D3DXVECTOR3 dir(0, -1, 0);
+	D3DXVECTOR3 Pos(100, 100, 100);
 	D3DXCOLOR c(1.0f, 1.0f, 1.0f, 1.0f);
 	ZeroMemory(&DirectLight, sizeof(D3DLIGHT9));
+	ZeroMemory(&subLight, sizeof(D3DLIGHT9));
+
 	DirectLight = InitDirectionalLight(&dir, &c);
+	subLight = InitPointLight(&Pos, &c);
 	g_pDevice->SetLight(0, &DirectLight);
-	//g_pDevice->SetLight(1, &DirectLight);
-	//g_pDevice->SetLight(2, &DirectLight);
-	//g_pDevice->SetLight(3, &DirectLight);
+	g_pDevice->SetLight(1, &DirectLight);
+	g_pDevice->SetLight(2, &DirectLight);
+	g_pDevice->SetLight(3, &DirectLight);
+
 	g_pDevice->LightEnable(0, TRUE);
-	//g_pDevice->LightEnable(1, TRUE);
-	//g_pDevice->LightEnable(2, TRUE);
-	//g_pDevice->LightEnable(3, TRUE);
+	g_pDevice->LightEnable(1, TRUE);
+	g_pDevice->LightEnable(2, TRUE);
+	g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// 하이트맵 셋팅
@@ -97,7 +110,7 @@ void cSCENE_INGAME::Setup()
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
 
-	g_pGameInfoManager->setup_Map("map", "rialto_small.obj");
+	g_pGameInfoManager->setup_Map("map", "test_map_obj.obj");
 
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
@@ -123,7 +136,7 @@ void cSCENE_INGAME::Setup()
 	nowMousePos.x = 1920 / 2;
 	nowMousePos.y = 1080 / 2;
 	SetCursorPos(1920 / 2, 1080 / 2);
-	
+
 	m_pAI = new cAI;
 	m_pAI->Setup("NPCS", "slicer.X");
 	cAI_Controller* pAI_Controller = new cAI_Controller;
@@ -132,6 +145,9 @@ void cSCENE_INGAME::Setup()
 	setupUI();
 
 	load = TRUE;
+
+	//폰트 셋팅
+	Creat_Font();
 }
 
 void cSCENE_INGAME::Update()
@@ -145,14 +161,14 @@ void cSCENE_INGAME::Update()
 
 		g_pGameInfoManager->mouseMoveX = nowMousePos.x - beforeMousePos.x;
 		g_pGameInfoManager->mouseMoveY = nowMousePos.y - beforeMousePos.y;
-	
+
 		beforeMousePos = nowMousePos;
 		if (nowMousePos.x == 0 || nowMousePos.y == 0 || nowMousePos.x >= 1920 || nowMousePos.y >= 1080)
 		{
-			SetCursorPos(1920 / 2, 1080 / 2);	
+			SetCursorPos(1920 / 2, 1080 / 2);
 			mouseMove = 1;
 		}
-	
+
 	}
 	else
 	{
@@ -190,7 +206,7 @@ void cSCENE_INGAME::Update()
 	else
 	{
 		if (m_pAI)
-			m_pAI->Update(false, D3DXVECTOR3(0,0,0));
+			m_pAI->Update(false, D3DXVECTOR3(0, 0, 0));
 	}
 
 
@@ -243,8 +259,7 @@ void cSCENE_INGAME::Update()
 	if (g_pNetworkManager->GetNetStatus())
 		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
 
-	if(m_pUIBase)
-		m_pUIBase->Update();
+	updateUI();
 }
 
 void cSCENE_INGAME::Render()
@@ -274,7 +289,7 @@ void cSCENE_INGAME::Render()
 		if (m_pMyCharacter)
 			m_pMyCharacter->Render(NULL);
 	}
-	
+
 	renderUI();
 
 	if (pHit)
@@ -282,8 +297,10 @@ void cSCENE_INGAME::Render()
 		Mesh_Render();
 	}
 
-	if(m_pAI)
+	if (m_pAI)
 		m_pAI->Render(NULL);
+
+	Render_Text();
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -291,22 +308,23 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	switch (message)
 	{
 	case WM_LBUTTONDOWN:
-		{
+	{
 		static int n = 0;
 		//m_pSkinnedMesh->SetAnimationIndex(n++);
 		//m_pMyCharacter->SetAnimationIndexBlend(n++);
 		m_pAI->SetAnimationIndexBlend(n++);
 		break;
-		}
-	 
+	}
+
 	case WM_KEYUP:
-		switch (wParam) 
+		switch (wParam)
 		{
 		case VK_ESCAPE:
-			{
-				g_pGameInfoManager->isESCPushed = ~g_pGameInfoManager->isESCPushed;
-				break;
-			}
+		{
+			g_pGameInfoManager->isESCPushed = ~g_pGameInfoManager->isESCPushed;
+			m_pUIShadowRoot->m_isHidden = !m_pUIShadowRoot->m_isHidden;
+			break;
+		}
 		break;
 		}
 	case WM_RBUTTONUP:
@@ -320,8 +338,8 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	if (m_pMyCharacter)
 	{
 		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
-	}	
-	
+	}
+
 }
 void cSCENE_INGAME::Setup_HeightMap()
 {
@@ -379,9 +397,8 @@ D3DLIGHT9 cSCENE_INGAME::InitSpotLight(D3DXVECTOR3 * position, D3DXVECTOR3 * dir
 
 void cSCENE_INGAME::setupUI()
 {
-	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/김태희.jpg");
-
+	{
+		D3DXCreateSprite(g_pDevice, &m_pSprite);
 		cUIImageView* pImageView = new cUIImageView;
 		pImageView->SetPosition(0, 0, 0);
 		m_pUIBase = pImageView;
@@ -485,22 +502,89 @@ void cSCENE_INGAME::setupUI()
 		pSkill1->SetPosition(g_pGameInfoManager->getScreenXPosByPer(78), g_pGameInfoManager->getScreenYPosByPer(81));
 		pSkill1->SetDelegate(this);
 		m_pUIBase->AddChild(pSkill1);
+	}
+	{
+		D3DXCreateSprite(g_pDevice, &m_pSprite);
+		cUIImageView* pImageView = new cUIImageView;
+		pImageView->SetPosition(0, 0, 0);
+		m_pUIShadowRoot = pImageView;
+
+		cUIButton* pButtontest = new cUIButton;
+		pButtontest->SetTexture("./UI/test3.png",
+			"./UI/test3.png",
+			"./UI/test3.png");
+		pButtontest->setSize(5.0f, 2.0f);
+		pButtontest->SetPosition(g_pGameInfoManager->getScreenXPosByPer(0), g_pGameInfoManager->getScreenYPosByPer(0));
+		pButtontest->SetDelegate(this);
+		m_pUIShadowRoot->AddChild(pButtontest);
+
+		cUITextView* pTextView = new cUITextView;
+		pTextView->Settext("게임을 종료하시겠습니까?");
+		pTextView->SetSize(ST_SIZEN(700, 200));
+		pTextView->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(35));
+		pTextView->SetDrawTextFormat(DT_CENTER | DT_VCENTER);
+		pTextView->SetTextColor(D3DCOLOR_XRGB(255, 255, 0));
+
+		m_pUIShadowRoot->AddChild(pTextView);
+
+
+
+		cUIButton* OK_button = new cUIButton;
+		OK_button->SetTexture("./UI/OK.png",
+			"./UI/OK.png",
+			"./UI/OK.png");
+		OK_button->setSize(1.0f, 1.0f);
+		OK_button->SetPosition(g_pGameInfoManager->getScreenXPosByPer(35), g_pGameInfoManager->getScreenYPosByPer(50));
+		OK_button->SetDelegate(this);
+		OK_button->SetTag(EXIT_OK);
+		m_pUIShadowRoot->AddChild(OK_button);
+
+		cUIButton* cancle_button = new cUIButton;
+		cancle_button->SetTexture("./UI/cancle.png",
+			"./UI/cancle.png",
+			"./UI/cancle.png");
+		cancle_button->setSize(0.5f, 1.0f);
+		cancle_button->SetPosition(g_pGameInfoManager->getScreenXPosByPer(48), g_pGameInfoManager->getScreenYPosByPer(50));
+		cancle_button->SetDelegate(this);
+		cancle_button->SetTag(EXIT_CANCLE);
+		m_pUIShadowRoot->AddChild(cancle_button);
+
+
+		m_pUIShadowRoot->m_isHidden = 1;
+	}
 }
 
 void cSCENE_INGAME::renderUI()
 {
 	if (m_pUIBase)
 		m_pUIBase->Render(m_pSprite);
+
+	if (m_pUIShadowRoot)
+		m_pUIShadowRoot->Render(m_pSprite);
 }
 
 void cSCENE_INGAME::updateUI()
 {
 	if (m_pUIBase)
 		m_pUIBase->Update();
+
+
+	if (m_pUIShadowRoot)
+		m_pUIShadowRoot->Update();
 }
+
 
 void cSCENE_INGAME::OnClick(cUIButton * pSender)
 {
+	if (pSender->GetTag() == EXIT_OK)
+	{
+		exit(0);
+	}
+	else if (pSender->GetTag() == EXIT_CANCLE)
+	{
+		m_pUIShadowRoot->m_isHidden = 1;
+		g_pGameInfoManager->isESCPushed = ~g_pGameInfoManager->isESCPushed;
+	}
 }
 
 void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
@@ -531,16 +615,72 @@ void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
 
 		pSender->SetPosition(g_pGameInfoManager->getScreenXPosByPer(50) - 11 - aimSize, g_pGameInfoManager->getScreenYPosByPer(50));
 	}
-
-
+	
 }
 
 void cSCENE_INGAME::Creat_Font()
 {
+	D3DXFONT_DESC fd;
+	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
+	fd.Height = 50;
+	fd.Width = 25;
+	fd.Weight = FW_MEDIUM;
+	fd.Italic = false;
+	fd.CharSet = DEFAULT_CHARSET;
+	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+	fd.PitchAndFamily = FF_DONTCARE;
+
+	{
+		AddFontResource("font/BigNoodleTooOblique.ttf");
+		strcpy(fd.FaceName, "BigNoodleTooOblique");
+	}
+	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
+	fd.Height = 30;
+	fd.Width = 15;
+	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont2);
+
+
 }
 
 void cSCENE_INGAME::Render_Text()
 {
+	int maxHP = 200;
+	int nowHP = 150;
+
+	int maxBullet = 30;
+	int nowBullet = 30;
+
+	string str, str2, str3;
+	if (nowHP < 100)
+		str += ' ';
+	if (nowHP < 10)
+		str += ' ';
+	str += to_string(nowHP) + '/';
+	str2 += to_string(maxHP);
+	str3 = to_string(nowBullet) + '/' + to_string(maxBullet);
+	RECT rc;
+	SetRect(&rc,
+		g_pGameInfoManager->getScreenXPosByPer(13),
+		g_pGameInfoManager->getScreenYPosByPer(77),
+		g_pGameInfoManager->getScreenXPosByPer(13) + 40,
+		g_pGameInfoManager->getScreenYPosByPer(77) + 5);
+	m_pFont->DrawTextA(NULL, str.c_str(), str.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	RECT rc2;
+	SetRect(&rc2,
+		g_pGameInfoManager->getScreenXPosByPer(13) + 110,
+		g_pGameInfoManager->getScreenYPosByPer(77) + 5,
+		g_pGameInfoManager->getScreenXPosByPer(13) + 150,
+		g_pGameInfoManager->getScreenYPosByPer(77) + 20);
+	m_pFont2->DrawTextA(NULL, str2.c_str(), str2.length(), &rc2, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	RECT rc3;
+	SetRect(&rc3,
+		1920 * 0.85f,
+		1080 * 0.85f + 10,
+		1920 * 0.85f + 50,
+		1080 * 0.85f + 15);
+	m_pFont->DrawTextA(NULL, str3.c_str(), str3.length(), &rc3, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+
+
 }
 /*
 void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
@@ -557,7 +697,7 @@ void cSCENE_INGAME::Set_Billboard(D3DXMATRIXA16 * pmatWorld)
 
 void cSCENE_INGAME::Setup_Particle()
 {
-	m_vecVertexParticle.resize(1000); 
+	m_vecVertexParticle.resize(1000);
 	for (int i = 0; i < m_vecVertexParticle.size(); ++i)
 	{
 		float fRadius = rand() % 100 / 10.0f;
@@ -595,7 +735,7 @@ void cSCENE_INGAME::Setup_Particle()
 	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	g_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-	
+
 	g_pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	g_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);

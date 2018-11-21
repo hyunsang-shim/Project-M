@@ -1,0 +1,3928 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# 파일 생성됨: 16.11.2018 17:26:07
+
+newmtl 리알토_0_D8926A6966F3D468_039
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012403.png
+map_Kd textures\000000012403.png
+map_bump textures\Normal__000000012402__023_법선 범프.png
+
+newmtl 리알토_0_C185E89E53B55CAE_013
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000128B6.png
+map_Kd textures\0000000128B6.png
+map_bump textures\Normal__00000001215B__075_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_087
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012799.png
+map_Kd textures\000000012799.png
+map_bump textures\Normal__00000001279A__014_법선 범프.png
+
+newmtl 02___Default
+Ns 10.0000
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.1922 0.2275 0.9608
+Kd 0.1922 0.2275 0.9608
+Ks 0.0000 0.0000 0.0000
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_6C5F5154823D0F31_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000009D7C.png
+map_Kd textures\000000009D7C.png
+map_bump textures\Normal__Normal__Normal__00000000000C__011__001__001_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_106
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_4EED79C603EBC725_086
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001215A.png
+map_Kd textures\00000001215A.png
+map_bump textures\Normal__00000001215B__073_법선 범프.png
+
+newmtl 리알토_0_4423E684922B29D7_047
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__00000001339E__018_법선 범프.png
+
+newmtl 리알토_0_C6AC98F40A311C94_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000120B2.png
+map_Kd textures\0000000120B2.png
+map_bump textures\Normal__0000000120B3__013_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_085
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001228C.png
+map_Kd textures\00000001228C.png
+map_bump textures\NormalEnv__000000011DC9__036_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_085
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001215A.png
+map_Kd textures\00000001215A.png
+map_bump textures\Normal__00000001215B__072_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_084
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135EA.png
+map_Kd textures\0000000135EA.png
+map_bump textures\NormalEnv__000000011DC9__035_법선 범프.png
+
+newmtl 리알토_0_960828E24DCB59D0_007
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142DF.png
+map_Kd textures\0000000142DF.png
+map_bump textures\Normal__0000000142E0__005_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_081
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012753.png
+map_Kd textures\000000012753.png
+map_bump textures\Normal__00000001215B__068_법선 범프.png
+
+newmtl 리알토_0_BA5165B13211CBD3_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001546B.png
+map_Kd textures\00000001546B.png
+map_bump textures\Normal__571210053__00000000000C__011__법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_099
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_999D6142253FB8FF_055
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_4EED79C603EBC725_080
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__035_법선 범프.png
+
+newmtl 리알토_0_5E3BC2C35974D53F_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012974.png
+map_Kd textures\000000012974.png
+map_bump textures\Normal__000000012975__009_법선 범프.png
+
+newmtl 리알토_0_D8926A6966F3D468_034
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__044__002_법선 범프.png
+
+newmtl 리알토_0_B80CEA39F56D024E_050
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__040_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_079
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\Normal__NormalEnv__000000011DC9__033__법선 범프.png
+
+newmtl 리알토_0_FE9BBF426EADAEA3_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000144EC.png
+map_Kd textures\0000000144EC.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_100
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012785.png
+map_Kd textures\000000012785.png
+map_bump textures\Normal__000000012787__001_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_099
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014DD1.png
+map_Kd textures\000000014DD1.png
+map_bump textures\Normal__000000014DD3__018_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_098
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014456.png
+map_Kd textures\000000014456.png
+map_bump textures\Normal__000000014458__001_법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_053
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_A24A1AA156C65D11_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012403.png
+map_Kd textures\000000012403.png
+map_bump textures\Normal__000000012402__019_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_077
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__044__법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_078
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001215A.png
+map_Kd textures\00000001215A.png
+map_bump textures\Normal__00000001215B__065_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_075
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001215A.png
+map_Kd textures\00000001215A.png
+map_bump textures\Normal__00000001215B__062_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_096
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_999D6142253FB8FF_051
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_B80CEA39F56D024E_045
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__036_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_074
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__000000011DCF__042_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_094
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000016363.png
+map_Kd textures\000000016363.png
+map_bump textures\Normal__Normal__000000016365__001__003_법선 범프.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_056
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__035__001_법선 범프.png
+
+newmtl 리알토_0_74D8AB66D08B5081_009
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__Normal__000000011DD5__036__법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_073
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135EA.png
+map_Kd textures\0000000135EA.png
+map_bump textures\NormalEnv__000000011DC9__032_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_092
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014DD1.png
+map_Kd textures\000000014DD1.png
+map_bump textures\Normal__000000014DD3__015_법선 범프.png
+
+newmtl 리알토_0_043BE835517B680E_050
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_D8926A6966F3D468_029
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__041__법선 범프.png
+
+newmtl 리알토_0_A7B2A059040CA43F_033
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__00000001288A__016_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_070
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__000000011DC9__030_법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_049
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_4EED79C603EBC725_073
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012753.png
+map_Kd textures\000000012753.png
+map_bump textures\Normal__00000001215B__058_법선 범프.png
+
+newmtl 리알토_0_A24A1AA156C65D11_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012403.png
+map_Kd textures\000000012403.png
+map_bump textures\Normal__000000012402__016_법선 범프.png
+
+newmtl 리알토_0_A6A4C80DA5C49C13_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_9899FF34B8B4EF79_046
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000133D0.png
+map_Kd textures\0000000133D0.png
+map_bump textures\Normal__Normal__Normal__00000001339E__017__003__법선 범프.png
+
+newmtl 리알토_0_9899FF34B8B4EF79_045
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000000000E.png
+map_Kd textures\00000000000E.png
+map_bump textures\Normal__0000000147E9__003_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_090
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001236C.png
+map_Kd textures\00000001236C.png
+
+newmtl 리알토_0_9899FF34B8B4EF79_044
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__017__002_법선 범프.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_053
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__035__법선 범프.png
+
+newmtl 리알토_0_2ADE06AA8F64825C_008
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__NormalEnv__NormalEnv__NormalEnv__NormalEn_법선 범프.png
+
+newmtl 리알토_0_21019E8A0513D533_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012358.png
+map_Kd textures\000000012358.png
+map_bump textures\Normal__Normal__000000012359__002__001_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_082
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001228C.png
+map_Kd textures\00000001228C.png
+map_bump textures\NormalEnv__000000011DC9__029_법선 범프.png
+
+newmtl 리알토_0_59AF773B149D2E5B_014
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__000000015125__002__002_법선 범프.png
+
+newmtl 리알토_0_04DAFF3CEDA3C927_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001230A.png
+map_Kd textures\00000001230A.png
+map_bump textures\Normal__00000001230B__004_법선 범프.png
+
+newmtl 리알토_0_E4802EDFD0ACB91A_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__017__001_법선 범프.png
+
+newmtl 리알토_0_9542E9AE8A9F4382_017
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_9899FF34B8B4EF79_043
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000133D0.png
+map_Kd textures\0000000133D0.png
+map_bump textures\Normal__Normal__00000001339E__017__001_법선 범프.png
+
+newmtl 리알토_0_646EBB875304444C_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000009B91.png
+map_Kd textures\000000009B91.png
+map_bump textures\Normal__000000009B93__003_법선 범프.png
+
+newmtl 리알토_0_A7B2A059040CA43F_031
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__00000001288A__015_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_087
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_999D6142253FB8FF_046
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_4EED79C603EBC725_069
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__033_법선 범프.png
+
+newmtl 리알토_0_B80CEA39F56D024E_039
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__033_법선 범프.png
+
+newmtl 리알토_0_D8926A6966F3D468_026
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__037__002_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_065
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__037__002_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_086
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_D8926A6966F3D468_025
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__028__법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_045
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_4EED79C603EBC725_068
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011ED5.png
+map_Kd textures\000000011ED5.png
+map_bump textures\Normal__000000011DD2__032_법선 범프.png
+
+newmtl 리알토_0_16F5F01A75612374_036
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012974.png
+map_Kd textures\000000012974.png
+map_bump textures\Normal__000000012975__007_법선 범프.png
+
+newmtl 리알토_0_B80CEA39F56D024E_038
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__032_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_064
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCA.png
+map_Kd textures\000000011DCA.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__028__법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_085
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_D8926A6966F3D468_024
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__037__법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_067
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__030_법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_044
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_A7B2A059040CA43F_030
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__00000001288A__013_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_063
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__037__법선 범프.png
+
+newmtl 리알토_0_B80CEA39F56D024E_037
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__030_법선 범프.png
+
+newmtl 리알토_1_014F64135F209FC7_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_1_999D6142253FB8FF_002
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_1_D8926A6966F3D468_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCC.png
+map_Kd textures\000000011DCC.png
+map_bump textures\Normal__NormalEnv__000000011DC9__028__법선 범프.png
+
+newmtl 리알토_1_16F5F01A75612374_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012974.png
+map_Kd textures\000000012974.png
+map_bump textures\Normal__000000012975__006_법선 범프.png
+
+newmtl 리알토_1_4EED79C603EBC725_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__029_법선 범프.png
+
+newmtl 리알토_1_57FAFB3136AD4FE3_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\Normal__NormalEnv__000000011DC9__028__법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_084
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_999D6142253FB8FF_043
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_16F5F01A75612374_033
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012974.png
+map_Kd textures\000000012974.png
+map_bump textures\Normal__000000012975__005_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_066
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__028_법선 범프.png
+
+newmtl 리알토_0_B80CEA39F56D024E_036
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__028_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_061
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCB.png
+map_Kd textures\000000011DCB.png
+map_bump textures\Normal__NormalEnv__000000011DC9__028__001_법선 범프.png
+
+newmtl 리알토_0_D8926A6966F3D468_022
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCC.png
+map_Kd textures\000000011DCC.png
+map_bump textures\Normal__NormalEnv__000000011DC9__028__001_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_090
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013430.png
+map_Kd textures\000000013430.png
+map_bump textures\Normal__000000013432__001_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_083
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_1E806F4AFA72F5F0_002
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000015293.png
+map_Kd textures\000000015293.png
+map_bump textures\Normal__000000012C51__005_법선 범프.png
+
+newmtl 리알토_0_A7B2A059040CA43F_029
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__00000001288A__012_법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_042
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_3703E5A0A8C3B274_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012989.png
+map_Kd textures\000000012989.png
+map_bump textures\Normal__00000001298A__002_법선 범프.png
+
+newmtl 리알토_0_66BA57B54E10D01E_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014288.png
+map_Kd textures\000000014288.png
+map_bump textures\Normal__000000014289__002_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_065
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001215A.png
+map_Kd textures\00000001215A.png
+map_bump textures\Normal__00000001215B__053_법선 범프.png
+
+newmtl 리알토_0_B80CEA39F56D024E_035
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__027_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_060
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__000000011DC9__027_법선 범프.png
+
+newmtl 리알토_0_EFD87533F4B4916E_019
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001215A.png
+map_Kd textures\00000001215A.png
+map_bump textures\Normal__00000001215B__052_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_080
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DC8.png
+map_Kd textures\000000011DC8.png
+map_bump textures\Normal__000000011DC9__003_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_082
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142DF.png
+map_Kd textures\0000000142DF.png
+
+newmtl 리알토_0_014F64135F209FC7_081
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_D8926A6966F3D468_021
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCC.png
+map_Kd textures\000000011DCC.png
+map_bump textures\Normal__NormalEnv__000000011DC9__027__법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_041
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_B80CEA39F56D024E_034
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__000000011DD5__026_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_064
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__027_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_059
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\Normal__NormalEnv__000000011DC9__027__법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_039
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_4423E684922B29D7_042
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__00000001339E__016_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_089
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014DD1.png
+map_Kd textures\000000014DD1.png
+map_bump textures\Normal__000000014DD3__014_법선 범프.png
+
+newmtl 리알토_0_17A40C8C76809DF5_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001548C.png
+map_Kd textures\00000001548C.png
+map_bump textures\Normal__00000000000C__009_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_076
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCC.png
+map_Kd textures\000000011DCC.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__025__001_법선 범프.png
+
+newmtl 리알토_0_A7B2A059040CA43F_027
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__00000001288A__011_법선 범프.png
+
+newmtl 리알토_0_C185E89E53B55CAE_009
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011ED5.png
+map_Kd textures\000000011ED5.png
+map_bump textures\Normal__000000011DD2__026_법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_035
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012268.png
+map_Kd textures\000000012268.png
+
+newmtl 리알토_0_4423E684922B29D7_038
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__00000001339E__014_법선 범프.png
+
+newmtl 리알토_0_C6AC98F40A311C94_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000120B2.png
+map_Kd textures\0000000120B2.png
+map_bump textures\Normal__0000000120B3__012_법선 범프.png
+
+newmtl 리알토_0_C185E89E53B55CAE_008
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011ED5.png
+map_Kd textures\000000011ED5.png
+map_bump textures\Normal__000000011DD2__025_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_061
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012753.png
+map_Kd textures\000000012753.png
+map_bump textures\Normal__00000001215B__047_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_081
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000009B97.png
+map_Kd textures\000000009B97.png
+
+newmtl 리알토_0_59AF773B149D2E5B_012
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__000000015125__002__001_법선 범프.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_046
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__025__002_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_068
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCC.png
+map_Kd textures\000000011DCC.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__025__법선 범프.png
+
+newmtl 리알토_0_B707BAB21018D1E4_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000000F1B0.png
+map_Kd textures\00000000F1B0.png
+map_bump textures\Normal__00000000F1B1__003_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_059
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012753.png
+map_Kd textures\000000012753.png
+map_bump textures\Normal__00000001215B__045_법선 범프.png
+
+newmtl 리알토_2_D65D58204DB23A48_009
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_2_6C3775F9F55E0FAD_017
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__013_법선 범프.png
+
+newmtl 리알토_0_D65D58204DB23A48_012
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_6C3775F9F55E0FAD_067
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__025_법선 범프.png
+
+newmtl 리알토_2_6C3775F9F55E0FAD_016
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__012_법선 범프.png
+
+newmtl 리알토_1_6C3775F9F55E0FAD_024
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142EA.png
+map_Kd textures\0000000142EA.png
+map_bump textures\Normal__00000001365C__040_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_066
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__024_법선 범프.png
+
+newmtl 리알토_0_F8A2AA0F69BFDEEE_042
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_A63F00CFAAC2FB92_016
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012423.png
+map_Kd textures\000000012423.png
+map_bump textures\Normal__Normal__Normal__Normal__00000000000C__009__001__003__법선 범프.png
+
+newmtl 리알토_0_B86912A2EBDA8C63_016
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012423.png
+map_Kd textures\000000012423.png
+map_bump textures\Normal__Normal__Normal__Normal__00000000000C__009__001__003__법선 범프.png
+
+newmtl 리알토_1_6C3775F9F55E0FAD_023
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142EA.png
+map_Kd textures\0000000142EA.png
+map_bump textures\Normal__00000001365C__039_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_065
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__023_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_077
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012CBD.png
+map_Kd textures\000000012CBD.png
+map_bump textures\Normal__000000012CBF__001_법선 범프.png
+
+newmtl 리알토_1_9899FF34B8B4EF79_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__013__001_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_075
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012C9A.png
+map_Kd textures\000000012C9A.png
+map_bump textures\Normal__000000012C9C__001_법선 범프.png
+
+newmtl 리알토_1_D65D58204DB23A48_010
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_1_A7B2A059040CA43F_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__Normal__Normal__Normal__00000001288A__011__002__001__법선 범프.png
+
+newmtl 리알토_1_6C3775F9F55E0FAD_021
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142EA.png
+map_Kd textures\0000000142EA.png
+map_bump textures\Normal__00000001365C__036_법선 범프.png
+
+newmtl 리알토_0_D65D58204DB23A48_011
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_A7B2A059040CA43F_024
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__Normal__Normal__00000001288A__011__002__법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_062
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__021_법선 범프.png
+
+newmtl 리알토_0_A20C45A0D27466C1_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000015191.png
+map_Kd textures\000000015191.png
+
+newmtl 리알토_0_C0321E5C625E9F67_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001518C.png
+map_Kd textures\00000001518C.png
+map_bump textures\Normal__00000001518D__001_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_070
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014DAC.png
+map_Kd textures\000000014DAC.png
+
+newmtl 리알토_0_DDCB254400EFCD2B_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\Map__1_멀티타일.png
+map_Kd textures\Map__1_멀티타일.png
+map_bump textures\Normal__Normal__000000011407__001__001_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_072
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000113EE.png
+map_Kd textures\0000000113EE.png
+map_bump textures\Normal__0000000113F0__001_법선 범프.png
+
+newmtl 리알토_3_6C3775F9F55E0FAD_008
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__011_법선 범프.png
+
+newmtl 리알토_0_D65D58204DB23A48_009
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_6C3775F9F55E0FAD_059
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__010_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_070
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\Map__9_멀티타일.png
+map_Kd textures\Map__9_멀티타일.png
+map_bump textures\Normal__Normal__Normal__000000011407__001__001__법선 범프.png
+
+newmtl 리알토_0_0ED80BE8A5382A59_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000000BA15.png
+map_Kd textures\00000000BA15.png
+map_bump textures\Normal__00000000BA16__001_법선 범프.png
+
+newmtl 리알토_0_9268BC2B16755CB2_008
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000015256.png
+map_Kd textures\000000015256.png
+map_bump textures\Normal__000000015257__008_법선 범프.png
+
+newmtl 리알토_0_ED26503F086C290E_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000015264.png
+map_Kd textures\000000015264.png
+map_bump textures\Normal__000000015265__004_법선 범프.png
+
+newmtl 리알토_0_2922F3635D7E5585_008
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001525B.png
+map_Kd textures\00000001525B.png
+map_bump textures\Normal__00000001525C__008_법선 범프.png
+
+newmtl 리알토_3_6C3775F9F55E0FAD_007
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__009_법선 범프.png
+
+newmtl 리알토_2_6C3775F9F55E0FAD_012
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142EA.png
+map_Kd textures\0000000142EA.png
+map_bump textures\Normal__00000001365C__032_법선 범프.png
+
+newmtl 리알토_1_6C3775F9F55E0FAD_017
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001365B.png
+map_Kd textures\00000001365B.png
+map_bump textures\Normal__00000001365C__031_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_055
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__018_법선 범프.png
+
+newmtl 리알토_1_014F64135F209FC7_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014DA2.png
+map_Kd textures\000000014DA2.png
+
+newmtl 리알토_0_014F64135F209FC7_065
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001542F.png
+map_Kd textures\00000001542F.png
+
+newmtl 리알토_0_014F64135F209FC7_064
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_039
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__025__001_법선 범프.png
+
+newmtl 리알토_0_74D8AB66D08B5081_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__Normal__000000011DD5__023__001_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_050
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135EA.png
+map_Kd textures\0000000135EA.png
+map_bump textures\NormalEnv__000000011DC9__024_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_067
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000016363.png
+map_Kd textures\000000016363.png
+map_bump textures\Normal__Normal__000000016365__001__002_법선 범프.png
+
+newmtl 리알토_0_CB0CCD526A22C577_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001236C.png
+map_Kd textures\00000001236C.png
+
+newmtl 리알토_0_EA4FD88394C32249_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012358.png
+map_Kd textures\000000012358.png
+map_bump textures\Normal__Normal__000000012359__002__법선 범프.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_038
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__025__법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_049
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCC.png
+map_Kd textures\000000011DCC.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__024__법선 범프.png
+
+newmtl 리알토_0_2ADE06AA8F64825C_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000168E7.png
+map_Kd textures\0000000168E7.png
+map_bump textures\571210053__NormalEnv__00000000000C__001__법선 범프.png
+
+newmtl 리알토_0_DDF6D57A4E954C1C_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__000000015125__002__법선 범프.png
+
+newmtl 리알토_0_59AF773B149D2E5B_011
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__000000015125__002__법선 범프.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_037
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001446C.png
+map_Kd textures\00000001446C.png
+map_bump textures\Normal__Normal__00000001288A__010__002_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_066
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001140A.png
+map_Kd textures\00000001140A.png
+map_bump textures\Normal__00000001140C__001_법선 범프.png
+
+newmtl 리알토_0_960828E24DCB59D0_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142DF.png
+map_Kd textures\0000000142DF.png
+map_bump textures\Normal__0000000142E0__003_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_054
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012753.png
+map_Kd textures\000000012753.png
+map_bump textures\Normal__00000001215B__042_법선 범프.png
+
+newmtl 리알토_0_EFD87533F4B4916E_014
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011ED5.png
+map_Kd textures\000000011ED5.png
+map_bump textures\Normal__000000011DD2__024_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_064
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001335C.png
+map_Kd textures\00000001335C.png
+map_bump textures\Normal__00000001335E__001_법선 범프.png
+
+newmtl 리알토_0_9268BC2B16755CB2_007
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000015256.png
+map_Kd textures\000000015256.png
+map_bump textures\Normal__000000015257__007_법선 범프.png
+
+newmtl 리알토_0_2922F3635D7E5585_007
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001525B.png
+map_Kd textures\00000001525B.png
+map_bump textures\Normal__00000001525C__007_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_063
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000000B8F2.png
+map_Kd textures\00000000B8F2.png
+map_bump textures\Normal__00000000B8F4__001_법선 범프.png
+
+newmtl 리알토_0_219EEDAEF9B6C50B_029
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__023_법선 범프.png
+
+newmtl 리알토_0_A7B2A059040CA43F_020
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000000000E.png
+map_Kd textures\00000000000E.png
+map_bump textures\Normal__Normal__00000001288A__010__001_법선 범프.png
+
+newmtl 리알토_1_6991115123C26701_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012376.png
+map_Kd textures\000000012376.png
+map_bump textures\NormalEnv__000000012371__003_법선 범프.png
+
+newmtl 리알토_0_6991115123C26701_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__NormalEnv__0000000134BB__002__001__001_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_062
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_048
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__000000011DC9__023_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_053
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__023__법선 범프.png
+
+newmtl 리알토_0_219EEDAEF9B6C50B_027
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__022_법선 범프.png
+
+newmtl 리알토_4_D65D58204DB23A48_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_4_6C3775F9F55E0FAD_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F8C.png
+map_Kd textures\000000013F8C.png
+map_bump textures\Normal__000000013F8D__004_법선 범프.png
+
+newmtl 리알토_3_D65D58204DB23A48_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_3_6C3775F9F55E0FAD_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__017_법선 범프.png
+
+newmtl 리알토_1_D65D58204DB23A48_007
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_1_6C3775F9F55E0FAD_016
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142EA.png
+map_Kd textures\0000000142EA.png
+map_bump textures\Normal__00000001365C__026_법선 범프.png
+
+newmtl 리알토_0_D65D58204DB23A48_008
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_6C3775F9F55E0FAD_049
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__008_법선 범프.png
+
+newmtl 리알토_1_219EEDAEF9B6C50B_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012889.png
+map_Kd textures\000000012889.png
+map_bump textures\Normal__Normal__Normal__Normal__00000001288A__010__001__001__법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_050
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012753.png
+map_Kd textures\000000012753.png
+map_bump textures\Normal__00000001215B__040_법선 범프.png
+
+newmtl 리알토_0_9899FF34B8B4EF79_032
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000133D0.png
+map_Kd textures\0000000133D0.png
+map_bump textures\Normal__00000001339E__012_법선 범프.png
+
+newmtl 리알토_0_9542E9AE8A9F4382_011
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_2_D65D58204DB23A48_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_2_6C3775F9F55E0FAD_010
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__016_법선 범프.png
+
+newmtl 리알토_1_D65D58204DB23A48_006
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_1_6C3775F9F55E0FAD_015
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F8C.png
+map_Kd textures\000000013F8C.png
+map_bump textures\Normal__000000013F8D__003_법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_047
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__000000011DC9__022_법선 범프.png
+
+newmtl 리알토_0_014F64135F209FC7_059
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_4EED79C603EBC725_048
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__022__법선 범프.png
+
+newmtl 리알토_0_BA830F062406B17B_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__021_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_059
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135C9.png
+map_Kd textures\0000000135C9.png
+map_bump textures\Normal__0000000135CB__001_법선 범프.png
+
+newmtl 리알토_0_646EBB875304444C_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000009B91.png
+map_Kd textures\000000009B91.png
+map_bump textures\Normal__000000009B93__002_법선 범프.png
+
+newmtl 리알토_0_9899FF34B8B4EF79_030
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__012__법선 범프.png
+
+newmtl 리알토_0_76AD6B1DC77ACBBE_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013672.png
+map_Kd textures\000000013672.png
+
+newmtl 리알토_0_014F64135F209FC7_058
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_4EED79C603EBC725_047
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__021__법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_046
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__000000011DC9__021_법선 범프.png
+
+newmtl 리알토_0_9899FF34B8B4EF79_028
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__011__003_법선 범프.png
+
+newmtl 리알토_0_5555DB738E760F34_002
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000125DF.png
+map_Kd textures\0000000125DF.png
+map_bump textures\Normal__0000000125E0__001_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_058
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000120B2.png
+map_Kd textures\0000000120B2.png
+map_bump textures\Normal__0000000120B3__009_법선 범프.png
+
+newmtl 리알토_0_4423E684922B29D7_028
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__011__002_법선 범프.png
+
+newmtl 리알토_1_6C3775F9F55E0FAD_014
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000142EA.png
+map_Kd textures\0000000142EA.png
+map_bump textures\Normal__00000001365C__024_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_047
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000122BB.png
+map_Kd textures\0000000122BB.png
+map_bump textures\Normal__Normal__0000000122BC__001__015_법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_057
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000120B2.png
+map_Kd textures\0000000120B2.png
+map_bump textures\Normal__0000000120B3__008_법선 범프.png
+
+newmtl 리알토_0_4423E684922B29D7_027
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__011__001_법선 범프.png
+
+newmtl 리알토_0_9899FF34B8B4EF79_025
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__Normal__00000001339E__011__법선 범프.png
+
+newmtl 리알토_0_81B09AB0F566B1D2_056
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001337E.png
+map_Kd textures\00000001337E.png
+map_bump textures\Normal__000000013380__001_법선 범프.png
+
+newmtl 리알토_0_219EEDAEF9B6C50B_024
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__020_법선 범프.png
+
+newmtl 리알토_3_6C3775F9F55E0FAD_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013F7B.png
+map_Kd textures\000000013F7B.png
+map_bump textures\Normal__000000013F7C__007_법선 범프.png
+
+newmtl 리알토_0_6C3775F9F55E0FAD_046
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012CEC.png
+map_Kd textures\000000012CEC.png
+map_bump textures\Normal__000000012CED__008_법선 범프.png
+
+newmtl 리알토_2_428D2495ED049BC0_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000014315.png
+map_Kd textures\000000014315.png
+map_bump textures\Normal__Normal__00000001363B__007__법선 범프.png
+
+newmtl 리알토_1_428D2495ED049BC0_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__0000000151FA__003_법선 범프.png
+
+newmtl 리알토_0_428D2495ED049BC0_007
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001363A.png
+map_Kd textures\00000001363A.png
+map_bump textures\Normal__00000001363B__006_법선 범프.png
+
+newmtl 리알토_0_873D17ACFC8B95C5_031
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__020__001_법선 범프.png
+
+newmtl 리알토_0_74D8AB66D08B5081_005
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD4.png
+map_Kd textures\000000011DD4.png
+map_bump textures\Normal__Normal__000000011DD5__023__법선 범프.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_045
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135EA.png
+map_Kd textures\0000000135EA.png
+map_bump textures\NormalEnv__000000011DC9__020_법선 범프.png
+
+newmtl 리알토_0_76AD6B1DC77ACBBE_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000013672.png
+map_Kd textures\000000013672.png
+
+newmtl 리알토_0_014F64135F209FC7_056
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_57FAFB3136AD4FE3_044
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__000000011DC9__019_법선 범프.png
+
+newmtl 리알토_0_4EED79C603EBC725_044
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__Normal__000000011DD2__020__법선 범프.png
+
+newmtl 리알토_0_C6AC98F40A311C94_003
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000120B2.png
+map_Kd textures\0000000120B2.png
+map_bump textures\Normal__0000000120B3__007_법선 범프.png
+
+newmtl 리알토_0_999D6142253FB8FF_032
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+
+newmtl 리알토_0_4423E684922B29D7_025
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001339D.png
+map_Kd textures\00000001339D.png
+map_bump textures\Normal__00000001339E__010_법선 범프.png
+
+newmtl 리알토_1_014F64135F209FC7_004
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000000250.png
+map_Kd textures\000000000250.png
+
+newmtl 리알토_0_014F64135F209FC7_055
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000000250.png
+map_Kd textures\000000000250.png
+
+newmtl 리알토_0_014F64135F209FC7_054
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\00000001245C.png
+map_Kd textures\00000001245C.png
+
+newmtl 리알토_0_9365A90CCCAF28FB_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__019__법선 범프.png
+
+newmtl 리알토_0_E8741FC2E6407B97_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DEF.png
+map_Kd textures\000000011DEF.png
+map_bump textures\NormalEnv__NormalEnv__000000011DC9__019__법선 범프.png
+
+newmtl 리알토_0_E7E71816B41E4BD6_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DD1.png
+map_Kd textures\000000011DD1.png
+map_bump textures\Normal__000000011DD2__019_법선 범프.png
+
+newmtl 리알토_0_B7686C5A66F06664_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000011DCE.png
+map_Kd textures\000000011DCE.png
+map_bump textures\Normal__Normal__000000011DCF__025__법선 범프.png
+
+newmtl 리알토_6_542F80C6B5FA7D9F_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000151F9.png
+map_Kd textures\0000000151F9.png
+map_bump textures\Normal__0000000151FA__002_법선 범프.png
+
+newmtl 리알토_4_542F80C6B5FA7D9F_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000134D9.png
+map_Kd textures\0000000134D9.png
+map_bump textures\NormalEnv__NormalEnv__NormalEnv__0000000134BB__002__001__법선 범프.png
+
+newmtl 리알토_3_542F80C6B5FA7D9F_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000012C90.png
+map_Kd textures\000000012C90.png
+map_bump textures\Normal__000000012C8F__001_법선 범프.png
+
+newmtl 리알토_2_542F80C6B5FA7D9F_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\000000002A86.png
+map_Kd textures\000000002A86.png
+map_bump textures\Normal__000000002A87__001_법선 범프.png
+
+newmtl 리알토_1_542F80C6B5FA7D9F_001
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135BC.png
+map_Kd textures\0000000135BC.png
+map_bump textures\Normal__Normal__Normal__Normal__Normal__00000000000C__009__001__법선 범프.png
+
+newmtl 리알토_0_542F80C6B5FA7D9F_009
+Ns 32.6421
+Ni 1.5000
+d 1.0000
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.8000 0.8000 0.8000
+Ks 0.2500 0.2500 0.2500
+Ke 0.0000 0.0000 0.0000
+map_Ka textures\0000000135BE.png
+map_Kd textures\0000000135BE.png
+map_bump textures\Normal__Normal__Normal__Normal__00000000000C__009__001__002__법선 범프.png
