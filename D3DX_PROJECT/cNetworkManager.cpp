@@ -16,7 +16,7 @@ cNetworkManager::cNetworkManager()
 }
 
 cNetworkManager::~cNetworkManager()
-{
+{	
 }
 
 //bool StartWith(char * FindStr, char * SearchStr)
@@ -58,33 +58,28 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 	}
 }
 
-void cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
+int cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 {
+	int result;
 	if (isConnected)
 	{
 		
 		strcpy(strPC->MsgHeader, MsgHeader);	
-		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
+		result = send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
 
 		if (strcmp(MsgHeader, "join") == 0)
 		{
 			strcpy(strPC->MsgHeader, "userData");
 		}
 	}
+
+	return result;
 }
 
 void cNetworkManager::recvData()
 {
 	if (isConnected)
 	{
-
-		/*
-		memset(buffer, 0, 200);
-		bufferLen = recv(s, buffer, 200, 0);
-		buffer[bufferLen] = NULL;
-		OMOK_MSG_SYS* tmpsys = (OMOK_MSG_SYS*)buffer;
-
-		*/
 		memset(buffer, 0, sizeof(CharacterStatus_PC)+1);
 		
 		int bufferLen = recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
@@ -93,16 +88,6 @@ void cNetworkManager::recvData()
 
 		if (strcmp(tmp->MsgHeader, "userData") == 0)
 		{
-			//float x, y, z, direc;
-			//int actCount, act, userNum;
-			//sscanf_s(buffer, "%*s %d %f %f %f %f %d %d", &userNum, &x, &y, &z, &direc, &act, &actCount);
-			//tmp.userNum = userNum;
-			//tmp.x = x;
-			//tmp.y = y;
-			//tmp.z = z;
-			//tmp.direction = direc;
-			//tmp.action = act;
-			//tmp.actionCount = actCount;
 
 			int check = 0;
 			for (int i = 0; i < OtherPlayer.size(); i++)
@@ -114,6 +99,7 @@ void cNetworkManager::recvData()
 					break;
 				}
 			}
+
 			if (check == 0)
 			{
 				g_pOtherPlayerManager->newPlayer(tmp);
@@ -152,5 +138,10 @@ void cNetworkManager::recvData()
 bool cNetworkManager::GetNetStatus()
 {
 	return isConnected;
+}
+
+SOCKET cNetworkManager::GetServerSocket()
+{
+	return s;
 }
 

@@ -124,7 +124,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
 	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
-		0, 0, 1366, 768, GetDesktopWindow(), nullptr, hInstance, nullptr);
+		0, 0, 1280, 1024, GetDesktopWindow(), nullptr, hInstance, nullptr);
 
 	if (!hWnd)
 	{
@@ -192,6 +192,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_DESTROY:
+		g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+		closesocket((g_pGameInfoManager->GetMyInfo()->s));
 		PostQuitMessage(0);
 		break;
 	default:

@@ -23,14 +23,15 @@ static vector<CharacterStatus_PC> g_vUsers;
 CRITICAL_SECTION	crit;
 HANDLE	g_thrThreads[MAX_USERS];
 int	g_isAliveThread[MAX_USERS] = { 0 };
+HWND hWnd;
+
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 int					UpdateAndSend(void* idx);
-
+void CALLBACK		TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -71,7 +72,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 }
 
 
-
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -96,9 +96,9 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
-
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   
+   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, 600, 400, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -131,8 +131,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
 	case WM_CREATE:
+		MoveWindow(hWnd,
+			GetSystemMetrics(SM_CXSCREEN) -370, GetSystemMetrics(SM_CYSCREEN) -230,
+			300, 220,
+			TRUE);
+
 		InitializeCriticalSection(&crit);
-		SetTimer(hWnd, 123, 25, NULL);		
+		SetTimer(hWnd, 123, 25, TimerProc);
 		playerCnt = 0;
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -163,12 +168,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			case FD_ACCEPT:
 			{
-				HANDLE hThread;
+				HANDLE hThread = new HANDLE;
 				size = sizeof(c_addr);
 				g_vUsers.push_back(TmpUser);
 				g_vUsers.back().s = accept(ServerSocket, (LPSOCKADDR)&c_addr, &size);
 				g_vUsers.back().ID = playerCnt;
-				WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_READ);
+				g_vUsers.back().FailCnt = 0;
+				WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_CLOSE | FD_WRITE);
 
 				playerCnt++;
 
@@ -181,6 +187,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				g_thrThreads[(int)g_vUsers.back().ID] = hThread;
 
 				CloseHandle(hThread);
+			}
+			break;
+			case FD_CLOSE:
+			{
+				int idx = -1;
+				for (int i = 0; i < g_vUsers.size(); i++)
+				{
+					char* buffer;
+					buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
+					CharacterStatus_PC* userData = (CharacterStatus_PC*)&buffer;
+
+					if (g_vUsers[i].s == userData->s)
+					{					
+						closesocket((g_vUsers[i].s));
+						g_isAliveThread[i] = -1;
+						break;
+					}
+				}
+				
 			}
 			break;
 //		case FD_READ:			
@@ -259,28 +284,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 //			break;
 		}
 		break;
-	case WM_TIMER:
-		InvalidateRgn(hWnd, NULL, TRUE);
-		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
+			char *tmp;
+			tmp = (char*)calloc(32, sizeof(char));
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다.
 			if (g_vUsers.size() == 0)
 				TextOut(hdc, 10, 10, "No Player is online", strlen("No Player is online"));
 			else
-			{
-				TextOut(hdc, 10, 10, to_string(g_vUsers.size()).c_str(), strlen(to_string(g_vUsers.size()).c_str()));
+			{				
+				TextOut(hdc, 10, 10, itoa((g_vUsers.size()), tmp, 10), strlen(tmp));
 				TextOut(hdc, 50, 10, "Player(s) online", strlen("Player(s) online"));
+
+				for (int i = 0; i < g_vUsers.size(); i++)
+				{
+					int nfailcount = g_vUsers[i].FailCnt;
+					itoa(g_isAliveThread[i], tmp, 10);
+					TextOut(hdc, 10, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+					itoa(g_vUsers[i].ID, tmp, 10);
+					TextOut(hdc, 100, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+					itoa((int)(g_vUsers[i].s), tmp, 10);
+					TextOut(hdc, 200, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+				}
+
 			}
 
-			for (int i = 0; i < g_vUsers.size(); i++)
-			{
-				TextOut(hdc, 10, 30 + 20 * g_vUsers[i].ID, to_string((int)g_vUsers[i].FailCnt).c_str(), strlen(to_string((int)g_vUsers[i].FailCnt).c_str()));
-				TextOut(hdc, 50, 30 + 20 * g_vUsers[i].ID, to_string(g_vUsers[i].ID).c_str(), strlen(to_string(g_vUsers[i].ID).c_str()));
-				TextOut(hdc, 90, 30 + 20 * g_vUsers[i].ID, to_string(g_vUsers[i].s).c_str(), strlen(to_string(g_vUsers[i].s).c_str()));
-			}
+			
+			DeleteObject(hdc);
 			EndPaint(hWnd, &ps);
         }
         break;
@@ -303,14 +335,23 @@ int UpdateAndSend(void* idx)
 	char* buffer;
 	buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
 	static int tryout = 0;
-	bool isExit = false;
+	g_vUsers[i].FailCnt = 0;
 
-	buffLen = recv(g_vUsers[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-	while (buffLen && !isExit)
+	
+	while (g_isAliveThread[i] != -1)
 	{
+		buffLen = recv(g_vUsers[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
 		CharacterStatus_PC* userData = (CharacterStatus_PC*)&buffer;
-
+		
 		EnterCriticalSection(&crit);		
+		
+		if (strcmp(userData->MsgHeader, "join") == 0)
+			strcpy(userData->MsgHeader, "userData");
+		else if (strcmp(userData->MsgHeader, "disconnect") == 0)
+		{
+			g_isAliveThread[i] = -1;
+			break;
+		}
 
 		g_vUsers[i] = *userData;
 		
@@ -319,21 +360,28 @@ int UpdateAndSend(void* idx)
 		{			
 				result = send(g_vUsers[n].s, (char*)userData, sizeof(CharacterStatus_PC) + 1, 0);
 
-				if (result != -1)
+				if (result != -1 && result != 0)
 					g_vUsers[n].FailCnt = 0;
 				else
 					g_vUsers[n].FailCnt += 1;
-
-				if (g_isAliveThread[n] > TRYOUT_CNT)
-					g_isAliveThread[n] = false;			
-		}
-
-		LeaveCriticalSection(&crit);
-
-		if (g_isAliveThread[i] == -1)
-			isExit = true;
 				
+				if (g_vUsers[n].FailCnt > TRYOUT_CNT)
+				{
+					g_isAliveThread[n] = -1;
+					break;
+				}
+
+		}
+		LeaveCriticalSection(&crit);
 	}
 
+	LeaveCriticalSection(&crit);
+
 	return 0;
+}
+
+
+void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
+{
+	InvalidateRgn(hwnd, NULL, TRUE);
 }

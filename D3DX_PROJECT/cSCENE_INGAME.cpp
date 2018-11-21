@@ -38,7 +38,12 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pObject);
 	SAFE_DELETE(m_pXmodel);
 	//SAFE_DELETE(m_pSKY);
-	SAFE_DELETE(m_pMyCharacter);
+	SAFE_DELETE(m_pMyCharacter);	
+
+	int result;
+	result = g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+	closesocket(g_pNetworkManager->GetServerSocket());
+
 }
 
 void cSCENE_INGAME::Setup()
