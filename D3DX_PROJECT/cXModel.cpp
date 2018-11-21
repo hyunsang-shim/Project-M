@@ -70,8 +70,8 @@ cXModel::cXModel(string filePath)
 	{
 		ID3DXMesh* pTempMesh = 0;
 		m_pXMesh->CloneMeshFVF(
-			D3DXMESH_MANAGED,
-			m_pXMesh->GetFVF() | D3DFVF_NORMAL,
+			D3DXMESH_MANAGED | D3DXMESH_32BIT,
+			m_pXMesh->GetFVF(),
 			g_pDevice,
 			&pTempMesh);
 
@@ -80,6 +80,16 @@ cXModel::cXModel(string filePath)
 		m_pXMesh->Release();
 		m_pXMesh = pTempMesh;
 	}
+
+	std::vector<DWORD> vecAdj(m_pXMesh->GetNumVertices());
+	m_pXMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+
+	m_pXMesh->OptimizeInplace(
+		D3DXMESHOPT_ATTRSORT |
+		D3DXMESHOPT_COMPACT |
+		D3DXMESHOPT_VERTEXCACHE,
+		&vecAdj[0],
+		0, 0, 0);
 
 	D3DXMatrixIdentity(&m_matWorld);
 }
@@ -116,6 +126,9 @@ void cXModel::Update()
 
 void cXModel::Render()
 {
+	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	/*g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+	g_pDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);*/
 	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
 	for (int i = 0; i < m_vecMtl.size(); i++)
 	{

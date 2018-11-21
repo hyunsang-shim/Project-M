@@ -165,14 +165,14 @@ void cNewObject::Updata()
 
 void cNewObject::Render()
 {
-	//D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
+	D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
 
 	//D3DXMatrixScaling(&BoxS, 0.01, 0.01, 0.01);
 	//D3DXMatrixRotationYawPitchRoll(&BoxR, D3DX_PI / 2, -D3DX_PI / 2, 0);
 	//D3DXVec3TransformNormal(&v_BoxLookAt, &D3DXVECTOR3(0, 0, 1), &BoxR);
 	//D3DXMatrixTranslation(&BoxT, v_translation.x, v_translation.y, v_translation.z);
 
-	//m_matWorld = BoxS * BoxR * BoxT;
+	//m_matWorld = BoxT;
 
 	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
 
@@ -387,20 +387,13 @@ bool cNewObject::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos
 	D3DXVECTOR3 footPos = HeadPos - D3DXVECTOR3(0, 2.1f, 0);
 
 	D3DXIntersect(m_pMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
-	D3DXIntersect(m_pMesh, &footPos, &D3DXVECTOR3(0, 1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
-
 	if (hit)
 	{
-		if (float(HeadPos.y) - dist >= -0.5 && dist + dist2 < 2.10001f && dist + dist2 > 2.09999f)
-		{
-			y = float(HeadPos.y) - dist;
-			return true;
-		}
-		else if (float(HeadPos.y) - dist >= -0.5 && !hit2)
-		{
-			y = float(HeadPos.y) - dist;
-			return true;
-		}
+		y = float(HeadPos.y) - dist;
 	}
-	return false;
+	else
+	{
+		y = HeadPos.y;
+	}
+	return true;
 }

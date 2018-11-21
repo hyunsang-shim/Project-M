@@ -59,6 +59,8 @@ cSCENE_INGAME::~cSCENE_INGAME()
 
 void cSCENE_INGAME::Setup()
 {
+	//g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 	m_pCrossHairPicking = new cCrossHairPicking;
 
 	
@@ -97,15 +99,17 @@ void cSCENE_INGAME::Setup()
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
 
-	g_pGameInfoManager->setup_Map("map", "rialto_small.obj");
+	//OBJ타입의 맵 로딩
+	//g_pGameInfoManager->setup_Map("map/rialto_obj_2", "Rialto_8B4.obj");
 
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//테스트 엑스모델 셋팅
-	m_pXmodel = new cXModel("Xfile/bigship1.x");
-	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
+	//xfile타입의 맵 로딩
+	//m_pXmodel = new cXModel("map/Rialto_8B4_blend_3.x");
+	//m_pXmodel = new cXModel("xfile/bigship1.x");
+	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
 	//하늘 셋팅
 	m_pSKY = new cSKY();
@@ -256,11 +260,13 @@ void cSCENE_INGAME::Render()
 		SetCursor(LoadCursor(NULL, IDC_ARROW));
 	}
 
+
+
 	m_pSKY->Render();
 	//m_pGrid->Render();
-	g_pGameInfoManager->m_pMap->Render();
+	//g_pGameInfoManager->m_pMap->Render();
 	m_pObject->Render();
-	m_pXmodel->Render();
+	//m_pXmodel->Render();
 
 	// 넷 상태에 따라 스킵 가능하도록 수정
 	if (g_pNetworkManager->GetNetStatus())
@@ -662,7 +668,7 @@ void cSCENE_INGAME::Mesh_Render()
 		g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
 		m_Bullet[i].m_pBulletMesh->DrawSubset(0);
 
-		m_Bullet[i].m_vBulletCreatePos += m_Bullet[i].BulletDirection;
+		m_Bullet[i].m_vBulletCreatePos += m_Bullet[i].BulletDirection/2;
 
 		m_Bullet[i].BulletLiveTime--;
 

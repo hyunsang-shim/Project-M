@@ -7,7 +7,7 @@
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
-	, m_vPosition(0, 0, -5)
+	, m_vPosition(88, 0, -30)
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
@@ -58,11 +58,11 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	{
 		if (GetKeyState('W') & 0x8000)
 		{
-			m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+			m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 			CurrentAnimNum = 8;
 			if (GetKeyState(VK_SHIFT) & 0x8000)
 			{
-				m_vPosition = m_vPosition + (m_vDirection * 0.15f);
+				m_vPosition = m_vPosition + (m_vDirection * 0.3f);
 				CurrentAnimNum = 4;
 				if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
 				{
@@ -76,7 +76,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 		else if (GetKeyState('S') & 0x8000)
 		{
-			m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+			m_vPosition = m_vPosition - (m_vDirection * 0.2f);
 			CurrentAnimNum = 5;
 			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
 			{
