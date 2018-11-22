@@ -31,7 +31,6 @@ public:
 	void Render();
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	void RenderOtherPlayer();
 	void Setup_HeightMap();
 private:
 	cCamera* m_pCamera;	

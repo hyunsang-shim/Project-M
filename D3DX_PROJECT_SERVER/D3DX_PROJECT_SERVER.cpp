@@ -28,8 +28,11 @@ HWND hWnd;
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-int					UpdateAndSend(void* idx);
+int					ThreadRecieveAndUpdate(void* idx);
 void CALLBACK		TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
+void				ThreadSend();
+
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -98,13 +101,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, 600, 400, nullptr, nullptr, hInstance, nullptr);
 
-   if (!g_hWnd)
+   if (!hWnd)
    {
       return FALSE;
    }
 
-   ShowWindow(g_hWnd, nCmdShow);
-   UpdateWindow(g_hWnd);
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
 
    return TRUE;
 }
@@ -166,6 +169,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				HANDLE hThread = new HANDLE;
 				size = sizeof(c_addr);
+				CharacterStatus_PC TmpUser;
+
+
 				g_vUsers.push_back(TmpUser);
 				g_vUsers.back().s = accept(ServerSocket, (LPSOCKADDR)&c_addr, &size);
 				g_vUsers.back().ID = playerCnt;
@@ -179,7 +185,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				strcpy(g_vUsers.back().MsgHeader, "TitleScene");
 
 				g_isAliveThread[(int)g_vUsers.back().ID] = 0;	// ������ ��� ���� Ƚ���� �ʱ�ȭ �Ѵ�.
-				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))UpdateAndSend, (void *)g_vUsers.back().ID, 0, NULL);
+				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, (void *)g_vUsers.back().ID, 0, NULL);
 				g_thrThreads[(int)g_vUsers.back().ID] = hThread;
 
 				CloseHandle(hThread);
@@ -286,7 +292,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
 			char *tmp;
 			tmp = (char*)calloc(32, sizeof(char));
-            // TODO: ���⿡ hdc�� ����ϴ� �׸��� �ڵ带 �߰��մϴ�.
 			if (g_vUsers.size() == 0)
 				TextOut(hdc, 10, 10, "No Player is online", strlen("No Player is online"));
 			else
@@ -297,17 +302,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				for (int i = 0; i < g_vUsers.size(); i++)
 				{
 					int nfailcount = g_vUsers[i].FailCnt;
+					int offsetY = g_vUsers[i].ID;
 					itoa(g_isAliveThread[i], tmp, 10);
 					TextOut(hdc, 10, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
 					itoa(g_vUsers[i].ID, tmp, 10);
-					TextOut(hdc, 100, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+					TextOut(hdc, 60, 30 + 20 * offsetY, tmp, strlen(tmp));
 					itoa((int)(g_vUsers[i].s), tmp, 10);
-					TextOut(hdc, 200, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
+					TextOut(hdc, 150, 30 + 20 * offsetY, tmp, strlen(tmp));
+					TextOut(hdc, 220, 30 + 20 * offsetY, g_vUsers[i].MsgHeader, strlen(g_vUsers[i].MsgHeader));
 				}
-
-			}
-
-			
+			}			
 			DeleteObject(hdc);
 			EndPaint(hWnd, &ps);
         }
@@ -324,50 +328,55 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-int UpdateAndSend(void* idx)
+int ThreadRecieveAndUpdate(void* idx)
 {
-	int i = (int)idx;
+	int MyID = (int)idx;
 	int buffLen = 0;
 	char* buffer;
 	buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
 	static int tryout = 0;
-	g_vUsers[i].FailCnt = 0;
+	g_vUsers[MyID].FailCnt = 0;
 
 	
-	while (g_isAliveThread[i] != -1)
+	while (g_isAliveThread[MyID] != -1)
 	{
-		buffLen = recv(g_vUsers[i].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+		buffLen = recv(g_vUsers[MyID].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
 		CharacterStatus_PC* userData = (CharacterStatus_PC*)&buffer;
 		
-		EnterCriticalSection(&crit);		
+		EnterCriticalSection(&crit);
 		
 		if (strcmp(userData->MsgHeader, "join") == 0)
-			strcpy(userData->MsgHeader, "userData");
-		else if (strcmp(userData->MsgHeader, "disconnect") == 0)
-		{
-			g_isAliveThread[i] = -1;
-			break;
-		}
-
-		g_vUsers[i] = *userData;
-		
-		int result;
-		for (int n = 0; n < g_vUsers.size(); n++)
-		{			
-				result = send(g_vUsers[n].s, (char*)userData, sizeof(CharacterStatus_PC) + 1, 0);
+		{	
+			
+			for (int n = 0; n < g_vUsers.size(); n++)
+			{
+				int result = send(g_vUsers[n].s, (char*)&g_vUsers[n], sizeof(CharacterStatus_PC) + 1, 0);
 
 				if (result != -1 && result != 0)
+				{
 					g_vUsers[n].FailCnt = 0;
+				}
 				else
+				{
 					g_vUsers[n].FailCnt += 1;
-				
+				}
+
 				if (g_vUsers[n].FailCnt > TRYOUT_CNT)
 				{
 					g_isAliveThread[n] = -1;
 					break;
 				}
+			}
 
+			strcpy(userData->MsgHeader, "userData");
 		}
+		else if (strcmp(userData->MsgHeader, "disconnect") == 0)
+		{
+			g_isAliveThread[MyID] = -1;
+			break;
+		}
+
+		g_vUsers[MyID] = *userData;
 		LeaveCriticalSection(&crit);
 	}
 
@@ -376,6 +385,34 @@ int UpdateAndSend(void* idx)
 	return 0;
 }
 
+
+
+
+void ThreadSend()
+{
+	EnterCriticalSection(&crit);		
+	for (int n = 0; n < g_vUsers.size(); n++)
+	{
+		int result = send(g_vUsers[n].s, (char*)&g_vUsers[n], sizeof(CharacterStatus_PC) + 1, 0);
+
+		if (result != -1 && result != 0)
+		{
+			g_vUsers[n].FailCnt = 0;
+		}
+		else
+		{
+			g_vUsers[n].FailCnt += 1;
+		}
+
+		if (g_vUsers[n].FailCnt > TRYOUT_CNT)
+		{
+			g_isAliveThread[n] = -1;
+			break;
+		}
+	}
+	LeaveCriticalSection(&crit);
+
+}
 
 void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {

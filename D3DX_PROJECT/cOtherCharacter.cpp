@@ -20,7 +20,7 @@ cOtherCharacter::~cOtherCharacter()
 
 void cOtherCharacter::Setup()
 {
-	m_pSkinnedMesh = new cSkinnedMesh("Xfile", "Soldier76_with_gun.x");
+	m_pSkinnedMesh = new cSkinnedMesh("Xfile/Reaper", "Reaper.x");
 	m_pSkinnedMesh->SetRandomTrackPosition();
 
 	m_pOBB = new cOBB;

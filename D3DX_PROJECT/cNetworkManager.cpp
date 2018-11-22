@@ -67,7 +67,7 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 
 int cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 {
-	int result;
+	int result = 0;
 	if (isConnected)
 	{
 		
@@ -91,9 +91,12 @@ void cNetworkManager::recvData()
 		
 		int bufferLen = recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
 		buffer[bufferLen] = NULL;
-		CharacterStatus_PC* tmp = (CharacterStatus_PC*)buffer;
-
-		if (strcmp(tmp->MsgHeader, "userData") == 0)
+		CharacterStatus_PC* tmp = (CharacterStatus_PC*)&buffer;
+		if (strcmp(tmp->MsgHeader, "join") == 0)
+		{
+			g_pOtherPlayerManager->newPlayer(tmp);
+		}
+		else if (strcmp(tmp->MsgHeader, "userData") == 0)
 		{
 
 			int check = 0;
@@ -112,16 +115,11 @@ void cNetworkManager::recvData()
 				g_pOtherPlayerManager->newPlayer(tmp);
 			}
 		}
-		else if (strcmp(tmp->MsgHeader, "totalUser") == 0)
-		{
-			int num;
-			sscanf_s(buffer, "%*s %d", &num);
-			g_pOtherPlayerManager->userNum = num;
-		}
 		else if (strcmp(tmp->MsgHeader, "disconnect") == 0)
 		{
 			int num = tmp->ID;
-			for (int i = 0; i < OtherPlayer.size(); i++)
+			g_pOtherPlayerManager->disconnectPlayer(num);	// erase user from OtherPlayerManager and also GameInfoManager.
+			/*for (int i = 0; i < OtherPlayer.size(); i++)
 			{
 				if (OtherPlayer.at(i)->info.ID == num)
 				{
@@ -130,7 +128,7 @@ void cNetworkManager::recvData()
 					i--;
 					break;
 				}
-			}
+			}*/
 		}
 		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
 		{

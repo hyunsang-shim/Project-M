@@ -115,6 +115,8 @@ void cSCENE_INGAME::Setup()
 void cSCENE_INGAME::Update()
 {
 	BOOL static mouseMove = 0;
+	static int numUsers = g_pGameInfoManager->GetNumTotalUser();
+
 	g_pTimeManager->Update();
 
 	if (mouseMove == 0)
@@ -147,7 +149,6 @@ void cSCENE_INGAME::Update()
 
 	if (m_pObject)
 		m_pObject->Updata();
-
 
 
 	float y = m_pMyCharacter->GetPosition().y;
@@ -192,6 +193,7 @@ void cSCENE_INGAME::Update()
 void cSCENE_INGAME::Render()
 {
 	SetCursor(NULL);
+	
 
 	if (g_pGameInfoManager->isESCPushed)
 	{
@@ -223,6 +225,12 @@ void cSCENE_INGAME::Render()
 	{
 		Mesh_Render();
 	}
+
+	for (int i = 0; i < g_pGameInfoManager->GetNumTotalUser(); i++)
+	{
+		g_pGameInfoManager->GetOthersInfo();
+	}
+	
 }
 
 void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

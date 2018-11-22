@@ -100,3 +100,26 @@ void cGameInfoManager::SetMyName()
 {
 	strcpy(m_strMyCharacter.PlayerName, userName);
 }
+
+int cGameInfoManager::GetNumTotalUser()
+{
+	return m_vOtherCharacters.size();
+}
+
+void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC * info)
+{
+	CharacterStatus_PC tmp = *info;
+	m_vOtherCharacters.push_back(tmp);	
+}
+
+void cGameInfoManager::RemoveOtherPlayerByID(int ID)
+{
+	for (int i = 0; i < m_vOtherCharacters.size(); i++)
+	{
+		if (m_vOtherCharacters[i].ID == ID)
+		{
+			m_vOtherCharacters.erase(m_vOtherCharacters.begin() + i);
+			break;
+		}
+	}
+}
