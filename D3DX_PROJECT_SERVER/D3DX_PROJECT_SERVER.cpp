@@ -353,10 +353,10 @@ int ThreadRecieveAndUpdate(void* idx)
 		
 		if (buffLen == sizeof(CharacterStatus_PC) + 1)
 			userData = (CharacterStatus_PC*)&buffer;
-		else if (buffLen == 0 || buffLen == -1)
+		/*else if (buffLen == 0 || buffLen == -1)
 		{
 			break;
-		}
+		}*/
 		else
 			continue;
 
