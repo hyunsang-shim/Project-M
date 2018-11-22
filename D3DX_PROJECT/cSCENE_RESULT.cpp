@@ -10,6 +10,9 @@ cSCENE_RESULT::cSCENE_RESULT() :
 
 cSCENE_RESULT::~cSCENE_RESULT()
 {
+	int result;
+	result = g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+	closesocket(g_pNetworkManager->GetServerSocket());
 }
 
 void cSCENE_RESULT::Setup()

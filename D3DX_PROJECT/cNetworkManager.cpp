@@ -46,7 +46,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR); // ������
 	 	
 	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// �����ϸ� 0 ����, �ƴϸ� ���� ����.
-	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ);
+	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_CONNECT);
 
 	// ���ῡ �����ϸ� �÷��׸� �Ҵ�.
 	// >>
@@ -133,7 +133,7 @@ void cNetworkManager::recvData()
 		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
 		{
 			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
-			tmp->s = s;
+			//tmp->s = s;
 			g_pGameInfoManager->UpdateMyInfo(*tmp);
 			g_pNetworkManager->SendData("TitleScene", g_pGameInfoManager->GetMyInfo());
 		}

@@ -22,6 +22,7 @@
 #include <string>
 #include <d3dx9.h>
 #include <process.h>
+#include <time.h>
 
 using namespace std;
 #pragma comment(lib,"ws2_32.lib")

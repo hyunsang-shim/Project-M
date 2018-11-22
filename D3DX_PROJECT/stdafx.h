@@ -145,6 +145,7 @@ struct ST_SIZEN
 	ST_SIZEN(int _w, int _h): nWidth(_w), nHeight(_h) {}
 
 };
+
 enum character_list {
 	PC_Soldier,
 	PC_Reaper,

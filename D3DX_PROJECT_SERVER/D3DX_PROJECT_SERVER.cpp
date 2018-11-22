@@ -22,6 +22,7 @@ CRITICAL_SECTION	crit;
 HANDLE	g_thrThreads[MAX_USERS];
 int	g_isAliveThread[MAX_USERS] = { 0 };
 HWND hWnd;
+bool isSent = false;
 
 
 // �� �ڵ� ��⿡ ��� �ִ� �Լ��� ������ �����Դϴ�.
@@ -136,7 +137,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			TRUE);
 
 		InitializeCriticalSection(&crit);
-		SetTimer(hWnd, 123, 25, TimerProc);
+		SetTimer(hWnd, 123, 25, (TIMERPROC)TimerProc);
+
 		playerCnt = 0;
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -296,18 +298,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				TextOut(hdc, 10, 10, "No Player is online", strlen("No Player is online"));
 			else
 			{				
-				TextOut(hdc, 10, 10, itoa((g_vUsers.size()), tmp, 10), strlen(tmp));
+				TextOut(hdc, 10, 10, _itoa((g_vUsers.size()), tmp, 10), strlen(tmp));
 				TextOut(hdc, 50, 10, "Player(s) online", strlen("Player(s) online"));
 
 				for (int i = 0; i < g_vUsers.size(); i++)
 				{
 					int nfailcount = g_vUsers[i].FailCnt;
 					int offsetY = g_vUsers[i].ID;
-					itoa(g_isAliveThread[i], tmp, 10);
+					_itoa(g_isAliveThread[i], tmp, 10);
 					TextOut(hdc, 10, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
-					itoa(g_vUsers[i].ID, tmp, 10);
+					_itoa(g_vUsers[i].ID, tmp, 10);
 					TextOut(hdc, 60, 30 + 20 * offsetY, tmp, strlen(tmp));
-					itoa((int)(g_vUsers[i].s), tmp, 10);
+					_itoa((int)(g_vUsers[i].s), tmp, 10);
 					TextOut(hdc, 150, 30 + 20 * offsetY, tmp, strlen(tmp));
 					TextOut(hdc, 220, 30 + 20 * offsetY, g_vUsers[i].MsgHeader, strlen(g_vUsers[i].MsgHeader));
 				}
@@ -317,7 +319,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
-		PostQuitMessage(0);
+		for (int i = 0; i < g_vUsers.size(); i++)
+		{
+			EnterCriticalSection(&crit);
+			g_isAliveThread[i] = -1;
+			closesocket(g_vUsers[i].s);
+			LeaveCriticalSection(&crit);
+		}
 		WSACleanup();
 		PostQuitMessage(0);
         break;
@@ -336,6 +344,7 @@ int ThreadRecieveAndUpdate(void* idx)
 	buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
 	static int tryout = 0;
 	g_vUsers[MyID].FailCnt = 0;
+	static HANDLE hThread = new HANDLE;
 
 	
 	while (g_isAliveThread[MyID] != -1)
@@ -374,6 +383,11 @@ int ThreadRecieveAndUpdate(void* idx)
 		{
 			g_isAliveThread[MyID] = -1;
 			break;
+		}
+		else if (strcmp(userData->MsgHeader, "userData") == 0)
+		{
+			isSent = false;
+			_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, NULL, 0, NULL);
 		}
 
 		g_vUsers[MyID] = *userData;
