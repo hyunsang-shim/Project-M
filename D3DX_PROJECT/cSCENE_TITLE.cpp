@@ -10,7 +10,13 @@ enum
 	E_BUTTON_CANCLE,
 	E_BUTTON_EXIT,
 	E_TEXT_VIEW,
-	E_BUTTON_OK
+	E_BUTTON_OK,
+	SELECT_DIVA,
+	SELECT_SOLDIER,
+	SELECT_HANZO,
+	SELECT_TRACER,
+	SELECT_LINE,
+	SELECT_RIPPER	
 };
 
 cSCENE_TITLE::cSCENE_TITLE() :
@@ -19,7 +25,8 @@ cSCENE_TITLE::cSCENE_TITLE() :
 	m_pTextureUI(NULL),
 	m_pUIRoot(NULL),
 	m_pUIShadowRoot(NULL),
-	enterNameState(0)
+	enterNameState(0),
+	m_pUICharacterSelect(NULL)
 {
 }
 
@@ -29,7 +36,9 @@ cSCENE_TITLE::~cSCENE_TITLE()
 	SAFE_DELETE(m_pCamera);
 	if (m_pUIRoot) m_pUIRoot->Destroy();
 	if (m_pUIShadowRoot) m_pUIShadowRoot->Destroy();
+	if (m_pUICharacterSelect) m_pUICharacterSelect->Destroy();
 	SAFE_RELEASE(m_pSprite);
+	SAFE_RELEASE(m_pTextureUI);
 	SAFE_RELEASE(m_pTextureUI);
 }
 
@@ -50,6 +59,8 @@ void cSCENE_TITLE::Update()
 		m_pUIRoot->Update();
 	if (m_pUIShadowRoot)
 		m_pUIShadowRoot->Update();
+	if (m_pUICharacterSelect)
+		m_pUICharacterSelect->Update();
 }
 
 void cSCENE_TITLE::Render()
@@ -240,6 +251,174 @@ void cSCENE_TITLE::UIsetup()
 
 		m_pUIShadowRoot->m_isHidden = 1;
 	}
+	{
+		cUIImageView* pImageView = new cUIImageView;
+		pImageView->SetPosition(0, 0, 0);
+		//pImageView->SetTexture("./UI/test2.png");
+		m_pUICharacterSelect = pImageView;
+
+		cUIButton* selectBack = new cUIButton;
+		selectBack->SetTexture("./UI/selectBack.jpg",
+			"./UI/selectBack.jpg",
+			"./UI/selectBack.jpg");
+		selectBack->setSize(1.0f,1.0f);
+		selectBack->SetPosition(g_pGameInfoManager->getScreenXPosByPer(0), g_pGameInfoManager->getScreenYPosByPer(0));
+		selectBack->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(selectBack);
+
+		cUIButton* selectCharacterBack = new cUIButton;
+		selectCharacterBack->SetTexture("./UI/select_back.png",
+			"./UI/select_back.png",
+			"./UI/select_back.png");
+		selectCharacterBack->setSize(1.0f, 1.0f);
+		selectCharacterBack->SetPosition(g_pGameInfoManager->getScreenXPosByPer(0)-50, g_pGameInfoManager->getScreenYPosByPer(22));
+		selectCharacterBack->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(selectCharacterBack);
+
+		cUIButton* select_divide = new cUIButton;
+		select_divide->SetTexture("./UI/select_divide.png",
+			"./UI/select_divide.png",
+			"./UI/select_divide.png");
+		select_divide->setSize(1.0f, 1.0f);
+		select_divide->SetPosition(g_pGameInfoManager->getScreenXPosByPer(10)-150 - 30, g_pGameInfoManager->getScreenYPosByPer(30));
+		select_divide->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(select_divide);
+
+		cUIButton* diva_select = new cUIButton;
+		diva_select->SetTexture("./UI/diva_select.png",
+			"./UI/diva_select.png",
+			"./UI/diva_select.png");
+		diva_select->setSize(0.98f, 0.98f);
+		diva_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(3)+17 - 30, g_pGameInfoManager->getScreenYPosByPer(33)+2);
+		diva_select->SetDelegate(this);
+		diva_select->SetTag(SELECT_DIVA);
+		m_pUICharacterSelect->AddChild(diva_select);
+
+		cUIButton* hanzo_select = new cUIButton;
+		hanzo_select->SetTexture("./UI/hanzo_select.png",
+			"./UI/hanzo_select.png",
+			"./UI/hanzo_select.png");
+		hanzo_select->setSize(0.95f, 0.95f);
+		hanzo_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(3)+17 - 30, g_pGameInfoManager->getScreenYPosByPer(45));
+		hanzo_select->SetDelegate(this);
+		hanzo_select->SetTag(SELECT_HANZO);
+		m_pUICharacterSelect->AddChild(hanzo_select);
+
+		cUIButton* tracer_select = new cUIButton;
+		tracer_select->SetTexture("./UI/tracer_select.png",
+			"./UI/tracer_select.png",
+			"./UI/tracer_select.png");
+		tracer_select->setSize(0.97f, 0.97f);
+		tracer_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(3)+17 - 30, g_pGameInfoManager->getScreenYPosByPer(56));
+		tracer_select->SetDelegate(this);
+		tracer_select->SetTag(SELECT_TRACER);
+		m_pUICharacterSelect->AddChild(tracer_select);
+
+		cUIButton* ripper_select = new cUIButton;
+		ripper_select->SetTexture("./UI/ripper_select.png",
+			"./UI/ripper_select.png",
+			"./UI/ripper_select.png");
+		ripper_select->setSize(0.96f, 0.96f);
+		ripper_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(9)+6 - 30, g_pGameInfoManager->getScreenYPosByPer(39));
+		ripper_select->SetDelegate(this);
+		ripper_select->SetTag(SELECT_RIPPER);
+		m_pUICharacterSelect->AddChild(ripper_select);
+
+		cUIButton* line_select = new cUIButton;
+		line_select->SetTexture("./UI/line_select.png",
+			"./UI/line_select.png",
+			"./UI/line_select.png");
+		line_select->setSize(0.93f, 0.93f);
+		line_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(9)+13 - 30, g_pGameInfoManager->getScreenYPosByPer(51));
+		line_select->SetDelegate(this);
+		line_select->SetTag(SELECT_LINE);
+		m_pUICharacterSelect->AddChild(line_select);
+
+		cUIButton* soldier_select = new cUIButton;
+		soldier_select->SetTexture("./UI/soldier_select.png",
+			"./UI/soldier_select.png",
+			"./UI/soldier_select.png");
+		soldier_select->setSize(0.95f, 0.95f);
+		soldier_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(15)+2 - 30, g_pGameInfoManager->getScreenYPosByPer(45));
+		soldier_select->SetDelegate(this);
+		soldier_select->SetTag(SELECT_SOLDIER);
+		m_pUICharacterSelect->AddChild(soldier_select);
+
+	/*	cUIButton* player1_back_line = new cUIButton;
+		player1_back_line->SetTexture("./UI/chaback.png",
+			"./UI/chaback.png",
+			"./UI/chaback.png");
+		player1_back_line->setSize(1.0f, 1.0f);
+		player1_back_line->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30) , g_pGameInfoManager->getScreenYPosByPer(70));
+		player1_back_line->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player1_back_line);
+
+		cUIButton* player2_back_line = new cUIButton;
+		player2_back_line->SetTexture("./UI/chaback.png",
+			"./UI/chaback.png",
+			"./UI/chaback.png");
+		player2_back_line->setSize(1.0f, 1.0f);
+		player2_back_line->SetPosition(g_pGameInfoManager->getScreenXPosByPer(45), g_pGameInfoManager->getScreenYPosByPer(70));
+		player2_back_line->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player2_back_line);
+
+		cUIButton* player3_back_line = new cUIButton;
+		player3_back_line->SetTexture("./UI/chaback.png",
+			"./UI/chaback.png",
+			"./UI/chaback.png");
+		player3_back_line->setSize(1.0f, 1.0f);
+		player3_back_line->SetPosition(g_pGameInfoManager->getScreenXPosByPer(60), g_pGameInfoManager->getScreenYPosByPer(70));
+		player3_back_line->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player3_back_line);
+
+		cUIButton* player4_back_line = new cUIButton;
+		player4_back_line->SetTexture("./UI/chaback.png",
+			"./UI/chaback.png",
+			"./UI/chaback.png");
+		player4_back_line->setSize(1.0f, 1.0f);
+		player4_back_line->SetPosition(g_pGameInfoManager->getScreenXPosByPer(75), g_pGameInfoManager->getScreenYPosByPer(70));
+		player4_back_line->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player4_back_line);
+*/
+
+		cUIButton* player1_hanzo = new cUIButton;
+		player1_hanzo->SetTexture("./UI/hanzo.png",
+			"./UI/hanzo.png",
+			"./UI/hanzo.png");
+		player1_hanzo->setSize(0.6f, 0.6f);
+		player1_hanzo->SetPosition(g_pGameInfoManager->getScreenXPosByPer(25), g_pGameInfoManager->getScreenYPosByPer(25));
+		player1_hanzo->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player1_hanzo);
+
+		cUIButton* player2_line = new cUIButton;
+		player2_line->SetTexture("./UI/line.png",
+			"./UI/line.png",
+			"./UI/line.png");
+		player2_line->setSize(0.8f, 0.8f);
+		player2_line->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(10));
+		player2_line->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player2_line);
+
+		cUIButton* player3_diva = new cUIButton;
+		player3_diva->SetTexture("./UI/diva.png",
+			"./UI/diva.png",
+			"./UI/diva.png");
+		player3_diva->setSize(0.5f, 0.5f);
+		player3_diva->SetPosition(g_pGameInfoManager->getScreenXPosByPer(60), g_pGameInfoManager->getScreenYPosByPer(40));
+		player3_diva->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player3_diva);
+
+		cUIButton* player4_ripper = new cUIButton;
+		player4_ripper->SetTexture("./UI/ripper.png",
+			"./UI/ripper.png",
+			"./UI/ripper.png");
+		player4_ripper->setSize(0.7f, 0.7f);
+		player4_ripper->SetPosition(g_pGameInfoManager->getScreenXPosByPer(80), g_pGameInfoManager->getScreenYPosByPer(30));
+		player4_ripper->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player4_ripper);
+
+		m_pUICharacterSelect->m_isHidden = 1;
+	}
 }
 
 void cSCENE_TITLE::UIrender()
@@ -249,6 +428,10 @@ void cSCENE_TITLE::UIrender()
 
 	if (m_pUIShadowRoot)
 		m_pUIShadowRoot->Render(m_pSprite);
+
+
+	if (m_pUICharacterSelect)
+		m_pUICharacterSelect->Render(m_pSprite);
 
 }
 
@@ -260,7 +443,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 	if (pSender->GetTag() == E_BUTTON_PLAY)
 	{
 		m_pUIShadowRoot->m_isHidden = !m_pUIShadowRoot->m_isHidden;
-		m_pUIRoot->setUnable();
+		m_pUIRoot->m_isHidden = 0;
 		m_pUIShadowRoot->setable();
 	}
 
@@ -272,10 +455,13 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 	else if (pSender->GetTag() == E_BUTTON_OK)
 	{
 		g_pGameInfoManager->SetMyName();
-		g_pGameInfoManager->sceneChangeTriger = TRUE;
-		g_pGameInfoManager->nextScene = 1;
+		//g_pGameInfoManager->sceneChangeTriger = TRUE;
+		//g_pGameInfoManager->nextScene = 1;
 		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
 		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
+		m_pUIRoot->m_isHidden = TRUE;
+		m_pUIShadowRoot->m_isHidden = TRUE;
+		m_pUICharacterSelect->m_isHidden = FALSE;
 	}
 	else if (pSender->GetTag() == E_BUTTON_CANCLE)
 	{

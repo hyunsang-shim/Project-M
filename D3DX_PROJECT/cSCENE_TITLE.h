@@ -18,7 +18,9 @@ public:
 	D3DXIMAGE_INFO		m_stBGImageInfo, m_stImageInfo;
 	cUIObject*			m_pUIRoot;
 	cUIObject*			m_pUIShadowRoot;
+	cUIObject*			m_pUICharacterSelect;
 	cUITextView*		m_pNameInput;
+	
 
 	void BGSetup();			// 배경화면 셋업
 	void BGRender();		// 배경화면 렌더
