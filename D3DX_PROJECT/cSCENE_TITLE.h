@@ -33,6 +33,7 @@ public:
 	bool enterNameState;
 	// << UI end
 
+	cUIButton* player1_character;
 
 private:
 	cCamera* m_pCamera;

@@ -43,10 +43,13 @@ public:
 	// <<
 
 	float aimSize;
-private:
+
+
 	CharacterStatus_PC m_strMyCharacter;
 	vector<CharacterStatus_PC> m_vOtherCharacters;
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
+
+private:
 
 
 };

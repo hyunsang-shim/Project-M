@@ -15,8 +15,8 @@ enum
 	SELECT_SOLDIER,
 	SELECT_HANZO,
 	SELECT_TRACER,
-	SELECT_LINE,
-	SELECT_RIPPER	
+	SELECT_REIN,
+	SELECT_REAPER
 };
 
 cSCENE_TITLE::cSCENE_TITLE() :
@@ -26,7 +26,8 @@ cSCENE_TITLE::cSCENE_TITLE() :
 	m_pUIRoot(NULL),
 	m_pUIShadowRoot(NULL),
 	enterNameState(0),
-	m_pUICharacterSelect(NULL)
+	m_pUICharacterSelect(NULL),
+	player1_character(NULL)
 {
 }
 
@@ -37,6 +38,8 @@ cSCENE_TITLE::~cSCENE_TITLE()
 	if (m_pUIRoot) m_pUIRoot->Destroy();
 	if (m_pUIShadowRoot) m_pUIShadowRoot->Destroy();
 	if (m_pUICharacterSelect) m_pUICharacterSelect->Destroy();
+
+
 	SAFE_RELEASE(m_pSprite);
 	SAFE_RELEASE(m_pTextureUI);
 	SAFE_RELEASE(m_pTextureUI);
@@ -315,24 +318,24 @@ void cSCENE_TITLE::UIsetup()
 		m_pUICharacterSelect->AddChild(tracer_select);
 
 		cUIButton* ripper_select = new cUIButton;
-		ripper_select->SetTexture("./UI/ripper_select.png",
-			"./UI/ripper_select.png",
-			"./UI/ripper_select.png");
+		ripper_select->SetTexture("./UI/reaper_select.png",
+			"./UI/reaper_select.png",
+			"./UI/reaper_select.png");
 		ripper_select->setSize(0.96f, 0.96f);
 		ripper_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(9)+6 - 30, g_pGameInfoManager->getScreenYPosByPer(39));
 		ripper_select->SetDelegate(this);
-		ripper_select->SetTag(SELECT_RIPPER);
+		ripper_select->SetTag(SELECT_REAPER);
 		m_pUICharacterSelect->AddChild(ripper_select);
 
-		cUIButton* line_select = new cUIButton;
-		line_select->SetTexture("./UI/line_select.png",
-			"./UI/line_select.png",
-			"./UI/line_select.png");
-		line_select->setSize(0.93f, 0.93f);
-		line_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(9)+13 - 30, g_pGameInfoManager->getScreenYPosByPer(51));
-		line_select->SetDelegate(this);
-		line_select->SetTag(SELECT_LINE);
-		m_pUICharacterSelect->AddChild(line_select);
+		cUIButton* Rein_select = new cUIButton;
+		Rein_select->SetTexture("./UI/rein_select.png",
+			"./UI/rein_select.png",
+			"./UI/rein_select.png");
+		Rein_select->setSize(0.93f, 0.93f);
+		Rein_select->SetPosition(g_pGameInfoManager->getScreenXPosByPer(9)+13 - 30, g_pGameInfoManager->getScreenYPosByPer(51));
+		Rein_select->SetDelegate(this);
+		Rein_select->SetTag(SELECT_REIN);
+		m_pUICharacterSelect->AddChild(Rein_select);
 
 		cUIButton* soldier_select = new cUIButton;
 		soldier_select->SetTexture("./UI/soldier_select.png",
@@ -380,42 +383,19 @@ void cSCENE_TITLE::UIsetup()
 		player4_back_line->SetDelegate(this);
 		m_pUICharacterSelect->AddChild(player4_back_line);
 */
+		player1_character = new cUIButton;
+	
 
-		cUIButton* player1_hanzo = new cUIButton;
-		player1_hanzo->SetTexture("./UI/hanzo.png",
-			"./UI/hanzo.png",
-			"./UI/hanzo.png");
-		player1_hanzo->setSize(0.6f, 0.6f);
-		player1_hanzo->SetPosition(g_pGameInfoManager->getScreenXPosByPer(25), g_pGameInfoManager->getScreenYPosByPer(25));
-		player1_hanzo->SetDelegate(this);
-		m_pUICharacterSelect->AddChild(player1_hanzo);
 
-		cUIButton* player2_line = new cUIButton;
-		player2_line->SetTexture("./UI/line.png",
-			"./UI/line.png",
-			"./UI/line.png");
-		player2_line->setSize(0.8f, 0.8f);
-		player2_line->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(10));
-		player2_line->SetDelegate(this);
-		m_pUICharacterSelect->AddChild(player2_line);
 
-		cUIButton* player3_diva = new cUIButton;
-		player3_diva->SetTexture("./UI/diva.png",
-			"./UI/diva.png",
-			"./UI/diva.png");
-		player3_diva->setSize(0.5f, 0.5f);
-		player3_diva->SetPosition(g_pGameInfoManager->getScreenXPosByPer(60), g_pGameInfoManager->getScreenYPosByPer(40));
-		player3_diva->SetDelegate(this);
-		m_pUICharacterSelect->AddChild(player3_diva);
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/trans.png",
+			"./UI/trans.png",
+			"./UI/trans.png"); 
+		player1_character->setSize(1.5f, 1.5f);
+		player1_character->SetDelegate(this);
+		m_pUICharacterSelect->AddChild(player1_character);
 
-		cUIButton* player4_ripper = new cUIButton;
-		player4_ripper->SetTexture("./UI/ripper.png",
-			"./UI/ripper.png",
-			"./UI/ripper.png");
-		player4_ripper->setSize(0.7f, 0.7f);
-		player4_ripper->SetPosition(g_pGameInfoManager->getScreenXPosByPer(80), g_pGameInfoManager->getScreenYPosByPer(30));
-		player4_ripper->SetDelegate(this);
-		m_pUICharacterSelect->AddChild(player4_ripper);
 
 		m_pUICharacterSelect->m_isHidden = 1;
 	}
@@ -468,6 +448,42 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		m_pUIShadowRoot->setUnable();
 		m_pUIShadowRoot->m_isHidden = TRUE;
 		m_pUIRoot->setable();
+	}
+	else if (pSender->GetTag() == SELECT_DIVA)
+	{
+		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_DIVA;
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/diva.png", "./UI/diva.png", "./UI/diva.png");
+	}
+	else if (pSender->GetTag() == SELECT_REAPER)
+	{
+		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reaper;
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/reaper.png", "./UI/reaper.png", "./UI/reaper.png");
+	}
+	else if (pSender->GetTag() == SELECT_HANZO)
+	{
+		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Hanzo;
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(37), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/hanzo.png", "./UI/hanzo.png", "./UI/hanzo.png");
+	}
+	else if (pSender->GetTag() == SELECT_REIN)
+	{
+		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reinhardt;
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(20), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/rein.png", "./UI/rein.png", "./UI/rein.png");
+	}
+	else if (pSender->GetTag() == SELECT_TRACER)
+	{
+		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Tracer;
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/tracer.png", "./UI/tracer.png", "./UI/tracer.png");
+	}
+	else if (pSender->GetTag() == SELECT_SOLDIER)
+	{
+		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Soldier;
+		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
+		player1_character->SetTexture("./UI/soldier.png", "./UI/soldier.png", "./UI/soldier.png");
 	}
 }
 

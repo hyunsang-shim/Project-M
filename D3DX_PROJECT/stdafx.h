@@ -149,7 +149,10 @@ struct ST_SIZEN
 enum character_list {
 	PC_Soldier,
 	PC_Reaper,
-	PC_Reinhardt
+	PC_Reinhardt,
+	PC_Tracer,
+	PC_Hanzo,
+	PC_DIVA
 };
 
 
