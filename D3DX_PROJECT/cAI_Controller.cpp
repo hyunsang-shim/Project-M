@@ -106,13 +106,14 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 		}
 	}
 
-
 	D3DXMATRIXA16 matR, matT;
 	if (b)
 	{
 		m_fRotY = -acos(moveToCharacterDir.z);
 	}
 	D3DXMatrixRotationY(&matR, m_fRotY);
+
+
 	m_vDirection = D3DXVECTOR3(0, 0, 1);
 
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);

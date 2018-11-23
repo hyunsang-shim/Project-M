@@ -43,7 +43,7 @@ cSCENE_INGAME::cSCENE_INGAME()
 	BulletCreateCount(0),
 	BulletCreateTime(MAXBulletCreateCount),
 	load(FALSE),
-	m_pTriggerBox(NULL)
+	m_pTriggerBox(NULL),
 	m_pUIShadowRoot(NULL),
 	m_pUIBase(NULL)
 {
