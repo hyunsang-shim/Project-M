@@ -125,7 +125,7 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
 	//xfileŸ���� �� �ε�
-	m_pXmodel = new cXModel("map/rialto_max_01_half_sized.X");
+	//m_pXmodel = new cXModel("map/rialto_max_01_half_sized.X");
 	//m_pXmodel = new cXModel("xfile/bigship1.x");
 	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
@@ -292,7 +292,7 @@ void cSCENE_INGAME::Render()
 	//m_pGrid->Render();
 	//g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
-	m_pXmodel->Render();
+	//m_pXmodel->Render();
 
 	if(m_pTriggerBox)
 		m_pTriggerBox->Render();

@@ -6,10 +6,11 @@
 
 cAI_Controller::cAI_Controller()
 	:m_fRotY(0.0f)
-	, m_vDirection(0, 0, 0)
+	, m_vDirection(0, 0, 1)
 	, m_vPosition(50, 0, 15)
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&RotateToCharacter);
 }
 
 
@@ -19,7 +20,7 @@ cAI_Controller::~cAI_Controller()
 
 void cAI_Controller::SetUP()
 {
-	
+
 }
 
 void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, cSkinnedMesh* m_SkinnedMesh)
@@ -33,13 +34,13 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 	bool OnlyLeftOrRight = true;
 	D3DXVECTOR3 m_vLeftDirection;
 	D3DXVECTOR3 m_vUp(0, 1, 0);
-	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
+	//D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
 
 
 	AttackTime = GetTickCount();
 
 	D3DXVECTOR3 m_vBeforePosition = m_vPosition;
-	
+
 	float AI_To_Distance = D3DXVec3Length(&moveToCharacterDir);
 
 
@@ -78,7 +79,7 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 		if (TotalPeriod <= CurrentPeriod + 0.05)
 		{
 			CurrentAnimNum = 0;
-		}	
+		}
 	}
 
 	if (beforeAnimNum != CurrentAnimNum)
@@ -106,34 +107,40 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 		}
 	}
 
-	D3DXMATRIXA16 matR, matT;
+
+	D3DXMATRIXA16 matT;
+
+
 	if (b)
 	{
-		m_fRotY = -acos(moveToCharacterDir.z);
+		m_fRotY = D3DXVec3Dot(&m_vDirection, &moveToCharacterDir) / D3DXVec3Length(&m_vDirection) * D3DXVec3Length(&moveToCharacterDir);
+
+		RotateToCharacter._11 = moveToCharacterDir.z / m_fRotY;
+		RotateToCharacter._13 = -moveToCharacterDir.x / m_fRotY;
+		RotateToCharacter._31 = moveToCharacterDir.x / m_fRotY;
+		RotateToCharacter._33 = moveToCharacterDir.z / m_fRotY;
 	}
-	D3DXMatrixRotationY(&matR, m_fRotY);
 
 
 	m_vDirection = D3DXVECTOR3(0, 0, 1);
-
-	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &RotateToCharacter);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-	m_matWorld = matR * matT;
+	m_matWorld = RotateToCharacter * matT;
 }
 
 
-void cAI_Controller::Update(float ROTY, D3DXVECTOR3 POSITION)
-{
-	D3DXMATRIXA16 matR, matT;
-	m_vPosition = POSITION;
-	D3DXMatrixRotationY(&matR, m_fRotY);
-
-	m_vDirection = D3DXVECTOR3(0, 0, 1);
-
-	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
-	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-	m_matWorld = matR * matT;
-}
+//void cAI_Controller::Update(float ROTY, D3DXVECTOR3 POSITION)
+//{
+//	D3DXMATRIXA16 matR, matT;
+//	m_vPosition = POSITION;
+//	D3DXMatrixRotationY(&matR, m_fRotY);
+//
+//	m_vDirection = D3DXVECTOR3(0, 0, 1);
+//
+//	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+//	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+//	m_matWorld = matR * matT;
+//}
 
 void cAI_Controller::Render()
 {
