@@ -2,6 +2,7 @@
 #include "cOBB.h"
 #include "cSkinnedMesh.h"
 #include "cNewObject.h"
+#include "cWaveTriggerBox.h"
 
 cOBB::cOBB()
 	:m_pIndexBuffer(NULL)
@@ -113,6 +114,99 @@ void cOBB::Setup(cNewObject * pObject)
 {
 	D3DXVECTOR3 vMin = pObject->GetMin();
 	D3DXVECTOR3 vMax = pObject->GetMax();
+	m_vOrgCenterPos = (vMin + vMax) / 2.0f;
+
+	m_vOrgAxisDir[0] = D3DXVECTOR3(1, 0, 0);
+	m_vOrgAxisDir[1] = D3DXVECTOR3(0, 1, 0);
+	m_vOrgAxisDir[2] = D3DXVECTOR3(0, 0, 1);
+
+	m_fAxisLen[0] = fabs(vMax.x - vMin.x);
+	m_fAxisLen[1] = fabs(vMax.y - vMin.y);
+	m_fAxisLen[2] = fabs(vMax.z - vMin.z);
+
+	m_fAxisHalfLen[0] = m_fAxisLen[0] / 2.0f;
+	m_fAxisHalfLen[1] = m_fAxisLen[1] / 2.0f;
+	m_fAxisHalfLen[2] = m_fAxisLen[2] / 2.0f;
+
+	D3DXMatrixIdentity(&m_matWorldTM);
+
+	vector<ST_PC_VERTEX> vecVertex;
+	vector<int> vecIndex;
+
+
+	ST_PC_VERTEX v;
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);	//FRT
+	v.c = D3DCOLOR_XRGB(255, 255, 255);
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FRB
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FLB
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FLT
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BRT
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BRB
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BLB
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BLT
+	vecVertex.push_back(v);
+
+	//¾Õ
+	vecIndex.push_back(0);
+	vecIndex.push_back(1);
+	vecIndex.push_back(1);
+	vecIndex.push_back(2);
+	vecIndex.push_back(2);
+	vecIndex.push_back(3);
+	vecIndex.push_back(3);
+	vecIndex.push_back(0);
+	//µÚ
+	vecIndex.push_back(4);
+	vecIndex.push_back(5);
+	vecIndex.push_back(5);
+	vecIndex.push_back(6);
+	vecIndex.push_back(6);
+	vecIndex.push_back(7);
+	vecIndex.push_back(7);
+	vecIndex.push_back(4);
+
+	//¿·
+	vecIndex.push_back(0);
+	vecIndex.push_back(4);
+	vecIndex.push_back(1);
+	vecIndex.push_back(5);
+	vecIndex.push_back(2);
+	vecIndex.push_back(6);
+	vecIndex.push_back(3);
+	vecIndex.push_back(7);
+
+	int size = sizeof(ST_PC_VERTEX) * vecVertex.size();
+	HRESULT asd = g_pDevice->CreateVertexBuffer(size, 0, ST_PC_VERTEX::FVF, D3DPOOL_DEFAULT, &m_pVertexBuffer, 0);
+	HRESULT ede = g_pDevice->CreateIndexBuffer(vecIndex.size() * sizeof(WORD), 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pIndexBuffer, 0);
+
+	ST_PC_VERTEX* vertices;
+	m_pVertexBuffer->Lock(0, 0, (void**)&vertices, 0);
+	for (int i = 0; i < vecVertex.size(); i++)
+	{
+		vertices[i] = vecVertex[i];
+	}
+	m_pVertexBuffer->Unlock();
+
+	WORD* indexList;
+	m_pIndexBuffer->Lock(0, 0, (void**)&indexList, 0);
+	for (int i = 0; i < vecIndex.size(); i++)
+	{
+		indexList[i] = vecIndex[i];
+	}
+	m_pIndexBuffer->Unlock();
+}
+
+void cOBB::Setup(TriggerBox* pTrigger)
+{
+	D3DXVECTOR3 vMin = pTrigger->GetMin();
+	D3DXVECTOR3 vMax = pTrigger->GetMax();
 	m_vOrgCenterPos = (vMin + vMax) / 2.0f;
 
 	m_vOrgAxisDir[0] = D3DXVECTOR3(1, 0, 0);

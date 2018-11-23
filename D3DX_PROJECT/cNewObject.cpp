@@ -178,9 +178,9 @@ void cNewObject::Render()
 
 	for (int i = 0; i < m_vecMLT.size(); i++)
 	{
-		g_pDevice->SetMaterial(&m_vecMLT[i].m_mtlColor);
-		g_pDevice->SetTexture(0, m_vecMLT[i].m_pTexture);
-		m_pMesh->DrawSubset(i);
+		//g_pDevice->SetMaterial(&m_vecMLT[i].m_mtlColor);
+		//g_pDevice->SetTexture(0, m_vecMLT[i].m_pTexture);
+		//m_pMesh->DrawSubset(i);
 	}
 	g_pDevice->SetTexture(0, NULL);
 

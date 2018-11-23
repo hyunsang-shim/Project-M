@@ -16,6 +16,7 @@
 #include "cUIImageView.h"
 #include "cCrossHairPicking.h"
 #include "cAI.h"
+#include "cWaveTriggerBox.h"
 
 enum
 {
@@ -38,7 +39,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pAI(NULL),
 	BulletCreateCount(0),
 	BulletCreateTime(MAXBulletCreateCount),
-	load(FALSE)
+	load(FALSE),
+	m_pTriggerBox(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -55,6 +57,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);
 	SAFE_DELETE(m_pAI);
+	SAFE_DELETE(m_pTriggerBox);
 }
 
 void cSCENE_INGAME::Setup()
@@ -63,7 +66,8 @@ void cSCENE_INGAME::Setup()
 
 	m_pCrossHairPicking = new cCrossHairPicking;
 
-	
+	m_pTriggerBox = new cWaveTriggerBox;
+	m_pTriggerBox->Setup();
 
 	//카메라 셋팅
 	m_pCamera = new cCamera();
@@ -94,8 +98,8 @@ void cSCENE_INGAME::Setup()
 
 
 	//테스트 오브젝트 셋팅
-	m_pObject = new cNewObject;
-	m_pObject->Setup("map", "box.obj");
+	//m_pObject = new cNewObject;
+	//m_pObject->Setup("map", "box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
 
@@ -107,7 +111,7 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
 	//xfile타입의 맵 로딩
-	//m_pXmodel = new cXModel("map/Rialto_8B4_blend_3.x");
+	m_pXmodel = new cXModel("map/rialto_max_01_half_sized.X");
 	//m_pXmodel = new cXModel("xfile/bigship1.x");
 	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
@@ -140,6 +144,11 @@ void cSCENE_INGAME::Setup()
 
 void cSCENE_INGAME::Update()
 {
+	if (m_pTriggerBox->GetNextWave())
+	{
+		m_pTriggerBox->Setup();
+	}
+
 	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
 
@@ -186,7 +195,7 @@ void cSCENE_INGAME::Update()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
 
-	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pObject->GetOBB()))
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pTriggerBox->m_pOBB))
 	{
 		if (m_pAI)
 			m_pAI->Update(true, m_pMyCharacter->GetPosition() - m_pAI->GetPosition());
@@ -194,9 +203,8 @@ void cSCENE_INGAME::Update()
 	else
 	{
 		if (m_pAI)
-			m_pAI->Update(false, D3DXVECTOR3(0,0,0));
+			m_pAI->Update(false, D3DXVECTOR3(0, 0, 0));
 	}
-
 
 	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
@@ -205,7 +213,7 @@ void cSCENE_INGAME::Update()
 			m_pCrossHairPicking->CalcPosition();
 
 			float dist;
-			D3DXIntersect(m_pObject->GetMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+			D3DXIntersect(m_pXmodel->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
 
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
@@ -249,6 +257,9 @@ void cSCENE_INGAME::Update()
 
 	if(m_pUIBase)
 		m_pUIBase->Update();
+
+	if(m_pTriggerBox)
+		m_pTriggerBox->Update();
 }
 
 void cSCENE_INGAME::Render()
@@ -265,8 +276,11 @@ void cSCENE_INGAME::Render()
 	m_pSKY->Render();
 	//m_pGrid->Render();
 	//g_pGameInfoManager->m_pMap->Render();
-	m_pObject->Render();
-	//m_pXmodel->Render();
+	//m_pObject->Render();
+	m_pXmodel->Render();
+
+	if(m_pTriggerBox)
+		m_pTriggerBox->Render();
 
 	// 넷 상태에 따라 스킵 가능하도록 수정
 	if (g_pNetworkManager->GetNetStatus())
