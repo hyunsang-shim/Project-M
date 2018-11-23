@@ -117,10 +117,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
 	static WSADATA wsadata;
-	static SOCKET ServerSocket;
-	static SOCKADDR_IN sockInfo = { 0 };
+	static SOCKET ServerSocket, ClientSocket;
+	static SOCKADDR_IN sockInfo = { 0 }, c_sockInfo;
 	char* buffer;
-	int size;
+	int srvSize, clnSize = sizeof(ClientSocket);
 	static int playerCnt;
 //	static vector<string> userMsgs;		//���� ���� �޽���
 
@@ -145,11 +145,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (ServerSocket == INVALID_SOCKET)
 		{
-			MessageBox(NULL, _T("Socket Initialization Failed!! 퉷!"), _T("Fail!"), MB_OK);
+			MessageBox(NULL, _T("Socket Initialization Failed!!"), _T("Fail!"), MB_OK);
 		}
 		else
 		{
-			MessageBoxA(NULL, "Socket Initialization Successful! 퉤엣!", "Success!", MB_OK);
+			MessageBoxA(NULL, "Socket Initialization Successful!!", "Success!", MB_OK);
 		}
 		sockInfo.sin_family = AF_INET;
 		sockInfo.sin_port = htons(2);
@@ -157,13 +157,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 		// Network Bind Test
-		if (bind(ServerSocket, (LPSOCKADDR)&sockInfo, sizeof(sockInfo)))
+		if (bind(ServerSocket, (LPSOCKADDR)&sockInfo, sizeof(sockInfo)) == SOCKET_ERROR)
 		{
 			MessageBox(NULL, _T("Binding Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
 
-		WSAAsyncSelect(ServerSocket, hWnd, WM_ASYNC, FD_ACCEPT);
+		//WSAAsyncSelect(ServerSocket, hWnd, WM_ASYNC, FD_ACCEPT);
 
 		//
 		// Check Listening
@@ -201,7 +201,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				g_thrThreads[(int)g_vUsers.back().ID] = hThread;
 
 				CloseHandle(hThread);*/
-
+				ClientSocket = accept(ServerSocket, (SOCKADDR*)&c_sockInfo, &clnSize);
+				if (ClientSocket == INVALID_SOCKET)
+				{
+					MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
+				}			
 
 			}
 			break;
