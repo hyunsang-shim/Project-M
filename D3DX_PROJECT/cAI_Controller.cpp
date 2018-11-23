@@ -113,12 +113,15 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 
 	if (b)
 	{
-		m_fRotY = D3DXVec3Dot(&m_vDirection, &moveToCharacterDir) / D3DXVec3Length(&m_vDirection) * D3DXVec3Length(&moveToCharacterDir);
+		D3DXVECTOR3 tmpVec = moveToCharacterDir;
+		tmpVec.y = 0;
+		D3DXVec3Normalize(&tmpVec, &tmpVec);
+		float side = pow(tmpVec.x*tmpVec.x + tmpVec.z * tmpVec.z, 0.5);
 
-		RotateToCharacter._11 = moveToCharacterDir.z / m_fRotY;
-		RotateToCharacter._13 = -moveToCharacterDir.x / m_fRotY;
-		RotateToCharacter._31 = moveToCharacterDir.x / m_fRotY;
-		RotateToCharacter._33 = moveToCharacterDir.z / m_fRotY;
+		RotateToCharacter._11 = tmpVec.z / side;
+		RotateToCharacter._13 = -tmpVec.x / side;
+		RotateToCharacter._31 = tmpVec.x / side;
+		RotateToCharacter._33 = tmpVec.z / side;
 	}
 
 

@@ -95,14 +95,14 @@ void cSCENE_INGAME::Setup()
 	DirectLight = InitDirectionalLight(&dir, &c);
 	subLight = InitPointLight(&Pos, &c);
 	g_pDevice->SetLight(0, &DirectLight);
-	g_pDevice->SetLight(1, &DirectLight);
-	g_pDevice->SetLight(2, &DirectLight);
-	g_pDevice->SetLight(3, &DirectLight);
+	//g_pDevice->SetLight(1, &DirectLight);
+	//g_pDevice->SetLight(2, &DirectLight);
+	//g_pDevice->SetLight(3, &DirectLight);
 
 	g_pDevice->LightEnable(0, TRUE);
-	g_pDevice->LightEnable(1, TRUE);
-	g_pDevice->LightEnable(2, TRUE);
-	g_pDevice->LightEnable(3, TRUE);
+	//g_pDevice->LightEnable(1, TRUE);
+	//g_pDevice->LightEnable(2, TRUE);
+	//g_pDevice->LightEnable(3, TRUE);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	// ����Ʈ�� ����
