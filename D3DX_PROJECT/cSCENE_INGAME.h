@@ -55,6 +55,7 @@ private:
 	cAI *m_pAI;
 private:
 	D3DLIGHT9 DirectLight; //¸ÞÀÎ ±¤¿ø
+	D3DLIGHT9 subLight;
 
 public:
 	D3DLIGHT9 InitDirectionalLight(D3DXVECTOR3* direction, D3DXCOLOR* color);
@@ -70,6 +71,7 @@ private:
 	LPDIRECT3DTEXTURE9	m_pTextureUI;
 	D3DXIMAGE_INFO		m_stImageInfo;
 	cUIObject*			m_pUIBase;
+	cUIObject*			m_pUIShadowRoot;
 
 	RECT				m_Worldrc;
 public:
@@ -83,7 +85,10 @@ public:
 
 
 private:
-	LPD3DXFONT m_pFont;
+	LPD3DXFONT m_pFont; 
+
+	LPD3DXFONT m_pFont2; 
+
 public:
 	void Creat_Font();
 	void Render_Text();

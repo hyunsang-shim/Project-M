@@ -7,7 +7,7 @@
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
-	, m_vPosition(88, 0, -30)
+	, m_vPosition(150, 0, -150)
 
 {
 	D3DXMatrixIdentity(&m_matWorld);

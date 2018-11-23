@@ -396,4 +396,14 @@ bool cNewObject::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos
 		y = HeadPos.y;
 	}
 	return true;
+	
+	
+	/*D3DXIntersect(m_pMesh, &footPos, &D3DXVECTOR3(0, 1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
+
+	if (hit)
+	{
+		y = float(HeadPos.y) - dist;
+	}
+	return true;
+	*/
 }
