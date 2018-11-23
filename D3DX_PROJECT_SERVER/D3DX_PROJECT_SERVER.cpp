@@ -118,7 +118,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	static WSADATA wsadata;
 	static SOCKET ServerSocket;
-	static SOCKADDR_IN addr = { 0 }, c_addr;	
+	static SOCKADDR_IN sockInfo = { 0 };
 	char* buffer;
 	int size;
 	static int playerCnt;
@@ -131,8 +131,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
 	case WM_CREATE:
+	{
 		MoveWindow(hWnd,
-			GetSystemMetrics(SM_CXSCREEN) -370, GetSystemMetrics(SM_CYSCREEN) -230,
+			GetSystemMetrics(SM_CXSCREEN) - 370, GetSystemMetrics(SM_CYSCREEN) - 230,
 			300, 220,
 			TRUE);
 
@@ -141,20 +142,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		playerCnt = 0;
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
-		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
-		addr.sin_family = AF_INET;
-		addr.sin_port = 20;
-		addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
+		ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (ServerSocket == INVALID_SOCKET)
+		{
+			MessageBox(NULL, _T("Socket Initialization Failed!! 퉷!"), _T("Fail!"), MB_OK);
+		}
+		else
+		{
+			MessageBoxA(NULL, "Socket Initialization Successful! 퉤엣!", "Success!", MB_OK);
+		}
+		sockInfo.sin_family = AF_INET;
+		sockInfo.sin_port = htons(2);
+		sockInfo.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+
 
 		// Network Bind Test
-		if (bind(ServerSocket, (LPSOCKADDR)&addr, sizeof(addr)))
+		if (bind(ServerSocket, (LPSOCKADDR)&sockInfo, sizeof(sockInfo)))
 		{
 			MessageBox(NULL, _T("Binding Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
 
 		WSAAsyncSelect(ServerSocket, hWnd, WM_ASYNC, FD_ACCEPT);
-		
+
 		//
 		// Check Listening
 		if (listen(ServerSocket, 5) == SOCKET_ERROR)
@@ -162,14 +172,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
-
+	}
 		break;
 	case WM_ASYNC:
 		switch (lParam)
 		{
 			case FD_ACCEPT:
 			{
-				HANDLE hThread = new HANDLE;
+				/*HANDLE hThread = new HANDLE;
 				size = sizeof(c_addr);
 				CharacterStatus_PC TmpUser;
 
@@ -186,11 +196,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				send(g_vUsers.back().s, (char*)&g_vUsers.back(), sizeof(CharacterStatus_PC) + 1, 0);
 				strcpy(g_vUsers.back().MsgHeader, "TitleScene");
 
-				g_isAliveThread[(int)g_vUsers.back().ID] = 0;	// ������ ��� ���� Ƚ���� �ʱ�ȭ �Ѵ�.
+				g_isAliveThread[(int)g_vUsers.back().ID] = 0;
 				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, (void *)g_vUsers.back().ID, 0, NULL);
 				g_thrThreads[(int)g_vUsers.back().ID] = hThread;
 
-				CloseHandle(hThread);
+				CloseHandle(hThread);*/
+
+
 			}
 			break;
 			case FD_CLOSE:
@@ -300,19 +312,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{				
 				TextOut(hdc, 10, 10, _itoa((g_vUsers.size()), tmp, 10), strlen(tmp));
 				TextOut(hdc, 50, 10, "Player(s) online", strlen("Player(s) online"));
-
-				for (int i = 0; i < g_vUsers.size(); i++)
-				{
-					int nfailcount = g_vUsers[i].FailCnt;
-					int offsetY = g_vUsers[i].ID;
-					_itoa(g_isAliveThread[i], tmp, 10);
-					TextOut(hdc, 10, 30 + 20 * g_vUsers[i].ID, tmp, strlen(tmp));
-					_itoa(g_vUsers[i].ID, tmp, 10);
-					TextOut(hdc, 60, 30 + 20 * offsetY, tmp, strlen(tmp));
-					_itoa((int)(g_vUsers[i].s), tmp, 10);
-					TextOut(hdc, 150, 30 + 20 * offsetY, tmp, strlen(tmp));
-					TextOut(hdc, 220, 30 + 20 * offsetY, g_vUsers[i].MsgHeader, strlen(g_vUsers[i].MsgHeader));
-				}
 			}			
 			DeleteObject(hdc);
 			EndPaint(hWnd, &ps);
@@ -338,78 +337,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 int ThreadRecieveAndUpdate(void* idx)
 {
-	int MyID = (int)idx;
-	int buffLen = 0;
-	char* buffer;
-	buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
-	static int tryout = 0;
-	g_vUsers[MyID].FailCnt = 0;
-	static HANDLE hThread = new HANDLE;
-	static CharacterStatus_PC* userData;
+	static int Myidx = (int)idx;
+
+	EnterCriticalSection(&crit);
 	
-	while (g_isAliveThread[MyID] != -1)
-	{
-		buffLen = recv(g_vUsers[MyID].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
-		
-		if (buffLen == sizeof(CharacterStatus_PC) + 1)
-			userData = (CharacterStatus_PC*)&buffer;
-		/*else if (buffLen == 0 || buffLen == -1)
-		{
-			break;
-		}*/
-		else
-			continue;
-
-		EnterCriticalSection(&crit);
-		
-		if (strcmp(userData->MsgHeader, "join") == 0)
-		{	
-			
-			for (int n = 0; n < g_vUsers.size(); n++)
-			{
-				int result = send(g_vUsers[n].s, (char*)&g_vUsers[n], sizeof(CharacterStatus_PC) + 1, 0);
-
-				if (result != -1 && result != 0)
-				{
-					g_vUsers[n].FailCnt = 0;
-				}
-				else
-				{
-					g_vUsers[n].FailCnt += 1;
-				}
-
-				if (g_vUsers[n].FailCnt > TRYOUT_CNT)
-				{
-					g_isAliveThread[n] = -1;
-					break;
-				}
-			}
-
-			strcpy(userData->MsgHeader, "userData");
-		}
-		else if (strcmp(userData->MsgHeader, "disconnect") == 0)
-		{
-			g_isAliveThread[MyID] = -1;
-			break;
-		}
-		else if (strcmp(userData->MsgHeader, "userData") == 0)
-		{
-			isSent = false;
-			_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, NULL, 0, NULL);
-		}
-		else if (strcmp(userData->MsgHeader, "TitleScene") == 0)
-		{
-			int a = 0;
-		}
-		else
-		{
-			isSent = false;
-			_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, NULL, 0, NULL);
-		}
-
-		g_vUsers[MyID] = *userData;
-		LeaveCriticalSection(&crit);
-	}
 
 	LeaveCriticalSection(&crit);
 
