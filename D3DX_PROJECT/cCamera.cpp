@@ -21,13 +21,14 @@ cCamera::~cCamera()
 }
 
 void cCamera::Setup()
-{
+{	
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f, rc.right / (float)rc.bottom, 1.0f, 1000.0f);
 	g_pDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+	g_pGameInfoManager->SetLoadState(0.1f);		// for Loading bar;
 }
 
 

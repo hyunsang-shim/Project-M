@@ -17,7 +17,8 @@ cGameInfoManager::cGameInfoManager() :
 	aimSize(0.0f),
 	m_vOtherCharacters(NULL),
 	m_vNpcCharacters(NULL),  
-	MaxBulletCount(30)
+	MaxBulletCount(30),
+	m_fLoadState(0.0f)
 {
 }
 
@@ -101,4 +102,14 @@ void cGameInfoManager::SetMyCharacter(int idx)
 void cGameInfoManager::SetMyName()
 {
 	strcpy(m_strMyCharacter.PlayerName, userName);
+}
+
+float cGameInfoManager::GetLoadState()
+{
+	return m_fLoadState;
+}
+
+void cGameInfoManager::SetLoadState(float ratio)
+{
+	m_fLoadState = ratio;
 }

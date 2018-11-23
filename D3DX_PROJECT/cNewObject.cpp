@@ -201,6 +201,7 @@ void cNewObject::FileLoad(char* szFolder, char* szFile)
 
 	fopen_s(&fp, sFullPath.c_str(), "r");
 
+
 	while (!feof(fp))
 	{
 		fgets(buf, 1024, fp);
@@ -262,6 +263,7 @@ void cNewObject::FileLoad(char* szFolder, char* szFile)
 		}
 	}
 	fclose(fp);
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.15f);	// for Loading bar;
 }
 
 void cNewObject::ProcessMtl(char* szFolder, char* szFile)
@@ -344,7 +346,7 @@ void cNewObject::ProcessMtl(char* szFolder, char* szFile)
 			m_vecMLT.push_back(m);
 		}
 	}
-
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.15f);	// for Loading bar;
 	fclose(fp);
 }
 

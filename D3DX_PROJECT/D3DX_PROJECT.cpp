@@ -5,6 +5,9 @@
 #include "D3DX_PROJECT.h"
 #include "cMainGame.h"
 
+// for debug purpose
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
+
 #define MAX_LOADSTRING 100
 
 // << :
@@ -124,7 +127,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
 	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
-		0, 0, 1920, 1080, GetDesktopWindow(), nullptr, hInstance, nullptr);
+		0, 0, 1680, 1080, GetDesktopWindow(), nullptr, hInstance, nullptr);
 
 	if (!hWnd)
 	{

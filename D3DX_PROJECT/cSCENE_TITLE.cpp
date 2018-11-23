@@ -673,10 +673,16 @@ void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 	
 	if (pSender->GetTag() == LOADING_BAR)
 	{
-		static float load = 0.0f;
-	
-		load += 0.005f;
+		static float tmp = 0.0000f;
+		float load = g_pGameInfoManager->GetLoadState();
+		
+		if (load - tmp < 0.0005f)
+			printf("Loading.... %f\n", load);
+
+		tmp = load;
+
 		pSender->cutSize(load, 1.0f);
+
 		if (load > 1.0f)
 		{
 			g_pGameInfoManager->sceneChangeTriger = TRUE;

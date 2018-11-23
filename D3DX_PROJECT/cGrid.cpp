@@ -17,6 +17,7 @@ cGrid::~cGrid()
 
 void cGrid::Setup()
 {
+	
 	vector<ST_PC_VERTEX> m_vecVertex;
 	vector<ST_PC_VERTEX> m_vecPiramidVertex;
 	ST_PC_VERTEX temp;
@@ -43,6 +44,9 @@ void cGrid::Setup()
 			temp.c = D3DCOLOR_XRGB(160, 160, 160);
 		}
 	}
+
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.025f);		// for Loading bar;
+
 	for (int i = -GRID_SIZE; i <= GRID_SIZE; i++)
 	{
 		if (i % 5 == 0)
@@ -64,7 +68,8 @@ void cGrid::Setup()
 			temp.c = D3DCOLOR_XRGB(160, 160, 160);
 		}
 	}
-	
+
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.025f);		// for Loading bar;
 
 	temp.c = D3DCOLOR_XRGB(0, 255, 0);
 	temp.p.x = 0.1;
@@ -303,6 +308,8 @@ void cGrid::Setup()
 	temp.p.z = 0;
 	m_vecPiramidVertex.push_back(temp);
 
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.005f);		// for Loading bar;
+
 	{
 		m_nNumLine = m_vecVertex.size() / 2;
 		g_pDevice->CreateVertexBuffer(
@@ -319,6 +326,9 @@ void cGrid::Setup()
 		m_pVB->Unlock();
 
 	}
+
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.005f);		// for Loading bar;
+
 	{
 		m_nPNumLine = m_vecPiramidVertex.size() / 3;
 		g_pDevice->CreateVertexBuffer(
@@ -335,6 +345,9 @@ void cGrid::Setup()
 		m_pPVB->Unlock();
 
 	}
+
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.005f);		// for Loading bar;
+
 }
 
 

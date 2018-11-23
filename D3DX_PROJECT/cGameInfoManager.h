@@ -39,7 +39,8 @@ public:
 	vector<CharacterStatus_NPC>* GetNpcsInfo();
 	void SetMyCharacter(int idx);
 	void SetMyName();
-
+	float GetLoadState();
+	void SetLoadState(float ratio);
 	// <<
 
 	float aimSize;
@@ -50,7 +51,7 @@ public:
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
 
 private:
-
+	float m_fLoadState;
 
 };
 

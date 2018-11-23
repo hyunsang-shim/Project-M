@@ -109,26 +109,31 @@ void cSCENE_INGAME::Setup()
 	m_pObject->Setup("map", "box.obj");
 	//m_pObject->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-10, 0, 10));
 	//
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.05f);		// for Loading bar;
 
 	g_pGameInfoManager->setup_Map("map", "test_map_obj.obj");
 
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.15f);	// for Loading bar;
 
 	//Å×½ºÆ® ¿¢½º¸ðµ¨ ¼ÂÆÃ
 	m_pXmodel = new cXModel("Xfile/bigship1.x");
 	m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.05f);	// for Loading bar;
 
 	//ÇÏ´Ã ¼ÂÆÃ
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.05f);	// for Loading bar;
 
 	//Áú·µ ¼ÂÆÃ
 	m_pMyCharacter = new cMyCharacter;
 	m_pMyCharacter->Setup("Xfile", "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
 	m_pMyCharacter->SetCharacterController(pCharacter);
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.1f);	// for Loading bar;
 
 	//¸¶¿ì½º ÁÂÇ¥ ¼ÂÆÃ
 	beforeMousePos.x = 1920 / 2;
@@ -141,6 +146,7 @@ void cSCENE_INGAME::Setup()
 	m_pAI->Setup("NPCS", "slicer.X");
 	cAI_Controller* pAI_Controller = new cAI_Controller;
 	m_pAI->SetAIController(pAI_Controller);
+	g_pGameInfoManager->SetLoadState(g_pGameInfoManager->GetLoadState() + 0.05f);	// for Loading bar;
 
 	setupUI();
 
