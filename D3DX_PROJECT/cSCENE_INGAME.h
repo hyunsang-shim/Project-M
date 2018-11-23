@@ -13,6 +13,7 @@ class cMyCharacter;
 class cUIObject;
 class cCrossHairPicking;
 class cAI;
+class cWaveTriggerBox;
 
 #define MAXBulletCreateCount 5
 
@@ -113,5 +114,10 @@ public:
 	void Mesh_Render();
 // << :
 	BOOL load;
+
+// >> : TriggerBox
+private:
+	cWaveTriggerBox* m_pTriggerBox;
+// << :
 };
 

@@ -66,7 +66,11 @@ cXModel::cXModel(string filePath)
 	SAFE_RELEASE(mtrlBuffer);
 	SAFE_RELEASE(adjBuffer);
 
-	if (!(m_pXMesh->GetFVF() & D3DFVF_NORMAL))
+	HRESULT ppp = m_pXMesh->GetFVF();
+
+	bool b = m_pXMesh->GetFVF() & D3DFVF_NORMAL;
+
+	/*if (!(m_pXMesh->GetFVF() & D3DFVF_NORMAL))
 	{
 		ID3DXMesh* pTempMesh = 0;
 		m_pXMesh->CloneMeshFVF(
@@ -79,10 +83,18 @@ cXModel::cXModel(string filePath)
 
 		m_pXMesh->Release();
 		m_pXMesh = pTempMesh;
-	}
+	}*/
+
+	int index = m_pXMesh->GetNumVertices();
+
+	int face = 3 * m_pXMesh->GetNumFaces() * sizeof(DWORD);
 
 	std::vector<DWORD> vecAdj(m_pXMesh->GetNumVertices());
-	m_pXMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+	for (int i = 0; i < vecAdj.size(); i++)
+	{
+		vecAdj[i] = 0;
+	}
+	HRESULT thr = m_pXMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
 
 	m_pXMesh->OptimizeInplace(
 		D3DXMESHOPT_ATTRSORT |

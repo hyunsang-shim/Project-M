@@ -1,6 +1,8 @@
 #pragma once
 class cSkinnedMesh;
 class cNewObject;
+class cWaveTriggerBox;
+struct TriggerBox;
 
 class cOBB
 {
@@ -22,6 +24,7 @@ private:
 public:
 	void Setup(cSkinnedMesh* pSkinnedMesh);
 	void Setup(cNewObject* pObject);
+	void Setup(TriggerBox* pTrigger);
 	void Update(D3DXMATRIXA16* pmatWorld);
 	static bool isCollision(cOBB* pOBB1, cOBB* pOBB2);
 	void OBBBox_Render(D3DXCOLOR c);
