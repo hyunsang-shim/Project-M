@@ -13,7 +13,7 @@
 #define MAX_LOADSTRING 100
 #define MAX_USERS 10
 
-// ���� ����:
+// global variables
 HINSTANCE hInst;                                // ���� �ν��Ͻ��Դϴ�.
 WCHAR szTitle[MAX_LOADSTRING];                  // ���� ǥ���� �ؽ�Ʈ�Դϴ�.
 WCHAR szWindowClass[MAX_LOADSTRING];            // �⺻ â Ŭ���� �̸��Դϴ�.
@@ -23,6 +23,7 @@ HANDLE	g_thrThreads[MAX_USERS];
 int	g_isAliveThread[MAX_USERS] = { 0 };
 HWND hWnd;
 bool isSent = false;
+vector<string> ServerStatus;
 
 
 // �� �ڵ� ��⿡ ��� �ִ� �Լ��� ������ �����Դϴ�.
@@ -33,7 +34,7 @@ int					ThreadRecieveAndUpdate(void* idx);
 void CALLBACK		TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 void				ThreadSend();
 
-
+#pragma commnet
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -120,7 +121,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static SOCKET ServerSocket, ClientSocket;
 	static SOCKADDR_IN sockInfo = { 0 }, c_sockInfo;
 	char* buffer;
-	int srvSize, clnSize = sizeof(ClientSocket);
+	int srvSize, clnSize = sizeof(c_sockInfo);
 	static int playerCnt;
 //	static vector<string> userMsgs;		//���� ���� �޽���
 
@@ -136,34 +137,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GetSystemMetrics(SM_CXSCREEN) - 370, GetSystemMetrics(SM_CYSCREEN) - 230,
 			300, 220,
 			TRUE);
-
+		ServerStatus.push_back("0 Players Online");
 		InitializeCriticalSection(&crit);
 		SetTimer(hWnd, 123, 25, (TIMERPROC)TimerProc);
 
-		playerCnt = 0;
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
-		ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-		if (ServerSocket == INVALID_SOCKET)
-		{
-			MessageBox(NULL, _T("Socket Initialization Failed!!"), _T("Fail!"), MB_OK);
-		}
-		else
-		{
-			MessageBoxA(NULL, "Socket Initialization Successful!!", "Success!", MB_OK);
-		}
+		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
 		sockInfo.sin_family = AF_INET;
-		sockInfo.sin_port = htons(2);
-		sockInfo.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+		sockInfo.sin_port = 20;
+		sockInfo.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 
-
-		// Network Bind Test
-		if (bind(ServerSocket, (LPSOCKADDR)&sockInfo, sizeof(sockInfo)) == SOCKET_ERROR)
+		//
+		// check Binding
+		if (bind(ServerSocket, (LPSOCKADDR)&sockInfo, sizeof(sockInfo)))
 		{
 			MessageBox(NULL, _T("Binding Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
 
-		//WSAAsyncSelect(ServerSocket, hWnd, WM_ASYNC, FD_ACCEPT);
+		WSAAsyncSelect(ServerSocket, hWnd, WM_ASYNC, FD_ACCEPT | FD_CLOSE);
 
 		//
 		// Check Listening
@@ -172,6 +164,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
 			return 0;
 		}
+
+
 	}
 		break;
 	case WM_ASYNC:
@@ -179,53 +173,75 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			case FD_ACCEPT:
 			{
-				/*HANDLE hThread = new HANDLE;
-				size = sizeof(c_addr);
+				HANDLE hThread = new HANDLE;
 				CharacterStatus_PC TmpUser;
 
 
 				g_vUsers.push_back(TmpUser);
-				g_vUsers.back().s = accept(ServerSocket, (LPSOCKADDR)&c_addr, &size);
-				g_vUsers.back().ID = playerCnt;
+				g_vUsers.back().s = accept(ServerSocket, (LPSOCKADDR)&c_sockInfo, &clnSize);
+				WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
+				g_vUsers.back().ID = playerCnt++;
 				g_vUsers.back().FailCnt = 0;
-				WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_CLOSE | FD_WRITE);
-
-				playerCnt++;
-
 				strcpy(g_vUsers.back().MsgHeader, "welcome");
 				send(g_vUsers.back().s, (char*)&g_vUsers.back(), sizeof(CharacterStatus_PC) + 1, 0);
-				strcpy(g_vUsers.back().MsgHeader, "TitleScene");
-
 				g_isAliveThread[(int)g_vUsers.back().ID] = 0;
-				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, (void *)g_vUsers.back().ID, 0, NULL);
 				g_thrThreads[(int)g_vUsers.back().ID] = hThread;
 
-				CloseHandle(hThread);*/
-				ClientSocket = accept(ServerSocket, (SOCKADDR*)&c_sockInfo, &clnSize);
+				{
+					string tmpString;
+					char tmpChar[32] = { 0 };
+
+					tmpString.append("ID: ");
+					tmpString.append(_itoa(g_vUsers.back().ID, tmpChar, 10));
+					memset(tmpChar, 0, 32);
+					tmpString.append(" Socket: ");
+					tmpString.append(_itoa(g_vUsers.back().s, tmpChar, 10));
+					memset(tmpChar, 0, 32);
+					tmpString.append(" | Fails : ");
+					tmpString.append(_itoa(g_vUsers.back().FailCnt, tmpChar, 10));
+					tmpString.append(" | Action : ");
+					tmpString.append(g_vUsers.back().MsgHeader);
+					ServerStatus.push_back(tmpString);
+				}
+
+				{
+					string tmpString;
+					char tmpChar[32] = { 0 };
+
+					ServerStatus[0].clear();
+					tmpString.append(_itoa(playerCnt, tmpChar, 10));
+					tmpString.append(" Players Online");
+					ServerStatus[0] = tmpString;
+				}
+
+				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))ThreadRecieveAndUpdate, (void *)g_vUsers.back().ID, 0, NULL);
+				CloseHandle(hThread);
+				/*ClientSocket = accept(ServerSocket, (SOCKADDR*)&c_sockInfo, &clnSize);
 				if (ClientSocket == INVALID_SOCKET)
 				{
-					MessageBox(NULL, _T("Listening Failed!"), _T("Error"), MB_OK);
-				}			
+					int errorNumber = WSAGetLastError();
+					MessageBox(NULL, _T("Accept Error!"), _T("Error"), MB_OK);
+				}
 
+				CharacterStatus_PC tmpPlayer;
+				tmpPlayer.s = ClientSocket;
+				g_vUsers.push_back(tmpPlayer);
+				WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_CLOSE | FD_WRITE);
+
+				string tmpString;
+
+				tmpString += "ID : " + tmpPlayer.ID;
+				tmpString += " | SocketID : " + tmpPlayer.s;
+				tmpString += " | FailCount : " + tmpPlayer.FailCnt;
+				ServerStatus.push_back(tmpString);
+				tmpString.clear();
+				tmpString += playerCnt;
+				ServerStatus[0].replace(0, 1, tmpString);*/
 			}
 			break;
 			case FD_CLOSE:
 			{
-				int idx = -1;
-				for (int i = 0; i < g_vUsers.size(); i++)
-				{
-					char* buffer;
-					buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
-					CharacterStatus_PC* userData = (CharacterStatus_PC*)&buffer;
-
-					if (g_vUsers[i].s == userData->s)
-					{					
-						closesocket((g_vUsers[i].s));
-						g_isAliveThread[i] = -1;
-						break;
-					}
-				}
-				
+				playerCnt--;
 			}
 			break;
 //		case FD_READ:			
@@ -308,15 +324,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-			char *tmp;
-			tmp = (char*)calloc(32, sizeof(char));
-			if (g_vUsers.size() == 0)
-				TextOut(hdc, 10, 10, "No Player is online", strlen("No Player is online"));
-			else
-			{				
-				TextOut(hdc, 10, 10, _itoa((g_vUsers.size()), tmp, 10), strlen(tmp));
-				TextOut(hdc, 50, 10, "Player(s) online", strlen("Player(s) online"));
-			}			
+			TextOut(hdc, 10, 10, ServerStatus[0].c_str(), strlen(ServerStatus[0].c_str()));
+			for (int i = 1; i < g_vUsers.size()+1; i++)
+			{
+				TextOut(hdc, 10, 10 + 20 * (i), ServerStatus[i].c_str(), strlen(ServerStatus[i].c_str()));
+			}
 			DeleteObject(hdc);
 			EndPaint(hWnd, &ps);
         }
@@ -342,12 +354,63 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 int ThreadRecieveAndUpdate(void* idx)
 {
 	static int Myidx = (int)idx;
+	char* buffer;
+	buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
+	memset(buffer, 0, sizeof(CharacterStatus_PC) + 1);
 
-	EnterCriticalSection(&crit);
-	
+	while (1)
+	{
+		EnterCriticalSection(&crit);
 
-	LeaveCriticalSection(&crit);
+		int bufferLen = recv(g_vUsers[Myidx].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+		buffer[bufferLen] = NULL;		// ensure data's end
 
+		//
+		//cast recieved data
+		CharacterStatus_PC* tmp = (CharacterStatus_PC*)&buffer;
+
+		//
+		// Set Recived user data into vector container
+		g_vUsers[Myidx] = *tmp;
+
+		//
+		// update ServerStatus
+		string tmpString;
+		char tmpChar[32] = { 0 };
+		tmpString.append("ID: ");
+		tmpString.append(_itoa(g_vUsers[Myidx].ID, tmpChar, 10));
+		memset(tmpChar, 0, 32);
+		tmpString.append(" Socket: ");
+		tmpString.append(_itoa(g_vUsers[Myidx].s, tmpChar, 10));
+		memset(tmpChar, 0, 32);
+		tmpString.append(" | Fails : ");
+		tmpString.append(_itoa(g_vUsers[Myidx].FailCnt, tmpChar, 10));
+		tmpString.append(" | Action : ");
+		tmpString.append(g_vUsers[Myidx].MsgHeader);
+		ServerStatus[Myidx+1] = tmpString;
+
+
+		//
+		// duplicate Current Users data to minimize criticalSection Time.
+		vector<CharacterStatus_PC> tmpUserData = g_vUsers;
+
+		LeaveCriticalSection(&crit);
+
+		for (int i = 0; i < tmpUserData.size(); i++)
+		{
+			int res = send(tmpUserData.at(i).s, (char*)tmp, sizeof(CharacterStatus_PC) + 1, 0);
+			if (res == -1)
+				int x = errno;
+		}
+
+		if (strcmp(tmp->MsgHeader, "disconnect") == 0)
+		{	
+				closesocket((g_vUsers[Myidx].s));
+				g_isAliveThread[Myidx] = -1;
+				ServerStatus.erase(ServerStatus.begin() + Myidx);
+				break;
+		}
+	}
 	return 0;
 }
 

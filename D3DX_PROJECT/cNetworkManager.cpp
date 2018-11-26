@@ -1,14 +1,6 @@
 #include "stdafx.h"
 #include "cNetworkManager.h"
 
-// Server IP Addresses.
-// should activated only one at once;
-//#define SERVER_ADDR "165.246.163.66"	// ��ȣ��
-//#define SERVER_ADDR "165.246.163.71"		// ������
-//#define SERVER_ADDR "192.168.0.9"	// ������ (��Ʈ��/������)
-#define SERVER_ADDR "192.168.0.3"		// ������ (��)
-
-
 // ���� �ּ�
 // �Ʒ� �� �ϳ��� Ȱ��ȭ ��Ű�� ���.
 //#define SERVER_ADDR "165.246.163.66"	// ��ȣ��
@@ -36,21 +28,21 @@ cNetworkManager::~cNetworkManager()
 
 bool cNetworkManager::SetupNetwork(HWND hWnd)
 {
-	if (WSAStartup(MAKEWORD(2, 2), &wsadata) != 0)
-	{
-		MessageBox(g_hWnd, "WSAstartup Error!", "WSAstartup Error!", 0);
-	}
+	WSAStartup(MAKEWORD(2, 2), &wsadata);
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	addr.sin_family = AF_INET;
 	addr.sin_port = 20;
-	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR); // ������
-	 	
-	int x = connect(s, (LPSOCKADDR)&addr, sizeof(addr));		// �����ϸ� 0 ����, �ƴϸ� ���� ����.
-	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_CONNECT);
+	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
+	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
 
-	// ���ῡ �����ϸ� �÷��׸� �Ҵ�.
-	// >>
-	if (!x) isConnected = true;
+
+	if (connect(s, (LPSOCKADDR)&addr, sizeof(addr)) != -1)
+	{
+		MessageBox(NULL, _T("Connection Failed!"), _T("Error!!"), MB_OK);
+		isConnected = false;
+	}
+	else
+		isConnected = true;
 	// <<
 
 	return isConnected;
