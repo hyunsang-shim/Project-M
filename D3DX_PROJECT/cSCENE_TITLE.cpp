@@ -269,7 +269,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 	else if (pSender->GetTag() == E_BUTTON_EXIT)
 	{
-
+		SendMessage(g_hWnd, WM_CLOSE, 0, 0);
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
 	{

@@ -5,9 +5,9 @@
 // Server Addresses
 // should activated just one.
 //#define SERVER_ADDR "165.246.163.66"	// ����ȣ.
-#define SERVER_ADDR "165.246.163.71"	// ������.
-//#define SERVER_ADDR "192.168.0.9"		// ������(��/������1)
-//#define SERVER_ADDR "192.168.0.7"		// ������(��/������2)
+//#define SERVER_ADDR "165.246.163.71"	// ������.
+//#define SERVER_ADDR "192.168.0.7"		// ������(��/������1)
+#define SERVER_ADDR "192.168.0.7"		// ������(��/������2)
 
 
 #define MAX_LOADSTRING 100
@@ -242,6 +242,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case FD_CLOSE:
 			{
 				playerCnt--;
+				closesocket((g_vUsers[Myidx].s));
+				g_isAliveThread[Myidx] = -1;
+				ServerStatus.erase(ServerStatus.begin() + Myidx);
+
+
+				string tmpString;
+				char tmpChar[32] = { 0 };
+				ServerStatus[0].clear();
+				tmpString.append(_itoa(g_vUsers.size(), tmpChar, 10));
+				tmpString.append(" Players Online");
+				ServerStatus[0] = tmpString;
+				break;
 			}
 			break;
 //		case FD_READ:			
@@ -408,6 +420,14 @@ int ThreadRecieveAndUpdate(void* idx)
 				closesocket((g_vUsers[Myidx].s));
 				g_isAliveThread[Myidx] = -1;
 				ServerStatus.erase(ServerStatus.begin() + Myidx);
+
+
+				string tmpString;
+				char tmpChar[32] = { 0 };
+				ServerStatus[0].clear();
+				tmpString.append(_itoa(g_vUsers.size(), tmpChar, 10));
+				tmpString.append(" Players Online");
+				ServerStatus[0] = tmpString;
 				break;
 		}
 	}

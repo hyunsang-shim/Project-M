@@ -4,9 +4,9 @@
 // ���� �ּ�
 // �Ʒ� �� �ϳ��� Ȱ��ȭ ��Ű�� ���.
 //#define SERVER_ADDR "165.246.163.66"	// ��ȣ��
-#define SERVER_ADDR "165.246.163.71"	// ������
+//#define SERVER_ADDR "165.246.163.71"	// ������
 //#define SERVER_ADDR "192.168.0.9"		// ������ (��Ʈ��/������)
-//#define SERVER_ADDR "192.168.0.7"		// ������ (��)
+#define SERVER_ADDR "192.168.0.7"		// ������ (��)
 //#define SERVER_ADDR "127.0.0.1"	// ������
 
 
