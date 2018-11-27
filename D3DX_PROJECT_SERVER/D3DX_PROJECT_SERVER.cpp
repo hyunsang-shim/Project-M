@@ -241,11 +241,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 			case FD_CLOSE:
 			{
-				playerCnt--;
-				closesocket((g_vUsers[Myidx].s));
-				g_isAliveThread[Myidx] = -1;
-				ServerStatus.erase(ServerStatus.begin() + Myidx);
+				int idx = -1;
+				for (int i = 0; i < g_vUsers.size(); i++)
+				{
+					if (g_vUsers[i].s == wParam)
+					{
+						idx = i;
+						break;
+					}
+				}
 
+				if (idx == -1)
+					break;
+
+				playerCnt--;
+				closesocket((g_vUsers[idx].s));
+				g_isAliveThread[idx] = -1;
+				ServerStatus.erase(ServerStatus.begin() + idx);
 
 				string tmpString;
 				char tmpChar[32] = { 0 };
