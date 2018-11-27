@@ -30,8 +30,7 @@ cDeviceManager::cDeviceManager()
 
 	//stD3DPP.BackBufferFormat = D3DFMT_A8R8G8B8;
 
-	m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, g_hWnd, nVertexProcessing, &stD3DPP, &m_pD3DDevice);
-
+	m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, g_hWnd, nVertexProcessing | D3DCREATE_MULTITHREADED, &stD3DPP, &m_pD3DDevice);
 
 }
 

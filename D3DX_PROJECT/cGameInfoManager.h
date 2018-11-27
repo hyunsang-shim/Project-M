@@ -49,6 +49,12 @@ public:
 	vector<CharacterStatus_PC> m_vOtherCharacters;
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
 
+	cSCENE_INGAME* m_pScene_Ingame;
+	cSCENE_RESULT* m_pScene_Result;
+	cSCENE_TITLE* m_pScene_Title;
+
+
+
 private:
 
 

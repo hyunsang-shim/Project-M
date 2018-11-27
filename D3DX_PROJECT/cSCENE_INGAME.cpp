@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "cSCENE_INGAME.h"
 
 #include "cGrid.h"
@@ -118,14 +118,14 @@ void cSCENE_INGAME::Setup()
 
 	//OBJŸ���� �� �ε�
 	//g_pGameInfoManager->setup_Map("map/rialto_obj_2", "Rialto_8B4.obj");
-	g_pGameInfoManager->setup_Map("map", "test_map_obj.obj");
+	//g_pGameInfoManager->setup_Map("map/x test", "test_map_obj.obj");
 
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
 	//xfileŸ���� �� �ε�
-	//m_pXmodel = new cXModel("map/rialto_max_01_half_sized.X");
+	//m_pXmodel = new cXModel("rialto.X");
 	//m_pXmodel = new cXModel("xfile/bigship1.x");
 	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
 
@@ -144,7 +144,7 @@ void cSCENE_INGAME::Setup()
 	beforeMousePos.y = 1080 / 2;
 	nowMousePos.x = 1920 / 2;
 	nowMousePos.y = 1080 / 2;
-	SetCursorPos(1920 / 2, 1080 / 2);
+	//SetCursorPos(1920 / 2, 1080 / 2);
 
 	m_pAI = new cAI;
 	m_pAI->Setup("NPCS", "slicer.X");

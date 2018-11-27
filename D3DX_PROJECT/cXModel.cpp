@@ -29,7 +29,7 @@ cXModel::cXModel(string filePath)
 	ID3DXBuffer* mtrlBuffer = 0;
 	DWORD numMtrls = 0;
 
-	D3DXLoadMeshFromXA(
+	hr = D3DXLoadMeshFromXA(
 		filePath.c_str(),
 		D3DXMESH_MANAGED,
 		g_pDevice,

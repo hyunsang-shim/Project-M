@@ -675,7 +675,7 @@ void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 	{
 		static float load = 0.0f;
 	
-		load += 0.005f;
+		load += 0.015f;
 		pSender->cutSize(load, 1.0f);
 		if (load > 1.0f)
 		{
