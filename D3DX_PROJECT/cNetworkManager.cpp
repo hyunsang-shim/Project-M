@@ -4,9 +4,9 @@
 // ���� �ּ�
 // �Ʒ� �� �ϳ��� Ȱ��ȭ ��Ű�� ���.
 //#define SERVER_ADDR "165.246.163.66"	// ��ȣ��
-//#define SERVER_ADDR "165.246.163.71"	// ������
+#define SERVER_ADDR "165.246.163.71"	// Shim Hyunsang
 //#define SERVER_ADDR "192.168.0.9"		// ������ (��Ʈ��/������)
-#define SERVER_ADDR "192.168.0.7"		// ������ (��)
+//#define SERVER_ADDR "192.168.0.7"		// ������ (��)
 //#define SERVER_ADDR "127.0.0.1"	// ������
 
 
@@ -35,8 +35,10 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
 
+	static SOCKET ConnectRes;
+	ConnectRes = connect(s, (LPSOCKADDR)&addr, sizeof(addr));
 
-	if (connect(s, (LPSOCKADDR)&addr, sizeof(addr)) != -1)
+	if (ConnectRes != -1)
 	{
 		MessageBox(NULL, _T("Connection Failed!"), _T("Error!!"), MB_OK);
 		isConnected = false;
