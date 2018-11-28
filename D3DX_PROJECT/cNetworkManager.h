@@ -15,7 +15,7 @@ public:
 
 private:
 	WSADATA wsadata;
-	SOCKET s, cs;
+	SOCKET s, MySocket;
 	SOCKADDR_IN addr = { 0 };
 	char buffer[1000];
 	vector<CharacterStatus_PC> user;

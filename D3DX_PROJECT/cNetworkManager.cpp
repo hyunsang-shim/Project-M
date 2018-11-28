@@ -65,7 +65,10 @@ int cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 	if (isConnected)
 	{
 		
-		strcpy(strPC->MsgHeader, MsgHeader);	
+		strcpy(strPC->MsgHeader, MsgHeader);
+		if (MySocket != strPC->s)
+			strPC->s = MySocket;
+
 		result = send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
 
 		if (strcmp(MsgHeader, "join") == 0)
@@ -127,7 +130,7 @@ void cNetworkManager::recvData()
 		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
 		{
 			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
-			//tmp->s = s;
+			tmp->s = s;
 			g_pGameInfoManager->UpdateMyInfo(*tmp);
 			g_pNetworkManager->SendData("TitleScene", g_pGameInfoManager->GetMyInfo());
 		}

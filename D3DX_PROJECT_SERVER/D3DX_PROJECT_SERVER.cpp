@@ -396,9 +396,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-			TextOut(hdc, 10, 10, ServerStatus[0].c_str(), strlen(ServerStatus[0].c_str()));
-			for (int i = 1; i < g_vUsers.size()+1; i++)
-			{
+			
+			for (int i = 0; i < g_vUsers.size()+1; i++)
+			{				
 				TextOut(hdc, 10, 10 + 20 * (i), ServerStatus[i].c_str(), strlen(ServerStatus[i].c_str()));
 			}
 			TextOut(hdc, 10, 10 + 20 * (g_vUsers.size() + 1), errmsg.c_str(), strlen(errmsg.c_str()));
