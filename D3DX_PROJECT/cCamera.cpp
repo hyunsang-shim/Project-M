@@ -34,13 +34,35 @@ void cCamera::Setup()
 void cCamera::Update(D3DXVECTOR3 cube)
 {
 	/*cube = D3DXVECTOR3(0, 0, 0);*/
-	
+
 	D3DXMATRIXA16 matR, matRX, matRY, matTY;
 	D3DXMATRIXA16 m_matTrans;
 
+
+
+	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
+
+	m_vEye = D3DXVECTOR3(0, m_fCameraDistance, -m_fCameraDistance);
+	cube.y += m_fCameraDistance / 3.0f + 0.5f;
+
+	D3DXMatrixRotationX(&matRX, m_vCamRotAngle.x);
+	D3DXMatrixRotationY(&matRY, m_vCamRotAngle.y);
+	matR = matRX * matRY;
+
+	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &matR);
+	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &m_matTrans);
+	D3DXMATRIXA16 matView;
+
+
+
+
+
 	D3DXVECTOR3 tmpDirection = m_vEye - cube;
-	BOOL pHit =false;
-	float dist = 999.9f;
+
+	D3DXVec3Normalize(&tmpDirection, &tmpDirection);
+
+	BOOL pHit = false;
+	float dist = 999999.9f;
 
 	float tmpdistance = m_fCameraDistance;
 
@@ -50,22 +72,15 @@ void cCamera::Update(D3DXVECTOR3 cube)
 	{
 		if (dist < m_fCameraDistance)
 			tmpdistance = dist;
+
+		m_vEye = cube + (dist - 0.1f)*tmpDirection;
 	}
 
-	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
 
-	m_vEye = D3DXVECTOR3(0, tmpdistance, -tmpdistance);
-	//cube.y += m_fCameraDistance / 3.0f + 0.5f;
 
-	D3DXMatrixRotationX(&matRX, m_vCamRotAngle.x);
-	D3DXMatrixRotationY(&matRY, m_vCamRotAngle.y);
-	matR = matRX * matRY;
 
-	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &matR);
-	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &m_matTrans);
-	D3DXMATRIXA16 matView;
-	D3DXVECTOR3 aimSet = cube + (cube - m_vEye)*10;
-	D3DXMatrixLookAtLH(&matView, &m_vEye, &cube , &m_vUp);
+
+	D3DXMatrixLookAtLH(&matView, &m_vEye, &cube, &m_vUp);
 	g_pDevice->SetTransform(D3DTS_VIEW, &matView);
 
 

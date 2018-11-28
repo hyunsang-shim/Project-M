@@ -676,9 +676,9 @@ void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 		static float load = 0.0f;
 	
 		load += 0.015f;
-		pSender->cutSize(load, 1.0f);
+		pSender->cutSize(load, 1.0f);/*
 		if (g_pGameInfoManager->load == 0)
-			load = 0.7;
+			load = 0.7;*/
 		if (load > 1.0f)
 		{
 			g_pGameInfoManager->sceneChangeTriger = TRUE;
