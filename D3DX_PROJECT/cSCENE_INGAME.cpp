@@ -40,9 +40,6 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	//SAFE_DELETE(m_pSKY);
 	SAFE_DELETE(m_pMyCharacter);	
 
-	int result;
-	result = g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
-	closesocket(g_pNetworkManager->GetServerSocket());
 
 }
 
