@@ -35,7 +35,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	addr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 	WSAAsyncSelect(s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
 
-	static SOCKET ConnectRes;
+	static int ConnectRes;
 	ConnectRes = connect(s, (LPSOCKADDR)&addr, sizeof(addr));
 
 	if (ConnectRes != -1)
