@@ -31,9 +31,6 @@ cSCENE_TITLE::~cSCENE_TITLE()
 	if (m_pUIShadowRoot) m_pUIShadowRoot->Destroy();
 	SAFE_RELEASE(m_pSprite);
 	SAFE_RELEASE(m_pTextureUI);
-	int result;
-	result = g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
-	closesocket(g_pNetworkManager->GetServerSocket());
 }
 
 void cSCENE_TITLE::Setup()
