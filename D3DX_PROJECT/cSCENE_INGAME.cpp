@@ -155,6 +155,7 @@ void cSCENE_INGAME::Setup()
 
 	//��Ʈ ����
 	Creat_Font();
+	g_pGameInfoManager->load = 1;
 }
 
 void cSCENE_INGAME::Update()

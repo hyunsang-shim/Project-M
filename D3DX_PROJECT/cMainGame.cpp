@@ -38,8 +38,8 @@ void cMainGame::Setup()
 		break;
 	case 1:
 	{
-		/*g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
-		g_pGameInfoManager->m_pScene_Ingame->Setup();*/
+		g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+		g_pGameInfoManager->m_pScene_Ingame->Setup();
 	}
 		break;
 	case 3:
@@ -144,8 +144,8 @@ void cMainGame::SceneChangeNum()
 		g_pGameInfoManager->m_pScene_Title->Setup();
 		break;
 	case 1:
-		g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
-		g_pGameInfoManager->m_pScene_Ingame->Setup();
+		/*g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+		g_pGameInfoManager->m_pScene_Ingame->Setup();*/
 		break;
 	case 3:
 		g_pGameInfoManager->m_pScene_Result = new cSCENE_RESULT();

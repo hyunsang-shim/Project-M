@@ -46,7 +46,7 @@ public:
 	// <<
 
 	float aimSize;
-
+	bool load;
 
 	CharacterStatus_PC m_strMyCharacter;
 	vector<CharacterStatus_PC> m_vOtherCharacters;

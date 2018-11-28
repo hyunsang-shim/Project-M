@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "cCamera.h"
-
+#include "cXModel.h"
 
 cCamera::cCamera() : m_vEye(0, 0, -5), m_vLookAt(0, 0, 0), m_vUp(0, 1, 0)
 {
@@ -37,10 +37,25 @@ void cCamera::Update(D3DXVECTOR3 cube)
 	
 	D3DXMATRIXA16 matR, matRX, matRY, matTY;
 	D3DXMATRIXA16 m_matTrans;
+
+	D3DXVECTOR3 tmpDirection = m_vEye - cube;
+	BOOL pHit =false;
+	float dist = 999.9f;
+
+	float tmpdistance = m_fCameraDistance;
+
+	D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &cube, &tmpDirection, &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+	if (pHit)
+	{
+		if (dist < m_fCameraDistance)
+			tmpdistance = dist;
+	}
+
 	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
 
-	m_vEye = D3DXVECTOR3(0, m_fCameraDistance, -m_fCameraDistance);
-	cube.y += m_fCameraDistance / 3.0f + 0.5f;
+	m_vEye = D3DXVECTOR3(0, tmpdistance, -tmpdistance);
+	//cube.y += m_fCameraDistance / 3.0f + 0.5f;
 
 	D3DXMatrixRotationX(&matRX, m_vCamRotAngle.x);
 	D3DXMatrixRotationY(&matRY, m_vCamRotAngle.y);
