@@ -29,9 +29,9 @@ cXModel::cXModel(string filePath)
 	ID3DXBuffer* mtrlBuffer = 0;
 	DWORD numMtrls = 0;
 
-	hr = D3DXLoadMeshFromXA(
+	D3DXLoadMeshFromXA(
 		filePath.c_str(),
-		D3DXMESH_MANAGED,
+		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		g_pDevice,
 		&adjBuffer,
 		&mtrlBuffer,
@@ -40,7 +40,7 @@ cXModel::cXModel(string filePath)
 		&m_pXMesh
 	);
 
-	
+
 
 	if (mtrlBuffer != 0 && numMtrls != 0)
 	{
@@ -53,8 +53,8 @@ cXModel::cXModel(string filePath)
 
 			if (mtrls[i].pTextureFilename != 0)
 			{
-				LPDIRECT3DTEXTURE9 tex = 0;
-				D3DXCreateTextureFromFileA(g_pDevice, mtrls[i].pTextureFilename, &tex);
+				LPDIRECT3DTEXTURE9 tex = g_pTextureManager->GetTexture(mtrls[i].pTextureFilename);
+				//D3DXCreateTextureFromFileA(g_pDevice, mtrls[i].pTextureFilename, &tex);
 				m_vecTextuer.push_back(tex);
 			}
 			else
@@ -63,37 +63,10 @@ cXModel::cXModel(string filePath)
 			}
 		}
 	}
-	SAFE_RELEASE(mtrlBuffer);
-	SAFE_RELEASE(adjBuffer);
 
-	HRESULT ppp = m_pXMesh->GetFVF();
 
-	bool b = m_pXMesh->GetFVF() & D3DFVF_NORMAL;
 
-	/*if (!(m_pXMesh->GetFVF() & D3DFVF_NORMAL))
-	{
-		ID3DXMesh* pTempMesh = 0;
-		m_pXMesh->CloneMeshFVF(
-			D3DXMESH_MANAGED | D3DXMESH_32BIT,
-			m_pXMesh->GetFVF(),
-			g_pDevice,
-			&pTempMesh);
-
-		D3DXComputeNormals(pTempMesh, 0);
-
-		m_pXMesh->Release();
-		m_pXMesh = pTempMesh;
-	}*/
-
-	int index = m_pXMesh->GetNumVertices();
-
-	int face = 3 * m_pXMesh->GetNumFaces() * sizeof(DWORD);
-
-	std::vector<DWORD> vecAdj(m_pXMesh->GetNumVertices());
-	for (int i = 0; i < vecAdj.size(); i++)
-	{
-		vecAdj[i] = 0;
-	}
+	std::vector<DWORD> vecAdj(adjBuffer->GetBufferSize());
 	HRESULT thr = m_pXMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
 
 	m_pXMesh->OptimizeInplace(
@@ -102,6 +75,10 @@ cXModel::cXModel(string filePath)
 		D3DXMESHOPT_VERTEXCACHE,
 		&vecAdj[0],
 		0, 0, 0);
+
+
+	SAFE_RELEASE(mtrlBuffer);
+	SAFE_RELEASE(adjBuffer);
 
 	D3DXMatrixIdentity(&m_matWorld);
 }

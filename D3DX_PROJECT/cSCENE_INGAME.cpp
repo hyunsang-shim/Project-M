@@ -290,9 +290,11 @@ void cSCENE_INGAME::Render()
 
 	m_pSKY->Render();
 	//m_pGrid->Render();
-	//g_pGameInfoManager->m_pMap->Render();
+	if(g_pGameInfoManager->m_pMap)
+		g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
-	//m_pXmodel->Render();
+	if(m_pXmodel)
+		m_pXmodel->Render();
 
 	if(m_pTriggerBox)
 		m_pTriggerBox->Render();

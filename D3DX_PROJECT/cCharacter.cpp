@@ -97,7 +97,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 		if (GetKeyState('A') & 0x8000)
 		{
-			m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+			m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
 			if (OnlyLeftOrRight)
 			{
 				CurrentAnimNum = 7;
@@ -106,7 +106,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 		if (GetKeyState('D') & 0x8000)
 		{
-			m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+			m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
 			if (OnlyLeftOrRight)
 			{
 				CurrentAnimNum = 6;
