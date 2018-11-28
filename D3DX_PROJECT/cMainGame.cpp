@@ -38,8 +38,8 @@ void cMainGame::Setup()
 		break;
 	case 1:
 	{
-		g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
-		g_pGameInfoManager->m_pScene_Ingame->Setup();
+		/*g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+		g_pGameInfoManager->m_pScene_Ingame->Setup();*/
 	}
 		break;
 	case 3:
@@ -131,7 +131,7 @@ void cMainGame::SetSceneChangeTriger(int sceneNum)
 
 void cMainGame::SceneChangeNum()
 {
-	SAFE_DELETE(g_pGameInfoManager->m_pScene_Ingame);
+	//SAFE_DELETE(g_pGameInfoManager->m_pScene_Ingame);
 	SAFE_DELETE(g_pGameInfoManager->m_pScene_Result);
 	SAFE_DELETE(g_pGameInfoManager->m_pScene_Title);
 

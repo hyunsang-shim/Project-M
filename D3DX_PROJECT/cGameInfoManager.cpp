@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "cGameInfoManager.h"
 #include "cNewObject.h"
-
+#include "cXModel.h"
 
 cGameInfoManager::cGameInfoManager() :
 	isESCPushed(0),
@@ -9,6 +9,7 @@ cGameInfoManager::cGameInfoManager() :
 	mouseMoveY(0),
 	canGo(1),
 	m_pMap(NULL),
+	m_pXMap(NULL),
 	GameScreenSizeX(1920),
 	GameScreenSizeY(1080),
 	namelength(0), 
@@ -25,6 +26,7 @@ cGameInfoManager::cGameInfoManager() :
 cGameInfoManager::~cGameInfoManager()
 {
 	SAFE_DELETE(m_pMap);
+	SAFE_DELETE(m_pXMap);
 }
 
 int cGameInfoManager::getScreenXPosByPer(float x)
@@ -43,6 +45,11 @@ void cGameInfoManager::setup_Map(char* Path, char* Filename)
 	m_pMap = new cNewObject;
 	m_pMap->Setup(Path, Filename);
 
+}
+
+void cGameInfoManager::setup_XMap(string filePath)
+{
+	m_pXMap = new cXModel(filePath);
 }
 
 void cGameInfoManager::UpdateMyInfo(CharacterStatus_PC &newInfo)

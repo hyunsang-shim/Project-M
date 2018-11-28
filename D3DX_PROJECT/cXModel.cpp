@@ -87,10 +87,6 @@ cXModel::cXModel(string filePath)
 cXModel::~cXModel()
 {
 	SAFE_RELEASE(m_pXMesh);
-	for (int i = 0; i < m_vecTextuer.size(); i++)
-	{
-		SAFE_RELEASE(m_vecTextuer[i]);
-	}
 }
 
 void cXModel::SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos)
@@ -125,4 +121,25 @@ void cXModel::Render()
 		g_pDevice->SetTexture(0, m_vecTextuer[i]);
 		m_pXMesh->DrawSubset(i);
 	}
+}
+
+bool cXModel::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos)
+{
+	BOOL hit = false;
+	BOOL hit2 = false;
+	float dist = 0.0f;
+	float dist2 = 0.0f;
+	//float start = y + 12.0f;
+	float before = y;
+
+	D3DXIntersect(m_pXMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+	if (hit)
+	{
+		y = float(HeadPos.y) - dist;
+	}
+	else
+	{
+		y = HeadPos.y;
+	}
+	return true;
 }

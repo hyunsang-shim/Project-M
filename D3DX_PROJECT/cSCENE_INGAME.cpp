@@ -124,10 +124,8 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//xfileŸ���� �� �ε�
-	//m_pXmodel = new cXModel("rialto.X");
-	//m_pXmodel = new cXModel("xfile/bigship1.x");
-	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
+	//xfile Map load
+	g_pGameInfoManager->setup_XMap("map/rialto_max_01_half_sized3.X");
 
 	//�ϴ� ����
 	m_pSKY = new cSKY();
@@ -230,7 +228,7 @@ void cSCENE_INGAME::Update()
 			m_pCrossHairPicking->CalcPosition();
 
 			float dist;
-			D3DXIntersect(m_pXmodel->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
 
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
@@ -293,8 +291,8 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pMap)
 		g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
-	if(m_pXmodel)
-		m_pXmodel->Render();
+	if(g_pGameInfoManager->m_pXMap)
+		g_pGameInfoManager->m_pXMap->Render();
 
 	if(m_pTriggerBox)
 		m_pTriggerBox->Render();
