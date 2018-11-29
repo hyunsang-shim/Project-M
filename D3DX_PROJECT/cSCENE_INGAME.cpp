@@ -118,16 +118,14 @@ void cSCENE_INGAME::Setup()
 
 	//OBJŸ���� �� �ε�
 	//g_pGameInfoManager->setup_Map("map/rialto_obj_2", "Rialto_8B4.obj");
-	//g_pGameInfoManager->setup_Map("map/x test", "test_map_obj.obj");
+	//g_pGameInfoManager->setup_Map("map", "box.obj");
 
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
-	//xfileŸ���� �� �ε�
-	//m_pXmodel = new cXModel("rialto.X");
-	//m_pXmodel = new cXModel("xfile/bigship1.x");
-	//m_pXmodel->SetSRT(D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-15, 0, -15));
+	//xfile Map load
+	g_pGameInfoManager->setup_XMap("map/rialto_max_01_half_sized3.X");
 
 	//�ϴ� ����
 	m_pSKY = new cSKY();
@@ -157,6 +155,7 @@ void cSCENE_INGAME::Setup()
 
 	//��Ʈ ����
 	Creat_Font();
+	g_pGameInfoManager->loading = 1;
 }
 
 void cSCENE_INGAME::Update()
@@ -193,7 +192,7 @@ void cSCENE_INGAME::Update()
 		mouseMove = 0;
 	}
 
-	m_pCamera->Update(m_pMyCharacter->GetPosition());
+	m_pCamera->Update(m_pMyCharacter->GetPosition(), m_pMyCharacter->GetMyHeadPos());
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
@@ -230,7 +229,7 @@ void cSCENE_INGAME::Update()
 			m_pCrossHairPicking->CalcPosition();
 
 			float dist;
-			D3DXIntersect(m_pXmodel->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
 
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
@@ -293,8 +292,8 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pMap)
 		g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
-	if(m_pXmodel)
-		m_pXmodel->Render();
+	if(g_pGameInfoManager->m_pXMap)
+		g_pGameInfoManager->m_pXMap->Render();
 
 	if(m_pTriggerBox)
 		m_pTriggerBox->Render();

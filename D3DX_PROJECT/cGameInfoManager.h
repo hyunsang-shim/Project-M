@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 class cNewObject;
+class cXModel;
 
 class cGameInfoManager
 {
@@ -23,8 +24,10 @@ public:
 	bool canGo;
 
 	cNewObject* m_pMap;
+	cXModel* m_pXMap;
 
 	void setup_Map(char* Path, char* Filename);
+	void setup_XMap(string filePath);
 
 	int MaxBulletCount;
 	BOOL sceneChangeTriger;
@@ -53,6 +56,7 @@ public:
 	cSCENE_RESULT* m_pScene_Result;
 	cSCENE_TITLE* m_pScene_Title;
 
+	int loading;
 
 
 private:

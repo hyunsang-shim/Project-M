@@ -3,11 +3,12 @@
 #include "cMyCharacter.h"
 #include "cSkinnedMesh.h"
 #include "cNewObject.h"
+#include "cXModel.h"
 
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
-	, m_vPosition(150, 0, -150)
+	, m_vPosition(350, 0, 79)
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
@@ -42,6 +43,11 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	TotalPeriod = pCurrentAnimSet->GetPeriod();
 
 	D3DXVECTOR3 m_vBeforePosition = m_vPosition;
+
+	if (GetKeyState('Y') & 0x8000)
+	{
+		m_vPosition.y += 1;
+	}
 
 
 	if (GetKeyState('R') & 0x8000)
@@ -120,6 +126,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 	}
 
+	//Obj 맵인 경우 Y 축 계산
 	if (g_pGameInfoManager->m_pMap)
 	{
 		float y = 0;
@@ -139,6 +146,25 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 	}
 	
+	//xfile 맵인 경우 Y 축 계산
+	if (g_pGameInfoManager->m_pXMap)
+	{
+		float y = 0;
+		D3DXVECTOR3 head = m_vPosition + D3DXVECTOR3(0, 2, 0);
+		if (!g_pGameInfoManager->m_pXMap->GetY(m_vPosition.x, y, m_vPosition.z, head))
+			m_vPosition = m_vBeforePosition;
+		else if (y - m_vPosition.y > 0.7)
+		{
+
+		}
+		else
+		{
+			if (m_vPosition.y - y > 0.3)
+				m_vPosition.y -= 0.3f;
+			else
+				m_vPosition.y = y;
+		}
+	}
 
 	D3DXMATRIXA16 matR, matT;
 	D3DXMatrixRotationY(&matR, m_fRotY);

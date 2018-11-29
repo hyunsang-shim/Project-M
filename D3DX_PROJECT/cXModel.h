@@ -19,6 +19,6 @@ public:
 	void SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos);
 	void Update();
 	void Render();
-	
+	bool GetY(IN float x, OUT float &y, IN float z, D3DXVECTOR3 HeadPos);
 };
 

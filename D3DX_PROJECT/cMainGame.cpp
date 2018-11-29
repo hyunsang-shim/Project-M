@@ -33,7 +33,7 @@ void cMainGame::Setup()
 	{
 		g_pGameInfoManager->m_pScene_Title = new cSCENE_TITLE();
 		g_pGameInfoManager->m_pScene_Title->Setup();
-		hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned(__stdcall *)(void*))ThreadPorc, NULL, 0, NULL);
+		//hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned(__stdcall *)(void*))ThreadPorc, NULL, 0, NULL);
 	}
 		break;
 	case 1:
