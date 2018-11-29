@@ -62,11 +62,7 @@ void cCamera::Update(D3DXVECTOR3 cube, D3DXVECTOR3 HeadPos)
 
 	if (SpringArmHit && SpringArmDist < hToCLength)
 	{
-		//m_vEye = cube + (SpringArmDist - 2.0f)*HeadToCameraDir;
-
-		m_vEye.x = cube.x + SpringArmDist;
-		m_vEye.y = cube.y + SpringArmDist;
-		m_vEye.z = cube.z + SpringArmDist;
+		m_vEye = cube + (SpringArmDist - 2.0f)*HeadToCameraDir;
 	}
 
 	D3DXMatrixLookAtLH(&matView, &m_vEye, &cube , &m_vUp);

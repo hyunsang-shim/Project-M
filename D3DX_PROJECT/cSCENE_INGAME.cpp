@@ -18,6 +18,7 @@
 #include "cAI.h"
 #include "cWaveTriggerBox.h"
 #include "cUITextView.h"
+#include "cXModelSurface.h"
 
 enum
 {
@@ -125,7 +126,9 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));
 
 	//xfile Map load
-	g_pGameInfoManager->setup_XMap("map/rialto_max_01_half_sized3.X");
+	g_pGameInfoManager->setup_XMap("map/rialto_map_new.X");
+
+	g_pGameInfoManager->setup_SXMap("map/rialto_floor_new.X");
 
 	//�ϴ� ����
 	m_pSKY = new cSKY();
@@ -295,6 +298,8 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pXMap)
 		g_pGameInfoManager->m_pXMap->Render();
 
+	if(g_pGameInfoManager->m_pSXMap)
+		g_pGameInfoManager->m_pSXMap->Render();
 	if(m_pTriggerBox)
 		m_pTriggerBox->Render();
 

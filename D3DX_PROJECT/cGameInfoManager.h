@@ -4,6 +4,7 @@
 
 class cNewObject;
 class cXModel;
+class cXModelSurface;
 
 class cGameInfoManager
 {
@@ -25,9 +26,11 @@ public:
 
 	cNewObject* m_pMap;
 	cXModel* m_pXMap;
+	cXModelSurface* m_pSXMap;
 
 	void setup_Map(char* Path, char* Filename);
 	void setup_XMap(string filePath);
+	void setup_SXMap(string filePath);
 
 	int MaxBulletCount;
 	BOOL sceneChangeTriger;

@@ -4,11 +4,12 @@
 #include "cSkinnedMesh.h"
 #include "cNewObject.h"
 #include "cXModel.h"
+#include "cXModelSurface.h"
 
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
-	, m_vPosition(350, 0, 79)
+	, m_vPosition(287, 10, -139)
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
@@ -130,8 +131,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	if (g_pGameInfoManager->m_pMap)
 	{
 		float y = 0;
-		D3DXVECTOR3 head = m_vPosition + D3DXVECTOR3(0, 2, 0);
-		if(!g_pGameInfoManager->m_pMap->GetY(m_vPosition.x, y, m_vPosition.z, head))
+		if(!g_pGameInfoManager->m_pMap->GetY(m_vPosition.x, y, m_vPosition.z, m_MyCharacter->GetMyHeadPos()))
 			m_vPosition = m_vBeforePosition;
 		else if (y - m_vPosition.y > 0.7)
 		{
@@ -147,11 +147,11 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	}
 	
 	//xfile 맵인 경우 Y 축 계산
-	if (g_pGameInfoManager->m_pXMap)
+	if (g_pGameInfoManager->m_pSXMap)
 	{
 		float y = 0;
 		D3DXVECTOR3 head = m_vPosition + D3DXVECTOR3(0, 2, 0);
-		if (!g_pGameInfoManager->m_pXMap->GetY(m_vPosition.x, y, m_vPosition.z, head))
+		if (!g_pGameInfoManager->m_pSXMap->GetY(m_vPosition.x, y, m_vPosition.z, head))
 			m_vPosition = m_vBeforePosition;
 		else if (y - m_vPosition.y > 0.7)
 		{

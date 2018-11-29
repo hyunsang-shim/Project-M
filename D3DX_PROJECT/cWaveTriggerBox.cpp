@@ -18,8 +18,8 @@ void cWaveTriggerBox::Setup()
 	if (m_WaveCount == 0)
 	{
 		tb.Name = "FirstTriggerBox";
-		tb.SetMin(D3DXVECTOR3(0, 0, 20));
-		tb.SetMax(D3DXVECTOR3(10, 10, 30));
+		tb.SetMin(D3DXVECTOR3(430, -5, 114));
+		tb.SetMax(D3DXVECTOR3(377, 5, 55));
 		tb.m_DisplayOrNot = true;
 		m_pOBB = new cOBB;
 		m_pOBB->Setup(&tb);

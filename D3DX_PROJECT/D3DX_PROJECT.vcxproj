@@ -189,6 +189,7 @@
     <ClInclude Include="cUITextView.h" />
     <ClInclude Include="cWaveTriggerBox.h" />
     <ClInclude Include="cXModel.h" />
+    <ClInclude Include="cXModelSurface.h" />
     <ClInclude Include="D3DX_PROJECT.h" />
     <ClInclude Include="iMap.h" />
     <ClInclude Include="Resource.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="cUITextView.cpp" />
     <ClCompile Include="cWaveTriggerBox.cpp" />
     <ClCompile Include="cXModel.cpp" />
+    <ClCompile Include="cXModelSurface.cpp" />
     <ClCompile Include="D3DX_PROJECT.cpp" />
     <ClCompile Include="iMap.cpp" />
     <ClCompile Include="stdafx.cpp">
