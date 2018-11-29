@@ -2,7 +2,8 @@
 #include "stdafx.h"
 #include "D3DX_PROJECT_SERVER.h"
 #include <list>
-
+#include <queue>
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 // Server Addresses
 // should activated just one.
 #define SERVER_ADDR "165.246.163.66"	// ����ȣ.
@@ -20,18 +21,20 @@ WCHAR szTitle[MAX_LOADSTRING];                  // ���� ǥ���� �
 WCHAR szWindowClass[MAX_LOADSTRING];            // �⺻ â Ŭ���� �̸��Դϴ�.
 static vector<CharacterStatus_PC> g_vUsers;
 CRITICAL_SECTION	crit;
+CRITICAL_SECTION	messageGet;
+
 HANDLE	g_thrThreads[MAX_USERS];
 int	g_isAliveThread[MAX_USERS] = { 0 };
 HWND hWnd;
 bool isSent = false;
 vector<string> ServerStatus;
-
+queue<string> messageQueue;
 
 // �� �ڵ� ��⿡ ��� �ִ� �Լ��� ������ �����Դϴ�.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-int					threadProcessRecv(void* idx);
+void				threadProcessRecv(void* str);
 void CALLBACK		TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 void				ThreadSend();
 
@@ -121,26 +124,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static WSADATA wsadata;
 	static SOCKET ServerSocket, ClientSocket;
 	static SOCKADDR_IN sockInfo = { 0 }, c_sockInfo;
-	char* buffer;
+	//char buffer[64];
 	int srvSize, clnSize = sizeof(c_sockInfo);
 	static int playerCnt;
 	static string errmsg;
 //	static vector<string> userMsgs;		//���� ���� �޽���
 
 	static int userNum = 0;
-	buffer = (char*)malloc(sizeof(CharacterStatus_NPC) + 1);
-	ZeroMemory(buffer, sizeof(CharacterStatus_PC) + 1);
+	//ZeroMemory(buffer, sizeof(CharacterStatus_PC) + 1);
 
     switch (message)
     {
 	case WM_CREATE:
 	{
+		HANDLE hThread = new HANDLE;
+		hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))threadProcessRecv, NULL, 0, NULL);
+
 		MoveWindow(hWnd,
 			GetSystemMetrics(SM_CXSCREEN) - 420, GetSystemMetrics(SM_CYSCREEN) - 230,
 			360, 220,
 			TRUE);
 		ServerStatus.push_back("0 Players Online");
 		InitializeCriticalSection(&crit);
+		InitializeCriticalSection(&messageGet);
 		SetTimer(hWnd, 123, 25, (TIMERPROC)TimerProc);
 
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
@@ -237,7 +243,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 			case FD_READ:
 			{
-				HANDLE hThread = new HANDLE;
 				int idx = -1;
 
 				for (int i = 0; i < g_vUsers.size(); i++)
@@ -254,17 +259,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				//
 				// initiate buffer
-				char* buffer;
-				buffer = (char*)malloc(sizeof(CharacterStatus_PC) + 1);
-				memset(buffer, 0, sizeof(CharacterStatus_PC) + 1);
-
+				char buffer[64];
+				CharacterStatus_PC * tmpBuffer;
 				//
 				//recieve data
-				int bufferLen = recv(g_vUsers[idx].s, buffer, sizeof(CharacterStatus_PC) + 1, 0);
+				int bufferLen = recv(g_vUsers[idx].s, buffer, 64, 0);	
 				buffer[bufferLen] = NULL;		// ensure data's end
 
-				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))threadProcessRecv, (void *)buffer, 0, NULL);
-				CloseHandle(hThread);
+				string tmp = string(buffer);
+
+				messageQueue.push(tmp);
+
+				
 			}
 				break;
 			case FD_CLOSE:
@@ -424,69 +430,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-int threadProcessRecv(void* buffer)
+void threadProcessRecv(void * str)
 {
-	CharacterStatus_PC *tmp = (CharacterStatus_PC*)&buffer;
-	int Myidx = tmp->ID;
-
-
-	EnterCriticalSection(&crit);
-
-	//
-	// update Server Status
-	string tmpString;
-	char tmpChar[32] = { 0 };
-	tmpString.append("ID: ");
-	tmpString.append(_itoa(g_vUsers[Myidx].ID, tmpChar, 10));
-	memset(tmpChar, 0, 32);
-	tmpString.append(" Socket: ");
-	tmpString.append(_itoa(g_vUsers[Myidx].s, tmpChar, 10));
-	memset(tmpChar, 0, 32);
-	tmpString.append(" | Fails : ");
-	tmpString.append(_itoa(g_vUsers[Myidx].FailCnt, tmpChar, 10));
-	tmpString.append(" | Action : ");
-	tmpString.append(g_vUsers[Myidx].MsgHeader);
-	ServerStatus[Myidx + 1] = tmpString;
-
-	//
-	// Update recieved Data 
-	g_vUsers[Myidx] = *tmp;
-
-	//
-	// duplicate Current Users data to minimize criticalSection Time.
-	
-
-	LeaveCriticalSection(&crit);
-
-	for (int i = 0; i < g_vUsers.size(); i++)
+	while (1)
 	{
-		int res = send(g_vUsers.at(i).s, (char*)tmp, sizeof(CharacterStatus_PC) + 1, 0);
-		if (res == -1)
+		string tmp;
+		if (messageQueue.size() == 0)
 		{
-			int x = errno;
-			EnterCriticalSection(&crit);
-			ServerStatus[g_vUsers.at(i).ID + 1].append(" Send Failed! Socket ID : ");
-			char tmpChar[32] = { 0 };
-			ServerStatus[g_vUsers.at(i).ID+1].append(_itoa(x, tmpChar, 10));
-			ServerStatus[Myidx + 1] = tmpString;
-			g_vUsers.at(i).FailCnt++;
-
-			if (g_vUsers.at(i).FailCnt > TRYOUT_CNT)
-			{				
-				closesocket((g_vUsers[i].s));
-				g_vUsers.erase(g_vUsers.begin() + i);
-				ServerStatus.erase(ServerStatus.begin() + i);
-
-				string tmpString;
-				char tmpChar[32] = { 0 };
-				ServerStatus[0].clear();
-				tmpString.append(_itoa(g_vUsers.size(), tmpChar, 10));
-				tmpString.append(" Players Online");
-				ServerStatus[0] = tmpString;
-			}
+			Sleep(1);
+			continue;
 		}
+		tmp = messageQueue.front();
+		messageQueue.pop();
+		
+		char* givenMessage = new char[tmp.size() + 1];
+		std::copy(tmp.begin(), tmp.end(), givenMessage);
+		givenMessage[tmp.size()] = '\0';
+		printf("%s", givenMessage);
+
 	}
-	return 0;
 }
 
 
