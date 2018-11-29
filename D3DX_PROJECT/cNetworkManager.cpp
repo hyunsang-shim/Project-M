@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "cNetworkManager.h"
+#include <string>
+#include <iostream>
+#include <queue>
+using namespace std;
 
 // ���� �ּ�
 // �Ʒ� �� �ϳ��� Ȱ��ȭ ��Ű�� ���.
@@ -18,13 +22,93 @@ cNetworkManager::~cNetworkManager()
 {	
 }
 
-//bool StartWith(char * FindStr, char * SearchStr)
-//{
-//	char* temp = strstr(FindStr, SearchStr);
-//	if (temp == FindStr)
-//		return true;
-//	return false;
-//}
+
+
+bool StartWith(char * FindStr, char * SearchStr)
+{
+	char* temp = strstr(FindStr, SearchStr);
+	if (temp == FindStr)
+		return true;
+	return false;
+}
+
+
+void threadProcessRecv(void * str)
+{
+	while (1)
+	{
+		Sleep(1);
+		string tmp;
+		char* givenMessage;
+		if (g_pNetworkManager->messageQueue.size() == 0)
+		{
+			continue;
+		}
+		tmp = g_pNetworkManager->messageQueue.front();
+		g_pNetworkManager->messageQueue.pop();
+
+		givenMessage = new char[tmp.size() + 1];
+		std::copy(tmp.begin(), tmp.end(), givenMessage);
+		givenMessage[tmp.size()] = '\0';
+		printf("%s\n", givenMessage);
+
+		if (StartWith(givenMessage, "userStatus"))
+		{
+			int ID =4;
+			D3DXVECTOR3 Pos;
+			float Dir;
+			int Status;
+			int CurHP;
+
+			sscanf_s(givenMessage, "%*s %d %f %f %f %f %d %d", &ID, &Pos.x, &Pos.y, &Pos.z, &Dir, &Status, &CurHP);
+
+		}
+		else if (StartWith(givenMessage, "shot"))
+		{
+			int ID;
+			int monsterNum;
+			int damage;
+
+			sscanf_s(givenMessage, "%*s %d %d %d", &ID, &damage, &ID);
+
+		}
+		else if (StartWith(givenMessage, "select"))
+		{
+			int ID;
+			int character;
+
+			sscanf_s(givenMessage, "%*s %d %d", &ID, &character);
+			/*	for (int i = 0; i < g_vUsers.size(); i++)
+			{
+			if (g_vUsers.at(i).ID == ID)
+			{
+			g_vUsers.at(i).Character_No = character;
+			}
+			}*/
+		}
+		else if (StartWith(givenMessage, "myNameIs"))
+		{
+			int ID;
+			char name[16];
+			sscanf_s(givenMessage, "%*s %d %s", &ID, &name, 16);
+
+			if (g_pGameInfoManager->GetMyInfo()->ID == ID)
+				continue;
+			CharacterStatus_PC tmp;
+			tmp.ID = ID;
+			strcpy(tmp.PlayerName, name);
+
+			g_pGameInfoManager->m_vOtherCharacters.push_back(tmp);
+		}
+		else if (StartWith(givenMessage, "SetID"))
+		{
+			int IDID;
+			sscanf_s(givenMessage, "%*s %d", &IDID);
+			g_pGameInfoManager->GetMyInfo()->ID = IDID;
+		}
+	}
+}
+
 
 bool cNetworkManager::SetupNetwork(HWND hWnd)
 {
@@ -46,6 +130,9 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 	else
 		isConnected = true;
 	// <<
+	hThread = new HANDLE;
+	hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))threadProcessRecv, NULL, 0, NULL);
+
 
 	return isConnected;
 	
@@ -59,22 +146,65 @@ void cNetworkManager::SendData(CharacterStatus_PC strPC)
 	}
 }
 
-int cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
+int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 {
 	int result = 0;
+	string sendString;
+
 	if (isConnected)
 	{
-		
-		strcpy(strPC->MsgHeader, MsgHeader);
-		if (MySocket != strPC->s)
-			strPC->s = MySocket;
-
-		result = send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
-
-		if (strcmp(MsgHeader, "join") == 0)
+		if (NH == NH_USER_STATUS)
 		{
-			strcpy(strPC->MsgHeader, "userData");
+ 			sendString += "userStatus";
+			sendString += ' ';
+			sendString += to_string(strPC->ID);
+			sendString += ' ';
+			sendString += to_string(strPC->CurPos.x);
+			sendString += ' ';
+			sendString += to_string(strPC->CurPos.y);
+			sendString += ' ';
+			sendString += to_string(strPC->CurPos.z);
+			sendString += ' ';
+			sendString += to_string(strPC->Dir);
+			sendString += ' ';
+			sendString += to_string(strPC->Status);
+			sendString += ' ';
+			sendString += to_string(strPC->CurHP);
 		}
+		if (NH == NH_SHOT)
+		{
+			sendString += "shot";
+			sendString += ' ';
+			sendString += to_string(strPC->ID);
+			sendString += ' ';
+			int monsterNum = 0; // hit monster num
+			sendString += to_string(monsterNum);
+			sendString += ' ';
+			sendString += to_string(strPC->Attack);
+		}
+		if (NH == NH_SELECT)
+		{
+			sendString += "select";
+			sendString += ' ';
+			sendString += to_string(strPC->ID);
+			sendString += ' ';
+			sendString += to_string(strPC->Character_No);
+		}
+		if (NH == NH_MY_NAME_IS)
+		{
+			sendString += "myNameIs";
+			sendString += ' ';
+			sendString += to_string(strPC->ID);
+			sendString += ' ';
+			sendString += string(strPC->PlayerName);
+		}
+		
+		char * sendMessage = new char[sendString.size() + 1];
+		copy(sendString.begin(), sendString.end(), sendMessage);
+		sendMessage[sendString.size()] = '\0';
+
+		result = send(s, sendMessage, sendString.size() + 1, 0);
+
 	}
 
 	return result;
@@ -82,59 +212,10 @@ int cNetworkManager::SendData(char * MsgHeader, CharacterStatus_PC *strPC)
 
 void cNetworkManager::recvData()
 {
-	if (isConnected)
-	{
-		memset(buffer, 0, sizeof(CharacterStatus_PC)+1);
-		
-		int bufferLen = recv(s, buffer, sizeof(CharacterStatus_PC)+1, 0);
-		buffer[bufferLen] = NULL;
-		CharacterStatus_PC* tmp = (CharacterStatus_PC*)&buffer;
-		if (strcmp(tmp->MsgHeader, "join") == 0)
-		{
-			g_pOtherPlayerManager->newPlayer(tmp);
-		}
-		else if (strcmp(tmp->MsgHeader, "userData") == 0)
-		{
-
-			int check = 0;
-			for (int i = 0; i < OtherPlayer.size(); i++)
-			{
-				if (OtherPlayer.at(i)->info.ID == tmp->ID)
-				{
-					OtherPlayer.at(i)->Update(tmp->CurPos, tmp->Dir, tmp->Status);
-					check = 1;
-					break;
-				}
-			}
-
-			if (check == 0)
-			{
-				g_pOtherPlayerManager->newPlayer(tmp);
-			}
-		}
-		else if (strcmp(tmp->MsgHeader, "disconnect") == 0)
-		{
-			int num = tmp->ID;
-			g_pOtherPlayerManager->disconnectPlayer(num);	// erase user from OtherPlayerManager and also GameInfoManager.
-			/*for (int i = 0; i < OtherPlayer.size(); i++)
-			{
-				if (OtherPlayer.at(i)->info.ID == num)
-				{
-					delete(OtherPlayer.at(i));
-					OtherPlayer.erase(OtherPlayer.begin() + i);
-					i--;
-					break;
-				}
-			}*/
-		}
-		else if (strcmp(tmp->MsgHeader, "welcome") == 0)
-		{
-			//MessageBox(NULL, _T("Server Said: Welcome!!"), _T("Message Recieved"), MB_OK);		
-			tmp->s = s;
-			g_pGameInfoManager->UpdateMyInfo(*tmp);
-			g_pNetworkManager->SendData("TitleScene", g_pGameInfoManager->GetMyInfo());
-		}
-	}
+	char buffer[64];
+	recv(s, buffer, 64, 0);
+	string tmp = string(buffer);
+	messageQueue.push(tmp);
 }
 
 bool cNetworkManager::GetNetStatus()

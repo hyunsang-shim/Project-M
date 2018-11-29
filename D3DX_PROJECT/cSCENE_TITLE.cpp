@@ -42,6 +42,7 @@ void cSCENE_TITLE::Setup()
 	BGSetup();
 	UIsetup();
 
+	g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
 }
 
 void cSCENE_TITLE::Update()
@@ -271,10 +272,10 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 	else if (pSender->GetTag() == E_BUTTON_OK)
 	{
 		g_pGameInfoManager->SetMyName();
+		g_pNetworkManager->SendData(NH_MY_NAME_IS,g_pGameInfoManager->GetMyInfo());
 		g_pGameInfoManager->sceneChangeTriger = TRUE;
 		g_pGameInfoManager->nextScene = 1;
 		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
-		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
 
 	}
 	else if (pSender->GetTag() == E_BUTTON_CANCLE)

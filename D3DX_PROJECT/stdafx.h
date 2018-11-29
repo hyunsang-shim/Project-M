@@ -174,6 +174,14 @@ enum character_status {
 	PC_NumSize
 };
 
+enum NETWORK_HEADER {
+	NH_USER_STATUS,
+	NH_SHOT,
+	NH_SELECT,
+	NH_MY_NAME_IS
+};
+
+
 struct CharacterStatus_PC
 {
 	char		MsgHeader[64];			// 메시지 헤더
