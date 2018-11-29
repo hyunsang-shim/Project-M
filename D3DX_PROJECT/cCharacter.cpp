@@ -147,6 +147,12 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = matR * matT;
+
+	g_pGameInfoManager->GetMyInfo()->CurPos.x = m_vPosition.x;
+	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.z;
+	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.z;
+
+	g_pGameInfoManager->GetMyInfo()->Dir = m_fRotY;
 }
 
 void cCharacter::UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status)
@@ -171,11 +177,7 @@ void cCharacter::Update(float ROTY, D3DXVECTOR3 POSITION)
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = matR * matT;
 
-	g_pGameInfoManager->GetMyInfo()->CurPos.x = m_vPosition.x;
-	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.z;
-	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.z;
-
-	g_pGameInfoManager->GetMyInfo()->Dir = m_fRotY;
+	
 
 
 
