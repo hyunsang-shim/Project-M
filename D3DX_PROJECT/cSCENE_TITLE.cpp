@@ -42,7 +42,7 @@ void cSCENE_TITLE::Setup()
 	BGSetup();
 	UIsetup();
 
-	g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
+	
 }
 
 void cSCENE_TITLE::Update()

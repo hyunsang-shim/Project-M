@@ -33,8 +33,7 @@ void cOtherPlayerManager::render()
 {
 	for (int i = 0; i < otherPlayerInfo.size(); i++)
 	{
-		if (strcmp(OtherPlayer.at(i)->info.MsgHeader, "userData") == 0)
-			otherPlayerInfo.at(i)->Render();
+		otherPlayerInfo.at(i)->Render();
 	}
 }
 

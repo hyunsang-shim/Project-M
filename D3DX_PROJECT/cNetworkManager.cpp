@@ -54,13 +54,24 @@ void threadProcessRecv(void * str)
 
 		if (StartWith(givenMessage, "userStatus"))
 		{
-			int ID =4;
+			int ID;
 			D3DXVECTOR3 Pos;
 			float Dir;
 			int Status;
 			int CurHP;
 
 			sscanf_s(givenMessage, "%*s %d %f %f %f %f %d %d", &ID, &Pos.x, &Pos.y, &Pos.z, &Dir, &Status, &CurHP);
+			for (int i = 0; i < g_pGameInfoManager->m_vOtherCharacters.size(); i++)
+			{
+				if (g_pGameInfoManager->m_vOtherCharacters.at(i).ID == ID)
+				{
+					g_pGameInfoManager->m_vOtherCharacters.at(i).CurPos = Pos;
+					g_pGameInfoManager->m_vOtherCharacters.at(i).Dir = Dir;
+					g_pGameInfoManager->m_vOtherCharacters.at(i).Status = Status;
+					g_pGameInfoManager->m_vOtherCharacters.at(i).CurHP = CurHP;
+
+				}
+			}
 
 		}
 		else if (StartWith(givenMessage, "shot"))
