@@ -125,8 +125,8 @@ void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		m_fCameraDistance -= (GET_WHEEL_DELTA_WPARAM(wParam) / 100.0f);
 		if (m_fCameraDistance < EPSILON)
 			m_fCameraDistance = EPSILON;
-		if (m_fCameraDistance > 2000.0)
-			m_fCameraDistance = 2000.0;
+		if (m_fCameraDistance > 20.0)
+			m_fCameraDistance = 20.0;
 		if (m_fCameraDistance < 2.0)
 			m_fCameraDistance = 2.0;
 		break;
