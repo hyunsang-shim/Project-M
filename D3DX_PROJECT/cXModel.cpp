@@ -132,7 +132,19 @@ bool cXModel::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos)
 	//float start = y + 12.0f;
 	float before = y;
 
+	D3DXVECTOR3 HeadPosDouble;
+	HeadPosDouble.x = HeadPos.x;
+	HeadPosDouble.y = HeadPos.y + 3.0f;
+	HeadPosDouble.z = HeadPos.z;
+
 	D3DXIntersect(m_pXMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+	D3DXIntersect(m_pXMesh, &HeadPosDouble, &D3DXVECTOR3(0, -1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
+	
+	if (dist > dist2)
+	{
+		return false;
+	}
+
 	if (hit)
 	{
 		y = float(HeadPos.y) - dist;

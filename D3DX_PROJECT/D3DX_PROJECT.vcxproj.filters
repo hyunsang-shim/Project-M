@@ -219,6 +219,9 @@
     <ClInclude Include="cWaveTriggerBox.h">
       <Filter>TriggerBox</Filter>
     </ClInclude>
+    <ClInclude Include="cXModelSurface.h">
+      <Filter>X-File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="cWaveTriggerBox.cpp">
       <Filter>TriggerBox</Filter>
+    </ClCompile>
+    <ClCompile Include="cXModelSurface.cpp">
+      <Filter>X-File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

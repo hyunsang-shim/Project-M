@@ -2,6 +2,7 @@
 #include "cGameInfoManager.h"
 #include "cNewObject.h"
 #include "cXModel.h"
+#include "cXModelSurface.h"
 
 cGameInfoManager::cGameInfoManager() :
 	isESCPushed(0),
@@ -51,6 +52,11 @@ void cGameInfoManager::setup_Map(char* Path, char* Filename)
 void cGameInfoManager::setup_XMap(string filePath)
 {
 	m_pXMap = new cXModel(filePath);
+}
+
+void cGameInfoManager::setup_SXMap(string filePath)
+{
+	m_pSXMap = new cXModelSurface(filePath);
 }
 
 void cGameInfoManager::UpdateMyInfo(CharacterStatus_PC &newInfo)
