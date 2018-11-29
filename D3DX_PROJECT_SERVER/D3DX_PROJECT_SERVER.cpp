@@ -5,8 +5,8 @@
 
 // Server Addresses
 // should activated just one.
-//#define SERVER_ADDR "165.246.163.66"	// ����ȣ.
-#define SERVER_ADDR "165.246.163.71"	// Shim Hyunsang
+#define SERVER_ADDR "165.246.163.66"	// ����ȣ.
+//#define SERVER_ADDR "165.246.163.71"	// Shim Hyunsang
 //#define SERVER_ADDR "192.168.0.7"		// ������(��/������1)
 //#define SERVER_ADDR "192.168.0.7"		// ������(��/������2)
 
