@@ -56,6 +56,7 @@ public:
 	cSCENE_RESULT* m_pScene_Result;
 	cSCENE_TITLE* m_pScene_Title;
 
+	int loading;
 
 
 private:

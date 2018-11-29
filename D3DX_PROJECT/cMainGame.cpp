@@ -33,13 +33,13 @@ void cMainGame::Setup()
 	{
 		g_pGameInfoManager->m_pScene_Title = new cSCENE_TITLE();
 		g_pGameInfoManager->m_pScene_Title->Setup();
-		hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned(__stdcall *)(void*))ThreadPorc, NULL, 0, NULL);
+		//hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned(__stdcall *)(void*))ThreadPorc, NULL, 0, NULL);
 	}
 		break;
 	case 1:
 	{
-		/*g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
-		g_pGameInfoManager->m_pScene_Ingame->Setup();*/
+		g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+		g_pGameInfoManager->m_pScene_Ingame->Setup();
 	}
 		break;
 	case 3:
@@ -131,7 +131,7 @@ void cMainGame::SetSceneChangeTriger(int sceneNum)
 
 void cMainGame::SceneChangeNum()
 {
-	//SAFE_DELETE(g_pGameInfoManager->m_pScene_Ingame);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Ingame);
 	SAFE_DELETE(g_pGameInfoManager->m_pScene_Result);
 	SAFE_DELETE(g_pGameInfoManager->m_pScene_Title);
 

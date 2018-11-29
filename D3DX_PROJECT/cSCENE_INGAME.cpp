@@ -118,7 +118,7 @@ void cSCENE_INGAME::Setup()
 
 	//OBJŸ���� �� �ε�
 	//g_pGameInfoManager->setup_Map("map/rialto_obj_2", "Rialto_8B4.obj");
-	//g_pGameInfoManager->setup_Map("map/x test", "test_map_obj.obj");
+	//g_pGameInfoManager->setup_Map("map", "box.obj");
 
 	loader = new cAseLoader();
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
@@ -155,6 +155,7 @@ void cSCENE_INGAME::Setup()
 
 	//��Ʈ ����
 	Creat_Font();
+	g_pGameInfoManager->loading = 1;
 }
 
 void cSCENE_INGAME::Update()
@@ -191,7 +192,7 @@ void cSCENE_INGAME::Update()
 		mouseMove = 0;
 	}
 
-	m_pCamera->Update(m_pMyCharacter->GetPosition());
+	m_pCamera->Update(m_pMyCharacter->GetPosition(), m_pMyCharacter->GetMyHeadPos());
 	if (m_pRootFrame)
 		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 

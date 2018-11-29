@@ -674,7 +674,9 @@ void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 	if (pSender->GetTag() == LOADING_BAR)
 	{
 		static float load = 0.0f;
-	
+		/*if(g_pGameInfoManager->loading == 0 && load>0.5)
+			load = 0.5;*/
+
 		load += 0.015f;
 		pSender->cutSize(load, 1.0f);
 		if (load > 1.0f)

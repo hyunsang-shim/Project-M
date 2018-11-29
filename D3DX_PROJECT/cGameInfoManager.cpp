@@ -18,7 +18,8 @@ cGameInfoManager::cGameInfoManager() :
 	aimSize(0.0f),
 	m_vOtherCharacters(NULL),
 	m_vNpcCharacters(NULL),  
-	MaxBulletCount(30)
+	MaxBulletCount(30),
+	loading(0)
 {
 }
 
