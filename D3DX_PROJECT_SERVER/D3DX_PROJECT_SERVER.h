@@ -1,26 +1,24 @@
 #pragma once
 
 #include "resource.h"
+
 enum character_status {
-	Stand,
-	Stand_Shoot,
-	Run_Front,
-	Run_Front_Shoot,
-	Run_Left,
-	Run_Left_Shoot,
-	Run_Right,
-	Run_Right_Shoot,
-	Run_Back,
-	Run_Back_Shoot,
-	Dash,
-	Reload,
-	Hit,
-	Down,
-	Down_idle,
-	Stand_Up,
-	Dead,
-	NumSize
+	CS_IDLE,
+	CS_FRONT,
+	CS_FRONT_LEFT,
+	CS_FRONT_RIGHT,
+	CS_FRONT_LEFT_SHIFT,
+	CS_FRONT_RIGHT_SHIFT,
+	CS_LEFT,
+	CS_RIGHT,
+	CS_BACK,
+	CS_BACK_LEFT,
+	CS_BACK_RIGHT,
+	CS_RELOAD,
+	CS_DOWN,
+	CS_DEAD
 };
+
 
 struct CharacterStatus_PC
 {

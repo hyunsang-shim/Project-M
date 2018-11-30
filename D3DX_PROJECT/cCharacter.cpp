@@ -26,6 +26,11 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 {
 	static int CurrentAnimNum = 1;
 	static int beforeAnimNum = 0;
+
+	static int beforeStatus = 0;
+	static int nowStatus = 0;
+
+
 	static double TotalPeriod = 0.0;
 	static double CurrentPeriod = 0.0;
 	bool OnlyLeftOrRight = true;
@@ -92,68 +97,81 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		CurrentAnimNum = 8;
+		nowStatus = CS_FRONT;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && !KEY_D && KEY_SHIFT) // front + shift
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
 		CurrentAnimNum = 4;
+		nowStatus = CS_FRONT_SHIFT;
 	}
 	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && !KEY_SHIFT) // front + left
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 8;
+		nowStatus = CS_FRONT_LEFT;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && !KEY_SHIFT) // front + right
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 8;
+		nowStatus = CS_FRONT_RIGHT;
+
 	}
 	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && KEY_SHIFT) // front + left + shift
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
 		CurrentAnimNum = 4;
+		nowStatus = CS_FRONT_LEFT_SHIFT;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && KEY_SHIFT) // front + right + shift
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
 		CurrentAnimNum = 4;
+		nowStatus = CS_FRONT_RIGHT_SHIFT;
 	}
 	else if (!KEY_W && !KEY_S && KEY_A && !KEY_D ) // left
 	{
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 7;
+		nowStatus = CS_LEFT;
 
 	}
 	else if (!KEY_W && !KEY_S && !KEY_A && KEY_D ) // right
 	{
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 6;
+		nowStatus = CS_RIGHT;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && !KEY_D ) // back
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		CurrentAnimNum = 5;
+		nowStatus = CS_BACK;
 	}
 	else if (!KEY_W && KEY_S && KEY_A && !KEY_D ) // back + left
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 5;
+		nowStatus = CS_LEFT;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && KEY_D ) // back + riight
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 5;
+		nowStatus = CS_BACK_RIGHT;
 	}
 	else if(!KEY_W && !KEY_S && !KEY_A && !KEY_D &&! reloading)
 	{
 		CurrentAnimNum = 10;
-		int i = 0;
+		int i = 0; 
+		nowStatus = CS_RELOAD;
 	}
 
 	if (reloading)
@@ -173,7 +191,6 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			beforeAnimNum = CurrentAnimNum;
 			m_MyCharacter->SetAnimationIndexBlend(CurrentAnimNum);
 			g_pGameInfoManager->GetMyInfo()->Status = CurrentAnimNum;
-			g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
 		}
 	}
 
@@ -186,86 +203,21 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		beforeAnimNum = CurrentAnimNum;
 		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
 		g_pGameInfoManager->GetMyInfo()->Status = CurrentAnimNum;
+	}
+
+	if (beforeStatus != nowStatus)
+	{
+		beforeStatus = nowStatus;
+		g_pGameInfoManager->GetMyInfo()->Status = nowStatus;
 		g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
+		
 	}
 
 
 
-	//if (GetKeyState('R') & 0x8000)
-	//{
-	//	CurrentAnimNum = 2;
 
-	//	beforeAnimNum = CurrentAnimNum;
 
-	//	m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
-	//}
-	//else
-	//{
-	//	if (GetKeyState('W') & 0x8000)
-	//	{
-	//		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
-	//		CurrentAnimNum = 6;
-	//		if (GetKeyState(VK_SHIFT) & 0x8000)
-	//		{
-	//			m_vPosition = m_vPosition + (m_vDirection * 0.15f);
 
-	//			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
-	//			{
-	//				OnlyLeftOrRight = false;
-	//			}
-	//		}
-	//		if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
-	//		{
-	//			OnlyLeftOrRight = false;
-	//		}
-	//	}
-	//	else if (GetKeyState('S') & 0x8000)
-	//	{
-	//		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
-	//		CurrentAnimNum = 3;
-	//		if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
-	//		{
-	//			OnlyLeftOrRight = false;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if (TotalPeriod <= CurrentPeriod + 0.1)
-	//		{
-	//			CurrentAnimNum = 1;
-	//		}
-	//	}
-
-	//	if (GetKeyState('A') & 0x8000)
-	//	{
-	//		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
-	//		if (OnlyLeftOrRight)
-	//		{
-	//			CurrentAnimNum = 5;
-	//		}
-	//	}
-
-	//	if (GetKeyState('D') & 0x8000)
-	//	{
-	//		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
-	//		if (OnlyLeftOrRight)
-	//		{
-	//			CurrentAnimNum = 4;
-	//		}
-
-	//	}
-
-	//	if (GetKeyState(VK_LBUTTON) & 0x8000)
-	//	{
-
-	//	}
-
-	//	if (beforeAnimNum != CurrentAnimNum)
-	//	{
-	//		beforeAnimNum = CurrentAnimNum;
-	//		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
-	//	}
-	//}
 
 	if (g_pGameInfoManager->m_pMap)
 	{

@@ -154,24 +154,21 @@ enum character_list {
 
 
 enum character_status {
-	PC_Stand,
-	PC_Stand_Shoot,
-	PC_Run_Front,
-	PC_Run_Front_Shoot,
-	PC_Run_Left,
-	PC_Run_Left_Shoot,
-	PC_Run_Right,
-	PC_Run_Right_Shoot,
-	PC_Run_Back,
-	PC_Run_Back_Shoot,
-	PC_Dash,
-	PC_Reload,
-	PC_Hit,
-	PC_Down,
-	PC_Down_idle,
-	PC_Stand_Up,
-	PC_Dead,
-	PC_NumSize
+	CS_IDLE,
+	CS_FRONT,
+	CS_FRONT_SHIFT,
+	CS_FRONT_LEFT,
+	CS_FRONT_RIGHT,
+	CS_FRONT_LEFT_SHIFT,
+	CS_FRONT_RIGHT_SHIFT,
+	CS_LEFT,
+	CS_RIGHT,
+	CS_BACK,
+	CS_BACK_LEFT,
+	CS_BACK_RIGHT,
+	CS_RELOAD,
+	CS_DOWN,
+	CS_DEAD
 };
 
 enum NETWORK_HEADER {
