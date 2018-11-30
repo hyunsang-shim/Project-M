@@ -103,13 +103,12 @@ void threadProcessRecv(void * str)
 			if (g_pGameInfoManager->GetMyInfo()->ID == ID)
 				continue;
 
-			cOtherCharacter* tmp = new cOtherCharacter;
-			tmp->Setup();
+			CharacterStatus_PC* tmp = new CharacterStatus_PC;
+	
 
-			tmp->info.ID = ID;
-			strcpy(tmp->info.PlayerName, name);
-
-			g_pOtherPlayerManager->otherPlayerInfo.push_back(tmp);
+			tmp->ID = ID;
+			strcpy(tmp->PlayerName, name);
+			g_pOtherPlayerManager->newPlayer(tmp);
 		}
 		else if (StartWith(givenMessage, "SetID"))
 		{
