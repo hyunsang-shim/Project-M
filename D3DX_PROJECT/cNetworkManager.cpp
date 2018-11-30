@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "cNetworkManager.h"
+#include "cOtherCharacter.h"
 #include <string>
 #include <iostream>
 #include <queue>
@@ -61,18 +62,14 @@ void threadProcessRecv(void * str)
 			int CurHP;
 
 			sscanf_s(givenMessage, "%*s %d %f %f %f %f %d %d", &ID, &Pos.x, &Pos.y, &Pos.z, &Dir, &Status, &CurHP);
-			for (int i = 0; i < g_pGameInfoManager->m_vOtherCharacters.size(); i++)
+			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 			{
-				if (g_pGameInfoManager->m_vOtherCharacters.at(i).ID == ID)
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == ID)
 				{
-					g_pGameInfoManager->m_vOtherCharacters.at(i).CurPos = Pos;
-					g_pGameInfoManager->m_vOtherCharacters.at(i).Dir = Dir;
-					g_pGameInfoManager->m_vOtherCharacters.at(i).Status = Status;
-					g_pGameInfoManager->m_vOtherCharacters.at(i).CurHP = CurHP;
-
+					g_pOtherPlayerManager->otherPlayerInfo.at(i)->Update(Pos, Dir, Status);
+					g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.CurHP = CurHP;
 				}
 			}
-
 		}
 		else if (StartWith(givenMessage, "shot"))
 		{
@@ -105,11 +102,13 @@ void threadProcessRecv(void * str)
 
 			if (g_pGameInfoManager->GetMyInfo()->ID == ID)
 				continue;
-			CharacterStatus_PC tmp;
-			tmp.ID = ID;
-			strcpy(tmp.PlayerName, name);
 
-			g_pGameInfoManager->m_vOtherCharacters.push_back(tmp);
+			cOtherCharacter* tmp = new cOtherCharacter;
+
+			tmp->info.ID = ID;
+			strcpy(tmp->info.PlayerName, name);
+
+			g_pOtherPlayerManager->otherPlayerInfo.push_back(tmp);
 		}
 		else if (StartWith(givenMessage, "SetID"))
 		{
