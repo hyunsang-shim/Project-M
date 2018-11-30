@@ -91,7 +91,7 @@ void cGameInfoManager::SetMyCharacter(int idx)
 		m_strMyCharacter.Mag_Max = 25;
 		m_strMyCharacter.MoveSpeed = 2.5f;
 		m_strMyCharacter.ShootSpeed = 4000.0f;
-		m_strMyCharacter.Status = PC_Stand;
+		m_strMyCharacter.Status = CS_IDLE;
 		break;
 	}
 }
