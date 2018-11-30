@@ -35,6 +35,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	LPD3DXANIMATIONSET pCurrentAnimSet = NULL;
 	D3DXTRACK_DESC stTrackDesc;
 
+	static bool reloading = false;
+	
 	m_SkinnedMesh->GetAnimController()->GetTrackDesc(0, &stTrackDesc);
 	m_SkinnedMesh->GetAnimController()->GetAnimationSet(CurrentAnimNum, &pCurrentAnimSet);
 
@@ -89,66 +91,88 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	if (KEY_W && !KEY_S && !KEY_A &&! KEY_D && !KEY_SHIFT) // front
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
-		CurrentAnimNum = 6;
+		CurrentAnimNum = 8;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && !KEY_D && KEY_SHIFT) // front + shift
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
-		CurrentAnimNum = 6;
+		CurrentAnimNum = 4;
 	}
 	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && !KEY_SHIFT) // front + left
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
-		CurrentAnimNum = 6;
+		CurrentAnimNum = 8;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && !KEY_SHIFT) // front + right
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
-		CurrentAnimNum = 6;
+		CurrentAnimNum = 8;
 	}
 	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && KEY_SHIFT) // front + left + shift
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
-		CurrentAnimNum = 6;
+		CurrentAnimNum = 4;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && KEY_SHIFT) // front + right + shift
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
-		CurrentAnimNum = 6;
+		CurrentAnimNum = 4;
 	}
 	else if (!KEY_W && !KEY_S && KEY_A && !KEY_D ) // left
 	{
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
-		CurrentAnimNum = 5;
+		CurrentAnimNum = 7;
 
 	}
 	else if (!KEY_W && !KEY_S && !KEY_A && KEY_D ) // right
 	{
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
-		CurrentAnimNum = 4;
+		CurrentAnimNum = 6;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && !KEY_D ) // back
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
-		CurrentAnimNum = 3;
+		CurrentAnimNum = 5;
 	}
 	else if (!KEY_W && KEY_S && KEY_A && !KEY_D ) // back + left
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
-		CurrentAnimNum = 3;
+		CurrentAnimNum = 5;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && KEY_D ) // back + riight
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
-		CurrentAnimNum = 3;
+		CurrentAnimNum = 5;
+	}
+	else if(!KEY_W && !KEY_S && !KEY_A && !KEY_D &&! reloading)
+	{
+		CurrentAnimNum = 10;
 	}
 
+
+	if (GetKeyState('R') & 0x8000 && !KEY_W && !KEY_S && !KEY_A && !KEY_D)
+	{
+		if (!reloading)
+		{
+			reloading = true;
+			CurrentAnimNum = 1;
+			beforeAnimNum = CurrentAnimNum;
+			m_MyCharacter->SetAnimationIndexBlend(CurrentAnimNum);
+		}
+	}
+	if (reloading)
+	{
+		if (TotalPeriod <= CurrentPeriod + 0.1)
+		{
+			reloading = false;
+		}
+	}
 
 	if (CurrentAnimNum == beforeAnimNum)
 	{
@@ -156,8 +180,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	}
 	else
 	{
-		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
 		beforeAnimNum = CurrentAnimNum;
+		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
 	}
 
 
