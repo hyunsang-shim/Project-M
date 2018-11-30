@@ -104,6 +104,7 @@ void threadProcessRecv(void * str)
 				continue;
 
 			cOtherCharacter* tmp = new cOtherCharacter;
+			tmp->Setup();
 
 			tmp->info.ID = ID;
 			strcpy(tmp->info.PlayerName, name);
