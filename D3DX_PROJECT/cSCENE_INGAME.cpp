@@ -238,7 +238,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		{
 		static int n = 0;
 		//m_pSkinnedMesh->SetAnimationIndex(n++);
-		m_pMyCharacter->SetAnimationIndexBlend(n++);
+		//m_pMyCharacter->SetAnimationIndexBlend(n++);
 		break;
 		}
 	 
@@ -255,11 +255,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_RBUTTONUP:
 		//g_pNetworkManager->SendData();
 		break;
-	case WM_TIMER:
-		if (wParam == 2)
-		{
-			g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
-		}
+
 	}
 	
 	if (m_pCamera)
