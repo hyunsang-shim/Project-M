@@ -16,10 +16,11 @@ private:
 	cSkinnedMesh* m_pSkinnedMesh;
 	cOBB* m_pOBB;
 	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
-
+	int status;
 
 public:
 	void Setup();
+	void Update();
 	void Update(D3DXVECTOR3 CurPos, float rotY, WORD Status);
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
 	cOBB* GetOBB();

@@ -37,6 +37,14 @@ void cOtherPlayerManager::render()
 	}
 }
 
+void cOtherPlayerManager::update()
+{
+	for (int i = 0; i < otherPlayerInfo.size(); i++)
+	{
+		otherPlayerInfo.at(i)->Update();
+	}
+}
+
 void cOtherPlayerManager::disconnectPlayer(int ID)
 {
 	for (int i = 0; i < otherPlayerInfo.size(); i++)

@@ -28,7 +28,7 @@ protected:
 public:
 	virtual void SetUP();
 	virtual void UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status);
-
+	void UpdateOtherPlayer(int status);
 	virtual void Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh);
 	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
 	virtual void Render();

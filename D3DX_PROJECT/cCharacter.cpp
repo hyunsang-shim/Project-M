@@ -258,10 +258,76 @@ void cCharacter::UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD sta
 {
 
 	D3DXMATRIXA16 matR, matT;
+	this->m_vPosition = CurPos;
 	D3DXMatrixRotationY(&matR, Direction);
+	m_vDirection = D3DXVECTOR3(0, 0, 1);
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
 	D3DXMatrixTranslation(&matT, CurPos.x, CurPos.y, CurPos.z);
 	m_matWorld = matR * matT;
+}
+
+void cCharacter::UpdateOtherPlayer(int status)
+{
+	D3DXVECTOR3 m_vLeftDirection;
+	D3DXVECTOR3 m_vUp(0, 1, 0);
+	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
+
+	if (status == CS_IDLE)
+	{
+	}
+	else if (CS_FRONT)
+	{
+		m_vPosition += m_vDirection * 0.1f;
+	}
+	else if (CS_FRONT_SHIFT)
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
+	}
+	else if (CS_FRONT_LEFT)
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+	}
+	else if (CS_FRONT_RIGHT)
+	{
+
+		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+	}
+	else if (CS_FRONT_LEFT_SHIFT)
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
+	}
+	else if (CS_FRONT_RIGHT_SHIFT)
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
+	}
+	else if (CS_LEFT)
+	{
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+	}
+	else if (CS_RIGHT)
+	{
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+	}
+	else if (CS_BACK)
+	{
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+
+	}
+	else if (CS_BACK_LEFT)
+	{
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+
+	}
+	else if (CS_BACK_RIGHT)
+	{
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+	}
 }
 
 void cCharacter::Update(float ROTY, D3DXVECTOR3 POSITION)
@@ -275,10 +341,6 @@ void cCharacter::Update(float ROTY, D3DXVECTOR3 POSITION)
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = matR * matT;
-
-	
-
-
 
 }
 

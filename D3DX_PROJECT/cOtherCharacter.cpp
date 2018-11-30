@@ -7,6 +7,7 @@ cOtherCharacter::cOtherCharacter()
 	: m_pSkinnedMesh(NULL)
 	, m_pCharacterController(NULL)
 	, m_pOBB(NULL)
+	, status(CS_IDLE)
 {
 }
 
@@ -27,15 +28,20 @@ void cOtherCharacter::Setup()
 	m_pOBB->Setup(m_pSkinnedMesh);*/
 }
 
+void cOtherCharacter::Update()
+{
+
+	m_pCharacterController->UpdateOtherPlayer(status);
+
+}
+
 void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 {
+	SetAnimationIndexBlend(Status);
+	this->status = Status;
 	if (m_pCharacterController)
 		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);
-	//	m_pCharacterController->Update();
 
-	//if (m_pOBB)
-	//	m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
-	//m_pSkinnedMesh->Update();
 }
 
 void cOtherCharacter::Render(D3DCOLOR c)
