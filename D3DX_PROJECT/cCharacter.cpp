@@ -43,82 +43,200 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 	D3DXVECTOR3 m_vBeforePosition = m_vPosition;
 
-
-	if (GetKeyState('R') & 0x8000)
+	if (GetKeyState('W') & 0x8000)
 	{
-		CurrentAnimNum = 2;
-
-		beforeAnimNum = CurrentAnimNum;
-
-		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+		this->KEY_W = 1;
 	}
 	else
 	{
-		if (GetKeyState('W') & 0x8000)
-		{
-			m_vPosition = m_vPosition + (m_vDirection * 0.1f);
-			CurrentAnimNum = 6;
-			if (GetKeyState(VK_SHIFT) & 0x8000)
-			{
-				m_vPosition = m_vPosition + (m_vDirection * 0.15f);
-
-				if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
-				{
-					OnlyLeftOrRight = false;
-				}
-			}
-			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
-			{
-				OnlyLeftOrRight = false;
-			}
-		}
-		else if (GetKeyState('S') & 0x8000)
-		{
-			m_vPosition = m_vPosition - (m_vDirection * 0.1f);
-			CurrentAnimNum = 3;
-			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
-			{
-				OnlyLeftOrRight = false;
-			}
-		}
-		else
-		{
-			if (TotalPeriod <= CurrentPeriod + 0.1)
-			{
-				CurrentAnimNum = 1;
-			}
-		}
-
-		if (GetKeyState('A') & 0x8000)
-		{
-			m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
-			if (OnlyLeftOrRight)
-			{
-				CurrentAnimNum = 5;
-			}
-		}
-
-		if (GetKeyState('D') & 0x8000)
-		{
-			m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
-			if (OnlyLeftOrRight)
-			{
-				CurrentAnimNum = 4;
-			}
-
-		}
-
-		if (GetKeyState(VK_LBUTTON) & 0x8000)
-		{
-
-		}
-
-		if (beforeAnimNum != CurrentAnimNum)
-		{
-			beforeAnimNum = CurrentAnimNum;
-			m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
-		}
+		this->KEY_W = 0;
 	}
+	if (GetKeyState('S') & 0x8000)
+	{
+		this->KEY_S = 1;
+	}
+	else
+	{
+		this->KEY_S = 0;
+	}
+	if (GetKeyState('A') & 0x8000)
+	{
+		this->KEY_A = 1;
+	}
+	else
+	{
+		this->KEY_A = 0;
+	}
+	if (GetKeyState('D') & 0x8000)
+	{
+		this->KEY_D = 1;
+	}
+	else
+	{
+		this->KEY_D = 0;
+	}
+	if (GetKeyState(VK_SHIFT) & 0x8000)
+	{
+		this->KEY_SHIFT = 1;
+	}
+	else
+	{
+		this->KEY_SHIFT = 0;
+	}
+
+	beforeAnimNum = CurrentAnimNum;
+
+	if (KEY_W && !KEY_S && !KEY_A &&! KEY_D && !KEY_SHIFT) // front
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		CurrentAnimNum = 6;
+	}
+	else if (KEY_W && !KEY_S && !KEY_A && !KEY_D && KEY_SHIFT) // front + shift
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
+		CurrentAnimNum = 6;
+	}
+	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && !KEY_SHIFT) // front + left
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		CurrentAnimNum = 6;
+	}
+	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && !KEY_SHIFT) // front + right
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		CurrentAnimNum = 6;
+	}
+	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && KEY_SHIFT) // front + left + shift
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
+		CurrentAnimNum = 6;
+	}
+	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && KEY_SHIFT) // front + right + shift
+	{
+		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
+		CurrentAnimNum = 6;
+	}
+	else if (!KEY_W && !KEY_S && KEY_A && !KEY_D ) // left
+	{
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		CurrentAnimNum = 5;
+
+	}
+	else if (!KEY_W && !KEY_S && !KEY_A && KEY_D ) // right
+	{
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		CurrentAnimNum = 4;
+	}
+	else if (!KEY_W && KEY_S && !KEY_A && !KEY_D ) // back
+	{
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		CurrentAnimNum = 3;
+	}
+	else if (!KEY_W && KEY_S && KEY_A && !KEY_D ) // back + left
+	{
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		CurrentAnimNum = 3;
+	}
+	else if (!KEY_W && KEY_S && !KEY_A && KEY_D ) // back + riight
+	{
+		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		CurrentAnimNum = 3;
+	}
+
+
+	if (CurrentAnimNum == beforeAnimNum)
+	{
+
+	}
+	else
+	{
+		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+		beforeAnimNum = CurrentAnimNum;
+	}
+
+
+
+	//if (GetKeyState('R') & 0x8000)
+	//{
+	//	CurrentAnimNum = 2;
+
+	//	beforeAnimNum = CurrentAnimNum;
+
+	//	m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+	//}
+	//else
+	//{
+	//	if (GetKeyState('W') & 0x8000)
+	//	{
+	//		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+	//		CurrentAnimNum = 6;
+	//		if (GetKeyState(VK_SHIFT) & 0x8000)
+	//		{
+	//			m_vPosition = m_vPosition + (m_vDirection * 0.15f);
+
+	//			if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
+	//			{
+	//				OnlyLeftOrRight = false;
+	//			}
+	//		}
+	//		if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
+	//		{
+	//			OnlyLeftOrRight = false;
+	//		}
+	//	}
+	//	else if (GetKeyState('S') & 0x8000)
+	//	{
+	//		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+	//		CurrentAnimNum = 3;
+	//		if ((GetKeyState('A') & 0x8000) || (GetKeyState('D') & 0x8000))
+	//		{
+	//			OnlyLeftOrRight = false;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (TotalPeriod <= CurrentPeriod + 0.1)
+	//		{
+	//			CurrentAnimNum = 1;
+	//		}
+	//	}
+
+	//	if (GetKeyState('A') & 0x8000)
+	//	{
+	//		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+	//		if (OnlyLeftOrRight)
+	//		{
+	//			CurrentAnimNum = 5;
+	//		}
+	//	}
+
+	//	if (GetKeyState('D') & 0x8000)
+	//	{
+	//		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+	//		if (OnlyLeftOrRight)
+	//		{
+	//			CurrentAnimNum = 4;
+	//		}
+
+	//	}
+
+	//	if (GetKeyState(VK_LBUTTON) & 0x8000)
+	//	{
+
+	//	}
+
+	//	if (beforeAnimNum != CurrentAnimNum)
+	//	{
+	//		beforeAnimNum = CurrentAnimNum;
+	//		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+	//	}
+	//}
 
 	if (g_pGameInfoManager->m_pMap)
 	{
@@ -230,5 +348,6 @@ void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			m_vDirection.x += (g_pGameInfoManager->mouseMoveY / 100.f);
 		}
 		break;
+	
 	}
 }

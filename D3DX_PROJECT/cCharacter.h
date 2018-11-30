@@ -40,5 +40,16 @@ public:
 		return &m_matWorld;
 	}
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+
+	BOOL KEY_W;
+	BOOL KEY_A;
+	BOOL KEY_S;
+	BOOL KEY_D;
+	BOOL KEY_SHIFT;
+
+
+
+
 };
 

@@ -64,6 +64,7 @@ void cSCENE_TITLE::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	HDC hdc;
 	switch (message)
 	{
+
 	case WM_CHAR:
 		if (m_pUIShadowRoot->m_isHidden == 0)
 		{
@@ -74,7 +75,6 @@ void cSCENE_TITLE::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 			m_pNameInput->Settext(g_pGameInfoManager->userName);			
 		}
 		break;
-
 
 	default:
 		break;

@@ -44,6 +44,10 @@ public:
 	void RemoveOtherPlayerByID(int ID);
 
 
+
+
+
+
 	vector<CharacterStatus_PC> m_vOtherCharacters;
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
 	// <<
