@@ -149,8 +149,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	m_matWorld = matR * matT;
 
 	g_pGameInfoManager->GetMyInfo()->CurPos.x = m_vPosition.x;
-	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.z;
-	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.z;
+	g_pGameInfoManager->GetMyInfo()->CurPos.y = m_vPosition.y;
+	g_pGameInfoManager->GetMyInfo()->CurPos.z = m_vPosition.z;
 
 	g_pGameInfoManager->GetMyInfo()->Dir = m_fRotY;
 }
