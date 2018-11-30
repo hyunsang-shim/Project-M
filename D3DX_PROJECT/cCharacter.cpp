@@ -153,8 +153,16 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	else if(!KEY_W && !KEY_S && !KEY_A && !KEY_D &&! reloading)
 	{
 		CurrentAnimNum = 10;
+		int i = 0;
 	}
 
+	if (reloading)
+	{
+		if (TotalPeriod <= CurrentPeriod+0.15)
+		{
+			reloading = false;
+		}
+	}
 
 	if (GetKeyState('R') & 0x8000 && !KEY_W && !KEY_S && !KEY_A && !KEY_D)
 	{
@@ -164,13 +172,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			CurrentAnimNum = 1;
 			beforeAnimNum = CurrentAnimNum;
 			m_MyCharacter->SetAnimationIndexBlend(CurrentAnimNum);
-		}
-	}
-	if (reloading)
-	{
-		if (TotalPeriod <= CurrentPeriod + 0.1)
-		{
-			reloading = false;
+			g_pGameInfoManager->GetMyInfo()->Status = CurrentAnimNum;
+			g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
 		}
 	}
 
@@ -182,6 +185,8 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	{
 		beforeAnimNum = CurrentAnimNum;
 		m_MyCharacter->SetAnimationIndexBlend(beforeAnimNum);
+		g_pGameInfoManager->GetMyInfo()->Status = CurrentAnimNum;
+		g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
 	}
 
 
