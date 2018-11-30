@@ -20,11 +20,11 @@ cOtherCharacter::~cOtherCharacter()
 
 void cOtherCharacter::Setup()
 {
-	m_pSkinnedMesh = new cSkinnedMesh("Xfile/Reaper", "Reaper.x");
+	m_pSkinnedMesh = new cSkinnedMesh("Xfile", "Soldier76_with_gun.x");
 	m_pSkinnedMesh->SetRandomTrackPosition();
 
-	m_pOBB = new cOBB;
-	m_pOBB->Setup(m_pSkinnedMesh);
+	/*m_pOBB = new cOBB;
+	m_pOBB->Setup(m_pSkinnedMesh);*/
 }
 
 void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
@@ -33,8 +33,8 @@ void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);
 	//	m_pCharacterController->Update();
 
-	if (m_pOBB)
-		m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
+	//if (m_pOBB)
+	//	m_pOBB->Update(m_pCharacterController ? m_pCharacterController->GetTransform() : NULL);
 	//m_pSkinnedMesh->Update();
 }
 
@@ -45,8 +45,8 @@ void cOtherCharacter::Render(D3DCOLOR c)
 
 	m_pSkinnedMesh->UpdateAndRender();
 
-	if (m_pOBB)
-		m_pOBB->OBBBox_Render(c);
+	//if (m_pOBB)
+	//	m_pOBB->OBBBox_Render(c);
 }
 
 cOBB * cOtherCharacter::GetOBB()
