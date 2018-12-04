@@ -396,8 +396,14 @@ void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 		if (!g_pGameInfoManager->isESCPushed)
 		{
+			static float check = 0.0f;
 			m_fRotY += (g_pGameInfoManager->mouseMoveX / 100.f);
 			m_vDirection.x += (g_pGameInfoManager->mouseMoveY / 100.f);
+			if (check - m_fRotX > 3.0f)
+			{
+				g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
+				check = m_fRotX;
+			}
 		}
 		break;
 	
