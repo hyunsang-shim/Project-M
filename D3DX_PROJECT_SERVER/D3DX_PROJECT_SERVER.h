@@ -5,6 +5,7 @@
 enum character_status {
 	CS_IDLE,
 	CS_FRONT,
+	CS_FRONT_SHIFT,
 	CS_FRONT_LEFT,
 	CS_FRONT_RIGHT,
 	CS_FRONT_LEFT_SHIFT,
