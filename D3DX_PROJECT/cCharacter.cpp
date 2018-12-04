@@ -399,10 +399,10 @@ void cCharacter::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			static float check = 0.0f;
 			m_fRotY += (g_pGameInfoManager->mouseMoveX / 100.f);
 			m_vDirection.x += (g_pGameInfoManager->mouseMoveY / 100.f);
-			if (check - m_fRotX > 3.0f)
+			if (abs(abs(check) - abs(m_fRotY)) > 0.05f)
 			{
 				g_pNetworkManager->SendData(NH_USER_STATUS, g_pGameInfoManager->GetMyInfo());
-				check = m_fRotX;
+				check = m_fRotY;
 			}
 		}
 		break;
