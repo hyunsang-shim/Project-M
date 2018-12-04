@@ -92,7 +92,7 @@ void cSCENE_INGAME::Setup()
 	m_pSKY = new cSKY();
 	m_pSKY->Setup();
 
-	//질럿 셋팅
+	//플레이어 셋팅
 	m_pMyCharacter = new cMyCharacter;
 	m_pMyCharacter->Setup("Xfile", "Soldier76_with_gun.x");
 	cCharacter* pCharacter = new cCharacter;
@@ -185,7 +185,7 @@ void cSCENE_INGAME::Update()
 	{
 		for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 		{
-			g_pOtherPlayerManager->otherPlayerInfo.at(i).Update();
+			g_pOtherPlayerManager->otherPlayerInfo.at(i)->Update();
 		}
 	}
 

@@ -10,7 +10,7 @@ public:
 	SINGLETON(cOtherPlayerManager);
 
 	int userNum;
-	vector<cOtherCharacter> otherPlayerInfo;
+	vector<cOtherCharacter*> otherPlayerInfo;
 	CharacterStatus_PC* GetOtherPlayerByID(int idx);
 
 

@@ -158,7 +158,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 5;
-		nowStatus = CS_LEFT;
+		nowStatus = CS_BACK_LEFT;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && KEY_D ) // back + riight
 	{

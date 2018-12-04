@@ -64,10 +64,10 @@ void threadProcessRecv(void * str)
 			sscanf_s(givenMessage, "%*s %d %f %f %f %f %d %d", &ID, &Pos.x, &Pos.y, &Pos.z, &Dir, &Status, &CurHP);
 			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 			{
-				if (g_pOtherPlayerManager->otherPlayerInfo.at(i).info.ID == ID)
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == ID)
 				{
-					g_pOtherPlayerManager->otherPlayerInfo.at(i).Update(Pos, Dir, Status);
-					g_pOtherPlayerManager->otherPlayerInfo.at(i).info.CurHP = CurHP;
+					g_pOtherPlayerManager->otherPlayerInfo.at(i)->Update(Pos, Dir, Status);
+					g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.CurHP = CurHP;
 				}
 			}
 		}
