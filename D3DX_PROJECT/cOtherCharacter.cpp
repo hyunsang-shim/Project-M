@@ -29,10 +29,9 @@ void cOtherCharacter::Setup()
 }
 
 void cOtherCharacter::Update()
-{
-
-	m_pCharacterController->UpdateOtherPlayer(status);
-
+{ 
+	if (m_pCharacterController)
+		m_pCharacterController->UpdateOtherPlayer(status);
 }
 
 void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)

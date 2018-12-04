@@ -275,59 +275,68 @@ void cCharacter::UpdateOtherPlayer(int status)
 	if (status == CS_IDLE)
 	{
 	}
-	else if (CS_FRONT)
+	else if (status == CS_FRONT)
 	{
 		m_vPosition += m_vDirection * 0.1f;
 	}
-	else if (CS_FRONT_SHIFT)
+	else if (status == CS_FRONT_SHIFT)
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
 	}
-	else if (CS_FRONT_LEFT)
+	else if (status == CS_FRONT_LEFT)
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 	}
-	else if (CS_FRONT_RIGHT)
+	else if (status == CS_FRONT_RIGHT)
 	{
 
 		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 	}
-	else if (CS_FRONT_LEFT_SHIFT)
+	else if (status == CS_FRONT_LEFT_SHIFT)
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
 	}
-	else if (CS_FRONT_RIGHT_SHIFT)
+	else if (status == CS_FRONT_RIGHT_SHIFT)
 	{
 		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
 	}
-	else if (CS_LEFT)
+	else if (status == CS_LEFT)
 	{
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 	}
-	else if (CS_RIGHT)
+	else if (status == CS_RIGHT)
 	{
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 	}
-	else if (CS_BACK)
+	else if (status == CS_BACK)
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 
 	}
-	else if (CS_BACK_LEFT)
+	else if (status == CS_BACK_LEFT)
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
 
 	}
-	else if (CS_BACK_RIGHT)
+	else if (status == CS_BACK_RIGHT)
 	{
 		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
 		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
 	}
+
+
+
+	D3DXMATRIXA16 matR, matT;
+	D3DXMatrixRotationY(&matR, m_fRotY);
+	m_vDirection = D3DXVECTOR3(0, 0, 1);
+	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+	m_matWorld = matR * matT;
 }
 
 void cCharacter::Update(float ROTY, D3DXVECTOR3 POSITION)
@@ -341,6 +350,9 @@ void cCharacter::Update(float ROTY, D3DXVECTOR3 POSITION)
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = matR * matT;
+
+
+
 
 }
 

@@ -40,7 +40,7 @@ public:
 	void SetMyCharacter(int idx);
 	void SetMyName();
 	int GetNumTotalUser();
-	void AddOtherPlayer(CharacterStatus_PC* info);
+	void AddOtherPlayer(CharacterStatus_PC info);
 	void RemoveOtherPlayerByID(int ID);
 
 

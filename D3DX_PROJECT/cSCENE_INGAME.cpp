@@ -183,7 +183,10 @@ void cSCENE_INGAME::Update()
 
 	if (g_pNetworkManager->GetNetStatus())
 	{
-		g_pOtherPlayerManager->update();
+		for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
+		{
+			g_pOtherPlayerManager->otherPlayerInfo.at(i).Update();
+		}
 	}
 
 	if (g_pNetworkManager->GetNetStatus())

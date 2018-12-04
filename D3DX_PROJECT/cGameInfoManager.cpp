@@ -106,9 +106,9 @@ int cGameInfoManager::GetNumTotalUser()
 	return m_vOtherCharacters.size();
 }
 
-void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC * info)
+void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC info)
 {
-	CharacterStatus_PC tmp = *info;
+	CharacterStatus_PC tmp = info;
 	m_vOtherCharacters.push_back(tmp);	
 }
 

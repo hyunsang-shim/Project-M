@@ -64,10 +64,10 @@ void threadProcessRecv(void * str)
 			sscanf_s(givenMessage, "%*s %d %f %f %f %f %d %d", &ID, &Pos.x, &Pos.y, &Pos.z, &Dir, &Status, &CurHP);
 			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 			{
-				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == ID)
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i).info.ID == ID)
 				{
-					g_pOtherPlayerManager->otherPlayerInfo.at(i)->Update(Pos, Dir, Status);
-					g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.CurHP = CurHP;
+					g_pOtherPlayerManager->otherPlayerInfo.at(i).Update(Pos, Dir, Status);
+					g_pOtherPlayerManager->otherPlayerInfo.at(i).info.CurHP = CurHP;
 				}
 			}
 		}
@@ -103,11 +103,11 @@ void threadProcessRecv(void * str)
 			if (g_pGameInfoManager->GetMyInfo()->ID == ID)
 				continue;
 
-			CharacterStatus_PC* tmp = new CharacterStatus_PC;
+			CharacterStatus_PC tmp;
 	
 
-			tmp->ID = ID;
-			strcpy(tmp->PlayerName, name);
+			tmp.ID = ID;
+			strcpy(tmp.PlayerName, name);
 			g_pOtherPlayerManager->newPlayer(tmp);
 		}
 		else if (StartWith(givenMessage, "SetID"))
