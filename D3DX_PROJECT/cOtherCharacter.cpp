@@ -36,7 +36,31 @@ void cOtherCharacter::Update()
 
 void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 {
-	SetAnimationIndexBlend(Status);
+	if (Status == CS_IDLE)
+	{
+		SetAnimationIndexBlend(10);
+	}
+	else if (Status == CS_FRONT || Status == CS_FRONT_LEFT || Status == CS_FRONT_RIGHT)
+	{
+		SetAnimationIndexBlend(8);
+	}
+	else if (Status == CS_FRONT_SHIFT || Status == CS_FRONT_LEFT_SHIFT || Status == CS_FRONT_RIGHT_SHIFT)
+	{
+		SetAnimationIndexBlend(4);
+	}
+	else if (Status == CS_BACK || Status == CS_BACK_LEFT || Status == CS_BACK_RIGHT)
+	{
+		SetAnimationIndexBlend(5);
+	}
+	else if (Status == CS_LEFT)
+	{
+		SetAnimationIndexBlend(7);
+	}
+	else if (Status == CS_RIGHT)
+	{
+		SetAnimationIndexBlend(6);
+	}
+
 	this->status = Status;
 	if (m_pCharacterController)
 		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);
