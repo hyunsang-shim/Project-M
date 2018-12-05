@@ -3,7 +3,7 @@
 #include "D3DX_PROJECT_SERVER.h"
 #include <list>
 #include <queue>
-//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 // Server Addresses
 // should activated just one.
 #define SERVER_ADDR "165.246.163.66"	// ����ȣ.
@@ -237,7 +237,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//
 			//recieve data
 			int bufferLen = recv(g_vUsers[idx].s, buffer, 64, 0);
-			buffer[bufferLen] = NULL;		// ensure data's end
+			buffer[bufferLen-1] = '\0';		// ensure data's end
 
 			string tmp = string(buffer);
 
@@ -346,7 +346,7 @@ void threadProcessRecv(void * str)
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
 		givenMessage[tmp.size()] = '\0';
-		//printf("%s\n", givenMessage);
+		printf("%s\n", givenMessage);
 
 		if (StartWith(givenMessage, "userStatus"))
 		{
