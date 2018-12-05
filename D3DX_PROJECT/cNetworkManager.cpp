@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <queue>
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 using namespace std;
 
 // ���� �ּ�
@@ -116,6 +117,26 @@ void threadProcessRecv(void * str)
 			sscanf_s(givenMessage, "%*s %d", &IDID);
 			g_pGameInfoManager->GetMyInfo()->ID = IDID;
 		}
+		else if (StartWith(givenMessage, "disconnect"))
+		{
+			int IDID;
+			sscanf_s(givenMessage, "%*s %d", &IDID);
+			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
+			{
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == IDID)
+				{
+					SAFE_DELETE(g_pOtherPlayerManager->otherPlayerInfo.at(i));
+					g_pOtherPlayerManager->otherPlayerInfo.erase(g_pOtherPlayerManager->otherPlayerInfo.begin() + i);
+					
+
+					break;
+				}
+			}
+		}
+		else
+		{
+			printf("error\n");
+		}
 	}
 }
 
@@ -213,7 +234,7 @@ int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 		copy(sendString.begin(), sendString.end(), sendMessage);
 		sendMessage[sendString.size()] = '\0';
 
-		result = send(s, sendMessage, sendString.size() + 1, 0);
+		result = send(s, sendMessage, 128, 0);
 
 	}
 
@@ -222,8 +243,8 @@ int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 
 void cNetworkManager::recvData()
 {
-	char buffer[64];
-	recv(s, buffer, 64, 0);
+	char* buffer = new char[128];
+	recv(s, buffer, 128, 0);
 	string tmp = string(buffer);
 	messageQueue.push(tmp);
 }

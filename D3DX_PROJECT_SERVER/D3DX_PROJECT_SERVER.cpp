@@ -19,7 +19,7 @@
 HINSTANCE hInst;                                // ���� �ν��Ͻ��Դϴ�.
 WCHAR szTitle[MAX_LOADSTRING];                  // ���� ǥ���� �ؽ�Ʈ�Դϴ�.
 WCHAR szWindowClass[MAX_LOADSTRING];            // �⺻ â Ŭ���� �̸��Դϴ�.
-static vector<CharacterStatus_PC> g_vUsers;
+static vector<CharacterStatus_PC*> g_vUsers;
 CRITICAL_SECTION	crit;
 CRITICAL_SECTION	messageGet;
 
@@ -140,6 +140,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	//	static vector<string> userMsgs;		//���� ���� �޽���
 
 	static int userNum = 0;
+	static char* ping;
 	//ZeroMemory(buffer, sizeof(CharacterStatus_PC) + 1);
 
 	switch (message)
@@ -156,7 +157,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ServerStatus.push_back("0 Players Online");
 		InitializeCriticalSection(&crit);
 		InitializeCriticalSection(&messageGet);
-		SetTimer(hWnd, 123, 25, (TIMERPROC)TimerProc);
+		SetTimer(hWnd, 123, 25,NULL);
 
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -165,6 +166,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		sockInfo.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
 
 		//
+		string strping = "ping";
+		ping = new char[strping.size() + 1];
+		copy(strping.begin(), strping.end(), ping);
+		ping[strping.size()] = '\0';
+
 		// check Binding
 		if (bind(ServerSocket, (LPSOCKADDR)&sockInfo, sizeof(sockInfo)))
 		{
@@ -190,13 +196,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case FD_ACCEPT:
 		{
-			CharacterStatus_PC TmpUser;
+			CharacterStatus_PC* TmpUser = new CharacterStatus_PC;
 
 			g_vUsers.push_back(TmpUser);
-			g_vUsers.back().s = accept(ServerSocket, (LPSOCKADDR)&c_sockInfo, &clnSize);
-			WSAAsyncSelect(g_vUsers.back().s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
-			g_vUsers.back().ID = playerCnt++;
-			g_vUsers.back().FailCnt = 0;
+			g_vUsers.back()->s = accept(ServerSocket, (LPSOCKADDR)&c_sockInfo, &clnSize);
+			WSAAsyncSelect(g_vUsers.back()->s, hWnd, WM_ASYNC, FD_READ | FD_CLOSE);
+			g_vUsers.back()->ID = playerCnt++;
+			g_vUsers.back()->FailCnt = 0;
 
 
 
@@ -205,13 +211,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			tmp += "SetID";
 			tmp += ' ';
-			tmp += to_string(g_vUsers.back().ID);
+			tmp += to_string(g_vUsers.back()->ID);
 
 			givenMessage = new char[tmp.size() + 1];
 			std::copy(tmp.begin(), tmp.end(), givenMessage);
 			givenMessage[tmp.size()] = '\0';
 
-			send(g_vUsers.back().s, givenMessage, tmp.size() + 1, 0);
+			send(g_vUsers.back()->s, givenMessage, tmp.size() + 1, 0);
 
 		}
 		break;
@@ -221,7 +227,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			for (int i = 0; i < g_vUsers.size(); i++)
 			{
-				if (g_vUsers[i].s == wParam)
+				if (g_vUsers[i]->s == wParam)
 				{
 					idx = i;
 					break;
@@ -233,10 +239,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			//
 			// initiate buffer
-			char buffer[64];
+			char buffer[128];
 			//
 			//recieve data
-			int bufferLen = recv(g_vUsers[idx].s, buffer, 64, 0);
+			int bufferLen = recv(g_vUsers[idx]->s, buffer, 128, 0);
 			buffer[bufferLen-1] = '\0';		// ensure data's end
 
 			string tmp = string(buffer);
@@ -252,7 +258,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			for (int i = 0; i < g_vUsers.size(); i++)
 			{
-				if (strcmp(g_vUsers[i].MsgHeader, "disconnect") == 0)
+				if (strcmp(g_vUsers[i]->MsgHeader, "disconnect") == 0)
 				{
 					idx = i;
 					break;
@@ -291,7 +297,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				memset(tmpChar, 0, 32);
 				errmsg.append(_itoa(wParam, tmpChar, 10));
 				errmsg.append(" Has left the game!");
-				closesocket((g_vUsers[idx].s));
+				closesocket((g_vUsers[idx]->s));
 			}
 		}
 		break;
@@ -316,11 +322,53 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			EnterCriticalSection(&crit);
 			g_isAliveThread[i] = -1;
-			closesocket(g_vUsers[i].s);
+			closesocket(g_vUsers[i]->s);
 			LeaveCriticalSection(&crit);
 		}
 		WSACleanup();
 		PostQuitMessage(0);
+		break;
+	case WM_TIMER:
+		for (int i = 0; i < g_vUsers.size(); i++)
+		{
+			//int result = send(g_vUsers.at(i)->s, ping, 5, 0);
+			int result = 0;
+			if (result < 0)
+			{
+				g_vUsers.at(i)->FailCnt++;
+
+				if (g_vUsers.at(i)->FailCnt > 20)
+				{
+					string disconnect;
+					disconnect += "disconnect";
+					disconnect += ' ';
+					disconnect += to_string(i);
+
+					char * sendMessage = new char[disconnect.size() + 1];
+					copy(disconnect.begin(), disconnect.end(), sendMessage);
+					sendMessage[disconnect.size()] = '\0';
+
+					for (int j = 0; j < g_vUsers.size(); j++)
+					{
+						send(g_vUsers.at(j)->s, sendMessage, disconnect.size() + 1, 0);
+					}
+					closesocket(g_vUsers.at(i)->s);
+					if(g_vUsers.at(i))
+						delete(g_vUsers.at(i));
+					g_vUsers.erase(g_vUsers.begin() + i);
+
+					printf("%d user disconnected", i);
+				}
+			}
+			else
+			{
+				g_vUsers.at(i)->FailCnt = 0;
+			}
+		}
+
+		
+
+
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -346,7 +394,8 @@ void threadProcessRecv(void * str)
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
 		givenMessage[tmp.size()] = '\0';
-		printf("%s\n", givenMessage);
+
+		int result = 10;
 
 		if (StartWith(givenMessage, "userStatus"))
 		{
@@ -360,12 +409,12 @@ void threadProcessRecv(void * str)
 
 			for (int i = 0; i < g_vUsers.size(); i++)
 			{
-				if (g_vUsers.at(i).ID == ID)
+				if (g_vUsers.at(i)->ID == ID)
 				{
-					g_vUsers.at(i).CurPos = Pos;
-					g_vUsers.at(i).Dir = Dir;
-					g_vUsers.at(i).Status = Status;
-					g_vUsers.at(i).CurHP = CurHP;
+					g_vUsers.at(i)->CurPos = Pos;
+					g_vUsers.at(i)->Dir = Dir;
+					g_vUsers.at(i)->Status = Status;
+					g_vUsers.at(i)->CurHP = CurHP;
 				}
 			}
 		}
@@ -386,9 +435,9 @@ void threadProcessRecv(void * str)
 			sscanf_s(givenMessage, "%*s %d %d", &ID, &character);
 			for (int i = 0; i < g_vUsers.size(); i++)
 			{
-				if (g_vUsers.at(i).ID == ID)
+				if (g_vUsers.at(i)->ID == ID)
 				{
-					g_vUsers.at(i).Character_No = character;
+					g_vUsers.at(i)->Character_No = character;
 				}
 			}
 
@@ -402,8 +451,8 @@ void threadProcessRecv(void * str)
 
 			for (int i = 0; i < g_vUsers.size(); i++)
 			{
-				if (g_vUsers.at(i).ID == ID)
-					strcpy(g_vUsers.at(i).PlayerName, name);
+				if (g_vUsers.at(i)->ID == ID)
+					strcpy(g_vUsers.at(i)->PlayerName, name);
 			}
 
 			for (int i = 0; i < g_vUsers.size(); i++)
@@ -413,24 +462,28 @@ void threadProcessRecv(void * str)
 
 				tmp += "myNameIs";
 				tmp += ' ';
-				tmp += to_string(g_vUsers.at(i).ID);
+				tmp += to_string(g_vUsers.at(i)->ID);
 				tmp += ' ';
-				tmp += string(g_vUsers.at(i).PlayerName);
+				tmp += string(g_vUsers.at(i)->PlayerName);
 
 				givenMessage = new char[tmp.size() + 1];
 				std::copy(tmp.begin(), tmp.end(), givenMessage);
 				givenMessage[tmp.size()] = '\0';
 
-				send(g_vUsers.back().s, givenMessage, tmp.size() + 1, 0);
+				result = send(g_vUsers.back()->s, givenMessage, tmp.size() + 1, 0);
 			}
 		}
 
 
 		for (int i = 0; i < g_vUsers.size(); i++)
 		{
-			send(g_vUsers.at(i).s, givenMessage, tmp.size() + 1, 0);
+			result = send(g_vUsers.at(i)->s, givenMessage, 128, 0);
 		}
 
+		printf("%s\n", givenMessage);
+
+		if (result < 0)
+			printf("문제있다.");
 
 	}
 }
@@ -443,18 +496,18 @@ void ThreadSend()
 	EnterCriticalSection(&crit);
 	for (int n = 0; n < g_vUsers.size(); n++)
 	{
-		int result = send(g_vUsers[n].s, (char*)&g_vUsers[n], sizeof(CharacterStatus_PC) + 1, 0);
+		int result = send(g_vUsers[n]->s, (char*)&g_vUsers[n], sizeof(CharacterStatus_PC) + 1, 0);
 
 		if (result != -1 && result != 0)
 		{
-			g_vUsers[n].FailCnt = 0;
+			g_vUsers[n]->FailCnt = 0;
 		}
 		else
 		{
-			g_vUsers[n].FailCnt += 1;
+			g_vUsers[n]->FailCnt += 1;
 		}
 
-		if (g_vUsers[n].FailCnt > TRYOUT_CNT)
+		if (g_vUsers[n]->FailCnt > TRYOUT_CNT)
 		{
 			g_isAliveThread[n] = -1;
 			break;
