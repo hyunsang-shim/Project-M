@@ -123,6 +123,8 @@ public:
 // >> : TriggerBox
 private:
 	cWaveTriggerBox* m_pTriggerBox;
+	LPD3DXMESH m_pMobMesh;
+	bool showMap = true;
 // << :
 };
 

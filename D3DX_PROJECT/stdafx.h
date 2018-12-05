@@ -177,6 +177,28 @@ enum character_status {
 	PC_NumSize
 };
 
+enum monster_status {
+	NPC_Stand,
+	NPC_Stand_Shoot,
+	NPC_Run_Front,
+	NPC_Run_Front_Shoot,
+	NPC_Run_Left,
+	NPC_Run_Left_Shoot,
+	NPC_Run_Right,
+	NPC_Run_Right_Shoot,
+	NPC_Run_Back,
+	NPC_Run_Back_Shoot,
+	NPC_Dash,
+	NPC_Reload,
+	NPC_Hit,
+	NPC_Down,
+	NPC_Down_idle,
+	NPC_Stand_Up,
+	NPC_Dead,
+	NPC_NumSize
+};
+
+
 struct CharacterStatus_PC
 {
 	char			MsgHeader[64];			// �޽��� ���

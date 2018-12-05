@@ -5,6 +5,7 @@
 class cNewObject;
 class cXModel;
 class cXModelSurface;
+class cOBB;
 
 class cGameInfoManager
 {
@@ -45,6 +46,8 @@ public:
 	vector<CharacterStatus_NPC>* GetNpcsInfo();
 	void SetMyCharacter(int idx);
 	void SetMyName();
+
+	void AddNPC(cAI* NPC);
 
 	// <<
 

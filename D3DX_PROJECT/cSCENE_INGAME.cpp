@@ -46,7 +46,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	load(FALSE),
 	m_pTriggerBox(NULL),
 	m_pUIShadowRoot(NULL),
-	m_pUIBase(NULL)
+	m_pUIBase(NULL),
+	m_pMobMesh(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -151,6 +152,7 @@ void cSCENE_INGAME::Setup()
 	m_pAI->Setup("NPCS", "slicer.X");
 	cAI_Controller* pAI_Controller = new cAI_Controller;
 	m_pAI->SetAIController(pAI_Controller);
+	g_pGameInfoManager->AddNPC(m_pAI);		// add npc to the NPC List
 
 	setupUI();
 
@@ -167,6 +169,9 @@ void cSCENE_INGAME::Update()
 	{
 		m_pTriggerBox->Setup();
 	}
+
+	if (GetKeyState(VK_RBUTTON) & 0x8000)
+		showMap = !showMap;
 
 	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
@@ -231,18 +236,56 @@ void cSCENE_INGAME::Update()
 		{
 			m_pCrossHairPicking->CalcPosition();
 
-			float dist;
-			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+			float dist, distToMonster;
+			D3DXVECTOR3 vecRayOrigin = m_pCrossHairPicking->GetOrigin();		// to lower down function calls and simple code
+			D3DXVECTOR3 vecRayDirection = m_pCrossHairPicking->GetDirection();	// to lower down function calls and simple code
+			D3DXVECTOR3 vecBulletPos = m_pMyCharacter->GetBulletPos();			// to lower down function calls and simple code
+			BOOL HitMonster = false;		// check if ray collides to target monster
 
+			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &vecRayOrigin, &vecRayDirection, &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
+			for (int i = 0; i < g_pGameInfoManager->GetNpcsInfo()->size(); i++)
+			{
+				D3DXCreateBox(g_pDevice, 2.0f, 4.0f, 2.0f, &m_pMobMesh, 0);
+				D3DXMATRIX inverse;
+				D3DXMatrixInverse(&inverse, 0, &m_pAI->GetOBB()->GetMatrix_Collision());
+				D3DXVECTOR3 vecRayDirection_Inversed, vecRayOrig;
+				D3DXVec3TransformCoord(&vecRayOrig, &vecRayOrigin, &inverse);
+				D3DXVec3TransformCoord(&vecRayOrig, &vecRayDirection, &inverse);
+				D3DXVec3TransformNormal(&vecRayDirection_Inversed, &vecRayDirection, &inverse);
+				D3DXIntersect(m_pMobMesh, &vecRayOrigin, &vecRayDirection_Inversed, &HitMonster, NULL, NULL, NULL, &distToMonster, NULL, NULL);
+				
+			}
+			
+			
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
 			{
-				m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+				m_vCrossHairHitPos = vecRayOrigin + dist * vecRayDirection;
 
-				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
 
 				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
-				m_Bullet[BulletCreateCount].m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
+				m_Bullet[BulletCreateCount].m_vBulletCreatePos = vecBulletPos;
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+				m_Bullet[BulletCreateCount].BulletLiveTime = 500;
+
+				BulletCreateCount++;
+
+				BulletCreateTime = 0;
+
+				g_pGameInfoManager->MaxBulletCount--;
+			}
+			// bullet collision test
+			else if (HitMonster && BulletCreateTime == MAXBulletCreateCount)
+			{
+				m_vCrossHairHitPos = vecRayOrigin + distToMonster * vecRayDirection;
+
+				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
+
+				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
+				m_Bullet[BulletCreateCount].m_vBulletCreatePos = vecBulletPos;
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
@@ -295,7 +338,7 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pMap)
 		g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
-	if(g_pGameInfoManager->m_pXMap)
+	if(g_pGameInfoManager->m_pXMap && showMap)
 		g_pGameInfoManager->m_pXMap->Render();
 
 	if(g_pGameInfoManager->m_pSXMap)
@@ -325,6 +368,9 @@ void cSCENE_INGAME::Render()
 
 	if (m_pAI)
 		m_pAI->Render(NULL);
+
+	if (m_pMobMesh)
+		m_pMobMesh->DrawSubset(0);
 
 	Render_Text();
 }
