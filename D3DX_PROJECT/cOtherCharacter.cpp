@@ -75,9 +75,9 @@ void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 	{
 		SetAnimationIndexBlend(tmpStatus);
 		this->motionStatus = tmpStatus;
-
+		
 	}
-
+	this->status = Status;
 	if (m_pCharacterController)
 		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);
 
