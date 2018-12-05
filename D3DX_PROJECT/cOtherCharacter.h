@@ -17,6 +17,7 @@ private:
 	cOBB* m_pOBB;
 	SYNTHESIZE_ADD_REF(cCharacter*, m_pCharacterController, CharacterController);
 	int status;
+	int motionStatus;
 
 public:
 	void Setup();

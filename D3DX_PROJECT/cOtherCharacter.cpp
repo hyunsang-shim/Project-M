@@ -7,7 +7,8 @@ cOtherCharacter::cOtherCharacter()
 	: m_pSkinnedMesh(NULL)
 	, m_pCharacterController(NULL)
 	, m_pOBB(NULL)
-	, status(CS_IDLE)
+	, status(CS_IDLE),
+	motionStatus(0)
 {
 }
 
@@ -70,10 +71,11 @@ void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 		tmpStatus = 6;
 	}
 
-	if (this->status != tmpStatus)
+	if (this->motionStatus != tmpStatus)
 	{
 		SetAnimationIndexBlend(tmpStatus);
-		this->status = Status;
+		this->motionStatus = tmpStatus;
+
 	}
 
 	if (m_pCharacterController)
