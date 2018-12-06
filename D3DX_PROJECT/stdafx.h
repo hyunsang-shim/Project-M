@@ -1,24 +1,26 @@
-// stdafx.h : ÀÚÁÖ »ç¿ëÇÏÁö¸¸ ÀÚÁÖ º¯°æµÇÁö´Â ¾Ê´Â
-// Ç¥ÁØ ½Ã½ºÅÛ Æ÷ÇÔ ÆÄÀÏ ¶Ç´Â ÇÁ·ÎÁ§Æ® °ü·Ã Æ÷ÇÔ ÆÄÀÏÀÌ
-// µé¾î ÀÖ´Â Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+ï»¿// stdafx.h : ìì£¼ ì‚¬ìš©í•˜ì§€ë§Œ ìì£¼ ë³€ê²½ë˜ì§€ëŠ” ì•ŠëŠ”
+// í‘œì¤€ ì‹œìŠ¤í…œ í¬í•¨ íŒŒì¼ ë˜ëŠ” í”„ë¡œì íŠ¸ ê´€ë ¨ í¬í•¨ íŒŒì¼ì´
+// ë“¤ì–´ ìˆëŠ” í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
 //
 
 #pragma once
 
 #include "targetver.h"
 
-#define WIN32_LEAN_AND_MEAN             // °ÅÀÇ »ç¿ëµÇÁö ¾Ê´Â ³»¿ëÀº Windows Çì´õ¿¡¼­ Á¦¿ÜÇÕ´Ï´Ù.
-// Windows Çì´õ ÆÄÀÏ:
+#define WIN32_LEAN_AND_MEAN             // ê±°ì˜ ì‚¬ìš©ë˜ì§€ ì•ŠëŠ” ë‚´ìš©ì€ Windows í—¤ë”ì—ì„œ ì œì™¸í•©ë‹ˆë‹¤.
+// Windows í—¤ë” íŒŒì¼:
 #include <windows.h>
 
-// C ·±Å¸ÀÓ Çì´õ ÆÄÀÏÀÔ´Ï´Ù.
+// C ëŸ°íƒ€ì„ í—¤ë” íŒŒì¼ì…ë‹ˆë‹¤.
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#include <winsock.h>
 
 
-// TODO: ÇÁ·Î±×·¥¿¡ ÇÊ¿äÇÑ Ãß°¡ Çì´õ´Â ¿©±â¿¡¼­ ÂüÁ¶ÇÕ´Ï´Ù.
+// TODO: í”„ë¡œê·¸ë¨ì— í•„ìš”í•œ ì¶”ê°€ í—¤ë”ëŠ” ì—¬ê¸°ì—ì„œ ì°¸ì¡°í•©ë‹ˆë‹¤.
+#include <map>
 #include <vector>
 #include <string>
 #include <map>
@@ -147,9 +149,12 @@ struct ST_SIZEN
 };
 
 enum character_list {
-	PC_Soldier,
+	PC_Soldier = 1,
 	PC_Reaper,
-	PC_Reinhardt
+	PC_Reinhardt,
+	PC_Tracer,
+	PC_Hanzo,
+	PC_DIVA
 };
 
 
@@ -181,49 +186,59 @@ enum NETWORK_HEADER {
 
 struct CharacterStatus_PC
 {
-	char		MsgHeader[64];			// ¸Ş½ÃÁö Çì´õ
-	int			ID;				// ¼¼¼Ç ID	
-	char		PlayerName[16];	// À¯ÀúÀÌ¸§
-	int			Character_No;	// Ä³¸¯ÅÍ Á¾·ù
-	int			Attack;			// °ø·Â·Â
-	int			MaxHP;			// ÃÖ´ë Ã¼·Â
-	int			CurHP;			// ÇöÀç Ã¼·Â
-	int			HP_Regen;		// Ã¼·Â Àç»ı
-	int			MoveSpeed;		// ÀÌµ¿ ¼Óµµ
-	int			Mag_Cnt;		// ÀåÅº ¼ö
-	int			Mag_Max;			// ÃÖ´ë ÀåÀü ¼ö
-	int			ShootSpeed;		// ¿¬»ç¼Óµµ
-	int			BulletTime;		// ÃÑ¾Ë ¼Óµµ
-	D3DXVECTOR3	CurPos;			// ÇöÀç À§Ä¡°ª
-	float		Dir;				// Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ¹æÇâ
-	int			Status;			// Ä³¸¯ÅÍ »óÅÂ
-	int			TargetID;		// °ø°İ ÇÑ ´ë»ó
-	int			FailCnt;		// Á¢¼Ó ¿©ºÎ
-	SOCKET		s;				// ¼ÒÄÏ
+	char		MsgHeader[64];			// ï¿½Ş½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+	int			ID;				// ï¿½ï¿½ï¿½ï¿½ ID	
+	char		PlayerName[16];	// ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½
+	int			Character_No;	// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int			Attack;			// ï¿½ï¿½ï¿½Â·ï¿½
+	int			MaxHP;			// ï¿½Ö´ï¿½ Ã¼ï¿½ï¿½
+	int			CurHP;			// ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½
+	int			HP_Regen;		// Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½
+	int			MoveSpeed;		// ï¿½Ìµï¿½ ï¿½Óµï¿½
+	int			Mag_Cnt;		// ï¿½ï¿½Åº ï¿½ï¿½
+	int			Mag_Max;			// ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+	int			ShootSpeed;		// ï¿½ï¿½ï¿½ï¿½Óµï¿½
+	int			BulletTime;		// ï¿½Ñ¾ï¿½ ï¿½Óµï¿½
+	D3DXVECTOR3	CurPos;			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½
+	float		Dir;				// Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ù¶óº¸´ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int			Status;			// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int			TargetID;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
+	int			FailCnt;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	SOCKET		s;				// ï¿½ï¿½ï¿½ï¿½
 };
 
 struct CharacterStatus_NPC
 {
-	char		MsgHeader[64];			// ¸Ş½ÃÁö Çì´õ
-	int			ID;				// ¼¼¼Ç ID	
-	char		CharacterName[16];	// Ä³¸¯ÅÍ ÀÌ¸§
-	int			Character_No;	// Ä³¸¯ÅÍ Á¾·ù
-	int			Attack;			// °ø·Â·Â
-	int			MaxHP;			// ÃÖ´ë Ã¼·Â
-	int			CurHP;			// ÇöÀç Ã¼·Â
-	int			HP_Regen;		// Ã¼·Â Àç»ı
-	int			MoveSpeed;		// ÀÌµ¿ ¼Óµµ
-	int			Mag_Cnt;		// ÀåÅº ¼ö
-	int			Mag_Max;		// ÃÖ´ë ÀåÀü ¼ö
-	int			ShootSpeed;		// ¿¬»ç¼Óµµ
-	int			BulletTime;		// ÃÑ¾Ë ¼Óµµ
-	D3DXVECTOR3	CurPos;			// ÇöÀç À§Ä¡°ª
-	float		Dir;			// Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ¹æÇâ
-	int			Status;			// Ä³¸¯ÅÍ »óÅÂ
-	int			TargetID;		// °ø°İ ÇÑ ´ë»ó
+	char		MsgHeader[64];			// ï¿½Ş½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+	int			ID;				// ï¿½ï¿½ï¿½ï¿½ ID	
+	char		CharacterName[16];	// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
+	int			Character_No;	// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int			Attack;			// ï¿½ï¿½ï¿½Â·ï¿½
+	int			MaxHP;			// ï¿½Ö´ï¿½ Ã¼ï¿½ï¿½
+	int			CurHP;			// ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½
+	int			HP_Regen;		// Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½
+	int			MoveSpeed;		// ï¿½Ìµï¿½ ï¿½Óµï¿½
+	int			Mag_Cnt;		// ï¿½ï¿½Åº ï¿½ï¿½
+	int			Mag_Max;		// ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+	int			ShootSpeed;		// ï¿½ï¿½ï¿½ï¿½Óµï¿½
+	int			BulletTime;		// ï¿½Ñ¾ï¿½ ï¿½Óµï¿½
+	D3DXVECTOR3	CurPos;			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½
+	float		Dir;			// Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ù¶óº¸´ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int			Status;			// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	int			TargetID;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
 };
 
+typedef struct UserInfo
+{//(int x, int y, int direction, int action, int actionCount)
 
+	int userNum;
+	float x;
+	float y;
+	float z;
+	float direction;
+	int action;
+	int actionCount;
+}UserInfo;
 
 
 #include "cMainGame.h"
@@ -255,6 +270,7 @@ namespace d3d
 #include "cNetworkManager.h"
 #include "cOtherPlayerManager.h"
 
+using namespace std;
 
 
 //<< :

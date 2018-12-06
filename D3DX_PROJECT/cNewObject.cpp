@@ -26,7 +26,7 @@ void cNewObject::Setup(string filePath)
 	std::copy(filePath.begin(), filePath.end(), writable);
 	writable[filePath.size()] = '\0';
 
-	FileLoad(writable);
+	FileLoad(NULL, writable);
 
 	delete[] writable;
 
@@ -78,6 +78,85 @@ void cNewObject::Setup(string filePath)
 	m_pOBB->Setup(this);
 }
 
+void cNewObject::Setup(char* szFolder, char* szFilename)
+{
+
+	/*string sFullPath(szFolder);
+	sFullPath += string("/") + string(szFilename);*/
+
+
+	m_mtlColor.Emissive.r = 0.0f;
+	m_mtlColor.Emissive.g = 0.0f;
+	m_mtlColor.Emissive.b = 0.0f;
+	m_mtlColor.Emissive.a = 1.0f;
+	//FileLoad("box.obj");
+
+	/*char * writable = new char[sFullPath.size() + 1];
+	std::copy(sFullPath.begin(), sFullPath.end(), writable);
+	writable[sFullPath.size()] = '\0';*/
+
+	FileLoad(szFolder, szFilename);
+
+	//delete[] writable;
+
+	D3DXCreateMeshFVF(
+		m_vecAttribute.size(),
+		m_vecVertex.size(),
+		D3DXMESH_MANAGED | D3DXMESH_32BIT,
+		ST_PNT_VERTEX::FVF,
+		g_pDevice,
+		&m_pMesh
+	);
+
+	ST_PNT_VERTEX* vertex;
+	m_pMesh->LockVertexBuffer(0, (void**)&vertex);
+	memcpy(vertex, &m_vecVertex[0], m_vecVertex.size() * sizeof(ST_PNT_VERTEX));
+	m_pMesh->UnlockVertexBuffer();
+
+	D3DXVECTOR3 vMin(0, 0, 0), vMax(0, 0, 0);
+
+	LPVOID pV = NULL;
+	m_pMesh->LockVertexBuffer(0, &pV);
+	D3DXComputeBoundingBox((D3DXVECTOR3*)pV,
+		m_pMesh->GetNumVertices(),
+		D3DXGetFVFVertexSize(m_pMesh->GetFVF()),
+		&vMin,
+		&vMax);
+
+	D3DXVec3Minimize(&m_vMin, &m_vMin, &vMin);
+	D3DXVec3Maximize(&m_vMax, &m_vMax, &vMax);
+
+	m_pMesh->UnlockVertexBuffer();
+
+
+	DWORD* Index = 0;
+	m_pMesh->LockIndexBuffer(0, (void**)&Index);
+	for (int i = 0; i < m_vecVertex.size(); i++)
+	{
+		Index[i] = i;
+	}
+	m_pMesh->UnlockIndexBuffer();
+
+
+	DWORD* Attribute = 0;
+	m_pMesh->LockAttributeBuffer(0, &Attribute);
+	memcpy(Attribute, &m_vecAttribute[0], m_vecAttribute.size() * sizeof(DWORD));
+	m_pMesh->UnlockAttributeBuffer();
+
+	std::vector<DWORD> vecAdj(m_vecVertex.size());
+	m_pMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+
+	m_pMesh->OptimizeInplace(
+		D3DXMESHOPT_ATTRSORT |
+		D3DXMESHOPT_COMPACT |
+		D3DXMESHOPT_VERTEXCACHE,
+		&vecAdj[0],
+		0, 0, 0);
+
+	m_pOBB = new cOBB();
+	m_pOBB->Setup(this);
+}
+
 void cNewObject::Updata()
 {
 	if (m_pOBB)
@@ -86,14 +165,14 @@ void cNewObject::Updata()
 
 void cNewObject::Render()
 {
-	//D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
+	D3DXMATRIXA16 matSRT, BoxR, BoxT, BoxS, BoxRY, tmp;
 
 	//D3DXMatrixScaling(&BoxS, 0.01, 0.01, 0.01);
 	//D3DXMatrixRotationYawPitchRoll(&BoxR, D3DX_PI / 2, -D3DX_PI / 2, 0);
 	//D3DXVec3TransformNormal(&v_BoxLookAt, &D3DXVECTOR3(0, 0, 1), &BoxR);
 	//D3DXMatrixTranslation(&BoxT, v_translation.x, v_translation.y, v_translation.z);
 
-	//m_matWorld = BoxS * BoxR * BoxT;
+	//m_matWorld = BoxT;
 
 	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
 
@@ -109,15 +188,18 @@ void cNewObject::Render()
 	m_pOBB->OBBBox_Render(c);
 }
 
-void cNewObject::FileLoad(char * FileName)
+void cNewObject::FileLoad(char* szFolder, char* szFile)
 {
+	std::string sFullPath(szFolder);
+	sFullPath += (std::string("/") + std::string(szFile));
+
 	char buf[1024];
 
 	char mtbuf[1024];
 
 	FILE* fp;
 
-	fopen_s(&fp, FileName, "r");
+	fopen_s(&fp, sFullPath.c_str(), "r");
 
 	while (!feof(fp))
 	{
@@ -136,7 +218,8 @@ void cNewObject::FileLoad(char * FileName)
 			char mltBuf[1024];
 
 			sscanf_s(buf, "%*s %s", mltBuf, 1024);
-			ProcessMtl(mltBuf);
+
+			ProcessMtl(szFolder, mltBuf);
 		}
 		else if (StartWith(buf, "vt"))
 		{
@@ -175,26 +258,24 @@ void cNewObject::FileLoad(char * FileName)
 				m_vecVertex.push_back(v);
 			}
 
-			for (int j = 0; j < m_vecMLT.size(); j++)
-			{
-				if (strcmp(mtbuf, m_vecMLT[j].c) == 0)
-				{
-					m_vecAttribute.push_back(j);
-				}
-			}
+			m_vecAttribute.push_back(m_MtlNameComp[mtbuf]);
 		}
 	}
 	fclose(fp);
 }
 
-void cNewObject::ProcessMtl(char * FileName)
+void cNewObject::ProcessMtl(char* szFolder, char* szFile)
 {
+	std::string sFullPath(szFolder);
+	sFullPath += (std::string("/") + std::string(szFile));
+
 	char buf[1024];
 
 	FILE* fp;
 	MLT_GROUP m;
+	DWORD count = 0;
 
-	fopen_s(&fp, FileName, "r");
+	fopen_s(&fp, sFullPath.c_str(), "r");
 
 	while (!feof(fp))
 	{
@@ -210,11 +291,18 @@ void cNewObject::ProcessMtl(char * FileName)
 
 			sscanf_s(buf, "%*s %s", mltBuf, 1024);
 			strcpy_s(m.c, mltBuf);
+
+			if (find(m_vecMLT.begin(), m_vecMLT.end(), mltBuf) == m_vecMLT.end())
+			{
+				m_MtlNameComp.insert(pair<string, DWORD>(mltBuf, count));
+				count++;
+			}
 		}
 		else if (StartWith(buf, "Ka"))
 		{
 			float r, g, b;
 			sscanf_s(buf, "%*s %f %f %f", &r, &g, &b);
+
 			m_mtlColor.Ambient = D3DXCOLOR(r, g, b, 1.0f);
 		}
 		else if (StartWith(buf, "Kd"))
@@ -240,13 +328,18 @@ void cNewObject::ProcessMtl(char * FileName)
 			char c[1024];
 			sscanf_s(buf, "%*s %s", c, 1024);
 
-			wchar_t wt[1024] = { 0 };
+			sFullPath = std::string(szFolder);
+			sFullPath += (std::string("/") + std::string(c));
+
+			/*wchar_t wt[1024] = { 0 };
 			::MultiByteToWideChar(CP_ACP, NULL, c, -1, wt, strlen(c));
 
-			D3DXCreateTextureFromFileW(g_pDevice, wt, &m_pTexture);
+			D3DXCreateTextureFromFileW(g_pDevice, wt, &m_pTexture);*/
+
+			LPDIRECT3DTEXTURE9 pTexture = g_pTextureManager->GetTexture(sFullPath);
 
 			m.m_mtlColor = m_mtlColor;
-			m.m_pTexture = m_pTexture;
+			m.m_pTexture = pTexture;
 
 			m_vecMLT.push_back(m);
 		}
@@ -294,20 +387,23 @@ bool cNewObject::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos
 	D3DXVECTOR3 footPos = HeadPos - D3DXVECTOR3(0, 2.1f, 0);
 
 	D3DXIntersect(m_pMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
-	D3DXIntersect(m_pMesh, &footPos, &D3DXVECTOR3(0, 1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
+	if (hit)
+	{
+		y = float(HeadPos.y) - dist;
+	}
+	else
+	{
+		y = HeadPos.y;
+	}
+	return true;
+	
+	
+	/*D3DXIntersect(m_pMesh, &footPos, &D3DXVECTOR3(0, 1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
 
 	if (hit)
 	{
-		if (float(HeadPos.y) - dist >= -0.5 && dist + dist2 < 2.10001f && dist + dist2 > 2.09999f)
-		{
-			y = float(HeadPos.y) - dist;
-			return true;
-		}
-		else if (float(HeadPos.y) - dist >= -0.5 && !hit2)
-		{
-			y = float(HeadPos.y) - dist;
-			return true;
-		}
+		y = float(HeadPos.y) - dist;
 	}
-	return false;
+	return true;
+	*/
 }

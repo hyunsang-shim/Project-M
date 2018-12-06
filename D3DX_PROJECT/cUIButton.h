@@ -6,6 +6,7 @@ class iButtonDelegate
 {
 public:
 	virtual void OnClick(cUIButton* pSender) = 0;
+	virtual void buttonUpdate(cUIButton* pSender) = 0;
 };
 
 class cUITextView;
@@ -31,6 +32,8 @@ protected:
 
 	SYNTHESIZE(iButtonDelegate*, m_pDelegate, Delegate);
 
+	D3DXIMAGE_INFO stImageInfo;
+
 	float sizeX;
 	float sizeY;
 
@@ -43,8 +46,9 @@ public:
 	virtual void Render(LPD3DXSPRITE pSprite) override;
 	virtual void setUnable() override;
 	virtual void setable() override;
+	virtual void setSize(float xSize, float ySize);
+	void cutSize(float xSize, float ySize);
 
-	void setSize(float x, float y);
 
 
 	void SetTexture(char* szNor, char* szOver, char* szSel, string str);

@@ -3,6 +3,8 @@
 #include "stdafx.h"
 
 class cNewObject;
+class cXModel;
+class cXModelSurface;
 
 class cGameInfoManager
 {
@@ -11,8 +13,8 @@ public:
 
 	int GameScreenSizeX;
 	int GameScreenSizeY;
-	int getScreenXPosByPer(int x);
-	int getScreenYPosByPer(int y);
+	int getScreenXPosByPer(float x);
+	int getScreenYPosByPer(float y);
 
 	char userName[25] = { 0 };
 	int namelength;
@@ -23,12 +25,16 @@ public:
 	bool canGo;
 
 	cNewObject* m_pMap;
+	cXModel* m_pXMap;
+	cXModelSurface* m_pSXMap;
 
-	void setup_Map(string filePath);
+	void setup_Map(char* Path, char* Filename);
+	void setup_XMap(string filePath);
+	void setup_SXMap(string filePath);
 
+	int MaxBulletCount;
 	BOOL sceneChangeTriger;
 	int nextScene;
-
 	// Network
 	// >>
 	void UpdateMyInfo(CharacterStatus_PC &newInfo);
@@ -52,7 +58,22 @@ public:
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
 	// <<
 
-private:
+	float aimSize;
+
+
 	CharacterStatus_PC m_strMyCharacter;
+	vector<CharacterStatus_PC> m_vOtherCharacters;
+	vector<CharacterStatus_NPC> m_vNpcCharacters;
+
+	cSCENE_INGAME* m_pScene_Ingame;
+	cSCENE_RESULT* m_pScene_Result;
+	cSCENE_TITLE* m_pScene_Title;
+
+	int loading;
+
+
+private:
+
+
 };
 

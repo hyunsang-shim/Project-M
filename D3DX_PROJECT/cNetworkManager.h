@@ -1,12 +1,12 @@
 #pragma once
+#include "stdafx.h"
 #define g_pNetworkManager cNetworkManager::GetInstance()
 
 #define WM_ASYNC WM_USER+2
 #pragma comment(lib,"ws2_32.lib")
 #include <queue>
 #include <process.h> 
-
-#include "stdafx.h"
+#include "cCharacter.h"
 
 
 class cNetworkManager
@@ -19,8 +19,8 @@ private:
 	SOCKET s, MySocket;
 	SOCKADDR_IN addr = { 0 };
 	char buffer[1000];
-	vector<CharacterStatus_PC> user;
-	bool isConnected = false;		// Á¢¼Ó »óÅÂ È®ÀÎ
+	vector<UserInfo> user;
+	bool isConnected = false;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	HANDLE hThread;
 
 
@@ -30,7 +30,7 @@ public:
 	void SendData(CharacterStatus_PC strPC);
 	int SendData(enum NETWORK_HEADER, CharacterStatus_PC* strPC);
 	void recvData();
-	bool GetNetStatus();		// ³×Æ®¿öÅ© È®ÀÎ¿ë
+	bool GetNetStatus();		// ï¿½ï¿½Æ®ï¿½ï¿½Å© È®ï¿½Î¿ï¿½
 	SOCKET GetServerSocket();
 
 };

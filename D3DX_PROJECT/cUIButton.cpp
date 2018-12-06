@@ -18,7 +18,6 @@ cUIButton::~cUIButton()
 
 void cUIButton::SetTexture(char * szNor, char * szOver, char * szSel)
 {
-	D3DXIMAGE_INFO stImageInfo;
 	m_aTexture[E_NORMAL] = g_pTextureManager->GetTexture(szNor, &stImageInfo);
 
 	m_stSize.nWidth = stImageInfo.Width;
@@ -36,7 +35,8 @@ void cUIButton::Update()
 	POINT pt;
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
-
+	if (m_pDelegate)
+		m_pDelegate->buttonUpdate(this);
 	RECT rc;
 	SetRect(
 		&rc,
@@ -111,6 +111,12 @@ void cUIButton::setSize(float x, float y)
 {
 	sizeX = x;
 	sizeY = y;
+}
+
+void cUIButton::cutSize(float xSize, float ySize)
+{
+	m_stSize.nWidth = stImageInfo.Width * xSize;
+	m_stSize.nHeight = stImageInfo.Height * ySize;
 }
 
 void cUIButton::SetTexture(char * szNor, char * szOver, char * szSel, string str)

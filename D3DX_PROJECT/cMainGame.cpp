@@ -1,37 +1,50 @@
 #include "stdafx.h"
 #include "cMainGame.h"
+#include <process.h>
+#include <time.h>
+using namespace std;
 
 cMainGame::cMainGame() :
-	SCENENUM(0),
-	m_pScene_Ingame(NULL),
-	m_pScene_Result(NULL),
-	m_pScene_Title(NULL)
+	SCENENUM(0)
 {
 }
+
 
 
 cMainGame::~cMainGame()
 {
-	SAFE_DELETE(m_pScene_Ingame);
-	SAFE_DELETE(m_pScene_Result);
-	SAFE_DELETE(m_pScene_Title);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Ingame);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Result);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Title);
+}
+
+void ThreadPorc()
+{
+	g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+	g_pGameInfoManager->m_pScene_Ingame->Setup();
 }
 
 void cMainGame::Setup()
 {
+	static HANDLE hThread;
 	switch (getSceneNum())
 	{
 	case 0:
-		m_pScene_Title = new cSCENE_TITLE();
-		m_pScene_Title->Setup();
+	{
+		g_pGameInfoManager->m_pScene_Title = new cSCENE_TITLE();
+		g_pGameInfoManager->m_pScene_Title->Setup();
+		//hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned(__stdcall *)(void*))ThreadPorc, NULL, 0, NULL);
+	}
 		break;
 	case 1:
-		m_pScene_Ingame = new cSCENE_INGAME();
-		m_pScene_Ingame->Setup();
+	{
+		g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+		g_pGameInfoManager->m_pScene_Ingame->Setup();
+	}
 		break;
 	case 3:
-		m_pScene_Result = new cSCENE_RESULT();
-		m_pScene_Result->Setup();
+		g_pGameInfoManager->m_pScene_Result = new cSCENE_RESULT();
+		g_pGameInfoManager->m_pScene_Result->Setup();
 		break;
 	default:
 		break;
@@ -43,13 +56,14 @@ void cMainGame::Update()
 	switch (getSceneNum())
 	{
 	case 0:
-		m_pScene_Title->Update();
+		g_pGameInfoManager->m_pScene_Title->Update();
 		break;
 	case 1:
-		m_pScene_Ingame->Update();
+		if (g_pGameInfoManager->m_pScene_Ingame->load)
+			g_pGameInfoManager->m_pScene_Ingame->Update();
 		break;
 	case 3:
-		m_pScene_Result->Update();
+		g_pGameInfoManager->m_pScene_Result->Update();
 		break;
 	default:
 		break;
@@ -67,13 +81,14 @@ void cMainGame::Render()
 	switch (getSceneNum())
 	{
 	case 0:
-		m_pScene_Title->Render();
+		g_pGameInfoManager->m_pScene_Title->Render();
 		break;
 	case 1:
-		m_pScene_Ingame->Render();
+		if (g_pGameInfoManager->m_pScene_Ingame->load)
+			g_pGameInfoManager->m_pScene_Ingame->Render();
 		break;
 	case 3:
-		m_pScene_Result->Render();
+		g_pGameInfoManager->m_pScene_Result->Render();
 		break;
 	default:
 		break;
@@ -93,19 +108,20 @@ void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (getSceneNum())
 	{
 	case 0:
-		m_pScene_Title->WndProc(hWnd, message, wParam, lParam);
+		g_pGameInfoManager->m_pScene_Title->WndProc(hWnd, message, wParam, lParam);
 		break;
 	case 1:
-		m_pScene_Ingame->WndProc(hWnd, message, wParam, lParam);
+		g_pGameInfoManager->m_pScene_Ingame->WndProc(hWnd, message, wParam, lParam);
 		break;
 	case 3:
-		m_pScene_Result->WndProc(hWnd, message, wParam, lParam);
+		g_pGameInfoManager->m_pScene_Result->WndProc(hWnd, message, wParam, lParam);
 		break;
 	default:
 		break;
 	}
 	
 }
+
 
 void cMainGame::SetSceneChangeTriger(int sceneNum)
 {
@@ -115,25 +131,25 @@ void cMainGame::SetSceneChangeTriger(int sceneNum)
 
 void cMainGame::SceneChangeNum()
 {
-	SAFE_DELETE(m_pScene_Ingame);
-	SAFE_DELETE(m_pScene_Result);
-	SAFE_DELETE(m_pScene_Title);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Ingame);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Result);
+	SAFE_DELETE(g_pGameInfoManager->m_pScene_Title);
 
 	SCENENUM = g_pGameInfoManager->nextScene;
 
 	switch (getSceneNum())
 	{
 	case 0:
-		m_pScene_Title = new cSCENE_TITLE();
-		m_pScene_Title->Setup();
+		g_pGameInfoManager->m_pScene_Title = new cSCENE_TITLE();
+		g_pGameInfoManager->m_pScene_Title->Setup();
 		break;
 	case 1:
-		m_pScene_Ingame = new cSCENE_INGAME();
-		m_pScene_Ingame->Setup();
+		g_pGameInfoManager->m_pScene_Ingame = new cSCENE_INGAME();
+		g_pGameInfoManager->m_pScene_Ingame->Setup();
 		break;
 	case 3:
-		m_pScene_Result = new cSCENE_RESULT();
-		m_pScene_Result->Setup();
+		g_pGameInfoManager->m_pScene_Result = new cSCENE_RESULT();
+		g_pGameInfoManager->m_pScene_Result->Setup();
 		break;
 	default:
 		break;

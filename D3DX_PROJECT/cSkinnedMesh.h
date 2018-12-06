@@ -23,7 +23,6 @@ private:
 
 	char* BulletStartBoneName;
 	char* HeadBoneName;
-
 public:
 	cSkinnedMesh(char* szFolder, char* szFilename);
 	~cSkinnedMesh(void);

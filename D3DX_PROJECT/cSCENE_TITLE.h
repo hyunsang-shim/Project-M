@@ -18,21 +18,38 @@ public:
 	D3DXIMAGE_INFO		m_stBGImageInfo, m_stImageInfo;
 	cUIObject*			m_pUIRoot;
 	cUIObject*			m_pUIShadowRoot;
+	cUIObject*			m_pUICharacterSelect;
+	cUIObject*			m_pUILoading;
 	cUITextView*		m_pNameInput;
+	
 
 	void BGSetup();			// 배경화면 셋업
 	void BGRender();		// 배경화면 렌더
 
 	void UIsetup();
 	void UIrender();
+	void OtherPlayerUpdate();
+	void showTime();
+
+	void Creat_font();
 	virtual void OnClick(cUIButton* pSender) override;
+	virtual void buttonUpdate(cUIButton* pSender) override;
 
 	bool enterNameState;
 	// << UI end
+
+	cUIButton* player1_character; // 내 캐릭
+
+	cUIButton* ready_button;
+	vector<cUIButton*> other_player_character;
+
 
 
 private:
 	cCamera* m_pCamera;
 	CharacterStatus_PC m_strMyCharacter;
+
+	LPD3DXFONT m_pFont;
+	LPD3DXFONT m_pFont2;
 };
 

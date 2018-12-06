@@ -167,6 +167,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 	return isConnected;
 	
+	// <<
 }
 
 void cNetworkManager::SendData(CharacterStatus_PC strPC)

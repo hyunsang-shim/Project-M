@@ -14,6 +14,9 @@ protected:
 	SYNTHESIZE(cUIObject*, m_pParent, Parent);
 	SYNTHESIZE(ST_SIZEN, m_stSize, Size);
 	SYNTHESIZE(int, m_nTag, Tag);
+	SYNTHESIZE(int, m_nsizeX, SizeX);
+	SYNTHESIZE(int, m_nsizeY, SizeY);
+
 	bool		m_isHidden;
 
 	float sizePerX, sizePerY;
@@ -26,6 +29,7 @@ public:
 	virtual void Destroy();
 	virtual void setUnable();
 	virtual void setable();
+
 
 	virtual cUIObject* FindChildByTag(int nTag);
 };

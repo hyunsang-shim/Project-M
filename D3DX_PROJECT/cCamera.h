@@ -16,10 +16,12 @@ private:
 	float m_fCameraDistance;
 	float fDeltaX;
 	float fDeltaY;
-
+	BOOL SpringArmHit;
+	float SpringArmDist;
+	D3DXVECTOR3 HeadToCameraDir;
 public:
 	void Setup();
-	void Update(D3DXVECTOR3 cube);
+	void Update(D3DXVECTOR3 cube, D3DXVECTOR3 HeadPos);
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	D3DXVECTOR3 getDirection();
 

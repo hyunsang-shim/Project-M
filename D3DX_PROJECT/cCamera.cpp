@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "cCamera.h"
+#include "cXModel.h"
+#include "cNewObject.h"
 
-
-cCamera::cCamera() : m_vEye(0, 0, -5), m_vLookAt(0, 0, 0), m_vUp(0, 1, 0)
+cCamera::cCamera() : m_vEye(0, 0, -5), m_vLookAt(0, 0, 0), m_vUp(0, 1, 0), SpringArmHit(false), SpringArmDist(0.0f)
 {
 	// : 카메라 앵글, 거리, 버튼, 마우스 위치
 	m_vCamRotAngle.x = 0.0f;
@@ -31,14 +32,14 @@ void cCamera::Setup()
 }
 
 
-void cCamera::Update(D3DXVECTOR3 cube)
+void cCamera::Update(D3DXVECTOR3 cube, D3DXVECTOR3 HeadPos)
 {
 	/*cube = D3DXVECTOR3(0, 0, 0);*/
 	
 	D3DXMATRIXA16 matR, matRX, matRY, matTY;
 	D3DXMATRIXA16 m_matTrans;
 	D3DXMatrixTranslation(&m_matTrans, cube.x, cube.y, cube.z);
-
+	
 	m_vEye = D3DXVECTOR3(0, m_fCameraDistance, -m_fCameraDistance);
 	cube.y += m_fCameraDistance / 3.0f + 0.5f;
 
@@ -50,6 +51,20 @@ void cCamera::Update(D3DXVECTOR3 cube)
 	D3DXVec3TransformCoord(&m_vEye, &m_vEye, &m_matTrans);
 	D3DXMATRIXA16 matView;
 	D3DXVECTOR3 aimSet = cube + (cube - m_vEye)*10;
+
+	HeadToCameraDir = m_vEye - cube;
+
+	int hToCLength = D3DXVec3Length(&HeadToCameraDir);
+
+	D3DXVec3Normalize(&HeadToCameraDir, &HeadToCameraDir);
+
+	D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &cube, &HeadToCameraDir, &SpringArmHit, NULL, NULL, NULL, &SpringArmDist, NULL, NULL);
+
+	if (SpringArmHit && SpringArmDist < hToCLength)
+	{
+		m_vEye = cube + (SpringArmDist - 2.0f)*HeadToCameraDir;
+	}
+
 	D3DXMatrixLookAtLH(&matView, &m_vEye, &cube , &m_vUp);
 	g_pDevice->SetTransform(D3DTS_VIEW, &matView);
 
@@ -95,8 +110,8 @@ void cCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		m_fCameraDistance -= (GET_WHEEL_DELTA_WPARAM(wParam) / 100.0f);
 		if (m_fCameraDistance < EPSILON)
 			m_fCameraDistance = EPSILON;
-		if (m_fCameraDistance > 2000.0)
-			m_fCameraDistance = 2000.0;
+		if (m_fCameraDistance > 20.0)
+			m_fCameraDistance = 20.0;
 		if (m_fCameraDistance < 2.0)
 			m_fCameraDistance = 2.0;
 		break;

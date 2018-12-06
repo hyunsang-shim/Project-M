@@ -31,7 +31,7 @@ cXModel::cXModel(string filePath)
 
 	D3DXLoadMeshFromXA(
 		filePath.c_str(),
-		D3DXMESH_MANAGED,
+		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		g_pDevice,
 		&adjBuffer,
 		&mtrlBuffer,
@@ -40,7 +40,7 @@ cXModel::cXModel(string filePath)
 		&m_pXMesh
 	);
 
-	
+
 
 	if (mtrlBuffer != 0 && numMtrls != 0)
 	{
@@ -53,8 +53,8 @@ cXModel::cXModel(string filePath)
 
 			if (mtrls[i].pTextureFilename != 0)
 			{
-				LPDIRECT3DTEXTURE9 tex = 0;
-				D3DXCreateTextureFromFileA(g_pDevice, mtrls[i].pTextureFilename, &tex);
+				LPDIRECT3DTEXTURE9 tex = g_pTextureManager->GetTexture(mtrls[i].pTextureFilename);
+				//D3DXCreateTextureFromFileA(g_pDevice, mtrls[i].pTextureFilename, &tex);
 				m_vecTextuer.push_back(tex);
 			}
 			else
@@ -63,23 +63,22 @@ cXModel::cXModel(string filePath)
 			}
 		}
 	}
+
+
+
+	std::vector<DWORD> vecAdj(adjBuffer->GetBufferSize());
+	HRESULT thr = m_pXMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+
+	m_pXMesh->OptimizeInplace(
+		D3DXMESHOPT_ATTRSORT |
+		D3DXMESHOPT_COMPACT |
+		D3DXMESHOPT_VERTEXCACHE,
+		&vecAdj[0],
+		0, 0, 0);
+
+
 	SAFE_RELEASE(mtrlBuffer);
 	SAFE_RELEASE(adjBuffer);
-
-	if (!(m_pXMesh->GetFVF() & D3DFVF_NORMAL))
-	{
-		ID3DXMesh* pTempMesh = 0;
-		m_pXMesh->CloneMeshFVF(
-			D3DXMESH_MANAGED,
-			m_pXMesh->GetFVF() | D3DFVF_NORMAL,
-			g_pDevice,
-			&pTempMesh);
-
-		D3DXComputeNormals(pTempMesh, 0);
-
-		m_pXMesh->Release();
-		m_pXMesh = pTempMesh;
-	}
 
 	D3DXMatrixIdentity(&m_matWorld);
 }
@@ -88,10 +87,6 @@ cXModel::cXModel(string filePath)
 cXModel::~cXModel()
 {
 	SAFE_RELEASE(m_pXMesh);
-	for (int i = 0; i < m_vecTextuer.size(); i++)
-	{
-		SAFE_RELEASE(m_vecTextuer[i]);
-	}
 }
 
 void cXModel::SetSRT(D3DXVECTOR3 vScale, D3DXVECTOR3 vRot, D3DXVECTOR3 vPos)
@@ -116,6 +111,9 @@ void cXModel::Update()
 
 void cXModel::Render()
 {
+	g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	/*g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+	g_pDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);*/
 	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
 	for (int i = 0; i < m_vecMtl.size(); i++)
 	{
@@ -123,4 +121,37 @@ void cXModel::Render()
 		g_pDevice->SetTexture(0, m_vecTextuer[i]);
 		m_pXMesh->DrawSubset(i);
 	}
+}
+
+bool cXModel::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos)
+{
+	BOOL hit = false;
+	BOOL hit2 = false;
+	float dist = 0.0f;
+	float dist2 = 0.0f;
+	//float start = y + 12.0f;
+	float before = y;
+
+	D3DXVECTOR3 HeadPosDouble;
+	HeadPosDouble.x = HeadPos.x;
+	HeadPosDouble.y = HeadPos.y + 10.0f;
+	HeadPosDouble.z = HeadPos.z;
+
+	D3DXIntersect(m_pXMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
+	D3DXIntersect(m_pXMesh, &HeadPosDouble, &D3DXVECTOR3(0, -1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
+	
+	if (dist > dist2)
+	{
+		return false;
+	}
+
+	if (hit)
+	{
+		y = float(HeadPos.y) - dist;
+	}
+	else
+	{
+		y = HeadPos.y;
+	}
+	return true;
 }

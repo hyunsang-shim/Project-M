@@ -1,6 +1,5 @@
 #pragma once
 #include "cObject.h"
-#include "stdafx.h"
 
 class cMyCharacter;
 class cSkinnedMesh;
