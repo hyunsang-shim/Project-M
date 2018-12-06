@@ -589,7 +589,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 	else if (pSender->GetTag() == E_BUTTON_EXIT)
 	{
 		//네트워크 수정 필요
-		//g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+		//g_pNetworkManager->SendData(, g_pGameInfoManager->GetMyInfo());
 		exit(0);
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
@@ -599,7 +599,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		//g_pGameInfoManager->nextScene = 1;
 		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
 		//네트워크 수정 필요
-		//g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
+		g_pNetworkManager->SendData(NH_MY_NAME_IS, g_pGameInfoManager->GetMyInfo());
 		m_pUIRoot->m_isHidden = TRUE;
 		m_pUIShadowRoot->m_isHidden = TRUE;
 		m_pUICharacterSelect->m_isHidden = FALSE;
@@ -615,36 +615,42 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_DIVA;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/diva.png", "./UI/diva.png", "./UI/diva.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_REAPER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reaper;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/reaper.png", "./UI/reaper.png", "./UI/reaper.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_HANZO)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Hanzo;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(37), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/hanzo.png", "./UI/hanzo.png", "./UI/hanzo.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_REIN)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reinhardt;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(20), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/rein.png", "./UI/rein.png", "./UI/rein.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_TRACER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Tracer;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/tracer.png", "./UI/tracer.png", "./UI/tracer.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_SOLDIER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Soldier;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/soldier.png", "./UI/soldier.png", "./UI/soldier.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == E_BUTTON_READY)
 	{
