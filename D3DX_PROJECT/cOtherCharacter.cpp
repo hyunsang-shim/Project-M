@@ -8,7 +8,7 @@ cOtherCharacter::cOtherCharacter()
 	, m_pCharacterController(NULL)
 	, m_pOBB(NULL)
 	, status(CS_IDLE),
-	motionStatus(0)
+	motionStatus(10)
 {
 }
 
