@@ -6,6 +6,7 @@
 #pragma comment(lib,"ws2_32.lib")
 #include <queue>
 #include <process.h> 
+#include <winsock2.h>
 #include "cCharacter.h"
 
 
