@@ -155,7 +155,7 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 	int test = WSAGetLastError();
 	printf("%d", test);
-	if (ConnectRes == -1)
+	if (ConnectRes != -1)
 	{
 		MessageBox(NULL, _T("Connection Failed!"), _T("Error!!"), MB_OK);
 		isConnected = false;
