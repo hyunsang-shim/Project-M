@@ -588,7 +588,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 	else if (pSender->GetTag() == E_BUTTON_EXIT)
 	{
-		g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+		//네트워크 수정 필요
+		//g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
 		exit(0);
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
@@ -597,7 +598,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		//g_pGameInfoManager->sceneChangeTriger = TRUE;
 		//g_pGameInfoManager->nextScene = 1;
 		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
-		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
+		//네트워크 수정 필요
+		//g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
 		m_pUIRoot->m_isHidden = TRUE;
 		m_pUIShadowRoot->m_isHidden = TRUE;
 		m_pUICharacterSelect->m_isHidden = FALSE;

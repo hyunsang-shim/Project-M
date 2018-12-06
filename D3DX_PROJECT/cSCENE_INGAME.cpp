@@ -1,4 +1,4 @@
-#include "stdafx.h"﻿
+#include "stdafx.h"
 #include "cSCENE_INGAME.h"
 #include "cGrid.h"
 #include "cNewObject.h"
@@ -18,6 +18,7 @@
 #include "cWaveTriggerBox.h"
 #include "cUITextView.h"
 #include "cXModelSurface.h"
+
 
 enum
 {

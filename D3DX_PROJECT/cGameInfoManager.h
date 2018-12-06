@@ -35,6 +35,9 @@ public:
 	int MaxBulletCount;
 	BOOL sceneChangeTriger;
 	int nextScene;
+
+
+
 	// Network
 	// >>
 	void UpdateMyInfo(CharacterStatus_PC &newInfo);
@@ -62,8 +65,6 @@ public:
 
 
 	CharacterStatus_PC m_strMyCharacter;
-	vector<CharacterStatus_PC> m_vOtherCharacters;
-	vector<CharacterStatus_NPC> m_vNpcCharacters;
 
 	cSCENE_INGAME* m_pScene_Ingame;
 	cSCENE_RESULT* m_pScene_Result;
