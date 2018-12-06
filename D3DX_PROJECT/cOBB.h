@@ -20,7 +20,6 @@ private:
 	float m_fAxisHalfLen[3];
 
 	D3DXMATRIXA16 m_matWorldTM;
-
 public:
 	void Setup(cSkinnedMesh* pSkinnedMesh);
 	void Setup(cNewObject* pObject);

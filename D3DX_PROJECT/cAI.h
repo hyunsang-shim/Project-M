@@ -20,6 +20,7 @@ public:
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
 	cOBB* GetOBB();
 	D3DXVECTOR3 GetPosition();
+	void SetPosition(D3DXVECTOR3 pos);
 	void SetAnimationIndexBlend(int nIndex);
 };
 

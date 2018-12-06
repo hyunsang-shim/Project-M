@@ -17,5 +17,6 @@ private:
 public:
 	void Render();
 	bool GetY(IN float x, OUT float &y, IN float z, D3DXVECTOR3 HeadPos);
+	bool GetAIY(IN float x, OUT float &y, IN float z, D3DXVECTOR3 HeadPos);
 };
 

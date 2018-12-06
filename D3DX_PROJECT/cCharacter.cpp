@@ -9,7 +9,7 @@
 cCharacter::cCharacter()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 0)
-	, m_vPosition(287, 10, -139)
+	, m_vPosition(-220, 10, -210)
 
 {
 	D3DXMatrixIdentity(&m_matWorld);
@@ -150,8 +150,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 	if (g_pGameInfoManager->m_pSXMap)
 	{
 		float y = 0;
-		D3DXVECTOR3 head = m_vPosition + D3DXVECTOR3(0, 2, 0);
-		if (!g_pGameInfoManager->m_pSXMap->GetY(m_vPosition.x, y, m_vPosition.z, head))
+		if (!g_pGameInfoManager->m_pSXMap->GetY(m_vPosition.x, y, m_vPosition.z, m_MyCharacter->GetMyHeadPos()))
 			m_vPosition = m_vBeforePosition;
 		else if (y - m_vPosition.y > 0.7)
 		{
