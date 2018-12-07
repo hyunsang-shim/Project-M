@@ -52,6 +52,12 @@ void threadProcessRecv(void * str)
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
 		givenMessage[tmp.size()] = '\0';
+	
+
+		if (StartWith(givenMessage, "ping"))
+		{
+			continue;
+		}
 		printf("%s\n", givenMessage);
 
 		if (StartWith(givenMessage, "userStatus"))
@@ -87,13 +93,13 @@ void threadProcessRecv(void * str)
 			int character;
 
 			sscanf_s(givenMessage, "%*s %d %d", &ID, &character);
-			/*	for (int i = 0; i < g_vUsers.size(); i++)
+			for (int i = 0; i <  g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 			{
-			if (g_vUsers.at(i).ID == ID)
+			if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == ID)
 			{
-			g_vUsers.at(i).Character_No = character;
+				g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.Character_No = character;
 			}
-			}*/
+			}
 		}
 		else if (StartWith(givenMessage, "myNameIs"))
 		{
@@ -232,7 +238,12 @@ int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 			sendString += ' ';
 			sendString += string(strPC->PlayerName);
 		}
-		
+		if (NH == NH_IS_READY)
+		{
+			sendString += "IsReady";
+			sendString += ' ';
+			sendString += to_string(strPC->ID);
+		}
 		char * sendMessage = new char[sendString.size() + 1];
 		copy(sendString.begin(), sendString.end(), sendMessage);
 		sendMessage[sendString.size()] = '\0';

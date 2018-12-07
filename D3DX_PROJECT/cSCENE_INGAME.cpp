@@ -159,7 +159,6 @@ void cSCENE_INGAME::Setup()
 		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
 		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
-		SAFE_DELETE(m_pVecAI_Controller);
 	}
 
 	WaveStartOrEnd = false;
@@ -170,6 +169,7 @@ void cSCENE_INGAME::Setup()
 
 	//��Ʈ ����
 	Creat_Font();
+	g_pNetworkManager->SendData(NH_IS_READY, g_pGameInfoManager->GetMyInfo());
 	g_pGameInfoManager->loading = 1;
 }
 
@@ -198,7 +198,6 @@ void cSCENE_INGAME::Update()
 			m_pVecAI_Controller = new cAI_Controller;
 			m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
-			SAFE_RELEASE(m_pVecAI_Controller);
 		}
 	}
 

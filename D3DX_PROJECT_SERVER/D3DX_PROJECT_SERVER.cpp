@@ -379,6 +379,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void threadProcessRecv(void * str)
 {
+	int isReady = 0;
 	while (1)
 	{
 		Sleep(1);
@@ -390,6 +391,8 @@ void threadProcessRecv(void * str)
 		}
 		tmp = messageQueue.front();
 		messageQueue.pop();
+
+		
 
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
@@ -473,7 +476,18 @@ void threadProcessRecv(void * str)
 				result = send(g_vUsers.back()->s, givenMessage, tmp.size() + 1, 0);
 			}
 		}
+		else if (StartWith(givenMessage, "IsReady"))
+		{
+			int ID;
 
+			sscanf_s(givenMessage, "%*s %d %d", &ID);
+			isReady++;
+
+			if (isReady =! g_vUsers.size());
+			{
+				continue;
+			}
+		}
 
 		for (int i = 0; i < g_vUsers.size(); i++)
 		{
