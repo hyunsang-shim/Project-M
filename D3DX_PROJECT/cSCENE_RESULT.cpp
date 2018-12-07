@@ -10,6 +10,7 @@ cSCENE_RESULT::cSCENE_RESULT() :
 
 cSCENE_RESULT::~cSCENE_RESULT()
 {
+
 }
 
 void cSCENE_RESULT::Setup()

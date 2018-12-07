@@ -11,6 +11,7 @@ cGameInfoManager::cGameInfoManager() :
 	canGo(1),
 	m_pMap(NULL),
 	m_pXMap(NULL),
+	m_pSXMap(NULL),
 	GameScreenSizeX(1920),
 	GameScreenSizeY(1080),
 	namelength(0), 
@@ -29,6 +30,7 @@ cGameInfoManager::~cGameInfoManager()
 {
 	SAFE_DELETE(m_pMap);
 	SAFE_DELETE(m_pXMap);
+	SAFE_DELETE(m_pSXMap);
 }
 
 int cGameInfoManager::getScreenXPosByPer(float x)
@@ -107,7 +109,7 @@ void cGameInfoManager::SetMyCharacter(int idx)
 		m_strMyCharacter.Mag_Max = 25;
 		m_strMyCharacter.MoveSpeed = 2.5f;
 		m_strMyCharacter.ShootSpeed = 4000.0f;
-		m_strMyCharacter.Status = PC_Stand;
+		m_strMyCharacter.Status = CS_IDLE;
 		break;
 	}
 }
@@ -115,4 +117,28 @@ void cGameInfoManager::SetMyCharacter(int idx)
 void cGameInfoManager::SetMyName()
 {
 	strcpy(m_strMyCharacter.PlayerName, userName);
+}
+
+
+int cGameInfoManager::GetNumTotalUser()
+{
+	return m_vOtherCharacters.size();
+}
+
+void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC info)
+{
+	CharacterStatus_PC tmp = info;
+	m_vOtherCharacters.push_back(tmp);
+}
+
+void cGameInfoManager::RemoveOtherPlayerByID(int ID)
+{
+	for (int i = 0; i < m_vOtherCharacters.size(); i++)
+	{
+		if (m_vOtherCharacters[i].ID == ID)
+		{
+			m_vOtherCharacters.erase(m_vOtherCharacters.begin() + i);
+			break;
+		}
+	}
 }

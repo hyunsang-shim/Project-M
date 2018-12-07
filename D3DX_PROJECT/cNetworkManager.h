@@ -4,8 +4,8 @@
 
 #define WM_ASYNC WM_USER+2
 #pragma comment(lib,"ws2_32.lib")
-
-#include <winsock.h>
+#include <queue>
+#include <process.h> 
 #include "cCharacter.h"
 
 
@@ -16,19 +16,22 @@ public:
 
 private:
 	WSADATA wsadata;
-	SOCKET s, cs;
+	SOCKET s, MySocket;
 	SOCKADDR_IN addr = { 0 };
 	char buffer[1000];
 	vector<UserInfo> user;
-	bool isConnected = false;		// Á¢¼Ó »óÅÂ È®ÀÎ
+	bool isConnected = false;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+	HANDLE hThread;
 
 
 public:
+	queue<string> messageQueue;
 	bool SetupNetwork(HWND hWnd);
 	void SendData(CharacterStatus_PC strPC);
-	void SendData(char* MsgHeader, CharacterStatus_PC* strPC);
+	int SendData(enum NETWORK_HEADER, CharacterStatus_PC* strPC);
 	void recvData();
-	bool GetNetStatus();		// ³×Æ®¿öÅ© È®ÀÎ¿ë
+	bool GetNetStatus();		// ï¿½ï¿½Æ®ï¿½ï¿½Å© È®ï¿½Î¿ï¿½
+	SOCKET GetServerSocket();
 
 };
 

@@ -39,7 +39,6 @@ public:
 	void Render();
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	void RenderOtherPlayer();
 	void Setup_HeightMap();
 private:
 	cCamera* m_pCamera;	
@@ -52,7 +51,7 @@ private:
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
 	cMyCharacter *m_pMyCharacter;
-	cAI *m_pAI;
+	vector<cAI*> m_pVecAI;
 private:
 	D3DLIGHT9 DirectLight; //¸ÞÀÎ ±¤¿ø
 	D3DLIGHT9 subLight;
@@ -123,6 +122,14 @@ public:
 // >> : TriggerBox
 private:
 	cWaveTriggerBox* m_pTriggerBox;
+	bool WaveStartOrEnd;
+	int SpawnMoster;
+	int SpawnCount;
 // << :
+
+//>> : temp
+private:
+	BOOL AIMeshHit;
+	float AIMeshDist;
 };
 

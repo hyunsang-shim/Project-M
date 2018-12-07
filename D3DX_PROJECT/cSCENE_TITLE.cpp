@@ -50,10 +50,10 @@ cSCENE_TITLE::~cSCENE_TITLE()
 
 void cSCENE_TITLE::Setup()
 {
-	//Ä«¸Þ¶ó ¼ÂÆÃ
+	//Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
-	//UI¼ÂÆÃ
+	//UIï¿½ï¿½ï¿½ï¿½
 	BGSetup();
 	UIsetup();
 	Creat_font();
@@ -106,7 +106,7 @@ void cSCENE_TITLE::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 void cSCENE_TITLE::BGSetup()
 {
 	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±èÅÂÈñ.jpg");
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.jpg");
 
 	D3DXCreateTextureFromFileEx(
 		g_pDevice,
@@ -211,7 +211,7 @@ void cSCENE_TITLE::UIsetup()
 
 
 		cUITextView* pTextView = new cUITextView;
-		pTextView->Settext("ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä");
+		pTextView->Settext("ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½");
 		pTextView->SetSize(ST_SIZEN(500, 200));
 		pTextView->SetPosition(g_pGameInfoManager->getScreenXPosByPer(35), g_pGameInfoManager->getScreenYPosByPer(40));
 		pTextView->SetDrawTextFormat(DT_CENTER | DT_VCENTER);
@@ -588,7 +588,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 	else if (pSender->GetTag() == E_BUTTON_EXIT)
 	{
-		g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+		//ë„¤íŠ¸ì›Œí¬ ìˆ˜ì • í•„ìš”
+		//g_pNetworkManager->SendData(, g_pGameInfoManager->GetMyInfo());
 		exit(0);
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
@@ -597,7 +598,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		//g_pGameInfoManager->sceneChangeTriger = TRUE;
 		//g_pGameInfoManager->nextScene = 1;
 		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
-		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
+		//ë„¤íŠ¸ì›Œí¬ ìˆ˜ì • í•„ìš”
+		g_pNetworkManager->SendData(NH_MY_NAME_IS, g_pGameInfoManager->GetMyInfo());
 		m_pUIRoot->m_isHidden = TRUE;
 		m_pUIShadowRoot->m_isHidden = TRUE;
 		m_pUICharacterSelect->m_isHidden = FALSE;
@@ -613,36 +615,42 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_DIVA;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/diva.png", "./UI/diva.png", "./UI/diva.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_REAPER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reaper;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/reaper.png", "./UI/reaper.png", "./UI/reaper.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_HANZO)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Hanzo;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(37), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/hanzo.png", "./UI/hanzo.png", "./UI/hanzo.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_REIN)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reinhardt;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(20), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/rein.png", "./UI/rein.png", "./UI/rein.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_TRACER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Tracer;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/tracer.png", "./UI/tracer.png", "./UI/tracer.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_SOLDIER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Soldier;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/soldier.png", "./UI/soldier.png", "./UI/soldier.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == E_BUTTON_READY)
 	{

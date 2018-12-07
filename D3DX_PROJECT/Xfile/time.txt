@@ -1,0 +1,9 @@
+280 322 down_up_attack
+
+620 646 run
+660 686 right_run
+700 726 left_run
+
+3630 3780 win_win
+
+4320 4367 down_up

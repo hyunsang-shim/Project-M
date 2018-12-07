@@ -95,24 +95,45 @@ void cXModelSurface::Render()
 bool cXModelSurface::GetY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos)
 {
 	BOOL hit = false;
-	BOOL hit2 = false;
+	BOOL hit3 = false;
 	float dist = 0.0f;
-	float dist2 = 0.0f;
+	float dist3 = 0.0f;
 	//float start = y + 12.0f;
 	float before = y;
 
-	D3DXVECTOR3 HeadPosDouble;
-	HeadPosDouble.x = HeadPos.x;
-	HeadPosDouble.y = HeadPos.y + 3.0f;
-	HeadPosDouble.z = HeadPos.z;
+	D3DXVECTOR3 HeadPosThree;
+
+	HeadPosThree.x = HeadPos.x;
+	HeadPosThree.y = HeadPos.y + 4.0f;
+	HeadPosThree.z = HeadPos.z;
 
 	D3DXIntersect(m_pSXMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
-	D3DXIntersect(m_pSXMesh, &HeadPosDouble, &D3DXVECTOR3(0, -1, 0), &hit2, NULL, NULL, NULL, &dist2, NULL, NULL);
+	D3DXIntersect(m_pSXMesh, &HeadPosThree, &D3DXVECTOR3(0, -1, 0), &hit3, NULL, NULL, NULL, &dist3, NULL, NULL);
 
-	if (dist > dist2)
+	if (dist > dist3)
 	{
 		return false;
 	}
+	
+	if (hit)
+	{
+		y = float(HeadPos.y) - dist;
+	}
+	else
+	{
+		y = HeadPos.y;
+	}
+	return true;
+}
+
+bool cXModelSurface::GetAIY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 HeadPos)
+{
+	BOOL hit = false;
+	float dist = 0.0f;
+	//float start = y + 12.0f;
+	float before = y;
+
+	D3DXIntersect(m_pSXMesh, &HeadPos, &D3DXVECTOR3(0, -1, 0), &hit, NULL, NULL, NULL, &dist, NULL, NULL);
 
 	if (hit)
 	{

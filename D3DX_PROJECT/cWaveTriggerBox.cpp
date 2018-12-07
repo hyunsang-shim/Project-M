@@ -18,9 +18,13 @@ void cWaveTriggerBox::Setup()
 	if (m_WaveCount == 0)
 	{
 		tb.Name = "FirstTriggerBox";
-		tb.SetMin(D3DXVECTOR3(430, -5, 114));
-		tb.SetMax(D3DXVECTOR3(377, 5, 55));
+		tb.SetMin(D3DXVECTOR3(292, 2, -372));
+		tb.SetMax(D3DXVECTOR3(260, 12, -417));
+		m_SpawnXPos = 200;
+		m_SpawnYPos = 5;
+		m_SpawnZPos = -395;
 		tb.m_DisplayOrNot = true;
+		tb.MakeMonster = 10;
 		m_pOBB = new cOBB;
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
@@ -29,9 +33,13 @@ void cWaveTriggerBox::Setup()
 	else if (m_WaveCount == 1)
 	{
 		tb.Name = "SecondTriggerBox";
-		tb.SetMin(D3DXVECTOR3(10, 0, 20));
-		tb.SetMax(D3DXVECTOR3(20, 10, 30));
+		tb.SetMin(D3DXVECTOR3(22, 11, -185));
+		tb.SetMax(D3DXVECTOR3(-11, 16, -229));
+		m_SpawnXPos = -60;
+		m_SpawnYPos = 5;
+		m_SpawnZPos = -229;
 		tb.m_DisplayOrNot = true;
+		tb.MakeMonster = 20;
 		m_pOBB = new cOBB;
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
@@ -40,9 +48,13 @@ void cWaveTriggerBox::Setup()
 	else if (m_WaveCount == 2)
 	{
 		tb.Name = "ThirdTriggerBox";
-		tb.SetMin(D3DXVECTOR3(20, 0, 20));
-		tb.SetMax(D3DXVECTOR3(30, 10, 30));
+		tb.SetMin(D3DXVECTOR3(-208, 13, -108));
+		tb.SetMax(D3DXVECTOR3(-241, 18, -102));
+		m_SpawnXPos = -317;
+		m_SpawnYPos = 18;
+		m_SpawnZPos = -102;
 		tb.m_DisplayOrNot = true;
+		tb.MakeMonster = 25;
 		m_pOBB = new cOBB;
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
