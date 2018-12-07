@@ -48,7 +48,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pUIBase(NULL),
 	WaveStartOrEnd(false),
 	SpawnMoster(200),
-	SpawnCount(0)
+	SpawnCount(0),
+	m_pRootFrame(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
