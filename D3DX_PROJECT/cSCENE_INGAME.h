@@ -133,5 +133,7 @@ private:
 private:
 	BOOL AIMeshHit;
 	float AIMeshDist;
+
+	//thread t1;
 };
 

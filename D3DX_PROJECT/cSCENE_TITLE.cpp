@@ -4,6 +4,7 @@
 #include "cUIImageView.h"
 #include "cUIButton.h"
 #include "cUITextView.h"
+
 enum
 {
 	E_BUTTON_PLAY = 11,
@@ -46,6 +47,8 @@ cSCENE_TITLE::~cSCENE_TITLE()
 	SAFE_RELEASE(m_pSprite);
 	SAFE_RELEASE(m_pTextureUI);
 	SAFE_RELEASE(m_pTextureUI);
+	t1.join();
+	t2.join();
 }
 
 void cSCENE_TITLE::Setup()
@@ -672,25 +675,37 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 			m_pUICharacterSelect->m_isHidden = 1;
 			m_pUILoading->m_isHidden = 0;
 		}
+		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
+		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/floorBox.X"); });
 	}
 }
 
 
 void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 {
-	
+
 	if (pSender->GetTag() == LOADING_BAR)
 	{
+		//t1 = thread([]() {g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X");});
+
 		static float load = 0.0f;
 		/*if(g_pGameInfoManager->loading == 0 && load>0.5)
-			load = 0.5;*/
+		load = 0.5;*/
 
-		load += 0.015f;
+		load += 0.16f;
+		/*if (g_pGameInfoManager->loading == 0 && load > 1)
+		{
+			load = 0.0;
+		}*/
 		pSender->cutSize(load, 1.0f);
 		if (load > 1.0f)
 		{
 			g_pGameInfoManager->sceneChangeTriger = TRUE;
 			g_pGameInfoManager->nextScene = 1;
+		}
+		else
+		{
+			Sleep(10000);
 		}
 	}
 

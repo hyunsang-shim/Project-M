@@ -18,6 +18,8 @@
 #include "cWaveTriggerBox.h"
 #include "cUITextView.h"
 #include "cXModelSurface.h"
+#include <thread>
+#include <cstdio>
 
 
 enum
@@ -129,10 +131,12 @@ void cSCENE_INGAME::Setup()
 	m_pRootFrame = loader->Load("woman/woman_01_all.ASE");
 	m_pRootFrame->SetSRT(D3DXVECTOR3(5.0f, 5.0f, 5.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 0, 10));*/
 
-	//xfile Map load
-	g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); 
+	//t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
 
-	g_pGameInfoManager->setup_SXMap("map/floorBox.X");
+	//xfile Map load
+	/*g_pGameInfoManager->setup_XMap("map/Rialto_map_new4_textures/Map.X");
+
+	g_pGameInfoManager->setup_SXMap("map/floorBox.X");*/
 
 	//�ϴ� ����
 	m_pSKY = new cSKY();
@@ -235,8 +239,8 @@ void cSCENE_INGAME::Update()
 	}
 
 	m_pCamera->Update(m_pMyCharacter->GetPosition(), m_pMyCharacter->GetMyHeadPos());
-	if (m_pRootFrame)
-		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
+	/*if (m_pRootFrame)
+		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);*/
 
 	if (m_pObject)
 		m_pObject->Updata();
