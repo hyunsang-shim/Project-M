@@ -5,6 +5,7 @@
 class cNewObject;
 class cXModel;
 class cXModelSurface;
+class cOBB;
 
 class cGameInfoManager
 {
@@ -52,13 +53,10 @@ public:
 	void AddOtherPlayer(CharacterStatus_PC info);
 	void RemoveOtherPlayerByID(int ID);
 
-
-
-
-
-
 	vector<CharacterStatus_PC> m_vOtherCharacters;
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
+	void AddNPC(cAI* NPC);
+
 	// <<
 
 	float aimSize;

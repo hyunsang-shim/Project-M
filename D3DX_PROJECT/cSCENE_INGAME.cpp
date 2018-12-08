@@ -159,9 +159,9 @@ void cSCENE_INGAME::Setup()
 		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
 		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
-	}
+		g_pGameInfoManager->AddNPC(m_pAI);		// add npc to the NPC List
 
-	WaveStartOrEnd = false;
+	}
 
 	setupUI();
 
@@ -200,6 +200,9 @@ void cSCENE_INGAME::Update()
 			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
 		}
 	}
+
+	if (GetKeyState(VK_RBUTTON) & 0x8000)
+		showMap = !showMap;
 
 	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
@@ -280,14 +283,56 @@ void cSCENE_INGAME::Update()
 			float dist;
 			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 			
+			// check Monsters for hit
+			// to lower down function calls and simple code
+			float dist, distToMonster;
+			D3DXVECTOR3 vecRayOrigin = m_pCrossHairPicking->GetOrigin();		// Get Ray Origin pos
+			D3DXVECTOR3 vecRayDirection = m_pCrossHairPicking->GetDirection();	// Get Ray Direction
+			D3DXVECTOR3 vecBulletPos = m_pMyCharacter->GetBulletPos();			// Get Bullet Origin pos
+			BOOL HitMonster = false;											// result will be stored whether hit the monster or not
+
+			D3DXCreateBox(g_pDevice, 2.0f, 4.0f, 2.0f, &m_pMobMesh, 0);		// temporal mesh for check. (positioned at origin)
+			// check all monster if hit
+			for (int i = 0; i < g_pGameInfoManager->GetNpcsInfo()->size(); i++)
+			{				
+				D3DXMATRIX inverse;
+				D3DXMatrixInverse(&inverse, 0, &m_pAI->GetOBB()->GetMatrix_Collision());		// to inverse the ray
+				D3DXVECTOR3 vecRayDirection_Inversed, vecRayOrig_Inversed;
+				D3DXVec3TransformCoord(&vecRayOrig_Inversed, &vecRayOrigin, &inverse);			// apply inversed Target Mesh's world Matrix to Ray origin
+				D3DXVec3TransformCoord(&vecRayDirection_Inversed, &vecRayDirection, &inverse);  // apply inversed Target Mesh's world Matrix to Direction
+				D3DXVec3TransformNormal(&vecRayDirection_Inversed, &vecRayDirection_Inversed, &inverse);	// normallize ray's direction
+				D3DXIntersect(m_pMobMesh, &vecRayOrigin, &vecRayDirection_Inversed, &HitMonster, NULL, NULL, NULL, &distToMonster, NULL, NULL);		// check collision
+			}
+			m_pMobMesh->Release();
+
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
 			{
-				m_vCrossHairHitPos = m_pCrossHairPicking->GetOrigin() + dist * m_pCrossHairPicking->GetDirection();
+				m_vCrossHairHitPos = vecRayOrigin + dist * vecRayDirection;
 
-				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
+				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
 
 				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
-				m_Bullet[BulletCreateCount].m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
+				m_Bullet[BulletCreateCount].m_vBulletCreatePos = vecBulletPos;
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+				m_Bullet[BulletCreateCount].BulletLiveTime = 500;
+
+				BulletCreateCount++;
+
+				BulletCreateTime = 0;
+
+				g_pGameInfoManager->MaxBulletCount--;
+			}
+			// bullet collision test
+			else if (HitMonster && BulletCreateTime == MAXBulletCreateCount)
+			{
+				m_vCrossHairHitPos = vecRayOrigin + distToMonster * vecRayDirection;
+
+				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
+
+				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
+				m_Bullet[BulletCreateCount].m_vBulletCreatePos = vecBulletPos;
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
@@ -342,7 +387,7 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pMap)
 		g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
-	if(g_pGameInfoManager->m_pXMap)
+	if(g_pGameInfoManager->m_pXMap && showMap)
 		g_pGameInfoManager->m_pXMap->Render();
 
 	//if(g_pGameInfoManager->m_pSXMap)
@@ -383,6 +428,9 @@ void cSCENE_INGAME::Render()
 	{
 		g_pGameInfoManager->GetOthersInfo();
 	}
+
+	if (m_pMobMesh)
+		m_pMobMesh->DrawSubset(0);
 
 	Render_Text();
 }

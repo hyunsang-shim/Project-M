@@ -3,6 +3,8 @@
 #include "cNewObject.h"
 #include "cXModel.h"
 #include "cXModelSurface.h"
+#include "cAI.h"
+#include "cOBB.h"
 
 cGameInfoManager::cGameInfoManager() :
 	isESCPushed(0),
@@ -11,7 +13,7 @@ cGameInfoManager::cGameInfoManager() :
 	canGo(1),
 	m_pMap(NULL),
 	m_pXMap(NULL),
-	m_pSXMap(NULL),
+
 	GameScreenSizeX(1920),
 	GameScreenSizeY(1080),
 	namelength(0), 
@@ -30,7 +32,7 @@ cGameInfoManager::~cGameInfoManager()
 {
 	SAFE_DELETE(m_pMap);
 	SAFE_DELETE(m_pXMap);
-	SAFE_DELETE(m_pSXMap);
+
 }
 
 int cGameInfoManager::getScreenXPosByPer(float x)
@@ -119,12 +121,6 @@ void cGameInfoManager::SetMyName()
 	strcpy(m_strMyCharacter.PlayerName, userName);
 }
 
-
-int cGameInfoManager::GetNumTotalUser()
-{
-	return m_vOtherCharacters.size();
-}
-
 void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC info)
 {
 	CharacterStatus_PC tmp = info;
@@ -141,4 +137,27 @@ void cGameInfoManager::RemoveOtherPlayerByID(int ID)
 			break;
 		}
 	}
+
+void cGameInfoManager::AddNPC(cAI * NPC)
+{
+	CharacterStatus_NPC tmp;
+	strcpy(tmp.MsgHeader, "idle");
+	tmp.ID = m_vNpcCharacters.size();
+	
+	tmp.CharacterName[16];	
+	tmp.Character_No = m_vNpcCharacters.size();;
+	tmp.Attack = 1;			
+	tmp.MaxHP = 50;
+	tmp.CurHP = 50;
+	tmp.HP_Regen = 0;
+	tmp.MoveSpeed = 100;
+	tmp.Mag_Cnt = 0;
+	tmp.Mag_Max = 0;
+	tmp.ShootSpeed = 0;
+	tmp.BulletTime = 0;
+	tmp.CurPos = D3DXVECTOR3(0, 0, 0);
+	tmp.Dir = 0.0f;
+	tmp.Status = NPC_Stand;
+	tmp.TargetID = NULL;
+	m_vNpcCharacters.push_back(tmp);
 }

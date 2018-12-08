@@ -53,7 +53,7 @@ private:
 	cMyCharacter *m_pMyCharacter;
 	vector<cAI*> m_pVecAI;
 private:
-	D3DLIGHT9 DirectLight; //¸ÞÀÎ ±¤¿ø
+	D3DLIGHT9 DirectLight; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	D3DLIGHT9 subLight;
 
 public:
@@ -125,6 +125,8 @@ private:
 	bool WaveStartOrEnd;
 	int SpawnMoster;
 	int SpawnCount;
+//	LPD3DXMESH m_pMobMesh;
+	bool showMap = true;
 // << :
 
 //>> : temp
