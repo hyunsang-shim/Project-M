@@ -116,13 +116,13 @@ private:
 	int BulletCreateCount;
 public:
 	void Mesh_Render();
+	bool WaveStartOrEnd;
 // << :
 	BOOL load;
 
 // >> : TriggerBox
 private:
 	cWaveTriggerBox* m_pTriggerBox;
-	bool WaveStartOrEnd;
 	int SpawnMoster;
 	int SpawnCount;
 //	LPD3DXMESH m_pMobMesh;

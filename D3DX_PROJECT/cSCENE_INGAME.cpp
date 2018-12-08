@@ -49,7 +49,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	WaveStartOrEnd(false),
 	SpawnMoster(200),
 	SpawnCount(0),
-	m_pRootFrame(NULL)
+	m_pRootFrame(NULL),
+	showMap(true)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -68,6 +69,8 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pTriggerBox);
 	SAFE_DELETE(m_pUIBase);
 	SAFE_DELETE(m_pUIShadowRoot);
+	m_pFont->Release();
+	m_pFont2->Release();
 }
 
 void cSCENE_INGAME::Setup()
@@ -159,7 +162,7 @@ void cSCENE_INGAME::Setup()
 		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
 		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
-		g_pGameInfoManager->AddNPC(m_pAI);		// add npc to the NPC List
+		g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the NPC List
 
 	}
 
@@ -360,6 +363,8 @@ void cSCENE_INGAME::Update()
 		}
 	}
 
+	if (GetKeyState(VK_RBUTTON) & 0x8000)
+		showMap = !showMap;
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
@@ -387,6 +392,8 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pMap)
 		g_pGameInfoManager->m_pMap->Render();
 	//m_pObject->Render();
+
+	// render 
 	if(g_pGameInfoManager->m_pXMap && showMap)
 		g_pGameInfoManager->m_pXMap->Render();
 
@@ -429,8 +436,6 @@ void cSCENE_INGAME::Render()
 		g_pGameInfoManager->GetOthersInfo();
 	}
 
-	if (m_pMobMesh)
-		m_pMobMesh->DrawSubset(0);
 
 	Render_Text();
 }

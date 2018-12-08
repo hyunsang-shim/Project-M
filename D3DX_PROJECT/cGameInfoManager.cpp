@@ -127,26 +127,15 @@ void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC info)
 	m_vOtherCharacters.push_back(tmp);
 }
 
-void cGameInfoManager::RemoveOtherPlayerByID(int ID)
-{
-	for (int i = 0; i < m_vOtherCharacters.size(); i++)
-	{
-		if (m_vOtherCharacters[i].ID == ID)
-		{
-			m_vOtherCharacters.erase(m_vOtherCharacters.begin() + i);
-			break;
-		}
-	}
-
 void cGameInfoManager::AddNPC(cAI * NPC)
 {
 	CharacterStatus_NPC tmp;
 	strcpy(tmp.MsgHeader, "idle");
 	tmp.ID = m_vNpcCharacters.size();
-	
-	tmp.CharacterName[16];	
+
+	tmp.CharacterName[16];
 	tmp.Character_No = m_vNpcCharacters.size();;
-	tmp.Attack = 1;			
+	tmp.Attack = 1;
 	tmp.MaxHP = 50;
 	tmp.CurHP = 50;
 	tmp.HP_Regen = 0;
@@ -157,7 +146,18 @@ void cGameInfoManager::AddNPC(cAI * NPC)
 	tmp.BulletTime = 0;
 	tmp.CurPos = D3DXVECTOR3(0, 0, 0);
 	tmp.Dir = 0.0f;
-	tmp.Status = NPC_Stand;
+	tmp.Status = CS_IDLE;
 	tmp.TargetID = NULL;
 	m_vNpcCharacters.push_back(tmp);
 }
+
+void cGameInfoManager::RemoveOtherPlayerByID(int ID)
+{
+	for (int i = 0; i < m_vOtherCharacters.size(); i++)
+	{
+		if (m_vOtherCharacters[i].ID == ID)
+		{
+			m_vOtherCharacters.erase(m_vOtherCharacters.begin() + i);
+			break;
+		}
+	}
