@@ -161,3 +161,4 @@ void cGameInfoManager::RemoveOtherPlayerByID(int ID)
 			break;
 		}
 	}
+}

@@ -129,6 +129,10 @@ private:
 	bool showMap = true;
 // << :
 
+
+	//
+	// Monster Collide Box
+	LPD3DXMESH m_pMeshMobColide;
 //>> : temp
 private:
 	BOOL AIMeshHit;

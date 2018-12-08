@@ -105,75 +105,75 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 	if (KEY_W && !KEY_S && !KEY_A &&! KEY_D && !KEY_SHIFT) // front
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
 		CurrentAnimNum = 8;
 		nowStatus = CS_FRONT;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && !KEY_D && KEY_SHIFT) // front + shift
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.25f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.4f);
 		CurrentAnimNum = 4;
 		nowStatus = CS_FRONT_SHIFT;
 	}
 	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && !KEY_SHIFT) // front + left
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
-		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
 		CurrentAnimNum = 8;
 		nowStatus = CS_FRONT_LEFT;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && !KEY_SHIFT) // front + right
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.1f);
-		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
 		CurrentAnimNum = 8;
 		nowStatus = CS_FRONT_RIGHT;
 
 	}
 	else if (KEY_W && !KEY_S && KEY_A && !KEY_D && KEY_SHIFT) // front + left + shift
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
-		m_vPosition = m_vPosition - (m_vLeftDirection * 0.2f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.4f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.35f);
 		CurrentAnimNum = 4;
 		nowStatus = CS_FRONT_LEFT_SHIFT;
 	}
 	else if (KEY_W && !KEY_S && !KEY_A && KEY_D && KEY_SHIFT) // front + right + shift
 	{
-		m_vPosition = m_vPosition + (m_vDirection * 0.2f);
-		m_vPosition = m_vPosition + (m_vLeftDirection * 0.2f);
+		m_vPosition = m_vPosition + (m_vDirection * 0.4f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.35f);
 		CurrentAnimNum = 4;
 		nowStatus = CS_FRONT_RIGHT_SHIFT;
 	}
 	else if (!KEY_W && !KEY_S && KEY_A && !KEY_D ) // left
 	{
-		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.3f);
 		CurrentAnimNum = 7;
 		nowStatus = CS_LEFT;
 
 	}
 	else if (!KEY_W && !KEY_S && !KEY_A && KEY_D ) // right
 	{
-		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition + (m_vLeftDirection * 0.3f);
 		CurrentAnimNum = 6;
 		nowStatus = CS_RIGHT;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && !KEY_D ) // back
 	{
-		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vDirection * 0.15f);
 		CurrentAnimNum = 5;
 		nowStatus = CS_BACK;
 	}
 	else if (!KEY_W && KEY_S && KEY_A && !KEY_D ) // back + left
 	{
-		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
-		m_vPosition = m_vPosition - (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vDirection * 0.12f);
+		m_vPosition = m_vPosition - (m_vLeftDirection * 0.10f);
 		CurrentAnimNum = 5;
 		nowStatus = CS_BACK_LEFT;
 	}
 	else if (!KEY_W && KEY_S && !KEY_A && KEY_D ) // back + riight
 	{
-		m_vPosition = m_vPosition - (m_vDirection * 0.1f);
-		m_vPosition = m_vPosition + (m_vLeftDirection * 0.1f);
+		m_vPosition = m_vPosition - (m_vDirection * 0.12);
+		m_vPosition = m_vPosition +   (m_vLeftDirection * 0.1f);
 		CurrentAnimNum = 5;
 		nowStatus = CS_BACK_RIGHT;
 	}
@@ -223,7 +223,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		
 	}
 
-	//Obj ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Y ï¿½ï¿½ ï¿½ï¿½ï¿½
+	//Obj ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?Y ï¿½ï¿½ ï¿½ï¿½ï¿?
 	if (g_pGameInfoManager->m_pMap)
 	{
 		float y = 0;
@@ -242,7 +242,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 	}
 
-	//xfile ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Y ï¿½ï¿½ ï¿½ï¿½ï¿½
+	//xfile ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?Y ï¿½ï¿½ ï¿½ï¿½ï¿?
 	if (g_pGameInfoManager->m_pSXMap)
 	{
 		float y = 0;

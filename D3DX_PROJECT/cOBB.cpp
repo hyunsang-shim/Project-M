@@ -429,8 +429,9 @@ void cOBB::OBBBox_Render(D3DXCOLOR c)
 	g_pDevice->SetStreamSource(0, m_pVertexBuffer, 0, sizeof(ST_PC_VERTEX));
 	g_pDevice->SetIndices(m_pIndexBuffer);
 	g_pDevice->SetTransform(D3DTS_WORLD, &m_matWorldTM);
-	g_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLE, 0, 0, 8, 0, 36);
-	//g_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	g_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	g_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 36);
+	g_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	//m_pMeshBOX->DrawSubset(0);
 	g_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }

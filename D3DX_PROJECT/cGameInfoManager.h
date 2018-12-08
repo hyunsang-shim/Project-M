@@ -49,7 +49,6 @@ public:
 	vector<CharacterStatus_NPC>* GetNpcsInfo();
 	void SetMyCharacter(int idx);
 	void SetMyName();
-	int GetNumTotalUser();
 	void AddOtherPlayer(CharacterStatus_PC info);
 	void RemoveOtherPlayerByID(int ID);
 

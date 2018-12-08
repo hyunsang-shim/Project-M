@@ -166,7 +166,7 @@ void cSCENE_INGAME::Setup()
 		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
 		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
-		g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the NPC List
+		g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the GameInfo Manager
 
 	}
 
@@ -205,6 +205,8 @@ void cSCENE_INGAME::Update()
 			m_pVecAI_Controller = new cAI_Controller;
 			m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
+			g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the GameInfo Manager
+
 		}
 	}
 
@@ -287,9 +289,6 @@ void cSCENE_INGAME::Update()
 		{
 			m_pCrossHairPicking->CalcPosition();
 
-			float dist;
-			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
-			
 			// check Monsters for hit
 			// to lower down function calls and simple code
 			float dist, distToMonster;
@@ -298,19 +297,25 @@ void cSCENE_INGAME::Update()
 			D3DXVECTOR3 vecBulletPos = m_pMyCharacter->GetBulletPos();			// Get Bullet Origin pos
 			BOOL HitMonster = false;											// result will be stored whether hit the monster or not
 
-			D3DXCreateBox(g_pDevice, 2.0f, 4.0f, 2.0f, &m_pMobMesh, 0);		// temporal mesh for check. (positioned at origin)
+			//
+			// check map collision
+			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+			//
+			// monster collision start
+			D3DXCreateBox(g_pDevice, 2.0f, 4.0f, 2.0f, &m_pMeshMobColide, 0);		// temporal mesh for check. (positioned at origin)
 			// check all monster if hit
 			for (int i = 0; i < g_pGameInfoManager->GetNpcsInfo()->size(); i++)
 			{				
 				D3DXMATRIX inverse;
-				D3DXMatrixInverse(&inverse, 0, &m_pAI->GetOBB()->GetMatrix_Collision());		// to inverse the ray
+				D3DXMatrixInverse(&inverse, 0, &((m_pVecAI[i]->GetOBB())->GetMatrix_Collision()));		// to inverse the ray
 				D3DXVECTOR3 vecRayDirection_Inversed, vecRayOrig_Inversed;
 				D3DXVec3TransformCoord(&vecRayOrig_Inversed, &vecRayOrigin, &inverse);			// apply inversed Target Mesh's world Matrix to Ray origin
 				D3DXVec3TransformCoord(&vecRayDirection_Inversed, &vecRayDirection, &inverse);  // apply inversed Target Mesh's world Matrix to Direction
 				D3DXVec3TransformNormal(&vecRayDirection_Inversed, &vecRayDirection_Inversed, &inverse);	// normallize ray's direction
-				D3DXIntersect(m_pMobMesh, &vecRayOrigin, &vecRayDirection_Inversed, &HitMonster, NULL, NULL, NULL, &distToMonster, NULL, NULL);		// check collision
+				D3DXIntersect(m_pMeshMobColide, &vecRayOrigin, &vecRayDirection_Inversed, &HitMonster, NULL, NULL, NULL, &distToMonster, NULL, NULL);		// check collision
 			}
-			m_pMobMesh->Release();
+			m_pMeshMobColide->Release();
 
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
 			{
@@ -367,8 +372,9 @@ void cSCENE_INGAME::Update()
 		}
 	}
 
-	if (GetKeyState(VK_RBUTTON) & 0x8000)
+	if (GetKeyState(VK_MBUTTON) & 0x8000)
 		showMap = !showMap;
+
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
@@ -435,10 +441,10 @@ void cSCENE_INGAME::Render()
 		}
 	}
 	//?????????????????????????
-	for (int i = 0; i < g_pGameInfoManager->GetNumTotalUser(); i++)
-	{
-		g_pGameInfoManager->GetOthersInfo();
-	}
+	//for (int i = 0; i < g_pGameInfoManager->GetNumTotalUser(); i++)
+	//{
+	//	g_pGameInfoManager->GetOthersInfo();
+	//}
 
 
 	Render_Text();

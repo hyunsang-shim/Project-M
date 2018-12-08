@@ -42,6 +42,7 @@ public:
 
 	cUIButton* ready_button;
 	vector<cUIButton*> other_player_character;
+	thread t1, t2;
 
 
 
