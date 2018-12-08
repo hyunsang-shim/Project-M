@@ -28,8 +28,9 @@ cXModel::cXModel(string filePath)
 	ID3DXBuffer* adjBuffer = 0;
 	ID3DXBuffer* mtrlBuffer = 0;
 	DWORD numMtrls = 0;
+	m_pXMesh = NULL;
 
-	D3DXLoadMeshFromXA(
+	D3DXLoadMeshFromX(
 		filePath.c_str(),
 		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		g_pDevice,
@@ -39,9 +40,7 @@ cXModel::cXModel(string filePath)
 		&numMtrls,
 		&m_pXMesh
 	);
-
-
-
+	
 	if (mtrlBuffer != 0 && numMtrls != 0)
 	{
 		D3DXMATERIAL* mtrls = (D3DXMATERIAL*)mtrlBuffer->GetBufferPointer();

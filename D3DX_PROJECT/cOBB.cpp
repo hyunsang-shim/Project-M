@@ -44,23 +44,40 @@ void cOBB::Setup(cSkinnedMesh * pSkinnedMesh)
 	ST_PC_VERTEX v;
 	v.c = D3DCOLOR_XRGB(255, 255, 255);
 
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BRT
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);   //FRT
 	vecVertex.push_back(v);
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BLT
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);      //FRB
 	vecVertex.push_back(v);
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BRB
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);      //FLB
 	vecVertex.push_back(v);
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BLB
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);      //FLT
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);      //BRT
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);      //BRB
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);      //BLB
+	vecVertex.push_back(v);
+	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);      //BLT
 	vecVertex.push_back(v);
 
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FRT
-	vecVertex.push_back(v);
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FLT
-	vecVertex.push_back(v);
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FRB
-	vecVertex.push_back(v);
-	v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FLB
-	vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BRT
+	//vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BLT
+	//vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BRB
+	//vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z - m_fAxisHalfLen[2]);		//BLB
+	//vecVertex.push_back(v);
+
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FRT
+	//vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y + m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FLT
+	//vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x + m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FRB
+	//vecVertex.push_back(v);
+	//v.p = D3DXVECTOR3(m_vOrgCenterPos.x - m_fAxisHalfLen[0], m_vOrgCenterPos.y - m_fAxisHalfLen[1], m_vOrgCenterPos.z + m_fAxisHalfLen[2]);		//FLB
+	//vecVertex.push_back(v);
 
 
 	//¾Õ
