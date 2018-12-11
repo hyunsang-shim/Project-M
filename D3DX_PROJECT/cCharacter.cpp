@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "cCharacter.h"
 #include "cMyCharacter.h"
+#include "cOtherCharacter.h"
 #include "cSkinnedMesh.h"
 #include "cNewObject.h"
 #include "cXModel.h"
@@ -289,11 +290,13 @@ void cCharacter::UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD sta
 	m_matWorld = m_matR * matT;
 }
 
-void cCharacter::UpdateOtherPlayer(int status)
+void cCharacter::UpdateOtherPlayer(int status, cOtherCharacter* m_OtherCharacter)
 {
 	D3DXVECTOR3 m_vLeftDirection;
 	D3DXVECTOR3 m_vUp(0, 1, 0);
 	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
+
+	D3DXVECTOR3 m_vBeforePosition = m_vPosition;
 
 	if (status == CS_IDLE)
 	{
@@ -353,6 +356,43 @@ void cCharacter::UpdateOtherPlayer(int status)
 	}
 
 
+	//Obj ���� ��� Y �� ���
+	if (g_pGameInfoManager->m_pMap)
+	{
+		float y = 0;
+		if (!g_pGameInfoManager->m_pMap->GetY(m_vPosition.x, y, m_vPosition.z, m_OtherCharacter->GetMyHeadPos()))
+			m_vPosition = m_vBeforePosition;
+		else if (y - m_vPosition.y > 0.7)
+		{
+
+		}
+		else
+		{
+			if (m_vPosition.y - y > 0.3)
+				m_vPosition.y -= 0.3f;
+			else
+				m_vPosition.y = y;
+		}
+	}
+
+	//xfile ���� ��� Y �� ���
+	if (g_pGameInfoManager->m_pSXMap)
+	{
+		float y = 0;
+		if (!g_pGameInfoManager->m_pSXMap->GetY(m_vPosition.x, y, m_vPosition.z, m_OtherCharacter->GetMyHeadPos()))
+			m_vPosition = m_vBeforePosition;
+		else if (y - m_vPosition.y > 0.7)
+		{
+
+		}
+		else
+		{
+			if (m_vPosition.y - y > 0.3)
+				m_vPosition.y -= 0.3f;
+			else
+				m_vPosition.y = y;
+		}
+	}
 
 	D3DXMATRIXA16 matT;
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);

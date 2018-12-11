@@ -27,5 +27,5 @@ public:
 	D3DXVECTOR3 GetPosition();
 	void SetAnimationIndexBlend(int nIndex);
 	CharacterStatus_PC info;
-
+	D3DXVECTOR3 GetMyHeadPos();
 };

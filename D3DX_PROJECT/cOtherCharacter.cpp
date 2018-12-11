@@ -32,7 +32,7 @@ void cOtherCharacter::Setup()
 void cOtherCharacter::Update()
 { 
 	if (m_pCharacterController)
-		m_pCharacterController->UpdateOtherPlayer(status);
+		m_pCharacterController->UpdateOtherPlayer(status, this);
 }
 
 void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
@@ -107,4 +107,9 @@ D3DXVECTOR3 cOtherCharacter::GetPosition()
 void cOtherCharacter::SetAnimationIndexBlend(int nIndex)
 {
 	m_pSkinnedMesh->SetAnimationIndex(nIndex);
+}
+
+D3DXVECTOR3 cOtherCharacter::GetMyHeadPos()
+{
+	return m_pSkinnedMesh->GetHeadPos();
 }

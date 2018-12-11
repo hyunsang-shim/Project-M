@@ -157,7 +157,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ServerStatus.push_back("0 Players Online");
 		InitializeCriticalSection(&crit);
 		InitializeCriticalSection(&messageGet);
-		SetTimer(hWnd, 123, 25,NULL);
+		SetTimer(hWnd, 123, 500,NULL);
 
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -329,42 +329,45 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_TIMER:
-		for (int i = 0; i < g_vUsers.size(); i++)
-		{
-			//int result = send(g_vUsers.at(i)->s, ping, 5, 0);
-			int result = 0;
-			if (result < 0)
-			{
-				g_vUsers.at(i)->FailCnt++;
+		messageQueue.push("ping");
 
-				if (g_vUsers.at(i)->FailCnt > 20)
-				{
-					string disconnect;
-					disconnect += "disconnect";
-					disconnect += ' ';
-					disconnect += to_string(i);
 
-					char * sendMessage = new char[disconnect.size() + 1];
-					copy(disconnect.begin(), disconnect.end(), sendMessage);
-					sendMessage[disconnect.size()] = '\0';
+		//for (int i = 0; i < g_vUsers.size(); i++)
+		//{
+		//	//int result = send(g_vUsers.at(i)->s, ping, 5, 0);
+		//	int result = 0;
+		//	if (result < 0)
+		//	{
+		//		g_vUsers.at(i)->FailCnt++;
 
-					for (int j = 0; j < g_vUsers.size(); j++)
-					{
-						send(g_vUsers.at(j)->s, sendMessage, disconnect.size() + 1, 0);
-					}
-					closesocket(g_vUsers.at(i)->s);
-					if(g_vUsers.at(i))
-						delete(g_vUsers.at(i));
-					g_vUsers.erase(g_vUsers.begin() + i);
+		//		if (g_vUsers.at(i)->FailCnt > 20)
+		//		{
+		//			string disconnect;
+		//			disconnect += "disconnect";
+		//			disconnect += ' ';
+		//			disconnect += to_string(i);
 
-					printf("%d user disconnected", i);
-				}
-			}
-			else
-			{
-				g_vUsers.at(i)->FailCnt = 0;
-			}
-		}
+		//			char * sendMessage = new char[disconnect.size() + 1];
+		//			copy(disconnect.begin(), disconnect.end(), sendMessage);
+		//			sendMessage[disconnect.size()] = '\0';
+
+		//			for (int j = 0; j < g_vUsers.size(); j++)
+		//			{
+		//				send(g_vUsers.at(j)->s, sendMessage, disconnect.size() + 1, 0);
+		//			}
+		//			closesocket(g_vUsers.at(i)->s);
+		//			if(g_vUsers.at(i))
+		//				delete(g_vUsers.at(i));
+		//			g_vUsers.erase(g_vUsers.begin() + i);
+
+		//			printf("%d user disconnected", i);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		g_vUsers.at(i)->FailCnt = 0;
+		//	}
+		//}
 
 		
 
@@ -483,7 +486,7 @@ void threadProcessRecv(void * str)
 			sscanf_s(givenMessage, "%*s %d %d", &ID);
 			isReady++;
 
-			if (isReady =! g_vUsers.size());
+			if (isReady != g_vUsers.size())
 			{
 				continue;
 			}
@@ -492,12 +495,29 @@ void threadProcessRecv(void * str)
 		for (int i = 0; i < g_vUsers.size(); i++)
 		{
 			result = send(g_vUsers.at(i)->s, givenMessage, 128, 0);
+			if (result < 0)
+				g_vUsers.at(i)->FailCnt++;
+			else
+				g_vUsers.at(i)->FailCnt = 0;
+
+			if (g_vUsers.at(i)->FailCnt > 30)
+			{
+				string disconnect;
+				disconnect += "disconnect";
+				disconnect += ' ';
+				disconnect += to_string(i);
+				messageQueue.push(disconnect);
+
+				closesocket(g_vUsers.at(i)->s);
+				if (g_vUsers.at(i))
+					delete(g_vUsers.at(i));
+				g_vUsers.erase(g_vUsers.begin() + i);
+			}
 		}
+		if (!StartWith(givenMessage, "ping"))
+			printf("%s\n", givenMessage);
 
-		printf("%s\n", givenMessage);
 
-		if (result < 0)
-			printf("문제있다.");
 
 	}
 }
