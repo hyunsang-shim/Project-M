@@ -31,6 +31,11 @@ void cAI::Setup(char * szFolder, char * szFileName)
 
 void cAI::Update(bool b, D3DXVECTOR3 moveToCharacterDir)
 {
+
+	
+	moveToCharacterDir = g_pOtherPlayerManager->GetOtherPlayerByID(target)->CurPos;
+	
+
 	if (m_pAIController)
 	{
 		m_pAIController->Update(this, b, moveToCharacterDir, m_pSkinnedMesh);

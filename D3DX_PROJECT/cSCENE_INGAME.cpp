@@ -355,10 +355,10 @@ void cSCENE_INGAME::Render()
 		}
 	}
 	//?????????????????????????
-	for (int i = 0; i < g_pGameInfoManager->GetNumTotalUser(); i++)
+	/*for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 	{
 		g_pGameInfoManager->GetOthersInfo();
-	}
+	}*/
 
 	Render_Text();
 }

@@ -18,7 +18,6 @@ cGameInfoManager::cGameInfoManager() :
 	sceneChangeTriger(FALSE),
 	nextScene(0),
 	aimSize(0.0f),
-	m_vOtherCharacters(NULL),
 	m_vNpcCharacters(NULL),  
 	MaxBulletCount(30),
 	loading(0),
@@ -67,10 +66,7 @@ void cGameInfoManager::UpdateMyInfo(CharacterStatus_PC &newInfo)
 	memcpy(&m_strMyCharacter, (CharacterStatus_PC*)&newInfo, sizeof(CharacterStatus_PC));
 }
 
-void cGameInfoManager::UpdateOtherPlayers(vector<CharacterStatus_PC>& othersInfo)
-{
-	memcpy(&m_vOtherCharacters, (vector<CharacterStatus_PC>*)&othersInfo, sizeof(vector<CharacterStatus_PC>));
-}
+
 
 void cGameInfoManager::UpdateNPCs(vector<CharacterStatus_NPC>& npcInfo)
 {
@@ -82,10 +78,7 @@ CharacterStatus_PC* cGameInfoManager::GetMyInfo()
 	return &m_strMyCharacter;
 }
 
-vector<CharacterStatus_PC>* cGameInfoManager::GetOthersInfo()
-{
-	return &m_vOtherCharacters;
-}
+
 
 vector<CharacterStatus_NPC>* cGameInfoManager::GetNpcsInfo()
 {
@@ -121,25 +114,4 @@ void cGameInfoManager::SetMyName()
 }
 
 
-int cGameInfoManager::GetNumTotalUser()
-{
-	return m_vOtherCharacters.size();
-}
 
-void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC info)
-{
-	CharacterStatus_PC tmp = info;
-	m_vOtherCharacters.push_back(tmp);
-}
-
-void cGameInfoManager::RemoveOtherPlayerByID(int ID)
-{
-	for (int i = 0; i < m_vOtherCharacters.size(); i++)
-	{
-		if (m_vOtherCharacters[i].ID == ID)
-		{
-			m_vOtherCharacters.erase(m_vOtherCharacters.begin() + i);
-			break;
-		}
-	}
-}

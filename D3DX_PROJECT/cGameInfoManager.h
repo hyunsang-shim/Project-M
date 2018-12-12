@@ -44,20 +44,13 @@ public:
 	void UpdateOtherPlayers(vector<CharacterStatus_PC> &othersInfo);
 	void UpdateNPCs(vector<CharacterStatus_NPC> &npcInfo);
 	CharacterStatus_PC* GetMyInfo();
-	vector<CharacterStatus_PC>* GetOthersInfo();
 	vector<CharacterStatus_NPC>* GetNpcsInfo();
 	void SetMyCharacter(int idx);
 	void SetMyName();
-	int GetNumTotalUser();
-	void AddOtherPlayer(CharacterStatus_PC info);
-	void RemoveOtherPlayerByID(int ID);
 
 
 
 
-
-
-	vector<CharacterStatus_PC> m_vOtherCharacters;
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
 	// <<
 

@@ -165,7 +165,7 @@ void threadProcessRecv(void * str)
 			{
 				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == IDID)
 				{
-					g_pGameInfoManager->m_pVecAI.back()->target = g_pOtherPlayerManager->otherPlayerInfo.at(i)->GetPositionPoint();
+					g_pGameInfoManager->m_pVecAI.back()->target = IDID;
 				}
 			}
 		}
