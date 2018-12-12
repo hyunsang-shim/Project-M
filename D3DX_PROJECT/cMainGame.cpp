@@ -27,6 +27,7 @@ void ThreadPorc()
 void cMainGame::Setup()
 {
 	static HANDLE hThread;
+	g_pGameInfoManager->SoundSystem();
 	switch (getSceneNum())
 	{
 	case 0:
@@ -70,6 +71,7 @@ void cMainGame::Update()
 	}
 	if (g_pGameInfoManager->sceneChangeTriger)
 		this->SceneChangeNum();
+	g_pGameInfoManager->music_update();
 }
 
 void cMainGame::Render()

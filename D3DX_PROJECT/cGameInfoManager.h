@@ -69,6 +69,21 @@ public:
 
 	int loading;
 
+	///// Sound
+
+
+
+	void SoundSystem();
+	void Play(int Sound_num, int channel_num);
+	void Stop(int channel_num);
+	void channel_volum_set(int channel, float volum);
+
+	void destroy();
+	void music_update();
+	void music_speed_set(int Sound_num, float speed);
+
+	void sound_infinity_set(int sound_track_nums, int sound_repeat_nums);
+
 
 private:
 

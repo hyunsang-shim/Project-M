@@ -129,7 +129,13 @@ private:
 	bool showMap = true;
 // << :
 
-
+// skills
+	float cooltime;
+	bool skill_set;
+	//skills_in hps
+	int hp_heal;
+	bool hp_s;
+	//
 	//
 	// Monster Collide Box
 	LPD3DXMESH m_pMeshMobColide;

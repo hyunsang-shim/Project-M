@@ -30,7 +30,8 @@ enum
 	CROSS_DOWN,
 	CROSS_LEFT,
 	EXIT_OK,
-	EXIT_CANCLE
+	EXIT_CANCLE,
+	COOL_TIMES
 };
 
 
@@ -52,7 +53,11 @@ cSCENE_INGAME::cSCENE_INGAME()
 	SpawnMoster(200),
 	SpawnCount(0),
 	m_pRootFrame(NULL),
-	showMap(true)
+	showMap(true),
+	cooltime(1.0f),
+	skill_set(TRUE),
+	hp_s(FALSE),
+	hp_heal(0.0f)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -182,6 +187,40 @@ void cSCENE_INGAME::Setup()
 
 void cSCENE_INGAME::Update()
 {
+	///
+	if (g_pGameInfoManager->m_strMyCharacter.CurHP > 0)
+	{
+		if (skill_set == false)
+		{
+			cooltime += 0.001f;
+			if (cooltime > 1.0f)
+			{
+				skill_set = true;
+
+			}
+		}
+
+		if (hp_s)
+		{
+
+			hp_heal += 1;
+			g_pGameInfoManager->m_strMyCharacter.CurHP += 1;
+			if (hp_heal > 29)
+			{
+
+				hp_s = false;
+				hp_heal = 0;
+			}
+			if (g_pGameInfoManager->m_strMyCharacter.CurHP >= 150)
+			{
+				hp_s = false;
+				g_pGameInfoManager->m_strMyCharacter.CurHP = 150;
+			}
+
+		}
+	}
+	///
+
 	if (SpawnMoster == 0 && m_pVecAI.size() != SpawnCount * 5)
 	{
 		SpawnMoster = 200;
@@ -454,6 +493,42 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
 	switch (message)
 	{
+	case WM_KEYDOWN:
+	{
+		switch (wParam)
+		{
+		case 'X':
+		{
+			if (skill_set == true)
+			{
+				g_pGameInfoManager->Play(20, 0);
+				g_pGameInfoManager->channel_volum_set(0, 0.4f);
+				cooltime = 0.0f;
+				hp_s = true;
+				skill_set = false;
+			}
+			break;
+		}
+		case 'C':
+		{
+
+			g_pGameInfoManager->m_strMyCharacter.CurHP -= 30;
+
+			break;
+		}
+		case 'V':
+		{
+
+			g_pGameInfoManager->Play(10, 1);
+
+			break;
+		}
+		default:
+			break;
+		}
+
+		break;
+	}
 	case WM_LBUTTONDOWN:
 	{
 		static int n = 0;
@@ -465,9 +540,20 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			m_pVecAI[i]->SetAnimationIndexBlend(n);
 		}
 		n++;*/
+
+		////
+		g_pGameInfoManager->Play(30, 0);
+		g_pGameInfoManager->channel_volum_set(2, 10.0f);
+
+		////
+
 		break;
 	}
-
+	case WM_LBUTTONUP:
+	{
+		g_pGameInfoManager->Stop(0);
+		break;
+	}
 	case WM_KEYUP:
 		switch (wParam)
 		{
@@ -751,7 +837,11 @@ void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
 
 	if (pSender->GetTag() == HP_BAR)
 	{
-		pSender->cutSize(0.65f, 1.0f);
+		pSender->cutSize(g_pGameInfoManager->m_strMyCharacter.CurHP / 150.0f, 1.0f);
+	}
+	else if (pSender->GetTag() == COOL_TIMES)
+	{
+		pSender->cutSize(1.0f, cooltime);
 	}
 	else if (pSender->GetTag() == CROSS_UP)
 	{
@@ -801,8 +891,8 @@ void cSCENE_INGAME::Creat_Font()
 
 void cSCENE_INGAME::Render_Text()
 {
-	int maxHP = 200;
-	int nowHP = 150;
+	int maxHP = g_pGameInfoManager->m_strMyCharacter.MaxHP;
+	int nowHP = g_pGameInfoManager->m_strMyCharacter.CurHP;
 
 	int maxBullet = 30;
 	int nowBullet = 30;
@@ -824,9 +914,9 @@ void cSCENE_INGAME::Render_Text()
 	m_pFont->DrawTextA(NULL, str.c_str(), str.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 	RECT rc2;
 	SetRect(&rc2,
-		g_pGameInfoManager->getScreenXPosByPer(13) + 110,
+		g_pGameInfoManager->getScreenXPosByPer(13) + 120,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 5,
-		g_pGameInfoManager->getScreenXPosByPer(13) + 150,
+		g_pGameInfoManager->getScreenXPosByPer(13) + 160,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 20);
 	m_pFont2->DrawTextA(NULL, str2.c_str(), str2.length(), &rc2, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 	RECT rc3;
