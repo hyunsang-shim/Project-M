@@ -77,6 +77,7 @@ void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 		this->motionStatus = tmpStatus;
 		
 	}
+	this->info.CurPos = CurPos;
 	this->status = Status;
 	if (m_pCharacterController)
 		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);

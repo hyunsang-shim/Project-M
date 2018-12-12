@@ -33,7 +33,7 @@ void cAI::Update(bool b, D3DXVECTOR3 moveToCharacterDir)
 {
 
 	
-	moveToCharacterDir = g_pOtherPlayerManager->GetOtherPlayerByID(target)->CurPos;
+	moveToCharacterDir = g_pOtherPlayerManager->GetOtherPlayerByID(target)->CurPos - this->GetPosition();
 	
 
 	if (m_pAIController)

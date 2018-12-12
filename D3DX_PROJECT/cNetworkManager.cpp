@@ -160,14 +160,8 @@ void threadProcessRecv(void * str)
 			g_pGameInfoManager->m_pVecAI.back()->SetAIController(m_pVecAI_Controller);
 			g_pGameInfoManager->m_pVecAI.back()->SetPosition(D3DXVECTOR3(x,y,z));
 			g_pGameInfoManager->m_pVecAI.back()->MonsterNum = MonsterID;
-
-			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
-			{
-				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == IDID)
-				{
-					g_pGameInfoManager->m_pVecAI.back()->target = IDID;
-				}
-			}
+			g_pGameInfoManager->m_pVecAI.back()->target = IDID;
+			
 		}
 		else if (StartWith(givenMessage, "dieMonster"))
 		{
