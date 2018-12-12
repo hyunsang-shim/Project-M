@@ -18,7 +18,6 @@ protected:
 	float fDeltaX;
 	float fDeltaY;
 	D3DXVECTOR3 m_vDirection;
-	D3DXVECTOR3 m_vPosition;
 	
 	D3DXMATRIXA16 m_matR;
 	D3DXMATRIXA16 m_matWorld;
@@ -27,6 +26,7 @@ protected:
 
 
 public:
+	D3DXVECTOR3 m_vPosition;
 	virtual void SetUP();
 	virtual void UpdateOtherPlayer(D3DXVECTOR3 CurPos, float Direction, WORD status);
 	void UpdateOtherPlayer(int status, cOtherCharacter* m_OtherCharacter);

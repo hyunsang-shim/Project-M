@@ -185,7 +185,7 @@ void cSCENE_INGAME::Update()
 	{
 		m_pTriggerBox->Setup();
 		WaveStartOrEnd = false;
-		SpawnMoster = 200;
+	/*	SpawnMoster = 200;
 		SpawnCount = 0;
 		cAI_Controller* m_pVecAI_Controller;
 
@@ -198,7 +198,7 @@ void cSCENE_INGAME::Update()
 			m_pVecAI_Controller = new cAI_Controller;
 			m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
-		}
+		}*/
 	}
 
 	BOOL static mouseMove = 0;

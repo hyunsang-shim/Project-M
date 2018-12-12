@@ -6,7 +6,8 @@
 cAI::cAI()
 	: m_pSkinnedMesh(NULL)
 	, m_pAIController(NULL)
-	, m_pOBB(NULL)
+	, m_pOBB(NULL),
+	MonsterNum(-1)
 {
 }
 
@@ -30,7 +31,7 @@ void cAI::Update(bool b, D3DXVECTOR3 moveToCharacterDir)
 {
 	if (m_pAIController)
 	{
-		m_pAIController->Update(this, b, moveToCharacterDir, m_pSkinnedMesh);
+		m_pAIController->Update(this, b, *target, m_pSkinnedMesh);
 	}
 
 	if (m_pOBB)

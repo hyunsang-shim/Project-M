@@ -29,6 +29,9 @@ void cWaveTriggerBox::Setup()
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
 		m_WaveCount = 1;
+		g_pGameInfoManager->monsterTriggerBoxNum = 0;
+		g_pNetworkManager->SendData(NH_SPAWN_TRIGGER, g_pGameInfoManager->GetMyInfo());
+
 	}
 	else if (m_WaveCount == 1)
 	{

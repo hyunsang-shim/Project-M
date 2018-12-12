@@ -4,16 +4,18 @@
 #include <string>
 #include <iostream>
 #include <queue>
+#include "cAI.h"
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 using namespace std;
 
-// ���� �ּ�
-// �Ʒ� �� �ϳ��� Ȱ��ȭ ��Ű�� ���.
-#define SERVER_ADDR "165.246.163.66"	// ��ȣ��
+
+// 占쏙옙占쏙옙 占쌍쇽옙
+// 占싣뤄옙 占쏙옙 占싹놂옙占쏙옙 활占쏙옙화 占쏙옙키占쏙옙 占쏙옙占?
+#define SERVER_ADDR "165.246.163.66"	// 占쏙옙호占쏙옙
 //#define SERVER_ADDR "165.246.163.71"	// Shim Hyunsang
-//#define SERVER_ADDR "192.168.0.9"		// ������ (��Ʈ��/������)
-//#define SERVER_ADDR "192.168.0.7"		// ������ (��)
-//#define SERVER_ADDR "127.0.0.1"	// ������
+//#define SERVER_ADDR "192.168.0.9"		// 占쏙옙占쏙옙占쏙옙 (占쏙옙트占쏙옙/占쏙옙占쏙옙占쏙옙)
+//#define SERVER_ADDR "192.168.0.7"		// 占쏙옙占쏙옙占쏙옙 (占쏙옙)
+//#define SERVER_ADDR "127.0.0.1"	// 占쏙옙占쏙옙占쏙옙
 
 
 cNetworkManager::cNetworkManager()
@@ -21,7 +23,7 @@ cNetworkManager::cNetworkManager()
 }
 
 cNetworkManager::~cNetworkManager()
-{	
+{
 }
 
 
@@ -52,15 +54,17 @@ void threadProcessRecv(void * str)
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
 		givenMessage[tmp.size()] = '\0';
-	
+
+
+		if (!StartWith(givenMessage, "ping"))
+			printf("%s\n", givenMessage);
+
 
 		if (StartWith(givenMessage, "ping"))
 		{
 			continue;
 		}
-		printf("%s\n", givenMessage);
-
-		if (StartWith(givenMessage, "userStatus"))
+		else if (StartWith(givenMessage, "userStatus"))
 		{
 			int ID;
 			D3DXVECTOR3 Pos;
@@ -93,13 +97,13 @@ void threadProcessRecv(void * str)
 			int character;
 
 			sscanf_s(givenMessage, "%*s %d %d", &ID, &character);
-			for (int i = 0; i <  g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
+			/*	for (int i = 0; i < g_vUsers.size(); i++)
 			{
-			if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == ID)
+			if (g_vUsers.at(i).ID == ID)
 			{
-				g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.Character_No = character;
+			g_vUsers.at(i).Character_No = character;
 			}
-			}
+			}*/
 		}
 		else if (StartWith(givenMessage, "myNameIs"))
 		{
@@ -111,7 +115,7 @@ void threadProcessRecv(void * str)
 				continue;
 
 			CharacterStatus_PC tmp;
-	
+
 
 			tmp.ID = ID;
 			strcpy(tmp.PlayerName, name);
@@ -133,11 +137,51 @@ void threadProcessRecv(void * str)
 				{
 					SAFE_DELETE(g_pOtherPlayerManager->otherPlayerInfo.at(i));
 					g_pOtherPlayerManager->otherPlayerInfo.erase(g_pOtherPlayerManager->otherPlayerInfo.begin() + i);
-					
+
 
 					break;
 				}
 			}
+		}
+		else if (StartWith(givenMessage, "setMonster"))
+		{
+			int IDID, MonsterID;
+			float x, y, z;
+			sscanf_s(givenMessage, "%*s %d %d %f %f %f", &IDID, &MonsterID, &x, &y, &z);
+
+			cAI *tmp;
+
+			g_pGameInfoManager->m_pVecAI.push_back(tmp);
+			g_pGameInfoManager->m_pVecAI.back() = new cAI;
+			cAI_Controller* m_pVecAI_Controller;
+			m_pVecAI_Controller = new cAI_Controller;
+			g_pGameInfoManager->m_pVecAI.back()->SetAIController(m_pVecAI_Controller);
+			g_pGameInfoManager->m_pVecAI.back()->SetPosition(D3DXVECTOR3(x,y,z));
+			g_pGameInfoManager->m_pVecAI.back()->MonsterNum = MonsterID;
+
+			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
+			{
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == IDID)
+				{
+					g_pGameInfoManager->m_pVecAI.back()->target = g_pOtherPlayerManager->otherPlayerInfo.at(i)->GetPositionPoint();
+				}
+			}
+		}
+		else if (StartWith(givenMessage, "dieMonster"))
+		{
+			int monsterID;
+			sscanf_s(givenMessage, "%*s %d", &monsterID);
+
+			for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
+			{
+				if (g_pGameInfoManager->m_pVecAI.at(i)->MonsterNum == monsterID)
+				{
+					delete(g_pGameInfoManager->m_pVecAI.at(i));
+					g_pGameInfoManager->m_pVecAI.erase(g_pGameInfoManager->m_pVecAI.begin() + i);
+					break;
+				}
+			}
+
 		}
 		else
 		{
@@ -174,19 +218,19 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 
 	return isConnected;
-	
+
 	// <<
 }
 
 void cNetworkManager::SendData(CharacterStatus_PC strPC)
 {
 	if (isConnected)
-	{		
-		send(s, (char*)&strPC, sizeof(CharacterStatus_PC)+1, 0);
+	{
+		send(s, (char*)&strPC, sizeof(CharacterStatus_PC) + 1, 0);
 	}
 }
 
-int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
+int cNetworkManager::SendData(NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 {
 	int result = 0;
 	string sendString;
@@ -195,7 +239,7 @@ int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 	{
 		if (NH == NH_USER_STATUS)
 		{
- 			sendString += "userStatus";
+			sendString += "userStatus";
 			sendString += ' ';
 			sendString += to_string(strPC->ID);
 			sendString += ' ';
@@ -238,12 +282,13 @@ int cNetworkManager::SendData( NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 			sendString += ' ';
 			sendString += string(strPC->PlayerName);
 		}
-		if (NH == NH_IS_READY)
+		if (NH == NH_SPAWN_TRIGGER)
 		{
-			sendString += "IsReady";
+			sendString += "triggerBoxNum";
 			sendString += ' ';
-			sendString += to_string(strPC->ID);
+			sendString += to_string(g_pGameInfoManager->monsterTriggerBoxNum);
 		}
+
 		char * sendMessage = new char[sendString.size() + 1];
 		copy(sendString.begin(), sendString.end(), sendMessage);
 		sendMessage[sendString.size()] = '\0';

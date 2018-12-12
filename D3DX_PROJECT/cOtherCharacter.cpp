@@ -104,6 +104,11 @@ D3DXVECTOR3 cOtherCharacter::GetPosition()
 	return m_pCharacterController->GetPosition();
 }
 
+D3DXVECTOR3 * cOtherCharacter::GetPositionPoint()
+{
+	return &m_pCharacterController->m_vPosition;
+}
+
 void cOtherCharacter::SetAnimationIndexBlend(int nIndex)
 {
 	m_pSkinnedMesh->SetAnimationIndex(nIndex);

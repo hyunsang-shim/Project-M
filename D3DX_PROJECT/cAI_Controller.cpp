@@ -8,7 +8,8 @@
 cAI_Controller::cAI_Controller()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 1)
-	, m_vPosition(50, 0, 15)
+	, m_vPosition(50, 0, 15),
+	target(0)
 {
 	D3DXMatrixIdentity(&m_matWorld);
 	D3DXMatrixIdentity(&RotateToCharacter);

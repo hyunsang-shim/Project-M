@@ -64,3 +64,11 @@ struct CharacterStatus_NPC
 	int			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
 };
+
+struct dogMonster
+{
+	int monsterNum;
+	int maxHealth;
+	int nowHealth;
+
+};

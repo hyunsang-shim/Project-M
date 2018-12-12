@@ -71,7 +71,8 @@ public:
 	cSCENE_TITLE* m_pScene_Title;
 
 	int loading;
-
+	vector<cAI*> m_pVecAI;
+	int monsterTriggerBoxNum;
 
 private:
 

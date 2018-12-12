@@ -29,6 +29,9 @@ HWND hWnd;
 bool isSent = false;
 vector<string> ServerStatus;
 queue<string> messageQueue;
+int triggerBoxNum = 0;
+void monsterSet(int i);
+vector<dogMonster> dogVec;
 
 bool StartWith(char * FindStr, char * SearchStr)
 {
@@ -86,6 +89,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	return (int)msg.wParam;
 }
+
+
 
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -247,8 +252,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			string tmp = string(buffer);
 
+			EnterCriticalSection(&crit);
 			messageQueue.push(tmp);
-
+			LeaveCriticalSection(&crit);
 
 		}
 		break;
@@ -329,8 +335,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_TIMER:
-		messageQueue.push("ping");
 
+	/*	EnterCriticalSection(&crit);
+		messageQueue.push("ping");
+		LeaveCriticalSection(&crit);
+*/
 
 		//for (int i = 0; i < g_vUsers.size(); i++)
 		//{
@@ -388,13 +397,23 @@ void threadProcessRecv(void * str)
 		Sleep(1);
 		string tmp;
 		char* givenMessage;
+		static int sleepCount = 0;
 		if (messageQueue.size() == 0)
 		{
+			sleepCount++;
+			if (sleepCount > 500)
+			{
+				sleepCount = 0;
+				messageQueue.push("ping");
+			}
+
 			continue;
 		}
+
+		EnterCriticalSection(&crit);
 		tmp = messageQueue.front();
 		messageQueue.pop();
-
+		LeaveCriticalSection(&crit);
 		
 
 		givenMessage = new char[tmp.size() + 1];
@@ -491,7 +510,18 @@ void threadProcessRecv(void * str)
 				continue;
 			}
 		}
-
+		else if (StartWith(givenMessage, "triggerBoxNum"))
+		{
+			static int tmpBoxNum = -1;
+			sscanf_s(givenMessage, "%*s %d %d", &tmpBoxNum);
+			if (tmpBoxNum > triggerBoxNum)
+			{
+				triggerBoxNum = tmpBoxNum;
+				HANDLE hThread = new HANDLE;
+				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))monsterSet, &tmpBoxNum, 0, NULL);
+				
+			}
+		}
 		for (int i = 0; i < g_vUsers.size(); i++)
 		{
 			result = send(g_vUsers.at(i)->s, givenMessage, 128, 0);
@@ -514,6 +544,7 @@ void threadProcessRecv(void * str)
 				g_vUsers.erase(g_vUsers.begin() + i);
 			}
 		}
+
 		if (!StartWith(givenMessage, "ping"))
 			printf("%s\n", givenMessage);
 
@@ -554,4 +585,45 @@ void ThreadSend()
 void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
 	InvalidateRgn(hwnd, NULL, TRUE);
+}
+
+
+void monsterSet(int i)
+{
+	static int MonID = 0;
+	if (i == 0)
+	{
+		
+		int m_SpawnXPos = 200;
+		int m_SpawnYPos = 5;
+		int m_SpawnZPos = -395;
+		for (int j = 0; j < 2; j++)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				string tmpMessage;
+				dogMonster tmpDog;
+				tmpDog.monsterNum = MonID;
+				tmpDog.maxHealth = 200;
+				tmpDog.nowHealth = 200;
+
+
+				tmpMessage += "setMonster";
+				tmpMessage += " ";
+				tmpMessage += to_string(MonID);
+				tmpMessage += " ";
+				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
+				tmpMessage += m_SpawnXPos;
+				tmpMessage += " ";
+				tmpMessage += m_SpawnYPos;
+				tmpMessage += " ";
+				tmpMessage += m_SpawnZPos + i * 10;
+
+				messageQueue.push(tmpMessage);
+
+				MonID++;
+			}
+			Sleep(5000);
+		}
+	}
 }
