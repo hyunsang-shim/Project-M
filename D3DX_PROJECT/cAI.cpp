@@ -8,6 +8,7 @@ cAI::cAI()
 	, m_pAIController(NULL)
 	, m_pOBB(NULL),
 	MonsterNum(-1)
+	, load(0)
 {
 }
 
@@ -25,13 +26,14 @@ void cAI::Setup(char * szFolder, char * szFileName)
 
 	m_pOBB = new cOBB;
 	m_pOBB->Setup(m_pSkinnedMesh);
+	load = 1;
 }
 
 void cAI::Update(bool b, D3DXVECTOR3 moveToCharacterDir)
 {
 	if (m_pAIController)
 	{
-		m_pAIController->Update(this, b, *target, m_pSkinnedMesh);
+		m_pAIController->Update(this, b, moveToCharacterDir, m_pSkinnedMesh);
 	}
 
 	if (m_pOBB)

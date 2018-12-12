@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "cSCENE_INGAME.h"
 #include "cGrid.h"
 #include "cNewObject.h"
@@ -47,8 +47,6 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pUIShadowRoot(NULL),
 	m_pUIBase(NULL),
 	WaveStartOrEnd(false),
-	SpawnMoster(200),
-	SpawnCount(0),
 	m_pRootFrame(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
@@ -150,16 +148,16 @@ void cSCENE_INGAME::Setup()
 
 	//cAI_Controller* m_pVecAI_Controller;
 
-	m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
+	//m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-	for (int i = 0; i < m_pVecAI.size(); i++)
-	{
-		m_pVecAI[i] = new cAI;
-		m_pVecAI[i]->Setup("NPCS", "slicer.X");
-		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
-		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
-	}
+	//for (int i = 0; i < m_pVecAI.size(); i++)
+	//{
+	//	m_pVecAI[i] = new cAI;
+	//	m_pVecAI[i]->Setup("NPCS", "slicer.X");
+	//	cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
+	//	m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
+	//	m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
+	//}
 
 	WaveStartOrEnd = false;
 
@@ -175,31 +173,9 @@ void cSCENE_INGAME::Setup()
 
 void cSCENE_INGAME::Update()
 {
-	if (SpawnMoster == 0 && m_pVecAI.size() != SpawnCount * 5)
-	{
-		SpawnMoster = 200;
-		SpawnCount++;
-	}
+	
 
-	if (m_pTriggerBox->GetNextWave())
-	{
-		m_pTriggerBox->Setup();
-		WaveStartOrEnd = false;
-	/*	SpawnMoster = 200;
-		SpawnCount = 0;
-		cAI_Controller* m_pVecAI_Controller;
-
-		m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
-
-		for (int i = 0; i < m_pVecAI.size(); i++)
-		{
-			m_pVecAI[i] = new cAI;
-			m_pVecAI[i]->Setup("NPCS", "slicer.X");
-			m_pVecAI_Controller = new cAI_Controller;
-			m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
-		}*/
-	}
+	
 
 	BOOL static mouseMove = 0;
 	g_pTimeManager->Update();
@@ -247,18 +223,18 @@ void cSCENE_INGAME::Update()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
 	
-	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pTriggerBox->m_pOBB))
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pTriggerBox->m_pOBB) && !WaveStartOrEnd)
 	{
-		WaveStartOrEnd = true;
+		g_pNetworkManager->SendData(NH_SPAWN_TRIGGER, g_pGameInfoManager->GetMyInfo());
+		m_pTriggerBox->Setup();
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
-		SpawnMoster--;
-		for (int i = 0; i < SpawnCount * 5; i++)
+		for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			if (m_pVecAI[i])
-				m_pVecAI[i]->Update(true, m_pMyCharacter->GetPosition() - m_pVecAI[i]->GetPosition());
+			if (g_pGameInfoManager->m_pVecAI.at(i)->load)
+				g_pGameInfoManager->m_pVecAI.at(i)->Update(true, m_pMyCharacter->GetPosition() - g_pGameInfoManager->m_pVecAI.at(i)->GetPosition());
 		}
 	}
 	/*else
@@ -370,12 +346,12 @@ void cSCENE_INGAME::Render()
 		Mesh_Render();
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
-		for (int i = 0; i < SpawnCount * 5; i++)
+		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			if (m_pVecAI[i])
-				m_pVecAI[i]->Render(NULL);
+			if (g_pGameInfoManager->m_pVecAI.at(i)->load)
+				g_pGameInfoManager->m_pVecAI.at(i)->Render(NULL);
 		}
 	}
 	//?????????????????????????
@@ -429,11 +405,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		m_pMyCharacter->WndProc(hWnd, message, wParam, lParam);
 	}
 
-	if (GetKeyState('N') & 0x8000)
-	{
-		m_pVecAI.clear();
-		WaveStartOrEnd = false;
-	}
+	
 }
 void cSCENE_INGAME::Setup_HeightMap()
 {

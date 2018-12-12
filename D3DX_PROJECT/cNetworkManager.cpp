@@ -9,13 +9,13 @@
 using namespace std;
 
 
-// 占쏙옙占쏙옙 占쌍쇽옙
-// 占싣뤄옙 占쏙옙 占싹놂옙占쏙옙 활占쏙옙화 占쏙옙키占쏙옙 占쏙옙占?
-#define SERVER_ADDR "165.246.163.66"	// 占쏙옙호占쏙옙
+// ?�쏙?�占?�옙 ?�쌍?�옙
+// ?�싣뤄옙 ?�쏙???�싹?�옙?�쏙???�占?�옙???�쏙?�키?�쏙???�쏙?�占?
+#define SERVER_ADDR "165.246.163.66"	// ?�쏙?�호?�쏙??
 //#define SERVER_ADDR "165.246.163.71"	// Shim Hyunsang
-//#define SERVER_ADDR "192.168.0.9"		// 占쏙옙占쏙옙占쏙옙 (占쏙옙트占쏙옙/占쏙옙占쏙옙占쏙옙)
-//#define SERVER_ADDR "192.168.0.7"		// 占쏙옙占쏙옙占쏙옙 (占쏙옙)
-//#define SERVER_ADDR "127.0.0.1"	// 占쏙옙占쏙옙占쏙옙
+//#define SERVER_ADDR "192.168.0.9"		// ?�쏙?�占?�옙?�쏙??(?�쏙?�트?�쏙???�쏙?�占?�옙?�쏙??
+//#define SERVER_ADDR "192.168.0.7"		// ?�쏙?�占?�옙?�쏙??(?�쏙??
+//#define SERVER_ADDR "127.0.0.1"	// ?�쏙?�占?�옙?�쏙??
 
 
 cNetworkManager::cNetworkManager()
@@ -48,8 +48,10 @@ void threadProcessRecv(void * str)
 		{
 			continue;
 		}
+		EnterCriticalSection(&g_pNetworkManager->crit);
 		tmp = g_pNetworkManager->messageQueue.front();
 		g_pNetworkManager->messageQueue.pop();
+		LeaveCriticalSection(&g_pNetworkManager->crit);
 
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
@@ -153,8 +155,8 @@ void threadProcessRecv(void * str)
 
 			g_pGameInfoManager->m_pVecAI.push_back(tmp);
 			g_pGameInfoManager->m_pVecAI.back() = new cAI;
-			cAI_Controller* m_pVecAI_Controller;
-			m_pVecAI_Controller = new cAI_Controller;
+			g_pGameInfoManager->m_pVecAI.back()->Setup("NPCS", "slicer.X");
+			cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
 			g_pGameInfoManager->m_pVecAI.back()->SetAIController(m_pVecAI_Controller);
 			g_pGameInfoManager->m_pVecAI.back()->SetPosition(D3DXVECTOR3(x,y,z));
 			g_pGameInfoManager->m_pVecAI.back()->MonsterNum = MonsterID;
@@ -202,6 +204,8 @@ bool cNetworkManager::SetupNetwork(HWND hWnd)
 
 	static int ConnectRes;
 	ConnectRes = connect(s, (LPSOCKADDR)&addr, sizeof(addr));
+
+	InitializeCriticalSection(&crit);
 
 	int test = WSAGetLastError();
 	printf("%d", test);
@@ -305,7 +309,10 @@ void cNetworkManager::recvData()
 	char* buffer = new char[128];
 	recv(s, buffer, 128, 0);
 	string tmp = string(buffer);
+
+	EnterCriticalSection(&crit);
 	messageQueue.push(tmp);
+	LeaveCriticalSection(&crit);
 }
 
 bool cNetworkManager::GetNetStatus()

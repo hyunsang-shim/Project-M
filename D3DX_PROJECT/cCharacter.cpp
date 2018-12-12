@@ -224,7 +224,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		
 	}
 
-	//Obj ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Y ï¿½ï¿½ ï¿½ï¿½ï¿½
+	//Obj ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?Y ï¿½ï¿½ ï¿½ï¿½ï¿?
 	if (g_pGameInfoManager->m_pMap)
 	{
 		float y = 0;
@@ -243,7 +243,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		}
 	}
 
-	//xfile ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Y ï¿½ï¿½ ï¿½ï¿½ï¿½
+	//xfile ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?Y ï¿½ï¿½ ï¿½ï¿½ï¿?
 	if (g_pGameInfoManager->m_pSXMap)
 	{
 		float y = 0;
@@ -356,7 +356,7 @@ void cCharacter::UpdateOtherPlayer(int status, cOtherCharacter* m_OtherCharacter
 	}
 
 
-	//Obj ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Y ï¿½ï¿½ ï¿½ï¿½ï¿½
+	//Obj ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?Y ï¿½ï¿½ ï¿½ï¿½ï¿?
 	if (g_pGameInfoManager->m_pMap)
 	{
 		float y = 0;
@@ -375,7 +375,7 @@ void cCharacter::UpdateOtherPlayer(int status, cOtherCharacter* m_OtherCharacter
 		}
 	}
 
-	//xfile ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Y ï¿½ï¿½ ï¿½ï¿½ï¿½
+	//xfile ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?Y ï¿½ï¿½ ï¿½ï¿½ï¿?
 	if (g_pGameInfoManager->m_pSXMap)
 	{
 		float y = 0;

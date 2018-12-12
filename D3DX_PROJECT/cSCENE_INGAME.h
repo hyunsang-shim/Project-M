@@ -51,7 +51,6 @@ private:
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
 	cMyCharacter *m_pMyCharacter;
-	vector<cAI*> m_pVecAI;
 private:
 	D3DLIGHT9 DirectLight; //¸ÞÀÎ ±¤¿ø
 	D3DLIGHT9 subLight;
@@ -123,8 +122,6 @@ public:
 private:
 	cWaveTriggerBox* m_pTriggerBox;
 	bool WaveStartOrEnd;
-	int SpawnMoster;
-	int SpawnCount;
 // << :
 
 //>> : temp

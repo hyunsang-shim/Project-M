@@ -29,8 +29,8 @@ void cWaveTriggerBox::Setup()
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
 		m_WaveCount = 1;
+
 		g_pGameInfoManager->monsterTriggerBoxNum = 0;
-		g_pNetworkManager->SendData(NH_SPAWN_TRIGGER, g_pGameInfoManager->GetMyInfo());
 
 	}
 	else if (m_WaveCount == 1)
@@ -47,6 +47,8 @@ void cWaveTriggerBox::Setup()
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
 		m_WaveCount = 2;
+
+		g_pGameInfoManager->monsterTriggerBoxNum = 1;
 	}
 	else if (m_WaveCount == 2)
 	{
@@ -62,6 +64,25 @@ void cWaveTriggerBox::Setup()
 		m_pOBB->Setup(&tb);
 		m_NextWave = false;
 		m_WaveCount = 3;
+
+		g_pGameInfoManager->monsterTriggerBoxNum = 2;
+	}
+	else if (m_WaveCount == 3)
+	{
+		tb.Name = "ThirdTriggerBox";
+		tb.SetMin(D3DXVECTOR3(-0, 0, -0));
+		tb.SetMax(D3DXVECTOR3(-0, 0, -0));
+		m_SpawnXPos = -317;
+		m_SpawnYPos = 18;
+		m_SpawnZPos = -102;
+		tb.m_DisplayOrNot = true;
+		tb.MakeMonster = 25;
+		m_pOBB = new cOBB;
+		m_pOBB->Setup(&tb);
+		m_NextWave = false;
+		m_WaveCount = 3;
+
+		g_pGameInfoManager->monsterTriggerBoxNum = 3;
 	}
 }
 

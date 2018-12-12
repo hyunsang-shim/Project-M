@@ -25,5 +25,6 @@ public:
 	D3DXVECTOR3 GetPosition();
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetAnimationIndexBlend(int nIndex);
+	int load;
 };
 

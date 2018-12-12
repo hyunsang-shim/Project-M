@@ -29,8 +29,8 @@ HWND hWnd;
 bool isSent = false;
 vector<string> ServerStatus;
 queue<string> messageQueue;
-int triggerBoxNum = 0;
-void monsterSet(int i);
+int triggerBoxNum = -1;
+void monsterSet();
 vector<dogMonster> dogVec;
 
 bool StartWith(char * FindStr, char * SearchStr)
@@ -162,7 +162,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ServerStatus.push_back("0 Players Online");
 		InitializeCriticalSection(&crit);
 		InitializeCriticalSection(&messageGet);
-		SetTimer(hWnd, 123, 500,NULL);
+		SetTimer(hWnd, 123, 500, NULL);
 
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -248,7 +248,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//
 			//recieve data
 			int bufferLen = recv(g_vUsers[idx]->s, buffer, 128, 0);
-			buffer[bufferLen-1] = '\0';		// ensure data's end
+			buffer[bufferLen - 1] = '\0';		// ensure data's end
 
 			string tmp = string(buffer);
 
@@ -336,10 +336,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_TIMER:
 
-	/*	EnterCriticalSection(&crit);
+		/*	EnterCriticalSection(&crit);
 		messageQueue.push("ping");
 		LeaveCriticalSection(&crit);
-*/
+		*/
 
 		//for (int i = 0; i < g_vUsers.size(); i++)
 		//{
@@ -378,7 +378,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//	}
 		//}
 
-		
+
 
 
 		break;
@@ -414,7 +414,7 @@ void threadProcessRecv(void * str)
 		tmp = messageQueue.front();
 		messageQueue.pop();
 		LeaveCriticalSection(&crit);
-		
+
 
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
@@ -512,14 +512,14 @@ void threadProcessRecv(void * str)
 		}
 		else if (StartWith(givenMessage, "triggerBoxNum"))
 		{
-			static int tmpBoxNum = -1;
-			sscanf_s(givenMessage, "%*s %d %d", &tmpBoxNum);
+			int tmpBoxNum;
+			sscanf_s(givenMessage, "%*s %d", &tmpBoxNum);
 			if (tmpBoxNum > triggerBoxNum)
 			{
 				triggerBoxNum = tmpBoxNum;
 				HANDLE hThread = new HANDLE;
-				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))monsterSet, &tmpBoxNum, 0, NULL);
-				
+				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))monsterSet, NULL, 0, NULL);
+
 			}
 		}
 		for (int i = 0; i < g_vUsers.size(); i++)
@@ -588,12 +588,12 @@ void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 }
 
 
-void monsterSet(int i)
+void monsterSet()
 {
 	static int MonID = 0;
-	if (i == 0)
+	if (triggerBoxNum == 0)
 	{
-		
+
 		int m_SpawnXPos = 200;
 		int m_SpawnYPos = 5;
 		int m_SpawnZPos = -395;
@@ -613,17 +613,90 @@ void monsterSet(int i)
 				tmpMessage += to_string(MonID);
 				tmpMessage += " ";
 				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
-				tmpMessage += m_SpawnXPos;
 				tmpMessage += " ";
-				tmpMessage += m_SpawnYPos;
+				tmpMessage += to_string(m_SpawnXPos);
 				tmpMessage += " ";
-				tmpMessage += m_SpawnZPos + i * 10;
+				tmpMessage += to_string(m_SpawnYPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnZPos + i * 5);
 
 				messageQueue.push(tmpMessage);
 
 				MonID++;
 			}
-			Sleep(5000);
+			Sleep(7000);
+		}
+	}
+	else if (triggerBoxNum == 1)
+	{
+
+		int m_SpawnXPos = -60;
+		int m_SpawnYPos = 5;
+		int m_SpawnZPos = -229;
+		for (int j = 0; j < 2; j++)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				string tmpMessage;
+				dogMonster tmpDog;
+				tmpDog.monsterNum = MonID;
+				tmpDog.maxHealth = 200;
+				tmpDog.nowHealth = 200;
+
+
+				tmpMessage += "setMonster";
+				tmpMessage += " ";
+				tmpMessage += to_string(MonID);
+				tmpMessage += " ";
+				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnXPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnYPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnZPos + i * 5);
+
+				messageQueue.push(tmpMessage);
+
+				MonID++;
+			}
+			Sleep(7000);
+		}
+	}
+	else if (triggerBoxNum == 2)
+	{
+
+		int m_SpawnXPos = -317;
+		int m_SpawnYPos = 18;
+		int m_SpawnZPos = -102;
+		for (int j = 0; j < 2; j++)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				string tmpMessage;
+				dogMonster tmpDog;
+				tmpDog.monsterNum = MonID;
+				tmpDog.maxHealth = 200;
+				tmpDog.nowHealth = 200;
+
+
+				tmpMessage += "setMonster";
+				tmpMessage += " ";
+				tmpMessage += to_string(MonID);
+				tmpMessage += " ";
+				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnXPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnYPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnZPos + i * 5);
+
+				messageQueue.push(tmpMessage);
+
+				MonID++;
+			}
+			Sleep(7000);
 		}
 	}
 }
