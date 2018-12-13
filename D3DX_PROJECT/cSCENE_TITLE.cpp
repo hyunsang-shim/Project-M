@@ -460,7 +460,7 @@ void cSCENE_TITLE::UIsetup()
 		player2_ready->setSize(0.4f, 0.4f);
 		player2_ready->SetPosition(g_pGameInfoManager->getScreenXPosByPer(91), g_pGameInfoManager->getScreenYPosByPer(41) + 12);
 		player2_ready->SetDelegate(this);
-		player2_ready->m_isHidden = 1;
+		player2_ready->m_isHidden = true;
 		player2_ready->SetTag(OTHER_READY_BUTTON1);
 		m_pUICharacterSelect->AddChild(player2_ready);
 
@@ -471,7 +471,7 @@ void cSCENE_TITLE::UIsetup()
 		player3_ready->setSize(0.4f, 0.4f);
 		player3_ready->SetPosition(g_pGameInfoManager->getScreenXPosByPer(91), g_pGameInfoManager->getScreenYPosByPer(56) + 5);
 		player3_ready->SetDelegate(this);
-		player3_ready->m_isHidden = 1;
+		player3_ready->m_isHidden = true;
 		player3_ready->SetTag(OTHER_READY_BUTTON2);
 		m_pUICharacterSelect->AddChild(player3_ready);
 
@@ -480,7 +480,7 @@ void cSCENE_TITLE::UIsetup()
 			"./UI/ready_set.png",
 			"./UI/ready_set.png");
 		player4_ready->setSize(0.4f, 0.4f);
-		player4_ready->m_isHidden = 1;
+		player4_ready->m_isHidden = true;
 		player4_ready->SetPosition(g_pGameInfoManager->getScreenXPosByPer(91), g_pGameInfoManager->getScreenYPosByPer(70) + 5);
 		player4_ready->SetDelegate(this);
 		player4_ready->SetTag(OTHER_READY_BUTTON3);
@@ -782,9 +782,9 @@ void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 				pSender->m_isHidden = true;
 		}
 		else
-			pSender->m_isHidden = false;
+			pSender->m_isHidden = true;
 	}
-	else if (pSender->GetTag() == OTHER_READY_BUTTON2)
+	else if (pSender->GetTag() == OTHER_READY_BUTTON3)
 	{
 		if (g_pOtherPlayerManager->otherPlayerInfo.size() > 2)
 		{

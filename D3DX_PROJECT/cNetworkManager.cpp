@@ -124,7 +124,7 @@ void threadProcessRecv(void * str)
 			tmp.ID = ID;
 			strcpy(tmp.PlayerName, name);
 			g_pOtherPlayerManager->newPlayer(tmp);
-			g_pGameInfoManager->timer == 30;
+			g_pGameInfoManager->timer = 30;
 		}
 		else if (StartWith(givenMessage, "SetID"))
 		{
