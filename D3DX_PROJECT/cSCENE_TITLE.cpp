@@ -709,8 +709,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 			g_pNetworkManager->SendData(NH_READY_BUTTON, g_pGameInfoManager->GetMyInfo());
 
-			//m_pUICharacterSelect->m_isHidden = 1;
-			//m_pUILoading->m_isHidden = 0;
+			m_pUICharacterSelect->m_isHidden = 1;
+			m_pUILoading->m_isHidden = 0;
 		}
 		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
 		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/floorBox.X"); });
