@@ -135,7 +135,6 @@ private:
 	int SpawnCount;
 //	LPD3DXMESH m_pMobMesh;
 	bool showMap = true;
-	bool WaveStartOrEnd;
 // << :
 
 // skills
