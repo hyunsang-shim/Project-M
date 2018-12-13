@@ -7,9 +7,10 @@ cOtherCharacter::cOtherCharacter()
 	: m_pSkinnedMesh(NULL)
 	, m_pCharacterController(NULL)
 	, m_pOBB(NULL)
-	, status(CS_IDLE),
-	motionStatus(10)
+	, status(CS_IDLE)
+	, motionStatus(10)
 {
+	info.CurPos = D3DXVECTOR3(330, 5, -410);
 }
 
 

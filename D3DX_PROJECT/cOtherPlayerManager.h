@@ -11,7 +11,7 @@ public:
 
 	int userNum;
 	vector<cOtherCharacter*> otherPlayerInfo;
-	CharacterStatus_PC* GetOtherPlayerByID(int idx);
+	cOtherCharacter* GetOtherPlayerByID(int idx);
 
 
 	void newPlayer(CharacterStatus_PC info);

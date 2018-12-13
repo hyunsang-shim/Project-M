@@ -33,7 +33,7 @@ public:
 	virtual void Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh);
 	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
 	virtual void Render();
-	virtual D3DXVECTOR3& GetPosition();
+	virtual D3DXVECTOR3 GetPosition();
 	void SetPositionY(float y);
 	CharacterStatus_PC getUserData();
 	virtual D3DXMATRIXA16* GetTransform()

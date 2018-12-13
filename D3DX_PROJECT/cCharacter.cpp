@@ -420,7 +420,7 @@ void cCharacter::Render()
 {
 }
 
-D3DXVECTOR3 & cCharacter::GetPosition()
+D3DXVECTOR3 cCharacter::GetPosition()
 {
 	return this->m_vPosition;
 }

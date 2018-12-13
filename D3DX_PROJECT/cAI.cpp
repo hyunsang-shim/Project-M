@@ -32,8 +32,10 @@ void cAI::Setup(char * szFolder, char * szFileName)
 void cAI::Update(bool b, D3DXVECTOR3 moveToCharacterDir)
 {
 
-	
-	moveToCharacterDir = g_pOtherPlayerManager->GetOtherPlayerByID(target)->CurPos - this->GetPosition();
+	if (g_pGameInfoManager->GetMyInfo()->ID != target)
+	{
+		moveToCharacterDir = g_pOtherPlayerManager->GetOtherPlayerByID(target)->GetPosition() - this->GetPosition();
+	}
 	
 
 	if (m_pAIController)

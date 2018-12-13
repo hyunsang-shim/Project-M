@@ -11,13 +11,13 @@ cOtherPlayerManager::~cOtherPlayerManager()
 {
 }
 
-CharacterStatus_PC* cOtherPlayerManager::GetOtherPlayerByID(int idx)
+cOtherCharacter* cOtherPlayerManager::GetOtherPlayerByID(int idx)
 {
 	for (int i = 0; i < otherPlayerInfo.size(); i++)
 	{
 		if (otherPlayerInfo.at(i)->info.ID == idx)
 		{
-			return &otherPlayerInfo.at(i)->info;
+			return otherPlayerInfo.at(i);
 		}
 	}
 	

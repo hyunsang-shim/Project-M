@@ -149,7 +149,7 @@ void threadProcessRecv(void * str)
 		{
 			int IDID, MonsterID;
 			float x, y, z;
-			sscanf_s(givenMessage, "%*s %d %d %f %f %f", &IDID, &MonsterID, &x, &y, &z);
+			sscanf_s(givenMessage, "%*s %d %d %f %f %f", &MonsterID, &IDID, &x, &y, &z);
 
 			cAI *tmp;
 
