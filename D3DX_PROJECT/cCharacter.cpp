@@ -190,6 +190,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		if (TotalPeriod <= CurrentPeriod+0.15)
 		{
 			reloading = false;
+			g_pGameInfoManager->MaxBulletCount = 30;
 		}
 	}
 
@@ -202,7 +203,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			beforeAnimNum = CurrentAnimNum;
 			m_MyCharacter->SetAnimationIndexBlend(CurrentAnimNum);
 			g_pGameInfoManager->GetMyInfo()->Status = CurrentAnimNum;
-			g_pGameInfoManager->MaxBulletCount = 30;
+			
 		}
 	}
 
