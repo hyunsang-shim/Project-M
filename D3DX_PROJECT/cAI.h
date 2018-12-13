@@ -14,6 +14,7 @@ private:
 	cOBB* m_pOBB;
 	SYNTHESIZE_ADD_REF(cAI_Controller*, m_pAIController, AIController);
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
+	SYNTHESIZE(bool, MonsterHp, Hp);
 public:
 	void Setup(char * szFolder, char * szFileName);
 	void Update(bool b, D3DXVECTOR3 moveToCharacterDir);

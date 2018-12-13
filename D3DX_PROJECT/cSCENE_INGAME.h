@@ -14,18 +14,29 @@ class cUIObject;
 class cCrossHairPicking;
 class cAI;
 class cWaveTriggerBox;
+class cXModelBullet;
 
 #define MAXBulletCreateCount 5
 
+//struct Bullet
+//{
+//	ID3DXMesh *m_pBulletMesh;
+//	D3DXVECTOR3 m_vBulletCreatePos;
+//	float Radius = 0.2f;
+//	D3DMATERIAL9 m_stMtlCircle;
+//	D3DXVECTOR3 BulletDirection;
+//	D3DXMATRIXA16 matT;
+//	int BulletLiveTime;
+//};
+
 struct Bullet
 {
-	ID3DXMesh *m_pBulletMesh;
+	cXModelBullet *m_pBulletMesh;
 	D3DXVECTOR3 m_vBulletCreatePos;
-	float Radius = 0.2f;
-	D3DMATERIAL9 m_stMtlCircle;
 	D3DXVECTOR3 BulletDirection;
 	D3DXMATRIXA16 matT;
 	int BulletLiveTime;
+	bool Shoot = false;
 };
 
 class cSCENE_INGAME: public iButtonDelegate
@@ -111,6 +122,7 @@ private:
 	cCrossHairPicking *m_pCrossHairPicking;
 	D3DXVECTOR3 m_vCrossHairHitPos;
 	BOOL pHit = false;
+	BOOL MonHit = false;
 	vector<Bullet> m_Bullet;
 	int BulletCreateTime;
 	int BulletCreateCount;
@@ -143,6 +155,8 @@ private:
 private:
 	BOOL AIMeshHit;
 	float AIMeshDist;
+
+	cXModelBullet* m_pXBullet;
 
 	//thread t1;
 };
