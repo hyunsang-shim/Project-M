@@ -58,9 +58,7 @@ cSCENE_INGAME::cSCENE_INGAME()
 	cooltime(1.0f),
 	skill_set(TRUE),
 	hp_s(FALSE),
-	hp_heal(0.0f),
-	m_pXBullet(NULL)
-	m_pRootFrame(NULL)
+	hp_heal(0.0f)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -169,17 +167,17 @@ void cSCENE_INGAME::Setup()
 
 	//m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-	for (int i = 0; i < m_pVecAI.size(); i++)
+	for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 	{
-		m_pVecAI[i] = new cAI;
-		m_pVecAI[i]->Setup("NPCS", "slicer.X");
+		g_pGameInfoManager->m_pVecAI[i] = new cAI;
+		g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
 		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
-		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
+		g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
+		g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
 	
 	//check here.
-		g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the GameInfo Manager
-		m_pVecAI[i]->SetHp(true);
+		g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
+		g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
 	}
 	//for (int i = 0; i < m_pVecAI.size(); i++)
 	//{
@@ -240,7 +238,7 @@ void cSCENE_INGAME::Update()
 	}
 	///
 
-	if (SpawnMoster == 0 && m_pVecAI.size() != SpawnCount * 5)
+	if (SpawnMoster == 0 && g_pGameInfoManager->m_pVecAI.size() != SpawnCount * 5)
 	{
 		SpawnMoster = 200;
 		SpawnCount++;
@@ -254,20 +252,20 @@ void cSCENE_INGAME::Update()
 		SpawnCount = 0;
 		cAI_Controller* m_pVecAI_Controller;
 
-		m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
+		g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-		for (int i = 0; i < m_pVecAI.size(); i++)
+		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			m_pVecAI[i] = new cAI;
-			m_pVecAI[i]->Setup("NPCS", "slicer.X");
+			g_pGameInfoManager->m_pVecAI[i] = new cAI;
+			g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
 			m_pVecAI_Controller = new cAI_Controller;
-			m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
+			g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
+			g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
 			
 			// check here.
-			g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the GameInfo Manager
+			g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
 
-			m_pVecAI[i]->SetHp(true);
+			g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
 		}
 	}
 	
@@ -333,7 +331,7 @@ void cSCENE_INGAME::Update()
 	{
 		for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&m_pVecAI[i]->GetHp())
+			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&g_pGameInfoManager->m_pVecAI[i]->GetHp())
 				g_pGameInfoManager->m_pVecAI.at(i)->Update(true, m_pMyCharacter->GetPosition() - g_pGameInfoManager->m_pVecAI.at(i)->GetPosition());
 		}
 
@@ -341,13 +339,13 @@ void cSCENE_INGAME::Update()
 		{
 			if (m_Bullet[j].Shoot)
 			{
-				for (int i = 0; i < m_pVecAI.size(); i++)
+				for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 				{
-					bool b = cOBB::isCollision(m_Bullet[j].m_pBulletMesh->GetOBB(), m_pVecAI[i]->GetOBB());
+					bool b = cOBB::isCollision(m_Bullet[j].m_pBulletMesh->GetOBB(), g_pGameInfoManager->m_pVecAI[i]->GetOBB());
 					if (b)
 					{
 						m_Bullet[j].Shoot = false;
-						m_pVecAI[i]->SetHp(false);
+						g_pGameInfoManager->m_pVecAI[i]->SetHp(false);
 						break;
 					}
 				}
@@ -516,7 +514,7 @@ void cSCENE_INGAME::Render()
 	{
 		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&m_pVecAI[i]->GetHp())
+			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&g_pGameInfoManager->m_pVecAI[i]->GetHp())
 				g_pGameInfoManager->m_pVecAI.at(i)->Render(NULL);
 		}
 	}
@@ -620,7 +618,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 	if (GetKeyState('N') & 0x8000)
 	{
-		m_pVecAI.clear();
+		g_pGameInfoManager->m_pVecAI.clear();
 		WaveStartOrEnd = false;
 	}
 
