@@ -41,6 +41,8 @@ struct CharacterStatus_PC
 	int			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
 	int				FailCnt;		// 접속 여부
+	BOOL		readyButton;
+	BOOL		isReady;
 	SOCKET			s;				// 소켓
 };
 
@@ -63,4 +65,12 @@ struct CharacterStatus_NPC
 	float			Dir;			// 캐릭터가 바라보는 방향
 	int			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
+};
+
+struct dogMonster
+{
+	int monsterNum;
+	int maxHealth;
+	int nowHealth;
+
 };

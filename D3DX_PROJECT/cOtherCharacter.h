@@ -25,7 +25,8 @@ public:
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
 	cOBB* GetOBB();
 	D3DXVECTOR3 GetPosition();
+	D3DXVECTOR3* GetPositionPoint();
 	void SetAnimationIndexBlend(int nIndex);
 	CharacterStatus_PC info;
-
+	D3DXVECTOR3 GetMyHeadPos();
 };

@@ -62,7 +62,6 @@ private:
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
 	cMyCharacter *m_pMyCharacter;
-	vector<cAI*> m_pVecAI;
 private:
 	D3DLIGHT9 DirectLight; //���� ����
 	D3DLIGHT9 subLight;
@@ -95,9 +94,6 @@ public:
 
 
 private:
-	LPD3DXFONT m_pFont; 
-
-	LPD3DXFONT m_pFont2; 
 
 public:
 	void Creat_Font();
@@ -139,6 +135,7 @@ private:
 	int SpawnCount;
 //	LPD3DXMESH m_pMobMesh;
 	bool showMap = true;
+	bool WaveStartOrEnd;
 // << :
 
 // skills

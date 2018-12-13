@@ -11,10 +11,16 @@ cOtherPlayerManager::~cOtherPlayerManager()
 {
 }
 
-CharacterStatus_PC* cOtherPlayerManager::GetOtherPlayerByID(int idx)
+cOtherCharacter* cOtherPlayerManager::GetOtherPlayerByID(int idx)
 {
-
-	return &g_pGameInfoManager->GetOthersInfo()->at(idx);
+	for (int i = 0; i < otherPlayerInfo.size(); i++)
+	{
+		if (otherPlayerInfo.at(i)->info.ID == idx)
+		{
+			return otherPlayerInfo.at(i);
+		}
+	}
+	
 }
 
 
@@ -26,7 +32,6 @@ void cOtherPlayerManager::newPlayer(CharacterStatus_PC info)
 	otherPlayerInfo.back()->Setup();
 	otherPlayerInfo.back()->SetCharacterController(pCharacter);
 	otherPlayerInfo.back()->info = info;
-	g_pGameInfoManager->AddOtherPlayer(info);
 }
 
 void cOtherPlayerManager::render()
@@ -51,8 +56,8 @@ void cOtherPlayerManager::disconnectPlayer(int ID)
 	{
 		if (otherPlayerInfo.at(i)->info.ID == ID)
 		{
+			SAFE_DELETE(otherPlayerInfo.at(i));
 			otherPlayerInfo.erase(otherPlayerInfo.begin() + i);
-			g_pGameInfoManager->RemoveOtherPlayerByID(ID);
 			break;
 		}
 	}

@@ -23,7 +23,6 @@ private:
 	bool isConnected = false;		// ���� ���� Ȯ��
 	HANDLE hThread;
 
-
 public:
 	queue<string> messageQueue;
 	bool SetupNetwork(HWND hWnd);
@@ -33,5 +32,6 @@ public:
 	bool GetNetStatus();		// ��Ʈ��ũ Ȯ�ο�
 	SOCKET GetServerSocket();
 
+	CRITICAL_SECTION	crit;
 };
 

@@ -29,6 +29,9 @@ HWND hWnd;
 bool isSent = false;
 vector<string> ServerStatus;
 queue<string> messageQueue;
+int triggerBoxNum = -1;
+void monsterSet();
+vector<dogMonster> dogVec;
 
 bool StartWith(char * FindStr, char * SearchStr)
 {
@@ -86,6 +89,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	return (int)msg.wParam;
 }
+
+
 
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -157,7 +162,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ServerStatus.push_back("0 Players Online");
 		InitializeCriticalSection(&crit);
 		InitializeCriticalSection(&messageGet);
-		SetTimer(hWnd, 123, 25,NULL);
+		SetTimer(hWnd, 123, 500, NULL);
 
 		WSAStartup(MAKEWORD(2, 2), &wsadata);
 		ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -243,12 +248,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//
 			//recieve data
 			int bufferLen = recv(g_vUsers[idx]->s, buffer, 128, 0);
-			buffer[bufferLen-1] = '\0';		// ensure data's end
+			buffer[bufferLen - 1] = '\0';		// ensure data's end
 
 			string tmp = string(buffer);
 
+			EnterCriticalSection(&crit);
 			messageQueue.push(tmp);
-
+			LeaveCriticalSection(&crit);
 
 		}
 		break;
@@ -329,44 +335,50 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_TIMER:
-		for (int i = 0; i < g_vUsers.size(); i++)
-		{
-			//int result = send(g_vUsers.at(i)->s, ping, 5, 0);
-			int result = 0;
-			if (result < 0)
-			{
-				g_vUsers.at(i)->FailCnt++;
 
-				if (g_vUsers.at(i)->FailCnt > 20)
-				{
-					string disconnect;
-					disconnect += "disconnect";
-					disconnect += ' ';
-					disconnect += to_string(i);
+		/*	EnterCriticalSection(&crit);
+		messageQueue.push("ping");
+		LeaveCriticalSection(&crit);
+		*/
 
-					char * sendMessage = new char[disconnect.size() + 1];
-					copy(disconnect.begin(), disconnect.end(), sendMessage);
-					sendMessage[disconnect.size()] = '\0';
+		//for (int i = 0; i < g_vUsers.size(); i++)
+		//{
+		//	//int result = send(g_vUsers.at(i)->s, ping, 5, 0);
+		//	int result = 0;
+		//	if (result < 0)
+		//	{
+		//		g_vUsers.at(i)->FailCnt++;
 
-					for (int j = 0; j < g_vUsers.size(); j++)
-					{
-						send(g_vUsers.at(j)->s, sendMessage, disconnect.size() + 1, 0);
-					}
-					closesocket(g_vUsers.at(i)->s);
-					if(g_vUsers.at(i))
-						delete(g_vUsers.at(i));
-					g_vUsers.erase(g_vUsers.begin() + i);
+		//		if (g_vUsers.at(i)->FailCnt > 20)
+		//		{
+		//			string disconnect;
+		//			disconnect += "disconnect";
+		//			disconnect += ' ';
+		//			disconnect += to_string(i);
 
-					printf("%d user disconnected", i);
-				}
-			}
-			else
-			{
-				g_vUsers.at(i)->FailCnt = 0;
-			}
-		}
+		//			char * sendMessage = new char[disconnect.size() + 1];
+		//			copy(disconnect.begin(), disconnect.end(), sendMessage);
+		//			sendMessage[disconnect.size()] = '\0';
 
-		
+		//			for (int j = 0; j < g_vUsers.size(); j++)
+		//			{
+		//				send(g_vUsers.at(j)->s, sendMessage, disconnect.size() + 1, 0);
+		//			}
+		//			closesocket(g_vUsers.at(i)->s);
+		//			if(g_vUsers.at(i))
+		//				delete(g_vUsers.at(i));
+		//			g_vUsers.erase(g_vUsers.begin() + i);
+
+		//			printf("%d user disconnected", i);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		g_vUsers.at(i)->FailCnt = 0;
+		//	}
+		//}
+
+
 
 
 		break;
@@ -385,14 +397,24 @@ void threadProcessRecv(void * str)
 		Sleep(1);
 		string tmp;
 		char* givenMessage;
+		static int sleepCount = 0;
 		if (messageQueue.size() == 0)
 		{
+			sleepCount++;
+			if (sleepCount > 500)
+			{
+				sleepCount = 0;
+				messageQueue.push("ping");
+			}
+
 			continue;
 		}
+
+		EnterCriticalSection(&crit);
 		tmp = messageQueue.front();
 		messageQueue.pop();
+		LeaveCriticalSection(&crit);
 
-		
 
 		givenMessage = new char[tmp.size() + 1];
 		std::copy(tmp.begin(), tmp.end(), givenMessage);
@@ -468,6 +490,8 @@ void threadProcessRecv(void * str)
 				tmp += to_string(g_vUsers.at(i)->ID);
 				tmp += ' ';
 				tmp += string(g_vUsers.at(i)->PlayerName);
+				tmp += ' ';
+				tmp += to_string(g_vUsers.at(i)->readyButton);
 
 				givenMessage = new char[tmp.size() + 1];
 				std::copy(tmp.begin(), tmp.end(), givenMessage);
@@ -483,21 +507,67 @@ void threadProcessRecv(void * str)
 			sscanf_s(givenMessage, "%*s %d %d", &ID);
 			isReady++;
 
-			if (isReady =! g_vUsers.size());
+			if (isReady != g_vUsers.size())
 			{
 				continue;
 			}
 		}
+		else if (StartWith(givenMessage, "triggerBoxNum"))
+		{
+			int tmpBoxNum;
+			sscanf_s(givenMessage, "%*s %d", &tmpBoxNum);
+			if (tmpBoxNum > triggerBoxNum)
+			{
+				triggerBoxNum = tmpBoxNum;
+				HANDLE hThread = new HANDLE;
+				hThread = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void *))monsterSet, NULL, 0, NULL);
+
+			}
+		}
+		else if (StartWith(givenMessage, "readyButtonPush"))
+		{
+			int IDID;
+			int ready;
+			sscanf_s(givenMessage, "%*s %d &d", &IDID, &ready);
+
+			for (int i = 0; i < g_vUsers.size(); i++)
+			{
+				if (g_vUsers.at(i)->ID == IDID)
+				{
+					g_vUsers.at(i)->readyButton = ready;
+				}
+
+			}
+		}
+
 
 		for (int i = 0; i < g_vUsers.size(); i++)
 		{
 			result = send(g_vUsers.at(i)->s, givenMessage, 128, 0);
+			if (result < 0)
+				g_vUsers.at(i)->FailCnt++;
+			else
+				g_vUsers.at(i)->FailCnt = 0;
+
+			if (g_vUsers.at(i)->FailCnt > 15)
+			{
+				string disconnect;
+				disconnect += "disconnect";
+				disconnect += ' ';
+				disconnect += to_string(g_vUsers.at(i)->ID);
+				messageQueue.push(disconnect);
+
+				closesocket(g_vUsers.at(i)->s);
+				if (g_vUsers.at(i))
+					delete(g_vUsers.at(i));
+				g_vUsers.erase(g_vUsers.begin() + i);
+			}
 		}
 
-		printf("%s\n", givenMessage);
+		if (!StartWith(givenMessage, "ping"))
+			printf("%s\n", givenMessage);
 
-		if (result < 0)
-			printf("문제있다.");
+
 
 	}
 }
@@ -534,4 +604,118 @@ void ThreadSend()
 void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
 	InvalidateRgn(hwnd, NULL, TRUE);
+}
+
+
+void monsterSet()
+{
+	static int MonID = 0;
+	if (triggerBoxNum == 0)
+	{
+
+		int m_SpawnXPos = 200;
+		int m_SpawnYPos = 5;
+		int m_SpawnZPos = -395;
+		for (int j = 0; j < 2; j++)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				string tmpMessage;
+				dogMonster tmpDog;
+				tmpDog.monsterNum = MonID;
+				tmpDog.maxHealth = 200;
+				tmpDog.nowHealth = 200;
+
+
+				tmpMessage += "setMonster";
+				tmpMessage += " ";
+				tmpMessage += to_string(MonID);
+				tmpMessage += " ";
+				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnXPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnYPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnZPos + i * 5);
+
+				messageQueue.push(tmpMessage);
+
+				MonID++;
+			}
+			Sleep(7000);
+		}
+	}
+	else if (triggerBoxNum == 1)
+	{
+
+		int m_SpawnXPos = -60;
+		int m_SpawnYPos = 5;
+		int m_SpawnZPos = -229;
+		for (int j = 0; j < 2; j++)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				string tmpMessage;
+				dogMonster tmpDog;
+				tmpDog.monsterNum = MonID;
+				tmpDog.maxHealth = 200;
+				tmpDog.nowHealth = 200;
+
+
+				tmpMessage += "setMonster";
+				tmpMessage += " ";
+				tmpMessage += to_string(MonID);
+				tmpMessage += " ";
+				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnXPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnYPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnZPos + i * 5);
+
+				messageQueue.push(tmpMessage);
+
+				MonID++;
+			}
+			Sleep(7000);
+		}
+	}
+	else if (triggerBoxNum == 2)
+	{
+
+		int m_SpawnXPos = -317;
+		int m_SpawnYPos = 18;
+		int m_SpawnZPos = -102;
+		for (int j = 0; j < 2; j++)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				string tmpMessage;
+				dogMonster tmpDog;
+				tmpDog.monsterNum = MonID;
+				tmpDog.maxHealth = 200;
+				tmpDog.nowHealth = 200;
+
+
+				tmpMessage += "setMonster";
+				tmpMessage += " ";
+				tmpMessage += to_string(MonID);
+				tmpMessage += " ";
+				tmpMessage += to_string(g_vUsers.at(rand() % g_vUsers.size())->ID);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnXPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnYPos);
+				tmpMessage += " ";
+				tmpMessage += to_string(m_SpawnZPos + i * 5);
+
+				messageQueue.push(tmpMessage);
+
+				MonID++;
+			}
+			Sleep(7000);
+		}
+	}
 }

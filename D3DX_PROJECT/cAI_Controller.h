@@ -10,6 +10,8 @@ public:
 	cAI_Controller();
 	virtual ~cAI_Controller(void);
 
+	int target;
+
 protected:
 	float m_fRotY;
 	float m_fRotX;
@@ -32,6 +34,9 @@ protected:
 
 	DWORD CurrentTime;
 	DWORD BeforeTime;
+
+
+
 public:
 	virtual void SetUP();
 

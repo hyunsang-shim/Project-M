@@ -16,6 +16,9 @@ private:
 	SYNTHESIZE(D3DXVECTOR3, m_vBulletPos, BulletPos);
 	SYNTHESIZE(bool, MonsterHp, Hp);
 public:
+	int MonsterNum;
+
+	int target;
 	void Setup(char * szFolder, char * szFileName);
 	void Update(bool b, D3DXVECTOR3 moveToCharacterDir);
 	void Render(D3DCOLOR c = D3DCOLOR_XRGB(255, 255, 255));
@@ -23,5 +26,6 @@ public:
 	D3DXVECTOR3 GetPosition();
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetAnimationIndexBlend(int nIndex);
+	int load;
 };
 

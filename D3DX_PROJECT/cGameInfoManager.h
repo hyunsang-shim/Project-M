@@ -37,6 +37,7 @@ public:
 	BOOL sceneChangeTriger;
 	int nextScene;
 
+	int timer;
 
 
 	// Network
@@ -45,7 +46,6 @@ public:
 	void UpdateOtherPlayers(vector<CharacterStatus_PC> &othersInfo);
 	void UpdateNPCs(vector<CharacterStatus_NPC> &npcInfo);
 	CharacterStatus_PC* GetMyInfo();
-	vector<CharacterStatus_PC>* GetOthersInfo();
 	vector<CharacterStatus_NPC>* GetNpcsInfo();
 	void SetMyCharacter(int idx);
 	void SetMyName();
@@ -53,6 +53,10 @@ public:
 	void RemoveOtherPlayerByID(int ID);
 
 	vector<CharacterStatus_PC> m_vOtherCharacters;
+
+
+
+
 	vector<CharacterStatus_NPC> m_vNpcCharacters;
 	void AddNPC(cAI* NPC);
 
@@ -84,6 +88,8 @@ public:
 
 	void sound_infinity_set(int sound_track_nums, int sound_repeat_nums);
 
+	vector<cAI*> m_pVecAI;
+	int monsterTriggerBoxNum;
 
 private:
 

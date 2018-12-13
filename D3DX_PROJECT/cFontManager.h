@@ -12,7 +12,8 @@ public:
 	{
 		E_DEFAULT,
 		E_QUEST,
-		E_MAX
+		E_MAX,
+		E_TIMER_FONT
 	};
 
 

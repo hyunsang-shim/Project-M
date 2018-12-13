@@ -7,9 +7,10 @@ cOtherCharacter::cOtherCharacter()
 	: m_pSkinnedMesh(NULL)
 	, m_pCharacterController(NULL)
 	, m_pOBB(NULL)
-	, status(CS_IDLE),
-	motionStatus(10)
+	, status(CS_IDLE)
+	, motionStatus(10)
 {
+	info.CurPos = D3DXVECTOR3(330, 5, -410);
 }
 
 
@@ -32,7 +33,7 @@ void cOtherCharacter::Setup()
 void cOtherCharacter::Update()
 { 
 	if (m_pCharacterController)
-		m_pCharacterController->UpdateOtherPlayer(status);
+		m_pCharacterController->UpdateOtherPlayer(status, this);
 }
 
 void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
@@ -77,6 +78,7 @@ void cOtherCharacter::Update(D3DXVECTOR3 CurPos, float rotY, WORD Status)
 		this->motionStatus = tmpStatus;
 		
 	}
+	this->info.CurPos = CurPos;
 	this->status = Status;
 	if (m_pCharacterController)
 		m_pCharacterController->UpdateOtherPlayer(CurPos, rotY, Status);
@@ -104,7 +106,17 @@ D3DXVECTOR3 cOtherCharacter::GetPosition()
 	return m_pCharacterController->GetPosition();
 }
 
+D3DXVECTOR3 * cOtherCharacter::GetPositionPoint()
+{
+	return &m_pCharacterController->m_vPosition;
+}
+
 void cOtherCharacter::SetAnimationIndexBlend(int nIndex)
 {
 	m_pSkinnedMesh->SetAnimationIndex(nIndex);
+}
+
+D3DXVECTOR3 cOtherCharacter::GetMyHeadPos()
+{
+	return m_pSkinnedMesh->GetHeadPos();
 }

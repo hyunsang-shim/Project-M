@@ -29,10 +29,11 @@ cGameInfoManager::cGameInfoManager() :
 	sceneChangeTriger(FALSE),
 	nextScene(0),
 	aimSize(0.0f),
-	m_vOtherCharacters(NULL),
 	m_vNpcCharacters(NULL),  
 	MaxBulletCount(30),
-	loading(0)
+	loading(0),
+	monsterTriggerBoxNum(0),
+	timer(9999)
 {
 	System_Create(&pSystem);
 	pSystem->init(4, FMOD_INIT_NORMAL, NULL); // 4 is max channel
@@ -80,10 +81,7 @@ void cGameInfoManager::UpdateMyInfo(CharacterStatus_PC &newInfo)
 	memcpy(&m_strMyCharacter, (CharacterStatus_PC*)&newInfo, sizeof(CharacterStatus_PC));
 }
 
-void cGameInfoManager::UpdateOtherPlayers(vector<CharacterStatus_PC>& othersInfo)
-{
-	memcpy(&m_vOtherCharacters, (vector<CharacterStatus_PC>*)&othersInfo, sizeof(vector<CharacterStatus_PC>));
-}
+
 
 void cGameInfoManager::UpdateNPCs(vector<CharacterStatus_NPC>& npcInfo)
 {
@@ -95,10 +93,7 @@ CharacterStatus_PC* cGameInfoManager::GetMyInfo()
 	return &m_strMyCharacter;
 }
 
-vector<CharacterStatus_PC>* cGameInfoManager::GetOthersInfo()
-{
-	return &m_vOtherCharacters;
-}
+
 
 vector<CharacterStatus_NPC>* cGameInfoManager::GetNpcsInfo()
 {
@@ -247,3 +242,4 @@ void cGameInfoManager::RemoveOtherPlayerByID(int ID)
 		}
 	}
 }
+

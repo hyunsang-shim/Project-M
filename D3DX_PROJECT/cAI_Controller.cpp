@@ -8,7 +8,8 @@
 cAI_Controller::cAI_Controller()
 	:m_fRotY(0.0f)
 	, m_vDirection(0, 0, 1)
-	, m_vPosition(50, 0, 15)
+	, m_vPosition(50, 0, 15),
+	target(0)
 {
 	D3DXMatrixIdentity(&m_matWorld);
 	D3DXMatrixIdentity(&RotateToCharacter);
@@ -147,6 +148,8 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &RotateToCharacter);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = RotateToCharacter * matT;
+
+
 }
 
 

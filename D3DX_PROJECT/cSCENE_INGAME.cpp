@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "cSCENE_INGAME.h"
 #include "cGrid.h"
 #include "cNewObject.h"
@@ -60,6 +60,7 @@ cSCENE_INGAME::cSCENE_INGAME()
 	hp_s(FALSE),
 	hp_heal(0.0f),
 	m_pXBullet(NULL)
+	m_pRootFrame(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -166,7 +167,7 @@ void cSCENE_INGAME::Setup()
 
 	//cAI_Controller* m_pVecAI_Controller;
 
-	m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
+	//m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
 	for (int i = 0; i < m_pVecAI.size(); i++)
 	{
@@ -180,6 +181,14 @@ void cSCENE_INGAME::Setup()
 		g_pGameInfoManager->AddNPC(m_pVecAI[i]);		// add npc to the GameInfo Manager
 		m_pVecAI[i]->SetHp(true);
 	}
+	//for (int i = 0; i < m_pVecAI.size(); i++)
+	//{
+	//	m_pVecAI[i] = new cAI;
+	//	m_pVecAI[i]->Setup("NPCS", "slicer.X");
+	//	cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
+	//	m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
+	//	m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
+	//}
 
 
 	setupUI();
@@ -261,6 +270,9 @@ void cSCENE_INGAME::Update()
 			m_pVecAI[i]->SetHp(true);
 		}
 	}
+	
+
+	
 
 	if (GetKeyState(VK_RBUTTON) & 0x8000)
 		showMap = !showMap;
@@ -311,18 +323,18 @@ void cSCENE_INGAME::Update()
 	if (m_pMyCharacter)
 		m_pMyCharacter->Update(m_pCamera->getDirection());
 	
-	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pTriggerBox->m_pOBB))
+	if (cOBB::isCollision(m_pMyCharacter->GetOBB(), m_pTriggerBox->m_pOBB) && !WaveStartOrEnd)
 	{
-		WaveStartOrEnd = true;
+		g_pNetworkManager->SendData(NH_SPAWN_TRIGGER, g_pGameInfoManager->GetMyInfo());
+		m_pTriggerBox->Setup();
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
-		SpawnMoster--;
-		for (int i = 0; i < SpawnCount * 5; i++)
+		for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			if (m_pVecAI[i]->GetHp())
-				m_pVecAI[i]->Update(true, m_pMyCharacter->GetPosition() - m_pVecAI[i]->GetPosition());
+			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&m_pVecAI[i]->GetHp())
+				g_pGameInfoManager->m_pVecAI.at(i)->Update(true, m_pMyCharacter->GetPosition() - g_pGameInfoManager->m_pVecAI.at(i)->GetPosition());
 		}
 
 		for (int j = 0; j < m_Bullet.size(); j++)
@@ -500,20 +512,19 @@ void cSCENE_INGAME::Render()
 		Mesh_Render();
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
-		for (int i = 0; i < SpawnCount * 5; i++)
+		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
-			if (m_pVecAI[i]->GetHp())
-				m_pVecAI[i]->Render(NULL);
+			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&m_pVecAI[i]->GetHp())
+				g_pGameInfoManager->m_pVecAI.at(i)->Render(NULL);
 		}
 	}
 	//?????????????????????????
-	//for (int i = 0; i < g_pGameInfoManager->GetNumTotalUser(); i++)
-	//{
-	//	g_pGameInfoManager->GetOthersInfo();
-	//}
-
+	/*for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
+	{
+		g_pGameInfoManager->GetOthersInfo();
+	}*/
 
 	Render_Text();
 }
@@ -619,6 +630,7 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		m_Bullet.clear();
 		m_Bullet.resize(30);
 	}
+	
 }
 void cSCENE_INGAME::Setup_HeightMap()
 {
@@ -903,24 +915,7 @@ void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
 
 void cSCENE_INGAME::Creat_Font()
 {
-	D3DXFONT_DESC fd;
-	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
-	fd.Height = 50;
-	fd.Width = 25;
-	fd.Weight = FW_MEDIUM;
-	fd.Italic = false;
-	fd.CharSet = DEFAULT_CHARSET;
-	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
-	fd.PitchAndFamily = FF_DONTCARE;
 
-	{
-		AddFontResource("font/BigNoodleTooOblique.ttf");
-		strcpy(fd.FaceName, "BigNoodleTooOblique");
-	}
-	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
-	fd.Height = 30;
-	fd.Width = 15;
-	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont2);
 
 
 }
@@ -947,21 +942,21 @@ void cSCENE_INGAME::Render_Text()
 		g_pGameInfoManager->getScreenYPosByPer(77),
 		g_pGameInfoManager->getScreenXPosByPer(13) + 40,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 5);
-	m_pFont->DrawTextA(NULL, str.c_str(), str.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	g_pFontManager->GetFont(g_pFontManager->E_DEFAULT)->DrawTextA(NULL, str.c_str(), str.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 	RECT rc2;
 	SetRect(&rc2,
 		g_pGameInfoManager->getScreenXPosByPer(13) + 120,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 5,
 		g_pGameInfoManager->getScreenXPosByPer(13) + 160,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 20);
-	m_pFont2->DrawTextA(NULL, str2.c_str(), str2.length(), &rc2, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	g_pFontManager->GetFont(g_pFontManager->E_MAX)->DrawTextA(NULL, str2.c_str(), str2.length(), &rc2, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 	RECT rc3;
 	SetRect(&rc3,
 		1920 * 0.85f,
 		1080 * 0.85f + 10,
 		1920 * 0.85f + 50,
 		1080 * 0.85f + 15);
-	m_pFont->DrawTextA(NULL, str3.c_str(), str3.length(), &rc3, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	g_pFontManager->GetFont(g_pFontManager->E_MAX)->DrawTextA(NULL, str3.c_str(), str3.length(), &rc3, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 
 
 }
