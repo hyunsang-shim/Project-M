@@ -58,7 +58,7 @@ cSCENE_INGAME::cSCENE_INGAME()
 	cooltime(1.0f),
 	skill_set(TRUE),
 	hp_s(FALSE),
-	hp_heal(0.0f)
+	hp_heal(0.0f),
 	m_pXBullet(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
@@ -181,7 +181,6 @@ void cSCENE_INGAME::Setup()
 		m_pVecAI[i]->SetHp(true);
 	}
 
-	}
 
 	setupUI();
 
@@ -191,7 +190,10 @@ void cSCENE_INGAME::Setup()
 	Creat_Font();
 	g_pNetworkManager->SendData(NH_IS_READY, g_pGameInfoManager->GetMyInfo());
 	g_pGameInfoManager->loading = 1;
+
 }
+
+
 
 void cSCENE_INGAME::Update()
 {
@@ -369,43 +371,43 @@ void cSCENE_INGAME::Update()
 
 			//
 			// monster collision start
-			D3DXCreateBox(g_pDevice, 2.0f, 4.0f, 2.0f, &m_pMeshMobColide, 0);		// temporal mesh for check. (positioned at origin)
-			// check all monster if hit
-			for (int i = 0; i < g_pGameInfoManager->GetNpcsInfo()->size(); i++)
-			{				
-				D3DXMATRIX inverse;
-				D3DXMatrixInverse(&inverse, 0, &((m_pVecAI[i]->GetOBB())->GetMatrix_Collision()));		// to inverse the ray
-				D3DXVECTOR3 vecRayDirection_Inversed, vecRayOrig_Inversed;
-				D3DXVec3TransformCoord(&vecRayOrig_Inversed, &vecRayOrigin, &inverse);			// apply inversed Target Mesh's world Matrix to Ray origin
-				D3DXVec3TransformCoord(&vecRayDirection_Inversed, &vecRayDirection, &inverse);  // apply inversed Target Mesh's world Matrix to Direction
-				D3DXVec3TransformNormal(&vecRayDirection_Inversed, &vecRayDirection_Inversed, &inverse);	// normallize ray's direction
-				D3DXIntersect(m_pMeshMobColide, &vecRayOrigin, &vecRayDirection_Inversed, &HitMonster, NULL, NULL, NULL, &distToMonster, NULL, NULL);		// check collision
-			}
-			m_pMeshMobColide->Release();
+			//D3DXCreateBox(g_pDevice, 2.0f, 4.0f, 2.0f, &m_pMeshMobColide, 0);		// temporal mesh for check. (positioned at origin)
+			//// check all monster if hit
+			//for (int i = 0; i < g_pGameInfoManager->GetNpcsInfo()->size(); i++)
+			//{				
+			//	D3DXMATRIX inverse;
+			//	D3DXMatrixInverse(&inverse, 0, &((m_pVecAI[i]->GetOBB())->GetMatrix_Collision()));		// to inverse the ray
+			//	D3DXVECTOR3 vecRayDirection_Inversed, vecRayOrig_Inversed;
+			//	D3DXVec3TransformCoord(&vecRayOrig_Inversed, &vecRayOrigin, &inverse);			// apply inversed Target Mesh's world Matrix to Ray origin
+			//	D3DXVec3TransformCoord(&vecRayDirection_Inversed, &vecRayDirection, &inverse);  // apply inversed Target Mesh's world Matrix to Direction
+			//	D3DXVec3TransformNormal(&vecRayDirection_Inversed, &vecRayDirection_Inversed, &inverse);	// normallize ray's direction
+			//	D3DXIntersect(m_pMeshMobColide, &vecRayOrigin, &vecRayDirection_Inversed, &HitMonster, NULL, NULL, NULL, &distToMonster, NULL, NULL);		// check collision
+			//}
+			//m_pMeshMobColide->Release();
 
+			//if (pHit && BulletCreateTime == MAXBulletCreateCount)
+			//{
+			//	m_vCrossHairHitPos = vecRayOrigin + dist * vecRayDirection;
+
+			//	m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
+
+			//	D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
+			//	m_Bullet[BulletCreateCount].m_vBulletCreatePos = vecBulletPos;
+			//	m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			//	m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			//	m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+			//	m_Bullet[BulletCreateCount].BulletLiveTime = 500;
+
+			//	BulletCreateCount++;
+
+			//	BulletCreateTime = 0;
+
+			//	g_pGameInfoManager->MaxBulletCount--;
+			//}
+			// bullet collision test
 			if (pHit && BulletCreateTime == MAXBulletCreateCount)
 			{
 				m_vCrossHairHitPos = vecRayOrigin + dist * vecRayDirection;
-
-				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
-
-				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
-				m_Bullet[BulletCreateCount].m_vBulletCreatePos = vecBulletPos;
-				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
-				m_Bullet[BulletCreateCount].BulletLiveTime = 500;
-
-				BulletCreateCount++;
-
-				BulletCreateTime = 0;
-
-				g_pGameInfoManager->MaxBulletCount--;
-			}
-			// bullet collision test
-			else if (HitMonster && BulletCreateTime == MAXBulletCreateCount)
-			{
-				m_vCrossHairHitPos = vecRayOrigin + distToMonster * vecRayDirection;
 
 				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - vecBulletPos;
 

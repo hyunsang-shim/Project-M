@@ -685,8 +685,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 			m_pUICharacterSelect->m_isHidden = 1;
 			m_pUILoading->m_isHidden = 0;
 		}
-		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new.X"); });
-		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/rialto_floor_new.X"); });
+		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
+		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/floorBox.X"); });
 		if (m_pUILoading->m_isHidden == 0)
 		{
 
