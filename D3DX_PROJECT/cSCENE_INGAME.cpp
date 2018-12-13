@@ -19,6 +19,7 @@
 #include "cWaveTriggerBox.h"
 #include "cUITextView.h"
 #include "cXModelSurface.h"
+#include "cXModelBullet.h"
 #include <thread>
 #include <cstdio>
 
@@ -50,7 +51,8 @@ cSCENE_INGAME::cSCENE_INGAME()
 	m_pUIBase(NULL),
 	WaveStartOrEnd(false),
 	SpawnMoster(200),
-	SpawnCount(0)
+	SpawnCount(0),
+	m_pXBullet(NULL)
 {
 	GetClientRect(g_hWnd, &m_Worldrc);
 	m_Bullet.resize(30);
@@ -69,6 +71,7 @@ cSCENE_INGAME::~cSCENE_INGAME()
 	SAFE_DELETE(m_pTriggerBox);
 	SAFE_DELETE(m_pUIBase);
 	SAFE_DELETE(m_pUIShadowRoot);
+	SAFE_DELETE(m_pXBullet);
 }
 
 void cSCENE_INGAME::Setup()
@@ -76,6 +79,9 @@ void cSCENE_INGAME::Setup()
 	//g_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	m_pCrossHairPicking = new cCrossHairPicking;
+
+	m_pXBullet = new cXModelBullet;
+	m_pXBullet->Setup("Bullet/bullet_mesh.X");
 
 	m_pTriggerBox = new cWaveTriggerBox;
 	m_pTriggerBox->Setup();
@@ -162,6 +168,7 @@ void cSCENE_INGAME::Setup()
 		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
 		m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 		m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
+		m_pVecAI[i]->SetHp(true);
 	}
 
 	WaveStartOrEnd = false;
@@ -199,6 +206,7 @@ void cSCENE_INGAME::Update()
 			m_pVecAI_Controller = new cAI_Controller;
 			m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
 			m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
+			m_pVecAI[i]->SetHp(true);
 		}
 	}
 
@@ -258,8 +266,25 @@ void cSCENE_INGAME::Update()
 		SpawnMoster--;
 		for (int i = 0; i < SpawnCount * 5; i++)
 		{
-			if (m_pVecAI[i])
+			if (m_pVecAI[i]->GetHp())
 				m_pVecAI[i]->Update(true, m_pMyCharacter->GetPosition() - m_pVecAI[i]->GetPosition());
+		}
+
+		for (int j = 0; j < m_Bullet.size(); j++)
+		{
+			if (m_Bullet[j].Shoot)
+			{
+				for (int i = 0; i < m_pVecAI.size(); i++)
+				{
+					bool b = cOBB::isCollision(m_Bullet[j].m_pBulletMesh->GetOBB(), m_pVecAI[i]->GetOBB());
+					if (b)
+					{
+						m_Bullet[j].Shoot = false;
+						m_pVecAI[i]->SetHp(false);
+						break;
+					}
+				}
+			}
 		}
 	}
 	/*else
@@ -271,7 +296,6 @@ void cSCENE_INGAME::Update()
 		}
 	}*/
 
-	
 	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{ 
 		if (g_pGameInfoManager->MaxBulletCount != 0)
@@ -287,11 +311,20 @@ void cSCENE_INGAME::Update()
 
 				m_Bullet[BulletCreateCount].BulletDirection = m_vCrossHairHitPos - m_pMyCharacter->GetBulletPos();
 
-				D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
+				//D3DXCreateSphere(g_pDevice, m_Bullet[BulletCreateCount].Radius, 20, 10, &m_Bullet[BulletCreateCount].m_pBulletMesh, NULL);
 				m_Bullet[BulletCreateCount].m_vBulletCreatePos = m_pMyCharacter->GetBulletPos();
-				m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+				/*D3DXMatrixTranslation(&m_Bullet[BulletCreateCount].matT, 
+					m_Bullet[BulletCreateCount].m_vBulletCreatePos.x, m_Bullet[BulletCreateCount].m_vBulletCreatePos.y, m_Bullet[BulletCreateCount].m_vBulletCreatePos.z);*/
+
+				m_Bullet[BulletCreateCount].m_pBulletMesh = m_pXBullet;
+				//m_Bullet[BulletCreateCount].m_pBulletMesh->Setup("Bullet/bullet2.X");
+
+				m_Bullet[BulletCreateCount].Shoot = true;
+
+				/*m_Bullet[BulletCreateCount].m_stMtlCircle.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 				m_Bullet[BulletCreateCount].m_stMtlCircle.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);
+				m_Bullet[BulletCreateCount].m_stMtlCircle.Specular = D3DXCOLOR(0.0f, 0.7f, 0.7f, 1.0f);*/
 				m_Bullet[BulletCreateCount].BulletLiveTime = 10;
 
 				BulletCreateCount++;
@@ -308,14 +341,7 @@ void cSCENE_INGAME::Update()
 				}
 			}
 		}
-		else
-		{
-			BulletCreateCount = 0;
-			m_Bullet.clear();
-			m_Bullet.resize(30);
-		}
 	}
-
 
 	if (g_pNetworkManager->GetNetStatus())
 		g_pNetworkManager->SendData(m_pMyCharacter->sendData());
@@ -371,7 +397,7 @@ void cSCENE_INGAME::Render()
 	{
 		for (int i = 0; i < SpawnCount * 5; i++)
 		{
-			if (m_pVecAI[i])
+			if (m_pVecAI[i]->GetHp())
 				m_pVecAI[i]->Render(NULL);
 		}
 	}
@@ -425,6 +451,13 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	{
 		m_pVecAI.clear();
 		WaveStartOrEnd = false;
+	}
+
+	if (GetKeyState('R') & 0x8000)
+	{
+		BulletCreateCount = 0;
+		m_Bullet.clear();
+		m_Bullet.resize(30);
 	}
 }
 void cSCENE_INGAME::Setup_HeightMap()
@@ -883,19 +916,23 @@ void cSCENE_INGAME::Mesh_Render()
 {
 	for (int i = 0; i < BulletCreateCount; i++)
 	{
-		D3DXMatrixTranslation(&m_Bullet[i].matT, m_Bullet[i].m_vBulletCreatePos.x, m_Bullet[i].m_vBulletCreatePos.y, m_Bullet[i].m_vBulletCreatePos.z);
-		g_pDevice->SetTransform(D3DTS_WORLD, &m_Bullet[i].matT);
-		g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
-		m_Bullet[i].m_pBulletMesh->DrawSubset(0);
+		if (m_Bullet[i].BulletLiveTime != 0)
+		{
+			m_Bullet[i].m_pBulletMesh->SetSRT(m_Bullet[i].BulletDirection, m_Bullet[i].m_vBulletCreatePos);
+			m_Bullet[i].m_pBulletMesh->Update();
+			//g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
+			//m_Bullet[i].m_pBulletMesh->DrawSubset(0);
 
-		m_Bullet[i].m_vBulletCreatePos += m_Bullet[i].BulletDirection/2;
+			m_Bullet[i].m_pBulletMesh->Render();
 
-		m_Bullet[i].BulletLiveTime--;
+			m_Bullet[i].m_vBulletCreatePos += m_Bullet[i].BulletDirection / 10;
 
-		if (m_Bullet[i].BulletLiveTime == 0)
+			m_Bullet[i].BulletLiveTime--;
+		}
+		/*if (m_Bullet[i].BulletLiveTime == 0)
 		{
 			m_Bullet.erase(m_Bullet.begin() + i);
 			BulletCreateCount--;
-		}
+		}*/
 	}
 }

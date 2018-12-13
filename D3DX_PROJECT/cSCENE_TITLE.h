@@ -43,7 +43,8 @@ public:
 	cUIButton* ready_button;
 	vector<cUIButton*> other_player_character;
 
-
+	thread t1;
+	thread t2;
 
 private:
 	cCamera* m_pCamera;
