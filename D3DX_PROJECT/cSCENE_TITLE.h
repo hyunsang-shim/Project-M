@@ -21,7 +21,9 @@ public:
 	cUIObject*			m_pUICharacterSelect;
 	cUIObject*			m_pUILoading;
 	cUITextView*		m_pNameInput;
-	
+	cUITextView*		playerName1;
+	cUITextView*		playerName2;
+	cUITextView*		playerName3;
 
 	void BGSetup();			// 배경화면 셋업
 	void BGRender();		// 배경화면 렌더
@@ -49,7 +51,5 @@ private:
 	cCamera* m_pCamera;
 	CharacterStatus_PC m_strMyCharacter;
 
-	LPD3DXFONT m_pFont;
-	LPD3DXFONT m_pFont2;
 };
 

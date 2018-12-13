@@ -21,7 +21,8 @@ cGameInfoManager::cGameInfoManager() :
 	m_vNpcCharacters(NULL),  
 	MaxBulletCount(30),
 	loading(0),
-	monsterTriggerBoxNum(0)
+	monsterTriggerBoxNum(0),
+	timer(9999)
 {
 }
 

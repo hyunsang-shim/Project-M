@@ -48,6 +48,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	g_pMainGame = new cMainGame;
 	g_pMainGame->Setup();
 	SetTimer(g_hWnd, 1, 10, NULL);
+	SetTimer(g_hWnd, 2, 1000, NULL);
 	// << :
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_D3DX_PROJECT));
@@ -180,6 +181,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (g_pMainGame)
 				g_pMainGame->Update();
 			InvalidateRect(g_hWnd, NULL, false);
+		}
+		else if (wParam == 2)
+		{
+			g_pGameInfoManager->timer--;
 		}
 		break;
 

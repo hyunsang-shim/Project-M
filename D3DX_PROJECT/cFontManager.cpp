@@ -9,6 +9,7 @@ cFontManager::cFontManager()
 
 cFontManager::~cFontManager()
 {
+
 }
 
 LPD3DXFONT cFontManager::GetFont(eFontType e)
@@ -22,6 +23,21 @@ LPD3DXFONT cFontManager::GetFont(eFontType e)
 	}
 	if (e == E_DEFAULT)
 	{
+		fd.Height = 40;
+		fd.Width = 20;
+		fd.Weight = FW_MEDIUM;
+		fd.Italic = false;
+		fd.CharSet = DEFAULT_CHARSET;
+		fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+		fd.PitchAndFamily = FF_DONTCARE;
+
+		{
+			AddFontResource("font/BigNoodleTooOblique.ttf");
+			strcpy(fd.FaceName, "BigNoodleTooOblique");
+		}
+	}
+	else if (e == E_MAX)
+	{
 		fd.Height = 50;
 		fd.Width = 25;
 		fd.Weight = FW_MEDIUM;
@@ -31,8 +47,23 @@ LPD3DXFONT cFontManager::GetFont(eFontType e)
 		fd.PitchAndFamily = FF_DONTCARE;
 
 		{
-			AddFontResource(TEXT("font/umberto.ttf"));
-			strcpy(fd.FaceName, "±¼¸²Ã¼");
+			AddFontResource("font/BigNoodleTooOblique.ttf");
+			strcpy(fd.FaceName, "BigNoodleTooOblique");
+		}
+	}
+	else if (e == E_TIMER_FONT)
+	{
+		fd.Height = 100;
+		fd.Width = 50;
+		fd.Weight = FW_MEDIUM;
+		fd.Italic = false;
+		fd.CharSet = DEFAULT_CHARSET;
+		fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+		fd.PitchAndFamily = FF_DONTCARE;
+
+		{
+			AddFontResource("font/BigNoodleTooOblique.ttf");
+			strcpy(fd.FaceName, "BigNoodleTooOblique");
 		}
 	}
 	else if (e == E_QUEST)

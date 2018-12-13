@@ -148,6 +148,8 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &RotateToCharacter);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = RotateToCharacter * matT;
+
+
 }
 
 

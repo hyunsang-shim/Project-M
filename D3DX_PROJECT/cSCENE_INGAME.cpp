@@ -686,24 +686,7 @@ void cSCENE_INGAME::buttonUpdate(cUIButton * pSender)
 
 void cSCENE_INGAME::Creat_Font()
 {
-	D3DXFONT_DESC fd;
-	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
-	fd.Height = 50;
-	fd.Width = 25;
-	fd.Weight = FW_MEDIUM;
-	fd.Italic = false;
-	fd.CharSet = DEFAULT_CHARSET;
-	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
-	fd.PitchAndFamily = FF_DONTCARE;
 
-	{
-		AddFontResource("font/BigNoodleTooOblique.ttf");
-		strcpy(fd.FaceName, "BigNoodleTooOblique");
-	}
-	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont);
-	fd.Height = 30;
-	fd.Width = 15;
-	D3DXCreateFontIndirect(g_pDevice, &fd, &m_pFont2);
 
 
 }
@@ -730,21 +713,21 @@ void cSCENE_INGAME::Render_Text()
 		g_pGameInfoManager->getScreenYPosByPer(77),
 		g_pGameInfoManager->getScreenXPosByPer(13) + 40,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 5);
-	m_pFont->DrawTextA(NULL, str.c_str(), str.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	g_pFontManager->GetFont(g_pFontManager->E_DEFAULT)->DrawTextA(NULL, str.c_str(), str.length(), &rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 	RECT rc2;
 	SetRect(&rc2,
 		g_pGameInfoManager->getScreenXPosByPer(13) + 110,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 5,
 		g_pGameInfoManager->getScreenXPosByPer(13) + 150,
 		g_pGameInfoManager->getScreenYPosByPer(77) + 20);
-	m_pFont2->DrawTextA(NULL, str2.c_str(), str2.length(), &rc2, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	g_pFontManager->GetFont(g_pFontManager->E_MAX)->DrawTextA(NULL, str2.c_str(), str2.length(), &rc2, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 	RECT rc3;
 	SetRect(&rc3,
 		1920 * 0.85f,
 		1080 * 0.85f + 10,
 		1920 * 0.85f + 50,
 		1080 * 0.85f + 15);
-	m_pFont->DrawTextA(NULL, str3.c_str(), str3.length(), &rc3, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
+	g_pFontManager->GetFont(g_pFontManager->E_MAX)->DrawTextA(NULL, str3.c_str(), str3.length(), &rc3, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 
 
 }

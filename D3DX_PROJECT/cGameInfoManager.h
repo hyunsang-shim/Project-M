@@ -36,6 +36,7 @@ public:
 	BOOL sceneChangeTriger;
 	int nextScene;
 
+	int timer;
 
 
 	// Network

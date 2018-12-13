@@ -530,12 +530,12 @@ void threadProcessRecv(void * str)
 			else
 				g_vUsers.at(i)->FailCnt = 0;
 
-			if (g_vUsers.at(i)->FailCnt > 30)
+			if (g_vUsers.at(i)->FailCnt > 15)
 			{
 				string disconnect;
 				disconnect += "disconnect";
 				disconnect += ' ';
-				disconnect += to_string(i);
+				disconnect += to_string(g_vUsers.at(i)->ID);
 				messageQueue.push(disconnect);
 
 				closesocket(g_vUsers.at(i)->s);

@@ -99,13 +99,15 @@ void threadProcessRecv(void * str)
 			int character;
 
 			sscanf_s(givenMessage, "%*s %d %d", &ID, &character);
-			/*	for (int i = 0; i < g_vUsers.size(); i++)
+
+
+			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
 			{
-			if (g_vUsers.at(i).ID == ID)
-			{
-			g_vUsers.at(i).Character_No = character;
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == ID)
+				{
+					g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.Character_No = character;
+				}
 			}
-			}*/
 		}
 		else if (StartWith(givenMessage, "myNameIs"))
 		{
@@ -122,6 +124,7 @@ void threadProcessRecv(void * str)
 			tmp.ID = ID;
 			strcpy(tmp.PlayerName, name);
 			g_pOtherPlayerManager->newPlayer(tmp);
+			g_pGameInfoManager->timer == 30;
 		}
 		else if (StartWith(givenMessage, "SetID"))
 		{
@@ -153,7 +156,7 @@ void threadProcessRecv(void * str)
 
 			cAI *tmp;
 
-			g_pGameInfoManager->m_pVecAI.push_back(tmp);
+			g_pGameInfoManager->m_pVecAI.push_back(tmp);	
 			g_pGameInfoManager->m_pVecAI.back() = new cAI;
 			g_pGameInfoManager->m_pVecAI.back()->Setup("NPCS", "slicer.X");
 			cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
@@ -174,6 +177,23 @@ void threadProcessRecv(void * str)
 				{
 					delete(g_pGameInfoManager->m_pVecAI.at(i));
 					g_pGameInfoManager->m_pVecAI.erase(g_pGameInfoManager->m_pVecAI.begin() + i);
+					break;
+				}
+			}
+
+		}
+		else if (StartWith(givenMessage, "readyButtonPush"))
+		{
+			int IDID;
+			sscanf_s(givenMessage, "%*s %d", &IDID);
+
+			for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
+			{
+				if (g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.ID == IDID)
+				{
+					g_pOtherPlayerManager->otherPlayerInfo.at(i)->info.readyButton = true;
+
+
 					break;
 				}
 			}
@@ -285,6 +305,12 @@ int cNetworkManager::SendData(NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 			sendString += "triggerBoxNum";
 			sendString += ' ';
 			sendString += to_string(g_pGameInfoManager->monsterTriggerBoxNum);
+		}
+		if (NH == NH_READY_BUTTON)
+		{
+			sendString += "readyButtonPush";
+			sendString += ' ';
+			sendString += to_string(g_pGameInfoManager->GetMyInfo()->ID);
 		}
 
 		char * sendMessage = new char[sendString.size() + 1];

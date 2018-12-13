@@ -83,9 +83,6 @@ public:
 
 
 private:
-	LPD3DXFONT m_pFont; 
-
-	LPD3DXFONT m_pFont2; 
 
 public:
 	void Creat_Font();

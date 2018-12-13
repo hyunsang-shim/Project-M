@@ -148,7 +148,8 @@ struct ST_SIZEN
 };
 
 enum character_list {
-	PC_Soldier = 1,
+	PC_DEFAULT,
+	PC_Soldier,
 	PC_Reaper,
 	PC_Reinhardt,
 	PC_Tracer,
@@ -181,33 +182,36 @@ enum NETWORK_HEADER {
 	NH_SELECT,
 	NH_MY_NAME_IS,
 	NH_IS_READY,
-	NH_SPAWN_TRIGGER
+	NH_SPAWN_TRIGGER,
+	NH_READY_BUTTON
 };
+
 
 
 struct CharacterStatus_PC
 {
-	char		MsgHeader[64];			// �޽��� ���
-	int			ID;				// ���� ID	
-	char		PlayerName[16];	// �����̸�
-	int			Character_No;	// ĳ���� ����
-	int			Attack;			// ���·�
-	int			MaxHP;			// �ִ� ü��
-	int			CurHP;			// ���� ü��
-	int			HP_Regen;		// ü�� ���
-	int			MoveSpeed;		// �̵� �ӵ�
-	int			Mag_Cnt;		// ��ź ��
-	int			Mag_Max;			// �ִ� ���� ��
-	int			ShootSpeed;		// ����ӵ�
-	int			BulletTime;		// �Ѿ� �ӵ�
-	D3DXVECTOR3	CurPos;			// ���� ��ġ��
-	float		Dir;				// ĳ���Ͱ� �ٶ󺸴� ����
-	int			Status;			// ĳ���� ����
-	int			TargetID;		// ���� �� ���
-	int			FailCnt;		// ���� ����
-	SOCKET		s;				// ����
+	char			MsgHeader[64];			// 메시지 헤더
+	int			ID;				// 세션 ID	
+	char			PlayerName[16];	// 유저이름
+	int			Character_No;	// 캐릭터 종류
+	int			Attack;			// 공력력
+	int			MaxHP;			// 최대 체력
+	int			CurHP;			// 현재 체력
+	int			HP_Regen;		// 체력 재생
+	int			MoveSpeed;		// 이동 속도
+	int			Mag_Cnt;		// 장탄 수
+	int			Mag_Max;			// 최대 장전 수
+	int			ShootSpeed;		// 연사속도
+	int			BulletTime;		// 총알 속도
+	D3DXVECTOR3		CurPos;			// 현재 위치값
+	float			Dir;				// 캐릭터가 바라보는 방향
+	int			Status;			// 캐릭터 상태
+	int				TargetID;		// 공격 한 대상
+	int				FailCnt;		// 접속 여부
+	BOOL		readyButton;
+	BOOL		isReady;
+	SOCKET			s;				// 소켓
 };
-
 struct CharacterStatus_NPC
 {
 	char		MsgHeader[64];			// �޽��� ���
