@@ -60,6 +60,11 @@ D3DXVECTOR3 cAI::GetPosition()
 	return m_pAIController->GetPosition();
 }
 
+void cAI::SetPosition(D3DXVECTOR3 pos)
+{
+	m_pAIController->SetPosition(pos);
+}
+
 void cAI::SetAnimationIndexBlend(int nIndex)
 {
 	m_pSkinnedMesh->SetAnimationIndex(nIndex);

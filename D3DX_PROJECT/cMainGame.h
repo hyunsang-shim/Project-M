@@ -15,7 +15,8 @@ public:
 	void Setup();
 	void Update();
 	void Render();
-	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); \
+
 
 	void SetSceneChangeTriger(int sceneNum);
 	int getSceneNum();
@@ -26,10 +27,7 @@ private:
 private:
 	int SCENENUM;
 
-private:
-	cSCENE_INGAME* m_pScene_Ingame;
-	cSCENE_RESULT* m_pScene_Result;
-	cSCENE_TITLE* m_pScene_Title;
+public:
 
 
 };

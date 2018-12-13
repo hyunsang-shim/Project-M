@@ -3,13 +3,21 @@
 #include "cAI.h"
 #include "cNewObject.h"
 #include "cSkinnedMesh.h"
+#include "cXModelSurface.h"
 
 cAI_Controller::cAI_Controller()
 	:m_fRotY(0.0f)
-	, m_vDirection(0, 0, 0)
+	, m_vDirection(0, 0, 1)
 	, m_vPosition(50, 0, 15)
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&RotateToCharacter);
+	CurrentAnimNum = 0;
+	beforeAnimNum = 0;
+	TotalPeriod = 0.0;
+	CurrentPeriod = 0.0;
+	AttackCoolTime = 0;
+	BeforeTime = 0;
 }
 
 
@@ -19,27 +27,21 @@ cAI_Controller::~cAI_Controller()
 
 void cAI_Controller::SetUP()
 {
-	
+
 }
 
 void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, cSkinnedMesh* m_SkinnedMesh)
 {
-	static int CurrentAnimNum = 0;
-	static int beforeAnimNum = 0;
-	static double TotalPeriod = 0.0;
-	static double CurrentPeriod = 0.0;
 	int AttackTime = 0;
-	static int AttackCoolTime = 0;
 	bool OnlyLeftOrRight = true;
 	D3DXVECTOR3 m_vLeftDirection;
 	D3DXVECTOR3 m_vUp(0, 1, 0);
-	D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
-
+	//D3DXVec3Cross(&m_vLeftDirection, &m_vUp, &m_vDirection);
 
 	AttackTime = GetTickCount();
 
 	D3DXVECTOR3 m_vBeforePosition = m_vPosition;
-	
+
 	float AI_To_Distance = D3DXVec3Length(&moveToCharacterDir);
 
 
@@ -78,7 +80,7 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 		if (TotalPeriod <= CurrentPeriod + 0.05)
 		{
 			CurrentAnimNum = 0;
-		}	
+		}
 	}
 
 	if (beforeAnimNum != CurrentAnimNum)
@@ -105,34 +107,61 @@ void cAI_Controller::Update(cAI * m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, 
 				m_vPosition.y = y;
 		}
 	}
+	
+	CurrentTime = GetTickCount();
+
+	if (g_pGameInfoManager->m_pSXMap && CurrentTime - BeforeTime > 350)
+	{
+		BeforeTime = CurrentTime;
+		float y = 0;
+		D3DXVECTOR3 head = m_vPosition + D3DXVECTOR3(0, 2, 0);
+		if (!g_pGameInfoManager->m_pSXMap->GetAIY(m_vPosition.x, y, m_vPosition.z, head))
+			m_vPosition = m_vBeforePosition;
+		else
+		{
+			if (m_vPosition.y - y > 0.3)
+				m_vPosition.y -= 0.3f;
+			else
+				m_vPosition.y = y;
+		}
+	}
+
+	D3DXMATRIXA16 matT;
 
 
-	D3DXMATRIXA16 matR, matT;
 	if (b)
 	{
-		m_fRotY = -acos(moveToCharacterDir.z);
+		D3DXVECTOR3 tmpVec = moveToCharacterDir;
+		tmpVec.y = 0;
+		D3DXVec3Normalize(&tmpVec, &tmpVec);
+		float side = pow(tmpVec.x*tmpVec.x + tmpVec.z * tmpVec.z, 0.5);
+
+		RotateToCharacter._11 = tmpVec.z / side;
+		RotateToCharacter._13 = -tmpVec.x / side;
+		RotateToCharacter._31 = tmpVec.x / side;
+		RotateToCharacter._33 = tmpVec.z / side;
 	}
-	D3DXMatrixRotationY(&matR, m_fRotY);
-	m_vDirection = D3DXVECTOR3(0, 0, 1);
 
-	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+
+	m_vDirection = D3DXVECTOR3(0, 0, 1);
+	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &RotateToCharacter);
 	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-	m_matWorld = matR * matT;
+	m_matWorld = RotateToCharacter * matT;
 }
 
 
-void cAI_Controller::Update(float ROTY, D3DXVECTOR3 POSITION)
-{
-	D3DXMATRIXA16 matR, matT;
-	m_vPosition = POSITION;
-	D3DXMatrixRotationY(&matR, m_fRotY);
-
-	m_vDirection = D3DXVECTOR3(0, 0, 1);
-
-	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
-	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-	m_matWorld = matR * matT;
-}
+//void cAI_Controller::Update(float ROTY, D3DXVECTOR3 POSITION)
+//{
+//	D3DXMATRIXA16 matR, matT;
+//	m_vPosition = POSITION;
+//	D3DXMatrixRotationY(&matR, m_fRotY);
+//
+//	m_vDirection = D3DXVECTOR3(0, 0, 1);
+//
+//	D3DXVec3TransformNormal(&m_vDirection, &m_vDirection, &matR);
+//	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+//	m_matWorld = matR * matT;
+//}
 
 void cAI_Controller::Render()
 {
@@ -147,4 +176,9 @@ D3DXVECTOR3 & cAI_Controller::GetPosition()
 void cAI_Controller::SetPositionY(float y)
 {
 	this->m_vPosition.y = y;
+}
+
+void cAI_Controller::SetPosition(D3DXVECTOR3 pos)
+{
+	m_vPosition = pos;
 }

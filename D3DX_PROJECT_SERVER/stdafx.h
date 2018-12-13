@@ -16,6 +16,17 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#include <stdio.h>
+#include <winsock2.h>
+#include <vector>
+#include <string>
+#include <d3dx9.h>
+#include <process.h>
+#include <time.h>
 
+using namespace std;
+#pragma comment(lib,"ws2_32.lib")
+#define WM_ASYNC WM_USER+2
+#define TRYOUT_CNT 200
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.

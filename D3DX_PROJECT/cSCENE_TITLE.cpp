@@ -4,6 +4,7 @@
 #include "cUIImageView.h"
 #include "cUIButton.h"
 #include "cUITextView.h"
+
 enum
 {
 	E_BUTTON_PLAY = 11,
@@ -46,14 +47,16 @@ cSCENE_TITLE::~cSCENE_TITLE()
 	SAFE_RELEASE(m_pSprite);
 	SAFE_RELEASE(m_pTextureUI);
 	SAFE_RELEASE(m_pTextureUI);
+	t1.join();
+	t2.join();
 }
 
 void cSCENE_TITLE::Setup()
 {
-	//Ä«¸Þ¶ó ¼ÂÆÃ
+	//camera setting
 	m_pCamera = new cCamera();
 	m_pCamera->Setup();
-	//UI¼ÂÆÃ
+	//UI setting
 	BGSetup();
 	UIsetup();
 	Creat_font();
@@ -106,7 +109,7 @@ void cSCENE_TITLE::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 void cSCENE_TITLE::BGSetup()
 {
 	D3DXCreateSprite(g_pDevice, &m_pSprite);
-	//m_pTextureUI = g_pTextureManager->GetTexture("UI/±èÅÂÈñ.jpg");
+	//m_pTextureUI = g_pTextureManager->GetTexture("UI/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.jpg");
 
 	D3DXCreateTextureFromFileEx(
 		g_pDevice,
@@ -123,6 +126,8 @@ void cSCENE_TITLE::BGSetup()
 		&m_stBGImageInfo,
 		NULL,
 		&m_pTextureUI);
+	g_pGameInfoManager->Play(1, 0);
+	g_pGameInfoManager->channel_volum_set(0, 0.03f);
 }
 
 void cSCENE_TITLE::BGRender()
@@ -211,7 +216,7 @@ void cSCENE_TITLE::UIsetup()
 
 
 		cUITextView* pTextView = new cUITextView;
-		pTextView->Settext("ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä");
+		pTextView->Settext("ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½");
 		pTextView->SetSize(ST_SIZEN(500, 200));
 		pTextView->SetPosition(g_pGameInfoManager->getScreenXPosByPer(35), g_pGameInfoManager->getScreenYPosByPer(40));
 		pTextView->SetDrawTextFormat(DT_CENTER | DT_VCENTER);
@@ -581,6 +586,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 	if (pSender->GetTag() == E_BUTTON_PLAY)
 	{
+		g_pGameInfoManager->Play(19, 1);
 		m_pUIShadowRoot->m_isHidden = !m_pUIShadowRoot->m_isHidden;
 		m_pUIRoot->m_isHidden = 0;
 		m_pUIShadowRoot->setable();
@@ -588,61 +594,76 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 	else if (pSender->GetTag() == E_BUTTON_EXIT)
 	{
-		g_pNetworkManager->SendData("disconnect", g_pGameInfoManager->GetMyInfo());
+		g_pGameInfoManager->Play(19, 1);
+		//ë„¤íŠ¸ì›Œí¬ ìˆ˜ì • í•„ìš”
+		//g_pNetworkManager->SendData(, g_pGameInfoManager->GetMyInfo());
 		exit(0);
 	}
 	else if (pSender->GetTag() == E_BUTTON_OK)
 	{
+		g_pGameInfoManager->Play(19, 1);
 		g_pGameInfoManager->SetMyName();
 		//g_pGameInfoManager->sceneChangeTriger = TRUE;
 		//g_pGameInfoManager->nextScene = 1;
 		g_pGameInfoManager->SetMyCharacter(PC_Soldier);
-		g_pNetworkManager->SendData("join", g_pGameInfoManager->GetMyInfo());
+		//ë„¤íŠ¸ì›Œí¬ ìˆ˜ì • í•„ìš”
+		g_pNetworkManager->SendData(NH_MY_NAME_IS, g_pGameInfoManager->GetMyInfo());
 		m_pUIRoot->m_isHidden = TRUE;
 		m_pUIShadowRoot->m_isHidden = TRUE;
 		m_pUICharacterSelect->m_isHidden = FALSE;
 	}
 	else if (pSender->GetTag() == E_BUTTON_CANCLE)
 	{
+		g_pGameInfoManager->Play(19, 1);
 		m_pUIShadowRoot->setUnable();
 		m_pUIShadowRoot->m_isHidden = TRUE;
 		m_pUIRoot->setable();
 	}
 	else if (pSender->GetTag() == SELECT_DIVA)
 	{
+		g_pGameInfoManager->Play(11, 1);
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_DIVA;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/diva.png", "./UI/diva.png", "./UI/diva.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_REAPER)
 	{
+		g_pGameInfoManager->Play(13, 1);
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reaper;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/reaper.png", "./UI/reaper.png", "./UI/reaper.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_HANZO)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Hanzo;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(37), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/hanzo.png", "./UI/hanzo.png", "./UI/hanzo.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_REIN)
 	{
+		g_pGameInfoManager->Play(12, 1);
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Reinhardt;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(20), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/rein.png", "./UI/rein.png", "./UI/rein.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_TRACER)
 	{
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Tracer;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/tracer.png", "./UI/tracer.png", "./UI/tracer.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == SELECT_SOLDIER)
 	{
+		g_pGameInfoManager->Play(10, 1);
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Soldier;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
 		player1_character->SetTexture("./UI/soldier.png", "./UI/soldier.png", "./UI/soldier.png");
+		g_pNetworkManager->SendData(NH_SELECT, g_pGameInfoManager->GetMyInfo());
 	}
 	else if (pSender->GetTag() == E_BUTTON_READY)
 	{
@@ -664,29 +685,50 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 			m_pUICharacterSelect->m_isHidden = 1;
 			m_pUILoading->m_isHidden = 0;
 		}
+		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new.X"); });
+		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/rialto_floor_new.X"); });
+		if (m_pUILoading->m_isHidden == 0)
+		{
+
+			g_pGameInfoManager->Stop(1);
+			g_pGameInfoManager->Stop(0);
+			//// load sound start
+			g_pGameInfoManager->Play(0, 0);
+			g_pGameInfoManager->channel_volum_set(0, 0.07f);
+			////
+		}
+		g_pGameInfoManager->Play(19, 1);
 	}
+	g_pGameInfoManager->channel_volum_set(1, 0.3f);
 }
 
 
 void cSCENE_TITLE::buttonUpdate(cUIButton * pSender)
 {
-	
+
 	if (pSender->GetTag() == LOADING_BAR)
 	{
-		static float tmp = 0.0000f;
-		float load = g_pGameInfoManager->GetLoadState();
-		
-		if (load - tmp < 0.0005f)
-			printf("Loading.... %f\n", load);
+		//t1 = thread([]() {g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X");});
 
-		tmp = load;
+		static float load = 0.0f;
+		/*if(g_pGameInfoManager->loading == 0 && load>0.5)
+		load = 0.5;*/
 
+		load += 0.33f;
+		/*if (g_pGameInfoManager->loading == 0 && load > 1)
+		{
+			load = 0.0;
+		}*/
 		pSender->cutSize(load, 1.0f);
 
 		if (load > 1.0f)
 		{
 			g_pGameInfoManager->sceneChangeTriger = TRUE;
 			g_pGameInfoManager->nextScene = 1;
+		}
+		else
+		{
+			Sleep(15000);
 		}
 	}
 

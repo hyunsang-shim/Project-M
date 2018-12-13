@@ -17,7 +17,8 @@
 #include <memory.h>
 #include <tchar.h>
 #include <winsock.h>
-
+#include <thread>
+#include <cstdio>
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 #include <map>
@@ -29,6 +30,7 @@
 #include <time.h>
 #include <fstream>
 #include <stdio.h>
+
 using namespace std;
 
 
@@ -157,68 +159,74 @@ enum character_list {
 
 
 enum character_status {
-	PC_Stand,
-	PC_Stand_Shoot,
-	PC_Run_Front,
-	PC_Run_Front_Shoot,
-	PC_Run_Left,
-	PC_Run_Left_Shoot,
-	PC_Run_Right,
-	PC_Run_Right_Shoot,
-	PC_Run_Back,
-	PC_Run_Back_Shoot,
-	PC_Dash,
-	PC_Reload,
-	PC_Hit,
-	PC_Down,
-	PC_Down_idle,
-	PC_Stand_Up,
-	PC_Dead,
-	PC_NumSize
+	CS_IDLE,
+	CS_FRONT,
+	CS_FRONT_SHIFT,
+	CS_FRONT_LEFT,
+	CS_FRONT_RIGHT,
+	CS_FRONT_LEFT_SHIFT,
+	CS_FRONT_RIGHT_SHIFT,
+	CS_LEFT,
+	CS_RIGHT,
+	CS_BACK,
+	CS_BACK_LEFT,
+	CS_BACK_RIGHT,
+	CS_RELOAD,
+	CS_DOWN,
+	CS_DEAD
 };
+
+enum NETWORK_HEADER {
+	NH_USER_STATUS,
+	NH_SHOT,
+	NH_SELECT,
+	NH_MY_NAME_IS,
+	NH_IS_READY
+};
+
 
 struct CharacterStatus_PC
 {
-	char			MsgHeader[64];			// �޽��� ���
-	WORD			ID;				// ���� ID	
-	char			PlayerName[16];	// �����̸�
-	WORD			Character_No;	// ĳ���� ����
-	WORD			Attack;			// ���·�
-	DWORD			MaxHP;			// �ִ� ü��
-	DWORD			CurHP;			// ���� ü��
-	WORD			HP_Regen;		// ü�� ���
-	DWORD			MoveSpeed;		// �̵� �ӵ�
-	WORD			Mag_Cnt;		// ��ź ��
-	WORD			Mag_Max;			// �ִ� ���� ��
-	DWORD			ShootSpeed;		// ����ӵ�
-	WORD			BulletTime;		// �Ѿ� �ӵ�
-	D3DXVECTOR3		CurPos;			// ���� ��ġ��
-	float			Dir;				// ĳ���Ͱ� �ٶ󺸴� ����
-	WORD			Status;			// ĳ���� ����
-	int				TargetID;		// ���� �� ���
-	int				FailCnt;		// ���� ����
-	SOCKET			s;				// ����
+	char		MsgHeader[64];			// �޽��� ���
+	int			ID;				// ���� ID	
+	char		PlayerName[16];	// �����̸�
+	int			Character_No;	// ĳ���� ����
+	int			Attack;			// ���·�
+	int			MaxHP;			// �ִ� ü��
+	int			CurHP;			// ���� ü��
+	int			HP_Regen;		// ü�� ���
+	int			MoveSpeed;		// �̵� �ӵ�
+	int			Mag_Cnt;		// ��ź ��
+	int			Mag_Max;			// �ִ� ���� ��
+	int			ShootSpeed;		// ����ӵ�
+	int			BulletTime;		// �Ѿ� �ӵ�
+	D3DXVECTOR3	CurPos;			// ���� ��ġ��
+	float		Dir;				// ĳ���Ͱ� �ٶ󺸴� ����
+	int			Status;			// ĳ���� ����
+	int			TargetID;		// ���� �� ���
+	int			FailCnt;		// ���� ����
+	SOCKET		s;				// ����
 };
 
 struct CharacterStatus_NPC
 {
-	char			MsgHeader[64];			// �޽��� ���
-	WORD			ID;				// ���� ID	
-	char			CharacterName[16];	// ĳ���� �̸�
-	WORD			Character_No;	// ĳ���� ����
-	WORD			Attack;			// ���·�
-	DWORD			MaxHP;			// �ִ� ü��
-	DWORD			CurHP;			// ���� ü��
-	WORD			HP_Regen;		// ü�� ���
-	DWORD			MoveSpeed;		// �̵� �ӵ�
-	WORD			Mag_Cnt;		// ��ź ��
-	WORD			Mag_Max;		// �ִ� ���� ��
-	DWORD			ShootSpeed;		// ����ӵ�
-	WORD			BulletTime;		// �Ѿ� �ӵ�
-	D3DXVECTOR3		CurPos;			// ���� ��ġ��
-	float			Dir;			// ĳ���Ͱ� �ٶ󺸴� ����
-	WORD			Status;			// ĳ���� ����
-	int				TargetID;		// ���� �� ���
+	char		MsgHeader[64];			// �޽��� ���
+	int			ID;				// ���� ID	
+	char		CharacterName[16];	// ĳ���� �̸�
+	int			Character_No;	// ĳ���� ����
+	int			Attack;			// ���·�
+	int			MaxHP;			// �ִ� ü��
+	int			CurHP;			// ���� ü��
+	int			HP_Regen;		// ü�� ���
+	int			MoveSpeed;		// �̵� �ӵ�
+	int			Mag_Cnt;		// ��ź ��
+	int			Mag_Max;		// �ִ� ���� ��
+	int			ShootSpeed;		// ����ӵ�
+	int			BulletTime;		// �Ѿ� �ӵ�
+	D3DXVECTOR3	CurPos;			// ���� ��ġ��
+	float		Dir;			// ĳ���Ͱ� �ٶ󺸴� ����
+	int			Status;			// ĳ���� ����
+	int			TargetID;		// ���� �� ���
 };
 
 typedef struct UserInfo

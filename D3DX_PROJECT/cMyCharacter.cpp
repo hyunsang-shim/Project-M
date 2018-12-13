@@ -45,7 +45,7 @@ void cMyCharacter::Update(D3DXVECTOR3 camDirection)
 		m_MyHeadPos = m_pSkinnedMesh->GetHeadPos();
 	else
 	{
-		printf("MyHeadBone 을 찾을 수 없습니다. 원점으로 대체하여 적용합니다.");
+		//printf("MyHeadBone 을 찾을 수 없습니다. 원점으로 대체하여 적용합니다.");
 		m_vBulletPos = D3DXVECTOR3(0, 0, 0);
 	}
 

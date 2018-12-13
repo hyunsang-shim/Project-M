@@ -13,6 +13,7 @@ class cMyCharacter;
 class cUIObject;
 class cCrossHairPicking;
 class cAI;
+class cWaveTriggerBox;
 
 #define MAXBulletCreateCount 5
 
@@ -38,7 +39,6 @@ public:
 	void Render();
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	void RenderOtherPlayer();
 	void Setup_HeightMap();
 private:
 	cCamera* m_pCamera;	
@@ -51,9 +51,9 @@ private:
 	cFrame *m_pRootFrame;
 	cSKY *m_pSKY;
 	cMyCharacter *m_pMyCharacter;
-	cAI *m_pAI;
+	vector<cAI*> m_pVecAI;
 private:
-	D3DLIGHT9 DirectLight; //¸ÞÀÎ ±¤¿ø
+	D3DLIGHT9 DirectLight; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	D3DLIGHT9 subLight;
 
 public:
@@ -116,7 +116,34 @@ private:
 	int BulletCreateCount;
 public:
 	void Mesh_Render();
+	bool WaveStartOrEnd;
 // << :
 	BOOL load;
+
+// >> : TriggerBox
+private:
+	cWaveTriggerBox* m_pTriggerBox;
+	int SpawnMoster;
+	int SpawnCount;
+//	LPD3DXMESH m_pMobMesh;
+	bool showMap = true;
+// << :
+
+// skills
+	float cooltime;
+	bool skill_set;
+	//skills_in hps
+	int hp_heal;
+	bool hp_s;
+	//
+	//
+	// Monster Collide Box
+	LPD3DXMESH m_pMeshMobColide;
+//>> : temp
+private:
+	BOOL AIMeshHit;
+	float AIMeshDist;
+
+	//thread t1;
 };
 

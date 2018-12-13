@@ -20,20 +20,29 @@ protected:
 
 	D3DXMATRIXA16 m_matWorld;
 
+	float angle;
 
+	D3DXMATRIXA16 RotateToCharacter;
 
+	int CurrentAnimNum;
+	int beforeAnimNum;
+	double TotalPeriod;
+	double CurrentPeriod;
+	int AttackCoolTime;
 
+	DWORD CurrentTime;
+	DWORD BeforeTime;
 public:
 	virtual void SetUP();
 
 	virtual void Update(cAI* m_AI, bool b, D3DXVECTOR3 moveToCharacterDir, cSkinnedMesh* m_SkinnedMesh);
-	virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
+	//virtual void Update(float ROTY, D3DXVECTOR3 POSITION);
 	virtual void Render();
 	virtual D3DXVECTOR3& GetPosition();
 	void SetPositionY(float y);
+	void SetPosition(D3DXVECTOR3 pos);
 	virtual D3DXMATRIXA16* GetTransform()
 	{
 		return &m_matWorld;
 	}
 };
-

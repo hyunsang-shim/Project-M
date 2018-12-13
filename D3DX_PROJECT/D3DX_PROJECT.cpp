@@ -153,6 +153,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
 	if (g_pMainGame)
 	{
 		g_pMainGame->WndProc(hWnd, message, wParam, lParam);
@@ -162,6 +163,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_CREATE:
+
 		g_pNetworkManager->SetupNetwork(hWnd);
 		break;
 	case WM_ASYNC:
@@ -169,15 +171,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case FD_READ:
 			// 넷 상태가 true일 때 진입하도록 수정
+
 			if (g_pNetworkManager->GetNetStatus())
 					g_pNetworkManager->recvData();
 		default:
 			break;
 		}
 	case WM_TIMER:
-		if (g_pMainGame)
-			g_pMainGame->Update();
-		InvalidateRect(g_hWnd, NULL, false);
+		if (wParam == 1)
+		{
+			if (g_pMainGame)
+				g_pMainGame->Update();
+			InvalidateRect(g_hWnd, NULL, false);
+		}
 		break;
 
 	case WM_PAINT:
@@ -195,6 +201,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_DESTROY:
+		closesocket((g_pGameInfoManager->GetMyInfo()->s));
 		PostQuitMessage(0);
 		break;
 	default:

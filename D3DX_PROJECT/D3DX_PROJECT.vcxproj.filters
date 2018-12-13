@@ -79,6 +79,9 @@
     <Filter Include="AI">
       <UniqueIdentifier>{95867f4b-00bb-45ec-80cb-8975cbeb5e23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TriggerBox">
+      <UniqueIdentifier>{4d07ba31-2d5a-4780-9ed2-f9168dd394f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -213,6 +216,12 @@
     <ClInclude Include="cAI_Controller.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="cWaveTriggerBox.h">
+      <Filter>TriggerBox</Filter>
+    </ClInclude>
+    <ClInclude Include="cXModelSurface.h">
+      <Filter>X-File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMainGame.cpp">
@@ -334,6 +343,12 @@
     </ClCompile>
     <ClCompile Include="cAI_Controller.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="cWaveTriggerBox.cpp">
+      <Filter>TriggerBox</Filter>
+    </ClCompile>
+    <ClCompile Include="cXModelSurface.cpp">
+      <Filter>X-File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
