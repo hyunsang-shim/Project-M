@@ -299,6 +299,8 @@ int cNetworkManager::SendData(NETWORK_HEADER NH, CharacterStatus_PC *strPC)
 			sendString += to_string(strPC->ID);
 			sendString += ' ';
 			sendString += string(strPC->PlayerName);
+			sendString += ' ';
+			sendString += to_string(strPC->readyButton);
 		}
 		if (NH == NH_SPAWN_TRIGGER)
 		{

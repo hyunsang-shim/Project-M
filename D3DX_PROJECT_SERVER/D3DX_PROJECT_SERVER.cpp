@@ -490,6 +490,8 @@ void threadProcessRecv(void * str)
 				tmp += to_string(g_vUsers.at(i)->ID);
 				tmp += ' ';
 				tmp += string(g_vUsers.at(i)->PlayerName);
+				tmp += ' ';
+				tmp += to_string(g_vUsers.at(i)->readyButton);
 
 				givenMessage = new char[tmp.size() + 1];
 				std::copy(tmp.begin(), tmp.end(), givenMessage);
@@ -522,6 +524,23 @@ void threadProcessRecv(void * str)
 
 			}
 		}
+		else if (StartWith(givenMessage, "readyButtonPush"))
+		{
+			int IDID;
+			int ready;
+			sscanf_s(givenMessage, "%*s %d &d", &IDID, &ready);
+
+			for (int i = 0; i < g_vUsers.size(); i++)
+			{
+				if (g_vUsers.at(i)->ID == IDID)
+				{
+					g_vUsers.at(i)->readyButton = ready;
+				}
+
+			}
+		}
+
+
 		for (int i = 0; i < g_vUsers.size(); i++)
 		{
 			result = send(g_vUsers.at(i)->s, givenMessage, 128, 0);
