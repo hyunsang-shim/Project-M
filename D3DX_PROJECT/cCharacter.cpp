@@ -202,6 +202,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 			beforeAnimNum = CurrentAnimNum;
 			m_MyCharacter->SetAnimationIndexBlend(CurrentAnimNum);
 			g_pGameInfoManager->GetMyInfo()->Status = CurrentAnimNum;
+			g_pGameInfoManager->MaxBulletCount = 30;
 		}
 	}
 
