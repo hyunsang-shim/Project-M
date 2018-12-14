@@ -41,7 +41,7 @@ struct CharacterStatus_PC
 	int			Status;			// 캐릭터 상태
 	int				TargetID;		// 공격 한 대상
 	int				FailCnt;		// 접속 여부
-	BOOL		readyButton;
+	BOOL		readyButton = 0;
 	BOOL		isReady;
 	SOCKET			s;				// 소켓
 };

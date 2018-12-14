@@ -923,7 +923,7 @@ void cSCENE_INGAME::Render_Text()
 	int maxHP = g_pGameInfoManager->m_strMyCharacter.MaxHP;
 	int nowHP = g_pGameInfoManager->m_strMyCharacter.CurHP;
 
-	int maxBullet = 30;
+	int maxBullet = g_pGameInfoManager->MaxBulletCount;
 	int nowBullet = 30;
 
 	string str, str2, str3;

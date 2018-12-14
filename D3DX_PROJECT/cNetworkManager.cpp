@@ -113,7 +113,8 @@ void threadProcessRecv(void * str)
 		{
 			int ID;
 			char name[16];
-			sscanf_s(givenMessage, "%*s %d %s", &ID, &name, 16);
+			int isReady;
+			sscanf_s(givenMessage, "%*s %d %s %d", &ID, &name, 16, &isReady);
 
 			if (g_pGameInfoManager->GetMyInfo()->ID == ID)
 				continue;
@@ -123,6 +124,7 @@ void threadProcessRecv(void * str)
 
 			tmp.ID = ID;
 			strcpy(tmp.PlayerName, name);
+			tmp.readyButton = isReady;
 			g_pOtherPlayerManager->newPlayer(tmp);
 			g_pGameInfoManager->timer = 30;
 		}
@@ -147,6 +149,10 @@ void threadProcessRecv(void * str)
 					break;
 				}
 			}
+		}
+		else if (StartWith(givenMessage, "AllReadyPush"))
+		{
+			g_pGameInfoManager->timer = 5;
 		}
 		else if (StartWith(givenMessage, "setMonster"))
 		{

@@ -530,14 +530,23 @@ void threadProcessRecv(void * str)
 			int ready;
 			sscanf_s(givenMessage, "%*s %d &d", &IDID, &ready);
 
+			int check = 0;
 			for (int i = 0; i < g_vUsers.size(); i++)
 			{
 				if (g_vUsers.at(i)->ID == IDID)
 				{
-					g_vUsers.at(i)->readyButton = ready;
+					g_vUsers.at(i)->readyButton = 1;
 				}
-
+				if (g_vUsers.at(i)->readyButton == 0)
+					check = 1;
 			}
+			if (check == 0)
+			{
+				string allReadyPush;
+				allReadyPush += "AllReadyPush";
+				messageQueue.push(allReadyPush);
+			}
+
 		}
 
 
