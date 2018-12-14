@@ -558,6 +558,14 @@ void cSCENE_TITLE::UIsetup()
 		loading_bar2->SetTag(LOADING_BAR);
 		m_pUILoading->AddChild(loading_bar2);
 
+		cUIButton* loads = new cUIButton;
+		loads->SetTexture("./UI/loads.png",
+			"./UI/loads.png",
+			"./UI/loads.png");
+		loads->setSize(1.0f, 1.0f);
+		loads->SetPosition(g_pGameInfoManager->getScreenXPosByPer(70), g_pGameInfoManager->getScreenYPosByPer(80));
+		loads->SetDelegate(this);
+		m_pUILoading->AddChild(loads);
 
 		m_pUILoading->m_isHidden = 1;
 	}
@@ -691,6 +699,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 	}
 	else if (pSender->GetTag() == SELECT_SOLDIER)
 	{
+		g_pGameInfoManager->Stop(1);
 		g_pGameInfoManager->Play(10, 1);
 		g_pGameInfoManager->m_strMyCharacter.Character_No = PC_Soldier;
 		player1_character->SetPosition(g_pGameInfoManager->getScreenXPosByPer(40), g_pGameInfoManager->getScreenYPosByPer(15));
@@ -712,8 +721,8 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 			m_pUICharacterSelect->m_isHidden = 1;
 			m_pUILoading->m_isHidden = 0;
 		}
-		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
-		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/floorBox.X"); });
+		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/Rialto_map.X"); });
+		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/Rialto_floor.X"); });
 		if (m_pUILoading->m_isHidden == 0)
 		{
 
@@ -726,7 +735,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 		}
 		g_pGameInfoManager->Play(19, 1);
 	}
-	g_pGameInfoManager->channel_volum_set(1, 0.3f);
+	g_pGameInfoManager->channel_volum_set(1, 0.175f);
 }
 
 

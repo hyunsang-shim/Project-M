@@ -13,7 +13,7 @@ using namespace FMOD;
 
 System* pSystem;
 Sound* pSound[100]; //sound num setting
-Channel* pChannel[3];
+Channel* pChannel[100];
 
 cGameInfoManager::cGameInfoManager() :
 	isESCPushed(0),
@@ -36,7 +36,7 @@ cGameInfoManager::cGameInfoManager() :
 	timer(9999)
 {
 	System_Create(&pSystem);
-	pSystem->init(4, FMOD_INIT_NORMAL, NULL); // 4 is max channel
+	pSystem->init(100, FMOD_INIT_NORMAL, NULL); // 4 is max channel
 }
 
 
@@ -137,15 +137,14 @@ void cGameInfoManager::AddOtherPlayer(CharacterStatus_PC info)
 void cGameInfoManager::SoundSystem()
 {
 	// 0~9 bgm , other sound
-	pSystem->createSound("sound/bgms/loadings.mp3", FMOD_DEFAULT, NULL, &pSound[0]); // loading
+	pSystem->createStream("sound/bgms/loadings.mp3", FMOD_LOOP_NORMAL, NULL, &pSound[0]); // loading
 	pSystem->createSound("sound/bgms/main_bgm.mp3", FMOD_LOOP_NORMAL, NULL, &pSound[1]); //main
+	pSystem->createStream("sound/bgms/rialto_bgm.mp3", FMOD_LOOP_NORMAL, NULL, &pSound[2]); //main
 
 
 																						 // 10~19 UI sound
 	pSystem->createSound("sound/chr/sd.mp3", FMOD_DEFAULT, NULL, &pSound[10]);
-	pSystem->createSound("sound/chr/d_v.mp3", FMOD_DEFAULT, NULL, &pSound[11]);
-	pSystem->createSound("sound/chr/r_h.mp3", FMOD_DEFAULT, NULL, &pSound[12]);
-	pSystem->createSound("sound/chr/r_p.mp3", FMOD_DEFAULT, NULL, &pSound[13]);
+
 
 	pSystem->createSound("sound/Effectsounds/click.mp3", FMOD_DEFAULT, NULL, &pSound[19]);
 
@@ -156,9 +155,10 @@ void cGameInfoManager::SoundSystem()
 
 
 	//30~99 effect and null sound
-	pSystem->createSound("sound/Effectsounds/pl_gunsound.wav", FMOD_LOOP_NORMAL, NULL, &pSound[30]);
-	pSystem->createSound("sound/Effectsounds/moves.wav", FMOD_LOOP_NORMAL, NULL, &pSound[31]);
-	pSystem->createSound("sound/Effectsounds/bullet_re.wav", FMOD_DEFAULT, NULL, &pSound[32]);
+	pSystem->createSound("sound/Effectsounds/pl_gunsound.mp3", FMOD_DEFAULT, NULL, &pSound[30]);
+	pSystem->createSound("sound/Effectsounds/moves.mp3", FMOD_LOOP_NORMAL, NULL, &pSound[31]);
+	pSystem->createSound("sound/Effectsounds/bullet_re.mp3", FMOD_DEFAULT, NULL, &pSound[32]);
+	pSystem->createSound("sound/Effectsounds/pl_damege.mp3", FMOD_DEFAULT, NULL, &pSound[33]);
 
 	//pSystem->createSound("sound/gunsound.wav", FMOD_DEFAULT, NULL, &pSound[track_num]);
 }

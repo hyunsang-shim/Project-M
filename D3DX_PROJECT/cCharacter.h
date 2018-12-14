@@ -49,6 +49,7 @@ public:
 	BOOL KEY_D;
 	BOOL KEY_SHIFT;
 
+	bool sounds_test = false;
 
 
 

@@ -36,10 +36,10 @@ void cOtherPlayerManager::newPlayer(CharacterStatus_PC info)
 
 void cOtherPlayerManager::render()
 {
-	for (int i = 0; i < otherPlayerInfo.size(); i++)
+	/*for (int i = 0; i < otherPlayerInfo.size(); i++)
 	{
 		otherPlayerInfo.at(i)->Render();
-	}
+	}*/
 }
 
 void cOtherPlayerManager::update()

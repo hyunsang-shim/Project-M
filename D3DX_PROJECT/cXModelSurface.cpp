@@ -42,8 +42,10 @@ cXModelSurface::cXModelSurface(string filePath)
 
 			if (mtrls[i].pTextureFilename != 0)
 			{
-				LPDIRECT3DTEXTURE9 tex = g_pTextureManager->GetTexture(mtrls[i].pTextureFilename);
-				//D3DXCreateTextureFromFileA(g_pDevice, mtrls[i].pTextureFilename, &tex);
+				string tmp;
+				tmp += "map/textures/";
+				tmp += mtrls[i].pTextureFilename;
+				LPDIRECT3DTEXTURE9 tex = g_pTextureManager->GetTexture(tmp);
 				m_vecTextuer.push_back(tex);
 			}
 			else

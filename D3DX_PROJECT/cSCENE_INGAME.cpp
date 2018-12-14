@@ -167,20 +167,20 @@ void cSCENE_INGAME::Setup()
 
 	//m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-	g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
+//	g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-	for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
-	{
-		g_pGameInfoManager->m_pVecAI[i] = new cAI;
-		g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
-		cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
-		g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-		g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
-	
-	//check here.
-		g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
-		g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
-	}
+	//for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
+	//{
+	//	g_pGameInfoManager->m_pVecAI[i] = new cAI;
+	//	g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
+	//	cAI_Controller* m_pVecAI_Controller = new cAI_Controller;
+	//	g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
+	//	g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos() , m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i/5)))  *5)));
+	//
+	////check here.
+	//	g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
+	//	g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
+	//}
 	//for (int i = 0; i < m_pVecAI.size(); i++)
 	//{
 	//	m_pVecAI[i] = new cAI;
@@ -200,6 +200,9 @@ void cSCENE_INGAME::Setup()
 	g_pNetworkManager->SendData(NH_IS_READY, g_pGameInfoManager->GetMyInfo());
 	g_pGameInfoManager->loading = 1;
 
+	g_pGameInfoManager->Stop(0);
+	g_pGameInfoManager->Play(2, 9);
+	g_pGameInfoManager->channel_volum_set(9, 0.025f);
 }
 
 
@@ -254,21 +257,21 @@ void cSCENE_INGAME::Update()
 		SpawnCount = 0;
 		cAI_Controller* m_pVecAI_Controller;
 
-		g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
+//		g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
-		{
-			g_pGameInfoManager->m_pVecAI[i] = new cAI;
-			g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
-			m_pVecAI_Controller = new cAI_Controller;
-			g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-			g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
-			
-			// check here.
-			g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
+		//for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
+		//{
+		//	g_pGameInfoManager->m_pVecAI[i] = new cAI;
+		//	g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
+		//	m_pVecAI_Controller = new cAI_Controller;
+		//	g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
+		//	g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
+		//	
+		//	// check here.
+		//	g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
 
-			g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
-		}
+		//	g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
+		//}
 	}
 	
 
@@ -327,6 +330,7 @@ void cSCENE_INGAME::Update()
 	{
 		g_pNetworkManager->SendData(NH_SPAWN_TRIGGER, g_pGameInfoManager->GetMyInfo());
 		m_pTriggerBox->Setup();
+		WaveStartOrEnd = true;
 	}
 
 	if (WaveStartOrEnd)
@@ -336,24 +340,8 @@ void cSCENE_INGAME::Update()
 			if (g_pGameInfoManager->m_pVecAI.at(i)->load&&g_pGameInfoManager->m_pVecAI[i]->GetHp())
 				g_pGameInfoManager->m_pVecAI.at(i)->Update(true, m_pMyCharacter->GetPosition() - g_pGameInfoManager->m_pVecAI.at(i)->GetPosition());
 		}
-
-		for (int j = 0; j < m_Bullet.size(); j++)
-		{
-			if (m_Bullet[j].Shoot)
-			{
-				for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
-				{
-					bool b = cOBB::isCollision(m_Bullet[j].m_pBulletMesh->GetOBB(), g_pGameInfoManager->m_pVecAI[i]->GetOBB());
-					if (b)
-					{
-						m_Bullet[j].Shoot = false;
-						g_pGameInfoManager->m_pVecAI[i]->SetHp(false);
-						break;
-					}
-				}
-			}
-		}
 	}
+
 	/*else
 	{
 		for (int i = 0; i < m_pVecAI.size(); i++)
@@ -380,6 +368,8 @@ void cSCENE_INGAME::Update()
 			//
 			// check map collision
 			D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
+
+			D3DXIntersect(g_pGameInfoManager->m_pSXMap->GetSXMESH(), &m_pCrossHairPicking->GetOrigin(), &m_pCrossHairPicking->GetDirection(), &pHit, NULL, NULL, NULL, &dist, NULL, NULL);
 
 			//
 			// monster collision start
@@ -455,6 +445,43 @@ void cSCENE_INGAME::Update()
 		}
 	}
 
+	for (int i = 0; i < BulletCreateCount; i++)
+	{
+		if (m_Bullet[i].BulletLiveTime != 0)
+		{	
+			m_Bullet[i].m_pBulletMesh->SetSRT(m_Bullet[i].BulletDirection, m_Bullet[i].m_vBulletCreatePos);
+			m_Bullet[i].m_pBulletMesh->Update();
+			//g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
+			//m_Bullet[i].m_pBulletMesh->DrawSubset(0);
+		}
+		/*if (m_Bullet[i].BulletLiveTime == 0)
+		{
+		m_Bullet.erase(m_Bullet.begin() + i);
+		BulletCreateCount--;
+		}*/
+	}
+
+	if (WaveStartOrEnd)
+	{
+		for (int j = 0; j < m_Bullet.size(); j++)
+		{
+			if (m_Bullet[j].Shoot)
+			{
+				for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
+				{
+					bool b = cOBB::isCollision(m_Bullet[j].m_pBulletMesh->GetOBB(), g_pGameInfoManager->m_pVecAI[i]->GetOBB());
+					if (b)
+					{
+						m_Bullet[j].Shoot = false;
+						//g_pGameInfoManager->m_pVecAI[i]->SetHp(false);
+						g_pGameInfoManager->m_pVecAI.erase(g_pGameInfoManager->m_pVecAI.begin() + i);
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	if (g_pNetworkManager->GetNetStatus())
 	{
 		for (int i = 0; i < g_pOtherPlayerManager->otherPlayerInfo.size(); i++)
@@ -487,8 +514,9 @@ void cSCENE_INGAME::Render()
 	if(g_pGameInfoManager->m_pXMap && showMap)
 		g_pGameInfoManager->m_pXMap->Render();
 
-	//if(g_pGameInfoManager->m_pSXMap)
-	//	g_pGameInfoManager->m_pSXMap->Render();
+	if(g_pGameInfoManager->m_pSXMap)
+		g_pGameInfoManager->m_pSXMap->Render();
+
 	if(m_pTriggerBox)
 		m_pTriggerBox->Render();
 
@@ -543,6 +571,8 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			{
 				g_pGameInfoManager->Play(20, 0);
 				g_pGameInfoManager->channel_volum_set(0, 0.4f);
+				g_pGameInfoManager->Play(20, 1);
+				g_pGameInfoManager->channel_volum_set(1, 0.4f);
 				cooltime = 0.0f;
 				hp_s = true;
 				skill_set = false;
@@ -554,13 +584,16 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 			g_pGameInfoManager->m_strMyCharacter.CurHP -= 30;
 
+			g_pGameInfoManager->Play(33, 1);
+			g_pGameInfoManager->channel_volum_set(1, 0.4f); // pl damege
 			break;
 		}
-		case 'V':
+		case 'R':
 		{
 
-			g_pGameInfoManager->Play(10, 1);
-
+			g_pGameInfoManager->Play(32, 2);
+			g_pGameInfoManager->channel_volum_set(2, 0.7f);
+			//
 			break;
 		}
 		default:
@@ -582,16 +615,18 @@ void cSCENE_INGAME::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		n++;*/
 
 		////
-		g_pGameInfoManager->Play(30, 0);
-		g_pGameInfoManager->channel_volum_set(2, 10.0f);
-
+		if (g_pGameInfoManager->MaxBulletCount != 0)
+		{
+			g_pGameInfoManager->Play(30, 6);
+			g_pGameInfoManager->channel_volum_set(6, 0.35f);
+		}
 		////
 
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
-		g_pGameInfoManager->Stop(0);
+		g_pGameInfoManager->Stop(6);
 		break;
 	}
 	case WM_KEYUP:
@@ -880,10 +915,12 @@ void cSCENE_INGAME::OnClick(cUIButton * pSender)
 {
 	if (pSender->GetTag() == EXIT_OK)
 	{
+		g_pGameInfoManager->Play(19, 1);
 		exit(0);
 	}
 	else if (pSender->GetTag() == EXIT_CANCLE)
 	{
+		g_pGameInfoManager->Play(19, 1);
 		m_pUIShadowRoot->m_isHidden = 1;
 		g_pGameInfoManager->isESCPushed = ~g_pGameInfoManager->isESCPushed;
 	}
@@ -937,7 +974,7 @@ void cSCENE_INGAME::Render_Text()
 	int nowHP = g_pGameInfoManager->m_strMyCharacter.CurHP;
 
 	int maxBullet = 30;
-	int nowBullet = 30;
+	int nowBullet = g_pGameInfoManager->MaxBulletCount;
 
 	string str, str2, str3;
 	if (nowHP < 100)
@@ -1088,8 +1125,6 @@ void cSCENE_INGAME::Mesh_Render()
 	{
 		if (m_Bullet[i].BulletLiveTime != 0)
 		{
-			m_Bullet[i].m_pBulletMesh->SetSRT(m_Bullet[i].BulletDirection, m_Bullet[i].m_vBulletCreatePos);
-			m_Bullet[i].m_pBulletMesh->Update();
 			//g_pDevice->SetMaterial(&m_Bullet[i].m_stMtlCircle);
 			//m_Bullet[i].m_pBulletMesh->DrawSubset(0);
 

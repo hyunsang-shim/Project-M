@@ -11,7 +11,7 @@ cCharacter::cCharacter()
 	:m_fRotY(0.0f),
 	m_fRotX(0.0f),
 	m_vDirection(0, 0, 0),
-	m_vPosition(330, 5, -410)
+	m_vPosition(454.329 ,  4.933, -234)
 
 {
 	D3DXMatrixIdentity(&m_matR);
@@ -183,6 +183,20 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 		CurrentAnimNum = 10;
 		int i = 0; 
 		nowStatus = CS_IDLE;
+	}
+
+
+	if (nowStatus > 0 && sounds_test && KEY_SHIFT)
+	{
+		g_pGameInfoManager->Play(31, 5);
+		g_pGameInfoManager->channel_volum_set(5, 0.5f);
+		sounds_test = false;
+	}
+
+	if (nowStatus == CS_IDLE)
+	{
+		g_pGameInfoManager->Stop(5);
+		sounds_test = true;
 	}
 
 	if (reloading)
