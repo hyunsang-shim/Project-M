@@ -88,6 +88,8 @@ void cSCENE_TITLE::Update()
 	{
 		m_pUICharacterSelect->m_isHidden = 1;
 		m_pUILoading->m_isHidden = 0;
+		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
+		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/floorBox.X"); });
 	}
 
 	if (playerName1)
@@ -718,8 +720,7 @@ void cSCENE_TITLE::OnClick(cUIButton * pSender)
 
 			
 		}
-		t1 = thread([]() { g_pGameInfoManager->setup_XMap("map/rialto_map_new3_text.X"); });
-		t2 = thread([]() { g_pGameInfoManager->setup_SXMap("map/floorBox.X"); });
+		
 		if (m_pUILoading->m_isHidden == 0)
 		{
 
