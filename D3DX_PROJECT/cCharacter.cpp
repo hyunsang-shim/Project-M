@@ -196,7 +196,7 @@ void cCharacter::Update(cMyCharacter* m_MyCharacter, cSkinnedMesh* m_SkinnedMesh
 
 	if (GetKeyState('R') & 0x8000 && !KEY_W && !KEY_S && !KEY_A && !KEY_D)
 	{
-		if (!reloading)
+		//if (!reloading)
 		{
 			reloading = true;
 			CurrentAnimNum = 1;

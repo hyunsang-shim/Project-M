@@ -167,6 +167,8 @@ void cSCENE_INGAME::Setup()
 
 	//m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
+	g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
+
 	for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 	{
 		g_pGameInfoManager->m_pVecAI[i] = new cAI;
@@ -327,7 +329,7 @@ void cSCENE_INGAME::Update()
 		m_pTriggerBox->Setup();
 	}
 
-	if (!WaveStartOrEnd)
+	if (WaveStartOrEnd)
 	{
 		for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
@@ -510,7 +512,7 @@ void cSCENE_INGAME::Render()
 		Mesh_Render();
 	}
 
-	if (!WaveStartOrEnd)
+	if (WaveStartOrEnd)
 	{
 		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
@@ -790,7 +792,18 @@ void cSCENE_INGAME::setupUI()
 		pSkill1->setSize(1.0f, 1.0f);
 		pSkill1->SetPosition(g_pGameInfoManager->getScreenXPosByPer(78), g_pGameInfoManager->getScreenYPosByPer(81));
 		pSkill1->SetDelegate(this);
+		pSkill1->SetTag(COOL_TIMES);
 		m_pUIBase->AddChild(pSkill1);
+
+		cUIButton* pSkill2 = new cUIButton;
+		pSkill2->SetTexture("./UI/E_skill2.png",
+			"./UI/E_skill2.png",
+			"./UI/E_skill2.png");
+		pSkill2->setSize(1.0f, 1.0f);
+		pSkill2->SetPosition(g_pGameInfoManager->getScreenXPosByPer(78), g_pGameInfoManager->getScreenYPosByPer(81));
+		pSkill2->SetDelegate(this);
+		//pSkill2->SetTag(COOL_TIMES);
+		m_pUIBase->AddChild(pSkill2);
 	}
 	{
 		D3DXCreateSprite(g_pDevice, &m_pSprite);
