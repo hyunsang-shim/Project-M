@@ -16,6 +16,7 @@ cXModelSurface::cXModelSurface(string filePath)
 
 	ID3DXBuffer* adjBuffer = 0;
 	ID3DXBuffer* mtrlBuffer = 0;
+	ID3DXBuffer* fxBuffer = 0;		// Buffer for Effect/Shader(.fx) files from addressed .x file
 	DWORD numMtrls = 0;
 
 	D3DXLoadMeshFromXA(
@@ -24,11 +25,10 @@ cXModelSurface::cXModelSurface(string filePath)
 		g_pDevice,
 		&adjBuffer,
 		&mtrlBuffer,
-		0,
+		&fxBuffer,
 		&numMtrls,
 		&m_pSXMesh
 	);
-
 
 
 	if (mtrlBuffer != 0 && numMtrls != 0)
@@ -54,6 +54,9 @@ cXModelSurface::cXModelSurface(string filePath)
 			}
 		}
 	}
+
+	// shader loading
+
 
 
 
@@ -146,4 +149,35 @@ bool cXModelSurface::GetAIY(IN float x, OUT float & y, IN float z, D3DXVECTOR3 H
 		y = HeadPos.y;
 	}
 	return true;
+}
+
+LPD3DXEFFECT cXModelSurface::LoadShader(const char * fileName)
+{
+
+	LPD3DXEFFECT	ret = NULL;
+	LPD3DXBUFFER	pError = NULL;
+	DWORD			dwShaderFlags = 0;
+
+#if _DEBUG
+	dwShaderFlags |= D3DXSHADER_DEBUG;
+#endif
+
+	D3DXCreateEffectFromFile(g_pDevice, fileName, NULL, NULL, dwShaderFlags, NULL, &ret, &pError);
+
+	// if fail to load shader, print compile error on output window
+	if (!ret && pError)
+	{
+		int size = pError->GetBufferSize();
+		void *ack = pError->GetBufferPointer();
+
+		if (ack)
+		{
+			char* str = new char[size];
+			sprintf(str, (const char*)ack, size);
+			OutputDebugString(str);
+			delete[] str;
+		}
+	}
+
+	return ret;
 }
