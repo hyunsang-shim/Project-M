@@ -56,7 +56,22 @@ cXModelSurface::cXModelSurface(string filePath)
 	}
 
 	// shader loading
+	if (fxBuffer != 0 && numMtrls != 0)
+	{
+		D3DXEFFECTINSTANCE* FXs = (D3DXEFFECTINSTANCE*)fxBuffer->GetBufferPointer();
 
+		for (int i = 0; i < fxBuffer->GetBufferSize() / sizeof(D3DXEFFECTINSTANCE); i++)
+		{
+			if (FXs[i].pEffectFilename != 0)
+			{
+				string tmp;
+				tmp += "map/textures/";
+				tmp += FXs[i].pEffectFilename;
+				LPDIRECT3DTEXTURE9 fxTex = g_pTextureManager->GetTexture(tmp);
+				m_vecTextuer.push_back(fxTex);
+			}
+		}
+	}
 
 
 
