@@ -613,9 +613,9 @@ void monsterSet()
 	if (triggerBoxNum == 0)
 	{
 
-		int m_SpawnXPos = 200;
+		int m_SpawnXPos = 300;
 		int m_SpawnYPos = 5;
-		int m_SpawnZPos = -395;
+		int m_SpawnZPos = -230;
 		for (int j = 0; j < 2; j++)
 		{
 			for (int i = 0; i < 5; i++)
@@ -649,9 +649,9 @@ void monsterSet()
 	else if (triggerBoxNum == 1)
 	{
 
-		int m_SpawnXPos = -60;
-		int m_SpawnYPos = 5;
-		int m_SpawnZPos = -229;
+		int m_SpawnXPos = -8;
+		int m_SpawnYPos = 10;
+		int m_SpawnZPos = -21;
 		for (int j = 0; j < 2; j++)
 		{
 			for (int i = 0; i < 5; i++)
@@ -685,9 +685,9 @@ void monsterSet()
 	else if (triggerBoxNum == 2)
 	{
 
-		int m_SpawnXPos = -317;
-		int m_SpawnYPos = 18;
-		int m_SpawnZPos = -102;
+		int m_SpawnXPos = -304;
+		int m_SpawnYPos = 19;
+		int m_SpawnZPos = 148;
 		for (int j = 0; j < 2; j++)
 		{
 			for (int i = 0; i < 5; i++)

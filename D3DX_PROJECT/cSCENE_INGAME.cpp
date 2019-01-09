@@ -257,21 +257,7 @@ void cSCENE_INGAME::Update()
 		SpawnCount = 0;
 		cAI_Controller* m_pVecAI_Controller;
 
-//		g_pGameInfoManager->m_pVecAI.resize(m_pTriggerBox->tb.MakeMonster);
 
-		//for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
-		//{
-		//	g_pGameInfoManager->m_pVecAI[i] = new cAI;
-		//	g_pGameInfoManager->m_pVecAI[i]->Setup("NPCS", "slicer.X");
-		//	m_pVecAI_Controller = new cAI_Controller;
-		//	g_pGameInfoManager->m_pVecAI[i]->SetAIController(m_pVecAI_Controller);
-		//	g_pGameInfoManager->m_pVecAI[i]->SetPosition(D3DXVECTOR3(m_pTriggerBox->GetSpawnXPos(), m_pTriggerBox->GetSpawnYPos(), m_pTriggerBox->GetSpawnZPos() + ((i - (5 * (i / 5))) * 10)));
-		//	
-		//	// check here.
-		//	g_pGameInfoManager->AddNPC(g_pGameInfoManager->m_pVecAI[i]);		// add npc to the GameInfo Manager
-
-		//	g_pGameInfoManager->m_pVecAI[i]->SetHp(true);
-		//}
 	}
 	
 
@@ -330,10 +316,10 @@ void cSCENE_INGAME::Update()
 	{
 		g_pNetworkManager->SendData(NH_SPAWN_TRIGGER, g_pGameInfoManager->GetMyInfo());
 		m_pTriggerBox->Setup();
-		WaveStartOrEnd = true;
+		WaveStartOrEnd = false;
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
 		for (int i = 0; i < g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
@@ -461,7 +447,7 @@ void cSCENE_INGAME::Update()
 		}*/
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
 		for (int j = 0; j < m_Bullet.size(); j++)
 		{
@@ -540,7 +526,7 @@ void cSCENE_INGAME::Render()
 		Mesh_Render();
 	}
 
-	if (WaveStartOrEnd)
+	if (!WaveStartOrEnd)
 	{
 		for (int i = 0; i <g_pGameInfoManager->m_pVecAI.size(); i++)
 		{
@@ -856,7 +842,7 @@ void cSCENE_INGAME::setupUI()
 		m_pUIShadowRoot->AddChild(pButtontest);
 
 		cUITextView* pTextView = new cUITextView;
-		pTextView->Settext("������ �����Ͻðڽ��ϱ�?");
+		pTextView->Settext("End This Game?");
 		pTextView->SetSize(ST_SIZEN(700, 200));
 		pTextView->SetPosition(g_pGameInfoManager->getScreenXPosByPer(30), g_pGameInfoManager->getScreenYPosByPer(35));
 		pTextView->SetDrawTextFormat(DT_CENTER | DT_VCENTER);
