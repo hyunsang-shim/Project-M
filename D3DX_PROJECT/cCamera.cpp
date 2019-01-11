@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "cCamera.h"
 #include "cXModel.h"
+#include "cXModelSurface.h"
 #include "cNewObject.h"
 
 cCamera::cCamera() : m_vEye(0, 0, -5), m_vLookAt(0, 0, 0), m_vUp(0, 1, 0), SpringArmHit(false), SpringArmDist(0.0f)
@@ -59,6 +60,8 @@ void cCamera::Update(D3DXVECTOR3 cube, D3DXVECTOR3 HeadPos)
 	D3DXVec3Normalize(&HeadToCameraDir, &HeadToCameraDir);
 
 	D3DXIntersect(g_pGameInfoManager->m_pXMap->GetXMESH(), &cube, &HeadToCameraDir, &SpringArmHit, NULL, NULL, NULL, &SpringArmDist, NULL, NULL);
+
+	D3DXIntersect(g_pGameInfoManager->m_pSXMap->GetSXMESH(), &cube, &HeadToCameraDir, &SpringArmHit, NULL, NULL, NULL, &SpringArmDist, NULL, NULL);
 
 	if (SpringArmHit && SpringArmDist < hToCLength)
 	{
